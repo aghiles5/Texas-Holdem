@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * the ranking name based on the 
  * 
  * @author Adam
- * @version 02/05/19
+ * @version 02/06/19
  */
 public class Showdown {
 
@@ -52,12 +52,12 @@ public class Showdown {
 			if (hand.get(0).getRank() - i == hand.get(i).getRank())
 				decMatchCount++;
 		}
-		if ((decMatchCount == 4) || ((decMatchCount == 3) && (hand.get(4).getRank() == 0)))
+		if ((decMatchCount == 4) || ((decMatchCount == 3) && (hand.get(0).getRank() == 12 ) && (hand.get(4).getRank() == 0)))
 			straight = true;
 		
 		//The appropriate flush/straight type ranking is returned based on the above test results, else the method continues
 		
-		if ((flush == true) && (straight == true) && (hand.get(0).getRank() == 12)) 
+		if ((flush == true) && (straight == true) && (hand.get(0).getRank() == 12) && (hand.get(4).getRank() == 0)) 
 			return RANKING_KEY[9];
 		else if ((flush == true) && (straight == true))
 			return RANKING_KEY[8];
