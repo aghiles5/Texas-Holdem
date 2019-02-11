@@ -18,7 +18,7 @@ public class Main {
 			System.out.println("Enter SPACE to start the game.");
 			start = input.next();
 		}
-			startGame(); // Is this line suppose to be indented within the while loop or main method?
+		startGame(); //Starts the game.
 		
 
 	}
