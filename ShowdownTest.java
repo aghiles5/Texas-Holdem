@@ -1,5 +1,3 @@
-package cardPackage;
-
 import java.util.ArrayList;
 import java.util.Random;
 
