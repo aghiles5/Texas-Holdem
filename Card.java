@@ -1,4 +1,3 @@
-package cardPackage;
 /** 
  * The Card class stores and handles information for a virtual playing card. 
  * The suite of the card is stored as an integer corresponding to the index of 
