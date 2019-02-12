@@ -3,11 +3,17 @@ public class AI {
   
   private int card_1;
   private int card_2;
+  private int[] hand = new int[2]; 
   
-  public int getCards() {
+  public int[] setCards() {
+	  hand[0] = card_1;
+	  hand[1] = card_2;
+	  return hand;
+  }
+  
+  public int[] getCards() {
     
-    return card_1;
-    return card_2;
+    return hand;
   
   }
   
