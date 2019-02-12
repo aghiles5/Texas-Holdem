@@ -1,4 +1,4 @@
-public class AI {
+public class AI extends SuperPlayer{
   /// Might change private int to public int
   
   private int card_1;
