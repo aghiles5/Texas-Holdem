@@ -1,21 +1,35 @@
+import java.util.ArrayList;
 
 public class Player {
   /// Might change private int to public int
   
   private int card_1;
   private int card_2;
-  private int[] hand = new int[2];
+  private ArrayList<Integer> hand = new ArrayList<Integer>();
   
-  public int[] setCards() {
-	  hand[0] = card_1;
-	  hand[1] = card_2;
+  public ArrayList<Integer> setCards() {
+	  hand.add(card_1);
+	  hand.add(card_2);
 	  return hand;
   }
   
   /// Accessor for player's card
-  public int[] getCards() {
+  public ArrayList<Integer> getCards() {
     return hand;
     
+  }
+  
+  public void check(String choice) {
+	  if (choice.equalsIgnoreCase("C")) {
+		  System.out.println("Player Checked.");
+	  }
+  }
+  
+  public void fold(String choice) {
+	  if (choice.equalsIgnoreCase("F")) {
+		  hand.clear();
+		  System.out.println("Player folded.");
+	  }
   }
   
   /*
