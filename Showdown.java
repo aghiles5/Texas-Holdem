@@ -5,113 +5,278 @@ import java.util.ArrayList;
  * Texas Holdem where players reveal their cards and vie for the pot by 
  * making the best ranking hand. Currently, only the basic ranking 
  * determination for one full, five card hand is implemented, returning
- * the ranking name based on the 
+ * the rank number.
  * 
  * @author Adam
- * @version 02/06/19
+ * @version 02/09/19
  */
 public class Showdown {
 
-	private static final String[] RANKING_KEY = {"High Card", "One Pair", "Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush"};
+	private static final String[] RANKING_KEY = {"High Card", "One Pair", 
+			"Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", 
+			"Four of a Kind", "Straight Flush", "Royal Flush"};
 	
 	public static void main(String args[]) {
 	}
 	
 	/**
+	 * Will generate all possible hands given a hole and the community cards.
+	 * Very WIP.
+	 * 
+	 * @param community
+	 * @param hole
+	 */
+	public static void allHands(ArrayList<Card> community, ArrayList<Card> hole) {	
+	}
+	
+	public static String byteToString(byte i) {
+		return RANKING_KEY[i];
+	}
+	
+	/**
 	 * For a five Card Arraylist hand this method will determine where it falls
 	 * on the Texas Holdem hand rankings, listed in the RANKING_KEY array from
-	 * lowest to highest. The correct string from the key for the determined 
-	 * ranking is returned to the caller.  
+	 * lowest to highest. The correct rank number according to the key is 
+	 * returned to the caller. 
 	 * 
 	 * @param hand the Card Arraylist hand to have its ranking determined
-	 * @return the name of the hand's ranking
+	 * @return the integer ranking of the hand
 	 */
-	public static String getHandRank(ArrayList<Card> hand) {
-		hand = orderByRank(hand); //The Cards are ordered from highest to lowest rank
+	public static byte getHandRank(ArrayList<Card> hand) {
+		hand = orderByRank(hand); //The Cards are ordered from highest 
+		                          //to lowest rank
 		
 		//Checks for flush/straight type hands
 		
-		boolean flush = false, straight = false;
+		boolean isFlush = isFlush(hand);
 		
-		//The suites of all the cards are tested if they are identical, or the hand is flush
+		boolean isStraight = isStraight(hand);
 		
-		int suiteMatchCount = 0; 
-		for (int i = 1; i < 5; i++) {
-			if (hand.get(0).getSuite() == hand.get(i).getSuite())
-				suiteMatchCount++;
-		}
-		if (suiteMatchCount == 4)
-			flush = true;
+		//The appropriate flush/straight type ranking is returned based on the 
+		//above test results, else the method continues
 		
-		//The rankings of cards are tested if they are in series, or the hand is straight
-		
-		int decMatchCount = 0;
-		for (int i = 1; i < 5; i++) {
-			if (hand.get(0).getRank() - i == hand.get(i).getRank())
-				decMatchCount++;
-		}
-		if ((decMatchCount == 4) || ((decMatchCount == 3) && (hand.get(0).getRank() == 12 ) && (hand.get(4).getRank() == 0)))
-			straight = true;
-		
-		//The appropriate flush/straight type ranking is returned based on the above test results, else the method continues
-		
-		if ((flush == true) && (straight == true) && (hand.get(0).getRank() == 12) && (hand.get(4).getRank() == 0)) 
-			return RANKING_KEY[9];
-		else if ((flush == true) && (straight == true))
-			return RANKING_KEY[8];
-		else if (flush == true)
-			return RANKING_KEY[5];
-		else if (straight == true)
-			return RANKING_KEY[4];
+		if ((isFlush == true) && (isStraight == true) && (hand.get(0).getRank() == 12) && (hand.get(4).getRank() == 8)) 
+			return 9;
+		else if ((isFlush == true) && (isStraight == true))
+			return 8;
+		else if (isFlush == true)
+			return 5;
+		else if (isStraight == true)
+			return 4;
 		
 		// Pair checking
 		
 		boolean threeKind = false;
 		double pairs = 0.0;
 		
-		for (Card card : hand) { //Each card is tested against all other cards in the hand for which ones have matching ranks	
+		for (Card card : hand) { //Each card is tested against all other cards 
+			                     //in the hand for which ones have matching 
+			                     //ranks	
 			int rankMatches = -1;
 			for (int i = 0; i < 5; i++) { 
 				if (card.getRank() == hand.get(i).getRank())
 					rankMatches++;
 			}
-			if (rankMatches == 3) //If four cards have matching ranks "Four of a Kind" is immediately returned
-				return RANKING_KEY[7];
+			if (rankMatches == 3) //If four cards have matching ranks "Four of 
+				                  //a Kind" is immediately returned
+				return 7;
 			else if (rankMatches == 2)
 				threeKind = true;
 			else if (rankMatches == 1)
 				pairs += 0.5;
 			}
 		
-		//Based on the above determined sets of equal ranks the appropriate rank based rankings are returned
+		//Based on the above determined sets of equal ranks the appropriate 
+		//rank based rankings are returned
 		
 		if ((threeKind == true) && (pairs == 1.0))
-			return RANKING_KEY[6];
+			return 6;
 		else if (threeKind == true)
-			return RANKING_KEY[3];
+			return 3;
 		else if (pairs == 2.0)
-			return RANKING_KEY[2];
+			return 2;
 		else if (pairs == 1.0)
-			return RANKING_KEY[1];
+			return 1;
 		
-		return RANKING_KEY[0]; // The ranking defaults to "High Card"
+		return 0; // The ranking defaults to "High Card"
+	}
+	
+	//Dispute settlers (WIP)
+	//Will return 0 if the hands are equal, 1 if the first hand is higher, 2 if the second is higher.
+	
+	public static int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+		hand1 = orderByRank(hand1);
+		hand2 = orderByRank(hand2);
+		
+		if ((hand1.get(0).getRank() == hand1.get(0).getRank()) && (hand1.get(4).getRank() == hand1.get(4).getRank()))
+			return 0;
+		else if ((hand1.get(0).getRank() > hand1.get(0).getRank()) && (hand1.get(4).getRank() > hand1.get(4).getRank()))
+			return 1;
+		else
+			return 2;
+	}
+	
+	public static int disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+		hand1 = orderByRank(hand1);
+		hand2 = orderByRank(hand2);
+		
+		for (int i = 0; i < 5; i++) {
+			if (hand1.get(i).getRank() > hand2.get(i).getRank())
+				return 1;
+			else if (hand1.get(i).getRank() < hand2.get(i).getRank())
+				return 2;
+		}
+		return 0;
+	}
+	
+	public static int disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+		int hand1SetRank = 0, hand2SetRank = 0;
+		
+		for (Card card : hand1) {
+			int rankMatches = 0;
+			for (int i = 0; i < 5; i++) { 
+				if (card.getRank() == hand1.get(i).getRank())
+					rankMatches++;
+			}
+			if (rankMatches > 1) {
+				hand1SetRank = card.getRank();
+				break;
+			}
+		}
+		
+		for (Card card : hand2) {
+			int rankMatches = 0;
+			for (int i = 0; i < 5; i++) { 
+				if (card.getRank() == hand1.get(i).getRank())
+					rankMatches++;
+			}
+			if (rankMatches > 1) {
+				hand2SetRank = card.getRank();
+				break;
+			}
+		}
+		
+		if (hand1SetRank > hand2SetRank)
+			return 1;
+		else if (hand1SetRank < hand2SetRank)
+			return 2;
+		else
+			return 0;
+	}
+	
+	public static int disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+		hand1 = orderByRank(hand1);
+		hand2 = orderByRank(hand2);
+		
+		int hand1SetRankA = -1, hand1SetRankB = -1, hand2SetRankA = -1, hand2SetRankB = -1;
+		
+		for (Card card : hand1) {
+			int rankMatches = 0;
+			for (int i = 0; i < 5; i++) { 
+				if (card.getRank() == hand1.get(i).getRank())
+					rankMatches++;
+			}
+			if ((rankMatches > 1) && (hand1SetRankA == -1))
+				hand1SetRankA = card.getRank();
+			else if ((rankMatches > 1) && (card.getRank() != hand1SetRankA)) {
+				hand1SetRankB = card.getRank();
+			}
+		}
+		
+		for (Card card : hand2) {
+			int rankMatches = 0;
+			for (int i = 0; i < 5; i++) { 
+				if (card.getRank() == hand2.get(i).getRank())
+					rankMatches++;
+			}
+			if ((rankMatches > 1) && (hand2SetRankA == -1))
+				hand2SetRankA = card.getRank();
+			else if ((rankMatches > 1) && (card.getRank() != hand2SetRankA)) {
+				hand2SetRankB = card.getRank();
+			}	
+		}	
+		return 0;
+	}
+	
+	//Private Helper Methods
+	
+	/**
+	 * This method checks if a five Card hand is flush, or the suits of all
+	 * five cards match. For each Card after the first, a counter is 
+	 * incremented when its suit matches the first Card's suit. If four matches
+	 * are registered then the hand is determined to be flush.
+	 * 
+	 * 
+	 * @param hand the five Card ArrayList to be evaluated
+	 * @return the appropriate boolean condition for the hand's flush state
+	 */
+	private static boolean isFlush(ArrayList<Card> hand) {
+		boolean isFlush = false;
+		int suiteMatchCount = 0; 
+		for (int i = 1; i < 5; i++) {
+			if (hand.get(0).getSuit() == hand.get(i).getSuit())
+				suiteMatchCount++;
+		}
+		if (suiteMatchCount == 4)
+			isFlush = true;
+		return isFlush;
 	}
 	
 	/**
-	 * To assist in the finding of straights, this method sorts a five Card 
-	 * Arraylist hand in ascending order of Card ranks.
+	 * This method checks if a five Card hand is straight, or all of its Card's
+	 * ranks are consecutive. Once a hand is ordered the number of decrement
+	 * matches are counted, where the highest ranking Card's rank minus one
+	 * should equal the rank of the Card one index from it and so on. If four
+	 * of these matches are registered the hand is determined to be straight. 
+	 * If an ace is the highest ranking card it can be straight with either a 
+	 * Ten to King or Two to Five rank sequence, so in this case the decrement
+	 * matches are tested for the last four Cards in the hand, then confirmed 
+	 * straight if these four begin with either a King or Five rank card.  
 	 * 
-	 * @param uHand the unsorted Card Arraylist
+	 * 
+	 * @param hand the five Card ArrayList to be evaluated
+	 * @return the appropriate boolean condition for the hand's straight state
+	 */
+	private static boolean isStraight(ArrayList<Card> hand) {
+		boolean isStraight = false;
+		int decMatchCount = 0;
+		if (hand.get(0).getRank() == 12) { //Ace special case
+			for (int i = 2; i < 5; i++) {
+				if (hand.get(1).getRank() - i + 1 == hand.get(i).getRank())
+					decMatchCount++;
+			}
+			if ((decMatchCount == 3) && ((hand.get(1).getRank() == 11) || (hand.get(1).getRank() == 3)))
+				isStraight = true;
+		}
+		else { //General straight check
+			decMatchCount = 0;
+			for (int i = 1; i < 5; i++) {
+				if (hand.get(0).getRank() - i == hand.get(i).getRank())
+					decMatchCount++;
+			}
+			if (decMatchCount == 4)
+				isStraight = true;
+		}
+		return isStraight;
+	}
+	
+	/**
+	 * To assist in the finding of straights and evaluating ranking disputes, 
+	 * this method sorts a five Card Arraylist hand in ascending order of Card 
+	 * ranks.
+	 * 
+	 * @param hand the unsorted Card Arraylist
 	 * @return an ArrayList cards ordered from highest to lowest ranks
 	 */
-	public static ArrayList<Card> orderByRank(ArrayList<Card> uHand){
-		ArrayList<Card> oHand = new ArrayList<Card>();
+	private static ArrayList<Card> orderByRank(ArrayList<Card> hand){
+		ArrayList<Card> oHand = new ArrayList<Card>(), uHand = new ArrayList<Card>();
+		for (Card card : hand) //The passed hand is copied to the unorganized hand uHand to prevent privacy leaks.
+			uHand.add(card);
 		while (uHand.size() > 0) { //As cards are transferred off of the old hand the next highest card is determined until all are gone		
 			int highRank = 0, highRankIndex = 0; 
 			for (int i = 0; i < uHand.size(); i++) { //Each card in the hand is tested for being the highest
-				Card card = uHand.get(i);
-				if (card.getRank() > highRank) { //If the current card has a higher rank it becomes the new high card
-					highRank = card.getRank();
+				if (uHand.get(i).getRank() > highRank) { //If the current card has a higher rank it becomes the new high card
+					highRank = uHand.get(i).getRank();
 					highRankIndex = i;
 				}
 			}

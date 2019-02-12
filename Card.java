@@ -1,79 +1,77 @@
 /** 
  * The Card class stores and handles information for a virtual playing card. 
- * The suite of the card is stored as an integer corresponding to the index of 
- * the suite in the class constant SUITE_KEY array and its rank is similarly 
- * an integer corresponding to the rank in the class constant RANK_KEY array.
- * E.g. the Ace of Spades would be classified by suite 1 and rank 0 as per the
+ * The suit of the card is stored as an byte corresponding to the index of 
+ * the suit in the class constant SUITE_KEY array and its rank is similarly 
+ * an byte corresponding to the rank in the class constant RANK_KEY array.
+ * E.g. the Ace of Spades would be classified by suite 1 and rank 12 as per the
  * mentioned keys.
  * 
  * @author Adam Hiles
- * @version 02/05/19
+ * @version 02/11/19
  */
 public class Card {
 
 	//Instance Variables
 	
-	private int suite;
-	private int rank;
+	private byte suit;
+	private byte rank;
 	
 	//Class Constants
 	
-	private static final String[] SUITE_KEY = {"Hearts", "Spades", "Diamonds", 
+	private static final String[] SUIT_KEY = {"Hearts", "Spades", "Diamonds", 
 			"Clubs"};
-	private static final String[] RANK_KEY = {"Ace", "Two", "Three", "Four", 
-			"Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
+	private static final String[] RANK_KEY = {"Two", "Three", "Four", "Five", 
+			"Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", 
+			"Ace"};
 	
 	//Constructors
 	
-	
 	/**
-	 * A new card object requires that caller to provide the instanced suite
+	 * A new card object requires that caller to provide the instanced suit
 	 * and rank integers, which will be directly set to said variables.
-	 * Currently there is no check for proper values: 0 to 3 for the suite and
-	 * 0 to 12 for the rank. Passing incorrect values will not result any error
+	 * Currently there is no check for proper values: 0 to 3 for the suit and
+	 * 0 to 12 for the rank. Passing incorrect values will not create errors 
 	 * in most aspects of usage (besides logical) except for in the toString()
 	 * method where the indexes will by out of the range of the keys.
 	 * 
-	 * @param setSuite the caller's specified suite 
-	 * @param setRank the caller's specified suite
+	 * @param suit the caller's specified suit
+	 * @param rank the caller's specified rank
 	 */
-	public Card(int setSuite, int setRank) {
-		suite = setSuite;
-		rank = setRank;
+	public Card(byte suit, byte rank) {
+		this.suit = suit;
+		this.rank = rank;
 	}
 	
 	//Getters
 	
 	/**
-	 * Returns the integer representing the card's suite.
+	 * Returns the byte representing the card's suit.
 	 * 
-	 * @return the suite integer
+	 * @return the suit byte
 	 */
-	public int getSuite() {
-		return suite;
+	public byte getSuit() {
+		return suit;
 	}
 	
 	/**
-	 * Returns the integer representing the card's rank.
+	 * Returns the byte representing the card's rank.
 	 * 
-	 * @return the rank integer
+	 * @return the rank byte
 	 */
-	public int getRank() {
+	public byte getRank() {
 		return rank;
 	}
 	
 	/**
-	 * For user interfaces the name of the card is converted from its integer
-	 * components to a string in the form "(rank) of (suite)" by retrieving its
-	 * corresponding string from the keys. E.g. a card with suite 2 (Diamonds) 
-	 * and rank 7 (Eight) will return the string "Eight of Diamonds".
+	 * For user interfaces the name of the card is converted from its byte
+	 * components to a string in the form "(rank) of (suit)" by retrieving its
+	 * corresponding string from the keys. E.g. a card with suit 2 (Diamonds) 
+	 * and rank 7 (Nine) will return the string "Nine of Diamonds".
 	 * 
 	 * @return a string of object information in a user friendly form
 	 */
 	public String toString() {
-		String cardName = RANK_KEY[rank] + " of " + SUITE_KEY[suite];
+		String cardName = RANK_KEY[rank] + " of " + SUIT_KEY[suit];
 		return cardName;
 	}
-	
-
 }
