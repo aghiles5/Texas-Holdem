@@ -5,6 +5,7 @@ public class Player {
   
   private int card_1;
   private int card_2;
+  private int Money;
   private ArrayList<Integer> hand = new ArrayList<Integer>();
   
   public ArrayList<Integer> setCards() {
@@ -29,6 +30,19 @@ public class Player {
 	  if (choice.equalsIgnoreCase("F")) {
 		  hand.clear();
 		  System.out.println("Player folded.");
+	  }
+  }
+  
+  public void BetRaise(String choice, int bet) {
+	  if (choice.equalsIgnoreCase("B")) {
+		  if (bet <= Money) {
+			  Money = Money - bet;
+			  //pot update
+		  }
+	  } else if (choice.equalsIgnoreCase("R")) {
+		  //if bet >= 2 times pot && bet <= Money
+		  Money = Money - bet;
+		  //pot update
 	  }
   }
   
