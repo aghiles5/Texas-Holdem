@@ -11,7 +11,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		//A way to start the game.
-		String start;
+		String start = "";
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);
 		while (!start.equals(" ")) {
