@@ -14,7 +14,7 @@ public class AI {
   public int[] getCards() {
     
     return hand;
-  
+    // hahahaha
   }
   
   /*
