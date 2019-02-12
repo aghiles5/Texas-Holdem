@@ -6,6 +6,8 @@ import java.util.ArrayList;
  * making the best ranking hand. Currently, only the basic ranking 
  * determination for one full, five card hand is implemented, returning
  * the rank number.
+ *
+ * DETERMINE HIGH CARD
  * 
  * @author Adam
  * @version 02/09/19
