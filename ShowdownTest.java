@@ -13,10 +13,7 @@ import java.util.ArrayList;
 public class ShowdownTest {
 
 	public static void main(String args[]) {
-		Deck testDeck = new Deck();
-		testDeck.printDeck();
-		testDeck.shuffle();
-		testDeck.printDeck();
+		findDefinedRank();
 	}
 	
 	public static void randomHandTest() {
@@ -33,7 +30,7 @@ public class ShowdownTest {
 	}
 	
 	public static void findDefinedRank() {
-		byte targetRank = 5;
+		byte targetRank = 9;
 		System.out.println("First \"" + Showdown.byteToString(targetRank) + "\" Hand\n");
 		int counter = 0;
 		boolean run = true;
