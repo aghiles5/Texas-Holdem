@@ -22,13 +22,13 @@ public class Showdown {
 	}
 	
 	/**
-	 * Will generate all possible hands given a hole and the community cards.
-	 * Very WIP.
+	 * Will determine a player's highest hand based on their hole cards and
+	 * the community cards.
 	 * 
 	 * @param community
 	 * @param hole
 	 */
-	public static void allHands(ArrayList<Card> community, ArrayList<Card> hole) {	
+	public static void detHighestHand(ArrayList<Card> community, ArrayList<Card> hole) {	
 	}
 	
 	public static String byteToString(byte i) {
@@ -286,5 +286,36 @@ public class Showdown {
 			uHand.remove(highRankIndex);
 		}
 		return oHand;
+	}
+	
+	private static ArrayList<ArrayList<Card>> combComm3(ArrayList<Card> comm) {
+		ArrayList<ArrayList<Card>> commCombs3 = new ArrayList<ArrayList<Card>>();
+		for (byte i = 0; i < 10; i++)
+			commCombs3.add(new ArrayList<Card>());
+		byte writeIndex = 0;
+		for (byte blank1 = 0; blank1 < 4; blank1++) {
+			for (byte blank2 = (byte) (blank1 + 1); blank2 > blank1 && blank2 < 5; blank2++) {
+				for (byte index = 0; index < 5; index++) {
+					if ((index != blank1) && (index != blank2))
+						commCombs3.get(writeIndex).add(comm.get(index));
+				}
+				writeIndex++;
+			}
+		}
+		
+		return commCombs3;
+	}
+	
+	private static ArrayList<ArrayList<Card>> combComm4(ArrayList<Card> comm) {
+		ArrayList<ArrayList<Card>> commCombs4 = new ArrayList<ArrayList<Card>>();
+		for (byte i = 0; i < 5; i++)
+			commCombs4.add(new ArrayList<Card>());
+		for (byte writeIndex = 0; writeIndex < 5; writeIndex++) {
+			for (byte index = 0; index < 5; index++) {
+				if (index != writeIndex)
+					commCombs4.get(writeIndex).add(comm.get(index));
+			}
+		}
+		return commCombs4;
 	}
 }

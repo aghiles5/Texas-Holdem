@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ShowdownTest {
 
 	public static void main(String args[]) {
-		findDefinedRank();
+		
 	}
 	
 	public static void randomHandTest() {
