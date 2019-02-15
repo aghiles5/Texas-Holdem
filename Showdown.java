@@ -21,86 +21,46 @@ public class Showdown {
 	public static void main(String args[]) {
 	}
 	
-	/**
-	 * Will determine a player's highest hand based on their hole cards and
-	 * the community cards.
-	 * 
-	 * @param community
-	 * @param hole
-	 */
-	public static void detHighestHand(ArrayList<Card> community, ArrayList<Card> hole) {	
+	public static byte showdown(ArrayList<Card> hole1, ArrayList<Card> hole2, ArrayList<Card> comm) {
+		ArrayList<Card> player1Hand, player2Hand;
+		byte player1Rank, player2Rank;
+		player1Hand = getHighestHand(hole1, comm);
+		player2Hand = getHighestHand(hole2, comm);
+		player1Rank = getHandRank(player1Hand);
+		player2Rank = getHandRank(player2Hand);
+		if (player1Rank > player2Rank) {
+			System.out.println("Player One Wins the Pot");
+			System.out.println("\n1. Player One: " + byteToString(player1Rank) + "\n");
+			for (Card card : player1Hand) {
+				System.out.println(card.toString());
+			}
+			System.out.println("\n2. Player Two: " + byteToString(player2Rank) + "\n");
+			for (Card card : player2Hand) {
+				System.out.println(card.toString());
+			}
+			return 1;
+		}
+		else if (player1Rank < player2Rank) {
+			System.out.println("Player Two Wins the Pot");
+			System.out.println("\n1. Player Two: " + byteToString(player2Rank) + "\n");
+			for (Card card : player2Hand) {
+				System.out.println(card.toString());
+			}
+			System.out.println("\n2. Player One: " + byteToString(player1Rank) + "\n");
+			for (Card card : player1Hand) {
+				System.out.println(card.toString());
+			}
+			return 2;
+		}
+		else {
+			System.out.println("Stalemate");
+			System.out.println("\nPlayers One and Two Both Have " + byteToString(player2Rank) + "\n");
+			return 0;
+		}
 	}
 	
 	public static String byteToString(byte i) {
 		return RANKING_KEY[i];
-	}
-	
-	/**
-	 * For a five Card Arraylist hand this method will determine where it falls
-	 * on the Texas Holdem hand rankings, listed in the RANKING_KEY array from
-	 * lowest to highest. The correct rank number according to the key is 
-	 * returned to the caller. 
-	 * 
-	 * @param hand the Card Arraylist hand to have its ranking determined
-	 * @return the integer ranking of the hand
-	 */
-	public static byte getHandRank(ArrayList<Card> hand) {
-		hand = orderByRank(hand); //The Cards are ordered from highest 
-		                          //to lowest rank
-		
-		//Checks for flush/straight type hands
-		
-		boolean isFlush = isFlush(hand);
-		
-		boolean isStraight = isStraight(hand);
-		
-		//The appropriate flush/straight type ranking is returned based on the 
-		//above test results, else the method continues
-		
-		if ((isFlush == true) && (isStraight == true) && (hand.get(0).getRank() == 12) && (hand.get(4).getRank() == 8)) 
-			return 9;
-		else if ((isFlush == true) && (isStraight == true))
-			return 8;
-		else if (isFlush == true)
-			return 5;
-		else if (isStraight == true)
-			return 4;
-		
-		// Pair checking
-		
-		boolean threeKind = false;
-		double pairs = 0.0;
-		
-		for (Card card : hand) { //Each card is tested against all other cards 
-			                     //in the hand for which ones have matching 
-			                     //ranks	
-			int rankMatches = -1;
-			for (int i = 0; i < 5; i++) { 
-				if (card.getRank() == hand.get(i).getRank())
-					rankMatches++;
-			}
-			if (rankMatches == 3) //If four cards have matching ranks "Four of 
-				                  //a Kind" is immediately returned
-				return 7;
-			else if (rankMatches == 2)
-				threeKind = true;
-			else if (rankMatches == 1)
-				pairs += 0.5;
-			}
-		
-		//Based on the above determined sets of equal ranks the appropriate 
-		//rank based rankings are returned
-		
-		if ((threeKind == true) && (pairs == 1.0))
-			return 6;
-		else if (threeKind == true)
-			return 3;
-		else if (pairs == 2.0)
-			return 2;
-		else if (pairs == 1.0)
-			return 1;
-		
-		return 0; // The ranking defaults to "High Card"
 	}
 	
 	//Dispute settlers (WIP)
@@ -200,7 +160,98 @@ public class Showdown {
 		return 0;
 	}
 	
-	//Private Helper Methods
+	//Private Methods
+	
+	/**
+	 * Will determine a player's highest hand based on their hole cards and
+	 * the community cards.
+	 * 
+	 * @param hole
+	 * @param community
+	 */
+	private static ArrayList<Card> getHighestHand(ArrayList<Card> hole, ArrayList<Card> comm) {
+		ArrayList<Card> allCards = new ArrayList<Card>(), highestHand = new ArrayList<Card>();
+		byte highestRank = -1, rank;
+		allCards.addAll(comm);
+		allCards.addAll(hole);
+		ArrayList<ArrayList<Card>> combs = comb(allCards);
+		for (ArrayList<Card> hand : combs) {
+			rank = getHandRank(hand);
+			if (rank > highestRank) {
+				highestRank = rank;
+				highestHand = hand;
+			}
+		}
+		return highestHand;
+	}
+	
+	/**
+	 * For a five Card Arraylist hand this method will determine where it falls
+	 * on the Texas Holdem hand rankings, listed in the RANKING_KEY array from
+	 * lowest to highest. The correct rank number according to the key is 
+	 * returned to the caller. 
+	 * 
+	 * @param hand the Card Arraylist hand to have its ranking determined
+	 * @return the integer ranking of the hand
+	 */
+	private static byte getHandRank(ArrayList<Card> hand) {
+		hand = orderByRank(hand); //The Cards are ordered from highest 
+		                          //to lowest rank
+		
+		//Checks for flush/straight type hands
+		
+		boolean isFlush = isFlush(hand);
+		
+		boolean isStraight = isStraight(hand);
+		
+		//The appropriate flush/straight type ranking is returned based on the 
+		//above test results, else the method continues
+		
+		if ((isFlush == true) && (isStraight == true) && (hand.get(0).getRank() == 12) && (hand.get(4).getRank() == 8)) 
+			return 9;
+		else if ((isFlush == true) && (isStraight == true))
+			return 8;
+		else if (isFlush == true)
+			return 5;
+		else if (isStraight == true)
+			return 4;
+		
+		// Pair checking
+		
+		boolean threeKind = false;
+		double pairs = 0.0;
+		
+		for (Card card : hand) { //Each card is tested against all other cards 
+			                     //in the hand for which ones have matching 
+			                     //ranks	
+			int rankMatches = -1;
+			for (int i = 0; i < 5; i++) { 
+				if (card.getRank() == hand.get(i).getRank())
+					rankMatches++;
+			}
+			if (rankMatches == 3) //If four cards have matching ranks "Four of 
+				                  //a Kind" is immediately returned
+				return 7;
+			else if (rankMatches == 2)
+				threeKind = true;
+			else if (rankMatches == 1)
+				pairs += 0.5;
+			}
+		
+		//Based on the above determined sets of equal ranks the appropriate 
+		//rank based rankings are returned
+		
+		if ((threeKind == true) && (pairs == 1.0))
+			return 6;
+		else if (threeKind == true)
+			return 3;
+		else if (pairs == 2.0)
+			return 2;
+		else if (pairs == 1.0)
+			return 1;
+		
+		return 0; // The ranking defaults to "High Card"
+	}
 	
 	/**
 	 * This method checks if a five Card hand is flush, or the suits of all
@@ -288,34 +339,20 @@ public class Showdown {
 		return oHand;
 	}
 	
-	private static ArrayList<ArrayList<Card>> combComm3(ArrayList<Card> comm) {
-		ArrayList<ArrayList<Card>> commCombs3 = new ArrayList<ArrayList<Card>>();
-		for (byte i = 0; i < 10; i++)
-			commCombs3.add(new ArrayList<Card>());
+	public static ArrayList<ArrayList<Card>> comb(ArrayList<Card> allCards) {
+		ArrayList<ArrayList<Card>> combs = new ArrayList<ArrayList<Card>>();
+		for (byte i = 0; i < 21; i++)
+			combs.add(new ArrayList<Card>());
 		byte writeIndex = 0;
-		for (byte blank1 = 0; blank1 < 4; blank1++) {
-			for (byte blank2 = (byte) (blank1 + 1); blank2 > blank1 && blank2 < 5; blank2++) {
-				for (byte index = 0; index < 5; index++) {
+		for (byte blank1 = 0; blank1 < 6; blank1++) {
+			for (byte blank2 = (byte) (blank1 + 1); blank2 < 7; blank2++) {
+				for (byte index = 0; index < 7; index++) {
 					if ((index != blank1) && (index != blank2))
-						commCombs3.get(writeIndex).add(comm.get(index));
+						combs.get(writeIndex).add(allCards.get(index));
 				}
 				writeIndex++;
 			}
-		}
-		
-		return commCombs3;
-	}
-	
-	private static ArrayList<ArrayList<Card>> combComm4(ArrayList<Card> comm) {
-		ArrayList<ArrayList<Card>> commCombs4 = new ArrayList<ArrayList<Card>>();
-		for (byte i = 0; i < 5; i++)
-			commCombs4.add(new ArrayList<Card>());
-		for (byte writeIndex = 0; writeIndex < 5; writeIndex++) {
-			for (byte index = 0; index < 5; index++) {
-				if (index != writeIndex)
-					commCombs4.get(writeIndex).add(comm.get(index));
-			}
-		}
-		return commCombs4;
+		}	
+		return combs;
 	}
 }

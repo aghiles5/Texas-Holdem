@@ -61,6 +61,27 @@ public class Deck {
 		return hand;
 	}
 	
+	public Card dealSingle() {
+		Card card = deck.get(0);
+		deck.remove(0);
+		return card;
+	}
+	
+	public ArrayList<Card> simComm() {
+		deck.remove(0);
+		ArrayList<Card> comm = new ArrayList<Card>();
+		for (int i = 0; i < 3; i++) { 
+			comm.add(deck.get(0)); 
+			deck.remove(0);
+		}
+		for (int i = 0; i < 2; i++) {
+			deck.remove(0);
+			comm.add(deck.get(0));
+			deck.remove(0);
+		}
+		return comm;
+	}
+	
 	/**
 	 * Every Card in the deck is listed.
 	 */

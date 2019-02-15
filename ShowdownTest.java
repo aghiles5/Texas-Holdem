@@ -13,62 +13,24 @@ import java.util.ArrayList;
 public class ShowdownTest {
 
 	public static void main(String args[]) {
-		
-	}
-	
-	public static void randomHandTest() {
 		Deck testDeck = new Deck();
 		testDeck.shuffle();
-		
-		ArrayList<Card> testHand = testDeck.dealFullHand();
-		for (Card card : testHand) 
-			System.out.println(card.toString());
-		
-		byte rankByte = Showdown.getHandRank(testHand);
-		
-		System.out.println("\nRank: " + Showdown.byteToString(rankByte));
-	}
-	
-	public static void findDefinedRank() {
-		byte targetRank = 9;
-		System.out.println("First \"" + Showdown.byteToString(targetRank) + "\" Hand\n");
-		int counter = 0;
-		boolean run = true;
-		while (run) {
-			Deck testDeck = new Deck();
-			testDeck.shuffle();
-			for (int i = 0; i < 10; i++) {
-				ArrayList<Card> testHand = testDeck.dealFullHand();
-				byte rankByte = Showdown.getHandRank(testHand);
-				counter++;
-				if (rankByte == targetRank) { //Change to find hands of a certain rank
-					for (Card card : testHand) 
-						System.out.println(card.toString());
-					System.out.println("\nNumber of Hands to Find: " + counter);
-					run = false;
-					break;
-				}
-			}
+		ArrayList<Card> hole1 = new ArrayList<Card>(), hole2 = new ArrayList<Card>(), comm = new ArrayList<Card>();
+		for (int i = 0; i < 2; i++) {
+			hole1.add(testDeck.dealSingle());
+			hole2.add(testDeck.dealSingle());
 		}
-	}
-	
-	public static void timeTest() {
-		System.out.println("Time Test\n");
-		long startTime = System.nanoTime();
-		
-		for (int o = 0; o < 100000; o++) {
-			Deck testDeck = new Deck();
-			testDeck.shuffle();
-			for (int i = 0; i < 10; i++) {
-				ArrayList<Card> testHand = testDeck.dealFullHand();
-				Showdown.getHandRank(testHand);
-				}
-			}
-		
-		long endTime = System.nanoTime();
-		double time = (endTime - startTime)/1000000.0;
-		
-		System.out.println("Time: " + time + " ms");
-		System.out.println("Approx. Time per Rank Determination: " + time/1000 + " us");
+		comm = testDeck.simComm();
+		System.out.println("Community Cards:\n");
+		for (Card card : comm)
+			System.out.println(card.toString());
+		System.out.println("\nPlayer One's Cards:\n");
+		for (Card card : hole1)
+			System.out.println(card.toString());
+		System.out.println("\nPlayer Two's Cards:\n");
+		for (Card card : hole2)
+			System.out.println(card.toString());
+		System.out.println("");
+		Showdown.showdown(hole1, hole2, comm);
 	}
 }
