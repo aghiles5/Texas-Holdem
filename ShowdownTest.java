@@ -14,6 +14,7 @@ public class ShowdownTest {
 
 	public static void main(String args[]) {
 		findDefinedRank();
+		//Test
 	}
 	
 	public static void randomHandTest() {
