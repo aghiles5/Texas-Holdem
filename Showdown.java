@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * DETERMINE HIGH CARD
  * 
  * @author Adam
- * @version 02/09/19
+ * @version 02/15/19
  */
 public class Showdown {
 
@@ -29,38 +29,34 @@ public class Showdown {
 		player1Rank = getHandRank(player1Hand);
 		player2Rank = getHandRank(player2Hand);
 		if (player1Rank > player2Rank) {
-			System.out.println("Player One Wins the Pot");
-			System.out.println("\n1. Player One: " + byteToString(player1Rank) + "\n");
+			System.out.println("\nPlayer One Wins the Pot");
+			System.out.println("\n1. Player One: " + RANKING_KEY[player1Rank] + "\n");
 			for (Card card : player1Hand) {
 				System.out.println(card.toString());
 			}
-			System.out.println("\n2. Player Two: " + byteToString(player2Rank) + "\n");
+			System.out.println("\n2. Player Two: " + RANKING_KEY[player2Rank] + "\n");
 			for (Card card : player2Hand) {
 				System.out.println(card.toString());
 			}
 			return 1;
 		}
 		else if (player1Rank < player2Rank) {
-			System.out.println("Player Two Wins the Pot");
-			System.out.println("\n1. Player Two: " + byteToString(player2Rank) + "\n");
+			System.out.println("\nPlayer Two Wins the Pot");
+			System.out.println("\n1. Player Two: " + RANKING_KEY[player2Rank] + "\n");
 			for (Card card : player2Hand) {
 				System.out.println(card.toString());
 			}
-			System.out.println("\n2. Player One: " + byteToString(player1Rank) + "\n");
+			System.out.println("\n2. Player One: " + RANKING_KEY[player1Rank] + "\n");
 			for (Card card : player1Hand) {
 				System.out.println(card.toString());
 			}
 			return 2;
 		}
 		else {
-			System.out.println("Stalemate");
-			System.out.println("\nPlayers One and Two Both Have " + byteToString(player2Rank) + "\n");
+			System.out.println("\nStalemate");
+			System.out.println("\nPlayers One and Two Both Have " + RANKING_KEY[player1Rank] + "\n");
 			return 0;
 		}
-	}
-	
-	public static String byteToString(byte i) {
-		return RANKING_KEY[i];
 	}
 	
 	//Dispute settlers (WIP)
@@ -82,7 +78,7 @@ public class Showdown {
 		hand1 = orderByRank(hand1);
 		hand2 = orderByRank(hand2);
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < hand1.size(); i++) {
 			if (hand1.get(i).getRank() > hand2.get(i).getRank())
 				return 1;
 			else if (hand1.get(i).getRank() < hand2.get(i).getRank())
