@@ -8,11 +8,15 @@ import java.util.ArrayList;
  * FOR TESTING PURPOSES ONLY.
  *
  * @author Adam Hiles
- * @version 02/15/19
+ * @version 02/18/19
  */
 public class ShowdownTest {
 
 	public static void main(String args[]) {
+		twoPlayerDemo();
+	}
+	
+	public static void twoPlayerDemo() {
 		Deck testDeck = new Deck();
 		testDeck.shuffle();
 		ArrayList<Card> hole1 = new ArrayList<Card>(), hole2 = new ArrayList<Card>(), comm = new ArrayList<Card>();
