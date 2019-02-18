@@ -7,8 +7,6 @@ import java.util.ArrayList;
  * determination for one full, five card hand is implemented, returning
  * the rank number.
  *
- * DETERMINE HIGH CARD
- * 
  * @author Adam
  * @version 02/15/19
  */
@@ -17,78 +15,190 @@ public class Showdown {
 	private static final String[] RANKING_KEY = {"High Card", "One Pair", 
 			"Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", 
 			"Four of a Kind", "Straight Flush", "Royal Flush"};
+	private static final byte HIGH_CARD = 0;
+	private static final byte ONE_PAIR = 1;
+	private static final byte TWO_PAIRS = 2;
+	private static final byte THREE_OF_A_KIND = 3;
+	private static final byte STRAIGHT = 4;
+	private static final byte FLUSH = 5;
+	private static final byte FULL_HOUSE = 6;
+	private static final byte FOUR_OF_A_KIND = 7;
+	private static final byte STRAIGHT_FLUSH = 8;
+	private static final byte ROYAL_FLUSH = 9;
+	
+	private static final byte HAND_ONE_GREATER = 1;
+	private static final byte HAND_TWO_GREATER = 2;
+	private static final byte HANDS_EQUAL = 0;
 	
 	public static void main(String args[]) {
 	}
 	
+	/**
+	 * Base public class. To be documented pending optimization and completion
+	 * of Showdown tests.
+	 * 
+	 * @param hole1
+	 * @param hole2
+	 * @param comm
+	 * @return
+	 */
 	public static byte showdown(ArrayList<Card> hole1, ArrayList<Card> hole2, ArrayList<Card> comm) {
 		ArrayList<Card> player1Hand, player2Hand;
-		byte player1Rank, player2Rank;
+		byte player1Rank, player2Rank, result;
 		player1Hand = getHighestHand(hole1, comm);
 		player2Hand = getHighestHand(hole2, comm);
 		player1Rank = getHandRank(player1Hand);
 		player2Rank = getHandRank(player2Hand);
-		if (player1Rank > player2Rank) {
-			System.out.println("\nPlayer One Wins the Pot");
-			System.out.println("\n1. Player One: " + RANKING_KEY[player1Rank] + "\n");
-			for (Card card : player1Hand) {
-				System.out.println(card.toString());
+		while (true) {
+			if (player1Rank > player2Rank) {
+				System.out.println("\nPlayer One Wins the Pot");
+				System.out.println("\n1. Player One: " + RANKING_KEY[player1Rank] + "\n");
+				for (Card card : player1Hand) {
+					System.out.println(card.toString());
+				}
+				System.out.println("\n2. Player Two: " + RANKING_KEY[player2Rank] + "\n");
+				for (Card card : player2Hand) {
+					System.out.println(card.toString());
+				}
+				return HAND_ONE_GREATER;
 			}
-			System.out.println("\n2. Player Two: " + RANKING_KEY[player2Rank] + "\n");
-			for (Card card : player2Hand) {
-				System.out.println(card.toString());
+			else if (player1Rank < player2Rank) {
+				System.out.println("\nPlayer Two Wins the Pot");
+				System.out.println("\n1. Player Two: " + RANKING_KEY[player2Rank] + "\n");
+				for (Card card : player2Hand) {
+					System.out.println(card.toString());
+				}
+				System.out.println("\n2. Player One: " + RANKING_KEY[player1Rank] + "\n");
+				for (Card card : player1Hand) {
+					System.out.println(card.toString());
+				}
+				return HAND_TWO_GREATER;
 			}
-			return 1;
-		}
-		else if (player1Rank < player2Rank) {
-			System.out.println("\nPlayer Two Wins the Pot");
-			System.out.println("\n1. Player Two: " + RANKING_KEY[player2Rank] + "\n");
-			for (Card card : player2Hand) {
-				System.out.println(card.toString());
+			else {
+				result = dispute(player1Hand, player2Hand, player1Rank);
+				if (result == HAND_ONE_GREATER) {
+					System.out.println("\nPlayer One Wins the Pot");
+					System.out.println("\n1. Player One: " + RANKING_KEY[player1Rank] + "\n");
+					for (Card card : player1Hand) {
+						System.out.println(card.toString());
+					}
+					System.out.println("\n2. Player Two: " + RANKING_KEY[player2Rank] + "\n");
+					for (Card card : player2Hand) {
+						System.out.println(card.toString());
+					}
+					return HAND_ONE_GREATER;
+				}
+				else if (result == HAND_TWO_GREATER) {
+					System.out.println("\nPlayer Two Wins the Pot");
+					System.out.println("\n1. Player Two: " + RANKING_KEY[player2Rank] + "\n");
+					for (Card card : player2Hand) {
+						System.out.println(card.toString());
+					}
+					System.out.println("\n2. Player One: " + RANKING_KEY[player1Rank] + "\n");
+					for (Card card : player1Hand) {
+						System.out.println(card.toString());
+					}
+					return HAND_TWO_GREATER;
+				}	
+				else {
+					System.out.println("\nStalemate");
+					System.out.println("\nPlayers One and Two Both Have " + RANKING_KEY[player1Rank] + "\n");
+					return HANDS_EQUAL;
+				}
 			}
-			System.out.println("\n2. Player One: " + RANKING_KEY[player1Rank] + "\n");
-			for (Card card : player1Hand) {
-				System.out.println(card.toString());
-			}
-			return 2;
-		}
-		else {
-			System.out.println("\nStalemate");
-			System.out.println("\nPlayers One and Two Both Have " + RANKING_KEY[player1Rank] + "\n");
-			return 0;
 		}
 	}
 	
-	//Dispute settlers (WIP)
-	//Will return 0 if the hands are equal, 1 if the first hand is higher, 2 if the second is higher.
+	// Dispute Settlers (Public for testing)
+	//
+	// In the cases that two hands have the same rank the ranks of the cards 
+	// that make up those hands will have to be compared to determine which
+	// hand is higher. The following methods settle these disputes based on the
+	// type of algorithm required for the conflicting hand rank.
 	
-	public static int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	/**
+	 * The first step in the dispute process is to direct the hands to the 
+	 * appropriate dispute method, achieved in the below if-else branches.
+	 * 
+	 * @param hand1 the first hand for the comparison
+	 * @param hand2 the second hand for the comparison
+	 * @param commonRank the common rank between the two hands
+	 * @return a byte corresponding to the evaluated relation
+	 */
+	public static byte dispute(ArrayList<Card> hand1, ArrayList<Card> hand2, byte commonRank) {
+		if ((commonRank == STRAIGHT_FLUSH) || (commonRank == STRAIGHT))
+			return disputeStraight(hand1, hand2);
+		else if ((commonRank == FLUSH) || (commonRank == HIGH_CARD))
+			return disputeNonConsec(hand1, hand2);
+		else if ((commonRank == FULL_HOUSE) ||(commonRank == TWO_PAIRS))
+			return disputeTwoRankSet(hand1, hand2);
+		else
+			return disputeOneRankSet(hand1, hand2);
+	}
+	
+	/**
+	 * For straight type hands, specifically straight flushes and straights,
+	 * the ranks of the first and last cards will be compared for each hand
+	 * to determine which has the higher value.
+	 * 
+	 * @param hand1 the first hand for the comparison
+	 * @param hand2 the second hand for the comparison
+	 * @return a byte corresponding to the evaluated relation
+	 */
+	public static byte disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		hand1 = orderByRank(hand1);
 		hand2 = orderByRank(hand2);
 		
 		if ((hand1.get(0).getRank() == hand1.get(0).getRank()) && (hand1.get(4).getRank() == hand1.get(4).getRank()))
-			return 0;
+			return HANDS_EQUAL;
 		else if ((hand1.get(0).getRank() > hand1.get(0).getRank()) && (hand1.get(4).getRank() > hand1.get(4).getRank()))
-			return 1;
+			return HAND_ONE_GREATER;
 		else
-			return 2;
+			return HAND_TWO_GREATER;
 	}
 	
-	public static int disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	/**
+	 * For hand ranks with non-consecutive card ranks, such as flush and high
+	 * card, the cards for both hands are scanned through from highest to 
+	 * lowest ranking, returning a result when one has a card rank higher
+	 * than the other. This method can also be used to evaluate the "kicker"
+	 * cards from rank set type hands if their initial tests don't settle the
+	 * dispute.
+	 * 
+	 * @param hand1 the first hand for the comparison
+	 * @param hand2 the second hand for the comparison
+	 * @return a byte corresponding to the evaluated relation
+	 */
+	public static byte disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		hand1 = orderByRank(hand1);
 		hand2 = orderByRank(hand2);
 		
 		for (int i = 0; i < hand1.size(); i++) {
 			if (hand1.get(i).getRank() > hand2.get(i).getRank())
-				return 1;
+				return HAND_ONE_GREATER;
 			else if (hand1.get(i).getRank() < hand2.get(i).getRank())
-				return 2;
+				return HAND_TWO_GREATER;
 		}
-		return 0;
+		return HANDS_EQUAL;
 	}
 	
-	public static int disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
-		int hand1SetRank = 0, hand2SetRank = 0;
+	/**
+	 * For hand ranks where there is one set of cards with the same rank, such 
+	 * as two pairs and three of a kind, the rank of this set is found in each
+	 * hand. The rank of the sets in the hands are then compared to determine
+	 * which is greater and return the result/ While the set scan is being 
+	 * processed the cards not part of the set are copied to the hand's 
+	 * respective "kicker" list in case both hands have the same set rank, in
+	 * which case said kicker cards are evaluated by the non consecutive 
+	 * dispute function to determine the victor. 
+	 * 
+	 * @param hand1 the first hand for the comparison
+	 * @param hand2 the second hand for the comparison
+	 * @return a byte corresponding to the evaluated relation
+	 */
+	public static byte disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+		int hand1SetRank = -1, hand2SetRank = -1;
+		ArrayList<Card> hand1Kicker = new ArrayList<Card>(), hand2Kicker = new ArrayList<Card>();
 		
 		for (Card card : hand1) {
 			int rankMatches = 0;
@@ -96,10 +206,10 @@ public class Showdown {
 				if (card.getRank() == hand1.get(i).getRank())
 					rankMatches++;
 			}
-			if (rankMatches > 1) {
+			if (rankMatches > 1) 
 				hand1SetRank = card.getRank();
-				break;
-			}
+			else
+				hand1Kicker.add(card);
 		}
 		
 		for (Card card : hand2) {
@@ -108,25 +218,40 @@ public class Showdown {
 				if (card.getRank() == hand1.get(i).getRank())
 					rankMatches++;
 			}
-			if (rankMatches > 1) {
+			if (rankMatches > 1) 
 				hand2SetRank = card.getRank();
-				break;
-			}
+			else
+				hand2Kicker.add(card);
 		}
 		
 		if (hand1SetRank > hand2SetRank)
-			return 1;
+			return HAND_ONE_GREATER;
 		else if (hand1SetRank < hand2SetRank)
-			return 2;
+			return HAND_TWO_GREATER;
 		else
-			return 0;
+			return disputeNonConsec(hand1Kicker, hand2Kicker);
 	}
 	
-	public static int disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	/**
+	 * For hands with two sets of cards with the same rank, specifically two
+	 * pairs and full house, the ranks of both sets will be found. For a full
+	 * house the three card sets of each hand will be the first to be 
+	 * compared, followed by the two card set. For two pairs the highest ranked
+	 * set will be compared first, then the second, then the two kicker cards
+	 * will be compared.
+	 * 
+	 * Please note that this method may be overhauled.
+	 * 
+	 * @param hand1 the first hand for the comparison
+	 * @param hand2 the second hand for the comparison
+	 * @return a byte corresponding to the evaluated relation
+	 */
+	public static byte disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		hand1 = orderByRank(hand1);
 		hand2 = orderByRank(hand2);
 		
 		int hand1SetRankA = -1, hand1SetRankB = -1, hand2SetRankA = -1, hand2SetRankB = -1;
+		ArrayList<Card> hand1Kicker = new ArrayList<Card>(), hand2Kicker = new ArrayList<Card>();
 		
 		for (Card card : hand1) {
 			int rankMatches = 0;
@@ -134,40 +259,64 @@ public class Showdown {
 				if (card.getRank() == hand1.get(i).getRank())
 					rankMatches++;
 			}
-			if ((rankMatches > 1) && (hand1SetRankA == -1))
+			if ((rankMatches == 2) && (hand1SetRankB == -1))
+				hand1SetRankB = card.getRank();
+			else if (rankMatches == 3)
 				hand1SetRankA = card.getRank();
-			else if ((rankMatches > 1) && (card.getRank() != hand1SetRankA)) {
+			else if (rankMatches == 2) {
+				hand1SetRankA = hand1SetRankB;
 				hand1SetRankB = card.getRank();
 			}
-		}
+			else
+				hand1Kicker.add(card);
+			}
 		
 		for (Card card : hand2) {
 			int rankMatches = 0;
 			for (int i = 0; i < 5; i++) { 
-				if (card.getRank() == hand2.get(i).getRank())
+				if (card.getRank() == hand1.get(i).getRank())
 					rankMatches++;
 			}
-			if ((rankMatches > 1) && (hand2SetRankA == -1))
-				hand2SetRankA = card.getRank();
-			else if ((rankMatches > 1) && (card.getRank() != hand2SetRankA)) {
+			if ((rankMatches == 2) && (hand2SetRankB == -1))
 				hand2SetRankB = card.getRank();
-			}	
-		}	
-		return 0;
+			else if (rankMatches == 3)
+				hand2SetRankA = card.getRank();
+			else if (rankMatches == 2) {
+				hand2SetRankA = hand2SetRankB;
+				hand2SetRankB = card.getRank();
+			}
+			else
+				hand2Kicker.add(card);
+			}
+		
+		if (hand1SetRankA > hand2SetRankA)
+			return HAND_ONE_GREATER;
+		else if (hand2SetRankA > hand1SetRankA)
+			return HAND_TWO_GREATER;
+		else if (hand1SetRankB > hand2SetRankB)
+			return HAND_ONE_GREATER;
+		else if (hand2SetRankB > hand1SetRankB)
+			return HAND_TWO_GREATER;
+		else
+			return disputeNonConsec(hand1Kicker, hand2Kicker);
 	}
 	
 	//Private Methods
 	
 	/**
-	 * Will determine a player's highest hand based on their hole cards and
-	 * the community cards.
+	 * Given the community and a player's hole cards, this method will find 
+	 * their highest ranking hand. The rank of each possible hand is determined
+	 * and compared to one and another to find the highest. If two hands share
+	 * the highest rank they are passed through to the dispute methods to find
+	 * the highest.
 	 * 
-	 * @param hole
-	 * @param community
+	 * @param hole a player's hole cards
+	 * @param comm the five community cards
+	 * @return the highest possible hand from the cards 
 	 */
 	private static ArrayList<Card> getHighestHand(ArrayList<Card> hole, ArrayList<Card> comm) {
 		ArrayList<Card> allCards = new ArrayList<Card>(), highestHand = new ArrayList<Card>();
-		byte highestRank = -1, rank;
+		byte highestRank = -1, rank, result;
 		allCards.addAll(comm);
 		allCards.addAll(hole);
 		ArrayList<ArrayList<Card>> combs = comb(allCards);
@@ -177,6 +326,13 @@ public class Showdown {
 				highestRank = rank;
 				highestHand = hand;
 			}
+			else if (rank == highestRank) {
+				result = dispute(hand, highestHand, rank);
+				if (result == HAND_ONE_GREATER) {
+					highestRank = rank;
+					highestHand = hand;
+				}
+			}
 		}
 		return highestHand;
 	}
@@ -184,8 +340,7 @@ public class Showdown {
 	/**
 	 * For a five Card Arraylist hand this method will determine where it falls
 	 * on the Texas Holdem hand rankings, listed in the RANKING_KEY array from
-	 * lowest to highest. The correct rank number according to the key is 
-	 * returned to the caller. 
+	 * lowest to highest. The correct rank number is returned to the caller.
 	 * 
 	 * @param hand the Card Arraylist hand to have its ranking determined
 	 * @return the integer ranking of the hand
@@ -204,13 +359,13 @@ public class Showdown {
 		//above test results, else the method continues
 		
 		if ((isFlush == true) && (isStraight == true) && (hand.get(0).getRank() == 12) && (hand.get(4).getRank() == 8)) 
-			return 9;
+			return ROYAL_FLUSH;
 		else if ((isFlush == true) && (isStraight == true))
-			return 8;
+			return STRAIGHT_FLUSH;
 		else if (isFlush == true)
-			return 5;
+			return FLUSH;
 		else if (isStraight == true)
-			return 4;
+			return STRAIGHT;
 		
 		// Pair checking
 		
@@ -227,7 +382,7 @@ public class Showdown {
 			}
 			if (rankMatches == 3) //If four cards have matching ranks "Four of 
 				                  //a Kind" is immediately returned
-				return 7;
+				return FOUR_OF_A_KIND;
 			else if (rankMatches == 2)
 				threeKind = true;
 			else if (rankMatches == 1)
@@ -238,15 +393,15 @@ public class Showdown {
 		//rank based rankings are returned
 		
 		if ((threeKind == true) && (pairs == 1.0))
-			return 6;
+			return FULL_HOUSE;
 		else if (threeKind == true)
-			return 3;
+			return THREE_OF_A_KIND;
 		else if (pairs == 2.0)
-			return 2;
+			return TWO_PAIRS;
 		else if (pairs == 1.0)
-			return 1;
+			return ONE_PAIR;
 		
-		return 0; // The ranking defaults to "High Card"
+		return HIGH_CARD; // The ranking defaults to "High Card"
 	}
 	
 	/**
@@ -335,6 +490,15 @@ public class Showdown {
 		return oHand;
 	}
 	
+	/**
+	 * All 21 unique combinations of five card hands from a seven card set are
+	 * found by the below algorithm. Two blank spaces in the seven card set are
+	 * cycled, their indices being exempt from a hand possibility when it is 
+	 * written to the master list.
+	 * 
+	 * @param allCards the combined community and a given player's hole cards
+	 * @return An ArrayList of all five card hand combinations
+	 */
 	public static ArrayList<ArrayList<Card>> comb(ArrayList<Card> allCards) {
 		ArrayList<ArrayList<Card>> combs = new ArrayList<ArrayList<Card>>();
 		for (byte i = 0; i < 21; i++)
