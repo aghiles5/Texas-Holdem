@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * the rank number.
  *
  * @author Adam
- * @version 02/15/19
+ * @version 02/17/19
  */
 public class Showdown {
 
