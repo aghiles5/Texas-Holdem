@@ -43,4 +43,13 @@ public class SuperPlayer {
 			  //pot update
 		  }
 	  }
+	  
+	  public void call(String choice, int toCall, int currentBet) {
+		  //need to determine how to compare each player's current Bet to generate a toCall
+		  if (choice.equalsIgnoreCase("C")) {
+			  int bet = toCall - currentBet;
+			  Money -= bet;
+			  //pot += bet;
+		  }
+	  }
 }
