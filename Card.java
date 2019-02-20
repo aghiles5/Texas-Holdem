@@ -7,14 +7,14 @@
  * mentioned keys.
  * 
  * @author Adam Hiles
- * @version 02/11/19
+ * @version 02/20/19
  */
 public class Card {
 
 	//Instance Variables
 	
-	private byte suit;
-	private byte rank;
+	private int suit;
+	private int rank;
 	
 	//Class Constants
 	
@@ -37,7 +37,7 @@ public class Card {
 	 * @param suit the caller's specified suit
 	 * @param rank the caller's specified rank
 	 */
-	public Card(byte suit, byte rank) {
+	public Card(int suit, int rank) {
 		this.suit = suit;
 		this.rank = rank;
 	}
@@ -49,7 +49,7 @@ public class Card {
 	 * 
 	 * @return the suit byte
 	 */
-	public byte getSuit() {
+	public int getSuit() {
 		return suit;
 	}
 	
@@ -58,7 +58,7 @@ public class Card {
 	 * 
 	 * @return the rank byte
 	 */
-	public byte getRank() {
+	public int getRank() {
 		return rank;
 	}
 	
