@@ -46,8 +46,10 @@ public class Player {
 		  }
 	  }
 
-	  public void allIn(String choice) {
+	  public void allIn(String choice, int currentBet) {
 		  if (choice.equalsIgnoreCase("A")) {
+			  currentBet += Money;
+			  Money = 0;
 			  // adds money to pot
 			  // then sets money to 0
 		  }
