@@ -4,16 +4,28 @@ import java.util.ArrayList;
 
 public class Player {
 	  private int Money; //not used until BetRaise is done
+	  protected ArrayList<Card> hole = new ArrayList<Card>();
 	  protected ArrayList<Card> hand = new ArrayList<Card>();
 	  
-	  public ArrayList<Card> setCard(Card c) {
-		  //adds the cards to the hand list
-		  hand.add(c);
-		  return hand;
+	  //sets the player's hand
+	  public void setHand(ArrayList<Card> newHand) {
+		  //passes an arrayList newHand and adds it to hand.
+		  for (Card card : newHand)
+			  hand.add(card);
 	  }
 	  
+	  //gets the player's hand
 	  public ArrayList<Card> getHand() {
-		  return hand;
+	    return hand;
+	  }
+	  
+	  public void setHole(Card c) {
+		  //adds the cards to the hand list
+		  hole.add(c);
+	  }
+	  
+	  public ArrayList<Card> getHole() {
+		  return hole;
 	  }
 
 	  public void check(String choice) {
