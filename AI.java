@@ -17,8 +17,25 @@ public class AI extends SuperPlayer{
     return hand;
   }
 
-  public void decisionAI() {
-    // Will implement random choice that SuperPlayer will decide on AI choice
+  // Not sure if accessor requires to return anythin
+  public void getGecisionAI() {
+    Random choice = new Random();
+    int decision = choice.nextInt(5);
+    if (decision == 0) {
+      super.check("C");
+    }
+    else if (decision == 1) {
+      super.fold("F");
+    }
+    else if (decision == 2) {
+      // super.BetRaise("B", bet);
+    }
+    else if (decision == 3) {
+      // super.BetRaise("R", bet);
+    }
+    else if (decision == 4) {
+      // super.call("C", something, something);
+    }
   }
 
 }
