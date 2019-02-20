@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * The AI class handles the decisions that the AI commits
+ * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
  * @version 02/19/2019
@@ -13,7 +13,7 @@ public class AI extends SuperPlayer{
   private int card_2;
 
   public ArrayList<Integer> setCards() {
-    // adds cards to AI's list
+    // adds cards to AI's hand of cards
     hand.add(card_1);
     hand.add(card_2);
     return hand;
@@ -52,7 +52,7 @@ public class AI extends SuperPlayer{
     }
 
     else if (decision == 5) {
-      // super.allIn("A");
+      super.allIn("A");
     }
 
   }
