@@ -1,6 +1,7 @@
+import java.util.ArrayList;
+import java.util.Random;
+
 public class AI extends SuperPlayer{
-  /// Might change private int to public int
-  
   private int card_1;
   private int card_2;
   private int[] hand = new int[2]; 
