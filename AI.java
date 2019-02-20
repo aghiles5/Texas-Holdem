@@ -24,7 +24,6 @@ public class AI extends SuperPlayer{
     return hand;
   }
 
-  // Not sure if accessor requires to return anything
   // This method pushes the AI decisions to SuperPlayer class
   public void getDecisionAI() {
     // This implements the randomness of the AI
@@ -55,6 +54,15 @@ public class AI extends SuperPlayer{
       super.allIn("A");
     }
 
+  }
+
+  // This method will randomly bet and check if AI has sufficient money
+  // This method will eventually take an argument
+  public int checkAIBets(/* money */) {
+    Random bet = new Random();
+    int betting = bet.nextInt(/* money */);
+    
+    return 0;
   }
 
 }
