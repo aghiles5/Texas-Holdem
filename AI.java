@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * The AI class is 
+ * The AI class handles the decisions that the AI commits
+ * 
+ * @author John Lowie
+ * @version 02/19/2019
  */
 
 public class AI extends SuperPlayer{
