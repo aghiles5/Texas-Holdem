@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Player extends SuperPlayer{
+public class Human extends SuperPlayer{
   private Card card_1;
   private Card card_2;
 
