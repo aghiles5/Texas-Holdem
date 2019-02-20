@@ -5,14 +5,7 @@ import java.util.ArrayList;
 public class SuperPlayer {
 	  private int Money; //not used until BetRaise is done
 	  protected ArrayList<Integer> hand = new ArrayList<Integer>();
-    /* implements
-    check (done)
-    fold (done)
-    raise (together with bet)
-    call
-    and bet
-    methods
-    */
+	  
 	  public void check(String choice) {
 		  //If the input is c, nothing happens
 		  if (choice.equalsIgnoreCase("C")) {
