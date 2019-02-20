@@ -5,6 +5,13 @@ import java.util.ArrayList;
 public class Player {
 	  private int Money; //not used until BetRaise is done
 	  protected ArrayList<Card> hand = new ArrayList<Card>();
+	  
+	  public ArrayList<Card> setCards() {
+		  //adds the cards to the hand list
+		  hand.add(//card_1);
+		  hand.add(//card_2);
+		  return hand;
+	  }
 
 	  public void check(String choice) {
 		  //If the input is c, nothing happens
