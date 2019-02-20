@@ -8,7 +8,7 @@ import java.util.Random;
  * @version 02/20/2019
  */
 
-public class AI extends SuperPlayer{
+public class AI extends Player{
 
   // This method pushes the AI decisions to SuperPlayer class
   public void getDecisionAI() {
