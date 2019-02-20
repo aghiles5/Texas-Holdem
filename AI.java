@@ -37,7 +37,8 @@ public class AI extends Player{
     }
 
     else if (decision == 5) {
-      super.allIn("A");
+      // Update this
+      super.allIn("A", something);
     }
 
   }
