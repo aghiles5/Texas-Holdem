@@ -7,6 +7,17 @@ public class Player {
 	  protected ArrayList<Card> hole = new ArrayList<Card>();
 	  protected ArrayList<Card> hand = new ArrayList<Card>();
 	  
+	  //sets the player's hand
+	  public void setHand(ArrayList<Card> newHand) {
+		  //passes an arrayList newHand and adds it to hand.
+		  for (Card card : newHand)
+			  hand.add(card);
+	  }
+	  
+	  //gets the player's hand
+	  public ArrayList<Card> getHand() {
+	    return hand;
+	  }
 	  
 	  public void setHole(Card c) {
 		  //adds the cards to the hand list
