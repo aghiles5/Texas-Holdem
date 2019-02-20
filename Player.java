@@ -12,6 +12,10 @@ public class Player {
 		  hand.add(//card_2);
 		  return hand;
 	  }
+	  
+	  public ArrayList<Card> getHand() {
+		  return hand;
+	  }
 
 	  public void check(String choice) {
 		  //If the input is c, nothing happens
