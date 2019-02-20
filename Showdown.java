@@ -8,27 +8,27 @@ import java.util.ArrayList;
  * the rank number.
  *
  * @author Adam Hiles
- * @version 02/18/19
+ * @version 02/20/19
  */
 public class Showdown {
 
 	private static final String[] RANKING_KEY = {"High Card", "One Pair", 
 			"Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", 
 			"Four of a Kind", "Straight Flush", "Royal Flush"};
-	private static final byte HIGH_CARD = 0;
-	private static final byte ONE_PAIR = 1;
-	private static final byte TWO_PAIRS = 2;
-	private static final byte THREE_OF_A_KIND = 3;
-	private static final byte STRAIGHT = 4;
-	private static final byte FLUSH = 5;
-	private static final byte FULL_HOUSE = 6;
-	private static final byte FOUR_OF_A_KIND = 7;
-	private static final byte STRAIGHT_FLUSH = 8;
-	private static final byte ROYAL_FLUSH = 9;
+	private static final int HIGH_CARD = 0;
+	private static final int ONE_PAIR = 1;
+	private static final int TWO_PAIRS = 2;
+	private static final int THREE_OF_A_KIND = 3;
+	private static final int STRAIGHT = 4;
+	private static final int FLUSH = 5;
+	private static final int FULL_HOUSE = 6;
+	private static final int FOUR_OF_A_KIND = 7;
+	private static final int STRAIGHT_FLUSH = 8;
+	private static final int ROYAL_FLUSH = 9;
 	
-	private static final byte HAND_ONE_GREATER = 1;
-	private static final byte HAND_TWO_GREATER = 2;
-	private static final byte HANDS_EQUAL = 0;
+	private static final int HAND_ONE_GREATER = 1;
+	private static final int HAND_TWO_GREATER = 2;
+	private static final int HANDS_EQUAL = 0;
 	
 	public static void main(String args[]) {
 	}
@@ -42,9 +42,9 @@ public class Showdown {
 	 * @param comm the five community cards
 	 * @return the result of the showdown so that the main class can reward the pot accordingly
 	 */
-	public static byte showdown(ArrayList<Card> hole1, ArrayList<Card> hole2, ArrayList<Card> comm) {
+	public static int showdown(ArrayList<Card> hole1, ArrayList<Card> hole2, ArrayList<Card> comm) {
 		ArrayList<Card> player1Hand, player2Hand;
-		byte player1Rank, player2Rank, result;
+		int player1Rank, player2Rank, result;
 		player1Hand = getHighestHand(hole1, comm);
 		player2Hand = getHighestHand(hole2, comm);
 		player1Rank = getHandRank(player1Hand);
@@ -123,7 +123,7 @@ public class Showdown {
 	 * @return the highest possible hand from the cards 
 	 */
 	private static ArrayList<Card> getHighestHand(ArrayList<Card> hole, ArrayList<Card> comm) {
-		byte highestRank = -1, rank, result;
+		int highestRank = -1, rank, result;
 		
 		ArrayList<Card> allCards = new ArrayList<Card>(), highestHand = new ArrayList<Card>(); //The hole and community cards are combined to a single ArrayList
 		allCards.addAll(comm);
@@ -159,7 +159,7 @@ public class Showdown {
 	 * @param hand the Card Arraylist hand to have its ranking determined
 	 * @return the integer ranking of the hand
 	 */
-	private static byte getHandRank(ArrayList<Card> hand) {
+	private static int getHandRank(ArrayList<Card> hand) {
 		hand = orderByRank(hand); //The Cards are ordered from highest to lowest rank
 		
 		//Checks for flush/straight type hands
@@ -319,13 +319,13 @@ public class Showdown {
 	 */
 	public static ArrayList<ArrayList<Card>> comb(ArrayList<Card> allCards) {
 		ArrayList<ArrayList<Card>> combs = new ArrayList<ArrayList<Card>>(); //A 21 ArrayList ArrayList is created to store all possible combinations
-		for (byte i = 0; i < 21; i++)
+		for (int i = 0; i < 21; i++)
 			combs.add(new ArrayList<Card>());
 		
-		byte writeIndex = 0; //The index of the 21 ArrayList ArrayList is cycled for each blank2 change
-		for (byte blank1 = 0; blank1 < 6; blank1++) { //The first blank advanced after the second has gone through each space following it
-			for (byte blank2 = (byte) (blank1 + 1); blank2 < 7; blank2++) { //The second blank cycles through each index following the first blank
-				for (byte index = 0; index < 7; index++) { //Each Card index in allCards is ran through
+		int writeIndex = 0; //The index of the 21 ArrayList ArrayList is cycled for each blank2 change
+		for (int blank1 = 0; blank1 < 6; blank1++) { //The first blank advanced after the second has gone through each space following it
+			for (int blank2 = blank1 + 1; blank2 < 7; blank2++) { //The second blank cycles through each index following the first blank
+				for (int index = 0; index < 7; index++) { //Each Card index in allCards is ran through
 					if ((index != blank1) && (index != blank2)) //If the index of the card doesn't fall on a blank it is written to the current combination index
 						combs.get(writeIndex).add(allCards.get(index));
 				}
@@ -351,7 +351,7 @@ public class Showdown {
 	 * @param commonRank the common rank between the two hands
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static byte dispute(ArrayList<Card> hand1, ArrayList<Card> hand2, byte commonRank) {
+	private static int dispute(ArrayList<Card> hand1, ArrayList<Card> hand2, int commonRank) {
 		hand1 = orderByRank(hand1); //Hands are ordered at this stage to mitigate repeated code
 		hand2 = orderByRank(hand2);
 		
@@ -374,7 +374,7 @@ public class Showdown {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static byte disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private static int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		if ((hand1.get(0).getRank() == hand2.get(0).getRank()) && (hand1.get(4).getRank() == hand2.get(4).getRank()))
 			return HANDS_EQUAL;
 		else if ((hand1.get(0).getRank() > hand2.get(0).getRank()) && (hand1.get(4).getRank() > hand2.get(4).getRank()))
@@ -395,7 +395,7 @@ public class Showdown {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static byte disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private static int disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		for (int i = 0; i < hand1.size(); i++) {
 			if (hand1.get(i).getRank() > hand2.get(i).getRank())
 				return HAND_ONE_GREATER;
@@ -419,7 +419,7 @@ public class Showdown {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static byte disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private static int disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		int hand1SetRank = -1, hand2SetRank = -1;
 		ArrayList<Card> hand1Kicker = new ArrayList<Card>(), hand2Kicker = new ArrayList<Card>();
 		
@@ -469,7 +469,7 @@ public class Showdown {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static byte disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private static int disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		int hand1SetRankA = -1, hand1SetRankB = -1, hand2SetRankA = -1, hand2SetRankB = -1; //The higher value set in the hands will be set A, the other set B
 		ArrayList<Card> hand1Kicker = new ArrayList<Card>(), hand2Kicker = new ArrayList<Card>();
 		

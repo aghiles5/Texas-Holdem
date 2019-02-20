@@ -10,7 +10,7 @@ import java.util.Random;
  * THIS CLASS IS FOR TESTING/PROOF OF CONCEPT, DECKS MAY NOT BE IMPLEMENTED AS OBJECTS.
  * 
  * @author Adam
- * @version 02/09/18
+ * @version 02/20/18
  */
 public class Deck {
 
@@ -22,8 +22,8 @@ public class Deck {
 	 * that cards can be removed to, say, be dealt or burnt.
 	 */
 	public Deck() {
-		for (byte s = 0; s < 4; s++) { //The creation of each rank of card is repeated for each suite
-			for (byte r = 0; r < 13; r++) { //Each rank of card is added to the deck
+		for (int s = 0; s < 4; s++) { //The creation of each rank of card is repeated for each suite
+			for (int r = 0; r < 13; r++) { //Each rank of card is added to the deck
 				deck.add(new Card(s, r));
 			}
 		}	
