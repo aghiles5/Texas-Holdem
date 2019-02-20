@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 // Common methods between AI and Player class will be in this super class
 
-public class SuperPlayer {
+public class Player {
 	  private int Money; //not used until BetRaise is done
 	  protected ArrayList<Card> hand = new ArrayList<Card>();
 
