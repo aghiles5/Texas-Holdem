@@ -24,8 +24,9 @@ public class AI extends SuperPlayer{
     return hand;
   }
 
-  // Not sure if accessor requires to return anythin
-  public void getGecisionAI() {
+  // Not sure if accessor requires to return anything
+  // This method pushes the AI decisions to SuperPlayer class
+  public void getDecisionAI() {
     // This implements the randomness of the AI
     Random choice = new Random();
     int decision = choice.nextInt(5);
@@ -49,7 +50,7 @@ public class AI extends SuperPlayer{
     else if (decision == 4) {
       // super.call("C", something, something);
     }
-    
+
   }
 
 }
