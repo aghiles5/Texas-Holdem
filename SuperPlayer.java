@@ -52,4 +52,11 @@ public class SuperPlayer {
 			  //pot += bet;
 		  }
 	  }
+
+	  public void allIn(String choice) {
+		  if (choice.equalsIgnoreCase("A")) {
+			  // adds money to pot
+			  // then sets money to 0
+		  }
+	  }
 }
