@@ -6,10 +6,9 @@ public class Player {
 	  private int Money; //not used until BetRaise is done
 	  protected ArrayList<Card> hand = new ArrayList<Card>();
 	  
-	  public ArrayList<Card> setCards() {
+	  public ArrayList<Card> setCard(Card c) {
 		  //adds the cards to the hand list
-		  hand.add(//card_1);
-		  hand.add(//card_2);
+		  hand.add(c);
 		  return hand;
 	  }
 	  
