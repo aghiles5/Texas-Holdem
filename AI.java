@@ -4,22 +4,21 @@ import java.util.Random;
 public class AI extends SuperPlayer{
   private int card_1;
   private int card_2;
-  private int[] hand = new int[2]; 
-  
-  public int[] setCards() {
-	  hand[0] = card_1;
-	  hand[1] = card_2;
-	  return hand;
-  }
-  
-  public int[] getCards() {
-    
-    return hand;
 
+  public ArrayList<Integer> setCards() {
+    // adds cards to AI's list
+    hand.add(card_1);
+    hand.add(card_2);
+    return hand;
   }
-  
-  /*
-  Might implement random AI decisions here but we will talk about it next meeting
-  */
+
+  // Accessor to retrieve AI's cards
+  public ArrayList<Interger> getCards() {
+    return hand;
+  }
+
+  public void decisionAI() {
+    // Will implement random choice that SuperPlayer will decide on AI choice
+  }
 
 }
