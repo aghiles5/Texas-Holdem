@@ -39,6 +39,9 @@ public class AI extends Player{
     }
 
     else if (decision == 4) {
+      // update this call of method
+      // money argument needs updating
+      checkAIBets(decision, money);
       // super.call("C", something, something);
     }
 
@@ -55,6 +58,11 @@ public class AI extends Player{
     Random bet = new Random();
     // int betting = bet.nextInt(money + 1);
 
+    /**
+     * This handle the AI's betting decisions
+     * If the bets are 0 or it is the same as its stack, the method will run again 
+     * until the bet is not 0 and lower than it's stack
+     */
     if (playDecision == 2) {
       int betting = bet.nextInt(money + 1);
       
@@ -73,6 +81,35 @@ public class AI extends Player{
       }
     }
 
+    /**
+     * This handles the AI's raising decisions
+     * If the bets are 0 or it is the same as its stack, the method will run again 
+     * until the bet is not 0 and lower than it's stack
+     */
+    else if (playDecision == 3) {
+      int betting = bet.nextInt(money + 1);
+
+      if (betting == 0) {
+        // must retrieve money
+        // money argument is not working
+        checkAIBets(playDecision, money);
+      }
+
+      else if (betting == money) {
+        checkAIBets(playDecision, money);
+      }
+
+      else {
+        return 0;
+      }
+    }
+
+    // This handles AI's call action which matches the previous player's bet
+    // This statement will have to be updated in the future
+    else if (playDecision == 4) {
+      return 0;
+    }
+    
     return 0;
   }
 
