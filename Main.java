@@ -1,4 +1,5 @@
-/* This line is required as it is used to get user input
+/**
+ * This line is required as it is used to get user input
  * for player action during game
  */
 import java.util.Scanner;
