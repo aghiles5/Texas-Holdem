@@ -7,6 +7,10 @@ public class Player {
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
 	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
 	  
+	  public String getName() {
+		  return "";
+	  }
+	  
 	  //sets the player's hand
 	  public void setHand(ArrayList<Card> newHand) {
 		  //passes an arrayList newHand and adds it to hand.
