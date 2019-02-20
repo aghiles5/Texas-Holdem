@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class SuperPlayer {
 	  private int Money; //not used until BetRaise is done
-	  protected ArrayList<Integer> hand = new ArrayList<Integer>();
-	  
+	  protected ArrayList<Card> hand = new ArrayList<Card>();
+
 	  public void check(String choice) {
 		  //If the input is c, nothing happens
 		  if (choice.equalsIgnoreCase("C")) {
