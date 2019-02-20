@@ -3,9 +3,11 @@ import java.util.ArrayList;
 /**
  * The Showdown class handles methods involved with the "showdown" phase in
  * Texas Holdem where players reveal their cards and vie for the pot by 
- * making the best ranking hand. Currently, only the basic ranking 
- * determination for one full, five card hand is implemented, returning
- * the rank number.
+ * making the best ranking hand. Full functionality is implemented for
+ * two players. Generalization of the interface for more players and general
+ * code optimization is to follow. Certain methods such as getHandRank and
+ * a variant of getHighestHand may be moved to a new class at a later time so 
+ * that they may be utilized in AI decision making.
  *
  * @author Adam Hiles
  * @version 02/20/19
