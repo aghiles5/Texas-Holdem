@@ -355,7 +355,7 @@ public class Showdown {
 		hand1 = orderByRank(hand1); //Hands are ordered at this stage to mitigate repeated code
 		hand2 = orderByRank(hand2);
 		
-		if ((commonRank == STRAIGHT_FLUSH) || (commonRank == STRAIGHT))
+		if ((commonRank == STRAIGHT_FLUSH) || (commonRank == STRAIGHT) || (commonRank == ROYAL_FLUSH))
 			return disputeStraight(hand1, hand2);
 		else if ((commonRank == FLUSH) || (commonRank == HIGH_CARD))
 			return disputeNonConsec(hand1, hand2);
@@ -440,7 +440,7 @@ public class Showdown {
 		for (Card card : hand2) { //The above process is repeated for hand2
 			int rankMatches = 0;
 			for (int i = 0; i < 5; i++) { 
-				if (card.getRank() == hand1.get(i).getRank())
+				if (card.getRank() == hand2.get(i).getRank())
 					rankMatches++;
 			}
 			if (rankMatches > 1) 
