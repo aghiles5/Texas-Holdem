@@ -29,7 +29,7 @@ public class AI extends SuperPlayer{
   public void getDecisionAI() {
     // This implements the randomness of the AI
     Random choice = new Random();
-    int decision = choice.nextInt(5);
+    int decision = choice.nextInt(6);
 
     if (decision == 0) {
       super.check("C");
@@ -49,6 +49,10 @@ public class AI extends SuperPlayer{
 
     else if (decision == 4) {
       // super.call("C", something, something);
+    }
+
+    else if (decision == 5) {
+      // super.allIn("A");
     }
 
   }
