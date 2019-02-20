@@ -8,6 +8,7 @@ public class Main {
 	
 	public static void startGame() {
 		//Plays the game!	
+		//comment
 	}
 	
 	public static void main(String[] args) {
