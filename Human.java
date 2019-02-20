@@ -6,10 +6,13 @@ public class Human extends Player{
 	 //Use deck class to set hand
   }
   
-  /// Accessory for player's card
-  public ArrayList<Card> getCards() {
+  public void setHand() {
+	  
+  }
+  
+  //gets the player's hand
+  public ArrayList<Card> getHand() {
     return hand;
-    
   }
 
 }
