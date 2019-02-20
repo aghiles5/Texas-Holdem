@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * The AI class is 
+ */
+
 public class AI extends SuperPlayer{
   private int card_1;
   private int card_2;
