@@ -5,7 +5,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 02/19/2019
+ * @version 02/20/2019
  */
 
 public class AI extends SuperPlayer{
@@ -61,7 +61,7 @@ public class AI extends SuperPlayer{
   public int checkAIBets(/* money */) {
     Random bet = new Random();
     int betting = bet.nextInt(/* money */);
-    
+
     return 0;
   }
 
