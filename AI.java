@@ -26,23 +26,30 @@ public class AI extends SuperPlayer{
 
   // Not sure if accessor requires to return anythin
   public void getGecisionAI() {
+    // This implements the randomness of the AI
     Random choice = new Random();
     int decision = choice.nextInt(5);
+
     if (decision == 0) {
       super.check("C");
     }
+
     else if (decision == 1) {
       super.fold("F");
     }
+
     else if (decision == 2) {
       // super.BetRaise("B", bet);
     }
+
     else if (decision == 3) {
       // super.BetRaise("R", bet);
     }
+
     else if (decision == 4) {
       // super.call("C", something, something);
     }
+    
   }
 
 }
