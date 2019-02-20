@@ -9,10 +9,10 @@ import java.util.Random;
  */
 
 public class AI extends SuperPlayer{
-  private int card_1;
-  private int card_2;
+  private Card card_1;
+  private Card card_2;
 
-  public ArrayList<Integer> setCards() {
+  public ArrayList<Card> setCards() {
     // adds cards to AI's hand of cards
     hand.add(card_1);
     hand.add(card_2);
@@ -20,7 +20,7 @@ public class AI extends SuperPlayer{
   }
 
   // Accessor to retrieve AI's cards
-  public ArrayList<Interger> getCards() {
+  public ArrayList<Card> getCards() {
     return hand;
   }
 
