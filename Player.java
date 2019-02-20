@@ -28,11 +28,13 @@ public class Player {
 			  if (bet <= Money) {
 				  Money = Money - bet;
 				  //pot update
+				  System.out.println("Player bet $" + bet + ".");
 			  }
 		  } else if (choice.equalsIgnoreCase("R")) {
 			  //Raise action
 			  //if bet >= 2 times pot && bet <= Money
 			  Money = Money - bet;
+			  System.out.println("Player raised $" + bet + ".");
 			  //pot update
 		  }
 	  }
@@ -43,6 +45,7 @@ public class Player {
 			  int bet = toCall - currentBet;
 			  Money -= bet;
 			  //pot += bet;
+			  System.out.println("Player called.");
 		  }
 	  }
 
@@ -52,6 +55,7 @@ public class Player {
 			  Money = 0;
 			  // adds money to pot
 			  // then sets money to 0
+			  System.out.println("Player went all-in!");
 		  }
 	  }
 }
