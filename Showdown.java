@@ -4,8 +4,7 @@ import java.util.ArrayList;
  * The Showdown class handles methods involved with the "showdown" phase in
  * Texas Holdem where players reveal their cards and vie for the pot by 
  * making the best ranking hand. Full functionality is implemented for
- * two players. Generalization of the interface for more players and general
- * code optimization is to follow. Certain methods such as getHandRank and
+ * multiple players, though untested. Certain methods such as getHandRank and
  * a variant of getHighestHand may be moved to a new class at a later time so 
  * that they may be utilized in AI decision making.
  *
@@ -36,79 +35,33 @@ public class Showdown {
 	}
 	
 	/**
-	 * Base public class. Messy right now but works, will look into 
-	 * stringbuilder for displaying results.
+	 * Interface for the Showdown class. For each player still in the game (not
+	 * folded) their highest hand from their hole and the community cards is 
+	 * found and set to their hand instance variable. The players by decreasing
+	 * hand rank and the end results of the game are printed.
 	 * 
-	 * @param hole1 the first player's hole cards
-	 * @param hole2 the second player's hole cards
+	 * @param players an ArrayList of all players
 	 * @param comm the five community cards
-	 * @return the result of the showdown so that the main class can reward the pot accordingly
+	 * @return the winning player
 	 */
-	public static int showdown(ArrayList<Card> hole1, ArrayList<Card> hole2, ArrayList<Card> comm) {
-		ArrayList<Card> player1Hand, player2Hand;
-		int player1Rank, player2Rank, result;
-		player1Hand = getHighestHand(hole1, comm);
-		player2Hand = getHighestHand(hole2, comm);
-		player1Rank = getHandRank(player1Hand);
-		player2Rank = getHandRank(player2Hand);
-		while (true) {
-			if (player1Rank > player2Rank) {
-				System.out.println("\nPlayer One Wins the Pot");
-				System.out.println("\n1. Player One: " + RANKING_KEY[player1Rank] + "\n");
-				for (Card card : player1Hand) {
-					System.out.println(card.toString());
-				}
-				System.out.println("\n2. Player Two: " + RANKING_KEY[player2Rank] + "\n");
-				for (Card card : player2Hand) {
-					System.out.println(card.toString());
-				}
-				return HAND_ONE_GREATER;
-			}
-			else if (player1Rank < player2Rank) {
-				System.out.println("\nPlayer Two Wins the Pot");
-				System.out.println("\n1. Player Two: " + RANKING_KEY[player2Rank] + "\n");
-				for (Card card : player2Hand) {
-					System.out.println(card.toString());
-				}
-				System.out.println("\n2. Player One: " + RANKING_KEY[player1Rank] + "\n");
-				for (Card card : player1Hand) {
-					System.out.println(card.toString());
-				}
-				return HAND_TWO_GREATER;
-			}
-			else {
-				result = dispute(player1Hand, player2Hand, player1Rank);
-				if (result == HAND_ONE_GREATER) {
-					System.out.println("\nPlayer One Wins the Pot");
-					System.out.println("\n1. Player One: " + RANKING_KEY[player1Rank] + "\n");
-					for (Card card : player1Hand) {
-						System.out.println(card.toString());
-					}
-					System.out.println("\n2. Player Two: " + RANKING_KEY[player2Rank] + "\n");
-					for (Card card : player2Hand) {
-						System.out.println(card.toString());
-					}
-					return HAND_ONE_GREATER;
-				}
-				else if (result == HAND_TWO_GREATER) {
-					System.out.println("\nPlayer Two Wins the Pot");
-					System.out.println("\n1. Player Two: " + RANKING_KEY[player2Rank] + "\n");
-					for (Card card : player2Hand) {
-						System.out.println(card.toString());
-					}
-					System.out.println("\n2. Player One: " + RANKING_KEY[player1Rank] + "\n");
-					for (Card card : player1Hand) {
-						System.out.println(card.toString());
-					}
-					return HAND_TWO_GREATER;
-				}	
-				else {
-					System.out.println("\nStalemate");
-					System.out.println("\nPlayers One and Two Both Have " + RANKING_KEY[player1Rank] + "\n");
-					return HANDS_EQUAL;
-				}
-			}
+	public static Player showdown(ArrayList<Player> players, ArrayList<Card> comm) {
+		for (Player player : players) {
+			ArrayList<Card> hand = getHighestHand(player.getHole(), comm);
+			player.setHand(hand);
 		}
+		
+		players = orderPlayersByRank(players);
+		
+		System.out.println("\n" + players.get(0).getName() + " wins the pot!\n\nResults:");
+		for (Player player : players) {
+			System.out.println("\n" + player.getName() + ": " + RANKING_KEY[getHandRank(player.getHand())] + "\n");
+			for (Card card : player.getHand()) {
+				System.out.println(card.toString());
+			}
+			System.out.println("");
+		}
+		
+		return players.get(0);
 	}
 	
 	//Private Methods
@@ -162,7 +115,7 @@ public class Showdown {
 	 * @return the integer ranking of the hand
 	 */
 	private static int getHandRank(ArrayList<Card> hand) {
-		hand = orderByRank(hand); //The Cards are ordered from highest to lowest rank
+		hand = orderCardsByRank(hand); //The Cards are ordered from highest to lowest rank
 		
 		//Checks for flush/straight type hands
 		
@@ -288,7 +241,7 @@ public class Showdown {
 	 * @param hand the unsorted Card Arraylist
 	 * @return an ArrayList cards ordered from highest to lowest ranks
 	 */
-	private static ArrayList<Card> orderByRank(ArrayList<Card> hand){
+	private static ArrayList<Card> orderCardsByRank(ArrayList<Card> hand){
 		ArrayList<Card> oHand = new ArrayList<Card>(), uHand = new ArrayList<Card>();
 		for (Card card : hand) //The passed hand is copied to the unorganized hand uHand to prevent privacy leaks.
 			uHand.add(card);
@@ -308,6 +261,38 @@ public class Showdown {
 		}
 		
 		return oHand;
+	}
+	
+	private static ArrayList<Player> orderPlayersByRank(ArrayList<Player> players) {
+		ArrayList<Player> newPlayers = new ArrayList<Player>();
+		
+		while (players.size() > 0) {		
+			int highRank = -1, highRankIndex = 0, result;
+			ArrayList<Card> highHand = new ArrayList<Card>();
+			
+			for (int i = 0; i < players.size(); i++) {
+				ArrayList<Card> hand = players.get(i).getHand();
+				
+				if (getHandRank(hand) > highRank) {
+					highRank = getHandRank(hand);
+					highHand = hand;
+					highRankIndex = i;
+				}
+				
+				else if (getHandRank(players.get(i).getHand()) == highRank) {
+					result = dispute(hand, highHand, highRank);
+					if (result == HAND_ONE_GREATER) {
+						highHand = hand;
+						highRankIndex = i;
+					}
+				}
+			}
+			
+			newPlayers.add(players.get(highRankIndex));
+			players.remove(highRankIndex);
+		}
+		
+		return newPlayers;
 	}
 	
 	/**
@@ -354,8 +339,8 @@ public class Showdown {
 	 * @return a byte corresponding to the evaluated relation
 	 */
 	private static int dispute(ArrayList<Card> hand1, ArrayList<Card> hand2, int commonRank) {
-		hand1 = orderByRank(hand1); //Hands are ordered at this stage to mitigate repeated code
-		hand2 = orderByRank(hand2);
+		hand1 = orderCardsByRank(hand1); //Hands are ordered at this stage to mitigate repeated code
+		hand2 = orderCardsByRank(hand2);
 		
 		if ((commonRank == STRAIGHT_FLUSH) || (commonRank == STRAIGHT) || (commonRank == ROYAL_FLUSH))
 			return disputeStraight(hand1, hand2);
