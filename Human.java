@@ -4,7 +4,7 @@ public class Human extends Player{
   private Card card_1;
   private Card card_2;
 
-  Player() {
+  Human() {
 	 //Use deck class to set hand
   }
   
