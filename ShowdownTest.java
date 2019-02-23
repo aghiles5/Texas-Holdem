@@ -21,6 +21,7 @@ public class ShowdownTest {
 		testDeck.shuffle();
 		ArrayList<Card> comm = new ArrayList<Card>();
 		ArrayList<Player> players = new ArrayList<Player>();
+		
 		players.add(new Human("Player1"));
 		players.add(new Human("Player2"));
 		players.add(new Human("Player3"));
@@ -46,6 +47,7 @@ public class ShowdownTest {
 			for (Card card : player.getHole())
 				System.out.println(card.toString());
 		}
+		
 		Showdown.showdown(players, comm);
 	}
 }

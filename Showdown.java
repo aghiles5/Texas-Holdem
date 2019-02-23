@@ -391,17 +391,28 @@ public class Showdown {
 	
 	/**
 	 * For straight type hands, specifically straight flushes and straights,
-	 * the ranks of the first and last cards will be compared for each hand
-	 * to determine which has the higher value.
+	 * the ranks of the last card will be compared for each hand to determine 
+	 * which has the higher value. If either hand is the lowest ace containing
+	 * straight it will always be the lowest ranking hand as long as the other
+	 * straight is not equivalent.
 	 * 
 	 * @param hand1 the first hand for the comparison
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
 	private static int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
-		if ((hand1.get(0).getRank() == hand2.get(0).getRank()) && (hand1.get(4).getRank() == hand2.get(4).getRank()))
+		if (((hand1.get(0).getRank() == 12) && (hand1.get(4).getRank() == 4)) || ((hand2.get(0).getRank() == 12) && (hand2.get(4).getRank() == 4))) { //Ace special case
+			if ((hand2.get(0).getRank() != 12) && (hand2.get(4).getRank() != 4))
+				return HAND_TWO_GREATER;
+			else if ((hand1.get(0).getRank() != 12) && (hand1.get(4).getRank() != 4))
+				return HAND_ONE_GREATER;
+			else
+				return HANDS_EQUAL;
+		}
+		
+		if (hand1.get(4).getRank() == hand2.get(4).getRank()) //General Case
 			return HANDS_EQUAL;
-		else if ((hand1.get(0).getRank() > hand2.get(0).getRank()) && (hand1.get(4).getRank() > hand2.get(4).getRank()))
+		else if (hand1.get(4).getRank() > hand2.get(4).getRank())
 			return HAND_ONE_GREATER;
 		else
 			return HAND_TWO_GREATER;
