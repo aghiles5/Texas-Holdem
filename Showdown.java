@@ -4,12 +4,12 @@ import java.util.ArrayList;
  * The Showdown class handles methods involved with the "showdown" phase in
  * Texas Holdem where players reveal their cards and vie for the pot by 
  * making the best ranking hand. Full functionality is implemented for
- * multiple players, though untested. Certain methods such as getHandRank and
+ * multiple players, gently tested. Certain methods such as getHandRank and
  * a variant of getHighestHand may be moved to a new class at a later time so 
  * that they may be utilized in AI decision making.
  *
  * @author Adam Hiles
- * @version 02/20/19
+ * @version 02/22/19
  */
 public class Showdown {
 
@@ -31,6 +31,8 @@ public class Showdown {
 	private static final int HAND_TWO_GREATER = 2;
 	private static final int HANDS_EQUAL = 0;
 	
+	private static int winnerCounter = 1;
+	
 	public static void main(String args[]) {
 	}
 	
@@ -38,30 +40,48 @@ public class Showdown {
 	 * Interface for the Showdown class. For each player still in the game (not
 	 * folded) their highest hand from their hole and the community cards is 
 	 * found and set to their hand instance variable. The players by decreasing
-	 * hand rank and the end results of the game are printed.
+	 * hand rank and the end results of the round are printed.
 	 * 
 	 * @param players an ArrayList of all players
 	 * @param comm the five community cards
 	 * @return the winning player
 	 */
-	public static Player showdown(ArrayList<Player> players, ArrayList<Card> comm) {
-		for (Player player : players) {
+	public static ArrayList<Player> showdown(ArrayList<Player> players, ArrayList<Card> comm) {
+		ArrayList<Player> winners = new ArrayList<Player>();
+		
+		for (Player player : players) { //The highest hand of each player is found and assigned to them
 			ArrayList<Card> hand = getHighestHand(player.getHole(), comm);
 			player.setHand(hand);
 		}
 		
-		players = orderPlayersByRank(players);
+		players = orderPlayersByRank(players); //The players are ordered by their highest hand's rank
 		
-		System.out.println("\n" + players.get(0).getName() + " wins the pot!\n\nResults:");
+		for (int i = 0; i < winnerCounter; i++) //The winner(s) is/are added to the winners ArrayList
+			winners.add(players.get(i));
+		
+		if (winnerCounter > 1) { //If a stalemate occurs all winners are listed appropriately
+			System.out.print("\nStalemate!\nThe pot will be split between ");
+			if (winnerCounter > 2) {
+				for (int i = 0; i < winnerCounter - 1; i++) {
+					System.out.print(winners.get(i).getName() + ", ");
+				}
+			}
+			else
+				System.out.print(winners.get(0).getName() + " ");
+			System.out.println("and " + winners.get(winnerCounter - 1).getName() + ".");
+		}
+		else //The sole winner is listed
+			System.out.println("\n" + players.get(0).getName() + " wins the pot!");
+		
+		System.out.println("\nFinal Hands:"); //The highest hands of all players are displayed
 		for (Player player : players) {
 			System.out.println("\n" + player.getName() + ": " + RANKING_KEY[getHandRank(player.getHand())] + "\n");
 			for (Card card : player.getHand()) {
 				System.out.println(card.toString());
 			}
-			System.out.println("");
 		}
 		
-		return players.get(0);
+		return winners;
 	}
 	
 	//Private Methods
@@ -239,7 +259,7 @@ public class Showdown {
 	 * ranks.
 	 * 
 	 * @param hand the unsorted Card Arraylist
-	 * @return an ArrayList cards ordered from highest to lowest ranks
+	 * @return an ArrayList of Cards ordered from highest to lowest ranks
 	 */
 	private static ArrayList<Card> orderCardsByRank(ArrayList<Card> hand){
 		ArrayList<Card> oHand = new ArrayList<Card>(), uHand = new ArrayList<Card>();
@@ -263,33 +283,50 @@ public class Showdown {
 		return oHand;
 	}
 	
+	/**
+	 * Similar to the above orderCardsByRank, this method will order a list of
+	 * Players by highest to lowest hand rankings. 
+	 * 
+	 * @param players the unsorted Player ArrayList 
+	 * @return an ArrayList of Players ordered by hands from highest to lowest 
+	 * rank
+	 */
 	private static ArrayList<Player> orderPlayersByRank(ArrayList<Player> players) {
-		ArrayList<Player> newPlayers = new ArrayList<Player>();
+		ArrayList<Player> oldPlayers = new ArrayList<Player>(), newPlayers = new ArrayList<Player>();
+		oldPlayers.addAll(players); //The player ArrayList is encapsulated by the proxy oldPlayers ArrayList
 		
-		while (players.size() > 0) {		
-			int highRank = -1, highRankIndex = 0, result;
+		while (oldPlayers.size() > 0) { //Players are transferred between ArrayLists until the old one is empty	
+			int highRank = -1, highRankIndex = 0;
 			ArrayList<Card> highHand = new ArrayList<Card>();
 			
-			for (int i = 0; i < players.size(); i++) {
-				ArrayList<Card> hand = players.get(i).getHand();
+			for (int i = 0; i < oldPlayers.size(); i++) { //Each Player's hand is compared to the highest hand 
+				ArrayList<Card> hand = oldPlayers.get(i).getHand();
+				int rank = getHandRank(hand);
 				
-				if (getHandRank(hand) > highRank) {
-					highRank = getHandRank(hand);
+				if (rank > highRank) { //If a hand is higher than the previous highest it becomes the highest
+					highRank = rank;
 					highHand = hand;
 					highRankIndex = i;
+					if (newPlayers.size() == 0)
+						winnerCounter = 1;
 				}
 				
-				else if (getHandRank(players.get(i).getHand()) == highRank) {
-					result = dispute(hand, highHand, highRank);
-					if (result == HAND_ONE_GREATER) {
+				else if (rank == highRank) { //If a hand is equal in rank to the highest it is disputed
+					int result = dispute(hand, highHand, highRank);
+					if (result == HAND_ONE_GREATER) { //The evaluated hand only replaces the highest if it is higher
 						highHand = hand;
 						highRankIndex = i;
+						if (newPlayers.size() == 0)
+							winnerCounter = 1;
+					}
+					else if ((result == HANDS_EQUAL) && (newPlayers.size() == 0)) { //If the hands are equal the highest hand is not updated but the winnerCounter is incremented
+						winnerCounter++;
 					}
 				}
 			}
 			
-			newPlayers.add(players.get(highRankIndex));
-			players.remove(highRankIndex);
+			newPlayers.add(oldPlayers.get(highRankIndex)); //The highest handed Player in the round is removed from the old ArrayList and added to the new
+			oldPlayers.remove(highRankIndex);
 		}
 		
 		return newPlayers;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * FOR TESTING PURPOSES ONLY.
  *
  * @author Adam Hiles
- * @version 02/18/19
+ * @version 02/22/19
  */
 public class ShowdownTest {
 
@@ -19,22 +19,33 @@ public class ShowdownTest {
 	public static void twoPlayerDemo() {
 		Deck testDeck = new Deck();
 		testDeck.shuffle();
-		ArrayList<Card> hole1 = new ArrayList<Card>(), hole2 = new ArrayList<Card>(), comm = new ArrayList<Card>();
+		ArrayList<Card> comm = new ArrayList<Card>();
+		ArrayList<Player> players = new ArrayList<Player>();
+		players.add(new Human("Player1"));
+		players.add(new Human("Player2"));
+		players.add(new Human("Player3"));
+		players.add(new Human("Player4"));
+		players.add(new Human("Player5"));
+		players.add(new Human("Player6"));
+		players.add(new Human("Player7"));
+		players.add(new Human("Player8"));
+		players.add(new Human("Player9"));
+		players.add(new Human("Player10"));
+		
 		for (int i = 0; i < 2; i++) {
-			hole1.add(testDeck.dealSingle());
-			hole2.add(testDeck.dealSingle());
+			for (Player player : players)
+				player.setHole(testDeck.dealSingle());
 		}
+		
 		comm = testDeck.simComm();
 		System.out.println("Community Cards:\n");
 		for (Card card : comm)
 			System.out.println(card.toString());
-		System.out.println("\nPlayer One's Cards:\n");
-		for (Card card : hole1)
-			System.out.println(card.toString());
-		System.out.println("\nPlayer Two's Cards:\n");
-		for (Card card : hole2)
-			System.out.println(card.toString());
-		System.out.println("");
-		Showdown.showdown(hole1, hole2, comm);
+		for (Player player : players) {
+			System.out.println("\n" + player.getName() + "'s Cards:\n");
+			for (Card card : player.getHole())
+				System.out.println(card.toString());
+		}
+		Showdown.showdown(players, comm);
 	}
 }
