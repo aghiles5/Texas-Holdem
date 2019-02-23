@@ -6,6 +6,10 @@ public class Human extends Player{
 	Human(String n) {
 	 name = n;
 	}
+	
+  public String getName() {
+	  return name;
+  }
  
   
 
