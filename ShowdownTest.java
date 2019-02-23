@@ -48,6 +48,9 @@ public class ShowdownTest {
 				System.out.println(card.toString());
 		}
 		
+		long start = System.nanoTime();
 		Showdown.showdown(players, comm);
+		long end = System.nanoTime();
+		System.out.println("\n" + (end - start)/1000000 + " ms");
 	}
 }
