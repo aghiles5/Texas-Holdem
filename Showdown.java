@@ -401,10 +401,10 @@ public class Showdown {
 	 * @return a byte corresponding to the evaluated relation
 	 */
 	private static int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
-		if (((hand1.get(0).getRank() == 12) && (hand1.get(4).getRank() == 4)) || ((hand2.get(0).getRank() == 12) && (hand2.get(4).getRank() == 4))) { //Ace special case
-			if ((hand2.get(0).getRank() != 12) && (hand2.get(4).getRank() != 4))
+		if (((hand1.get(0).getRank() == 12) && (hand1.get(4).getRank() == 0)) || ((hand2.get(0).getRank() == 12) && (hand2.get(4).getRank() == 0))) { //Ace special case
+			if ((hand2.get(0).getRank() != 12) && (hand2.get(4).getRank() != 0))
 				return HAND_TWO_GREATER;
-			else if ((hand1.get(0).getRank() != 12) && (hand1.get(4).getRank() != 4))
+			else if ((hand1.get(0).getRank() != 12) && (hand1.get(4).getRank() != 0))
 				return HAND_ONE_GREATER;
 			else
 				return HANDS_EQUAL;
