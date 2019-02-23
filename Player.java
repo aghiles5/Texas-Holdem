@@ -6,7 +6,7 @@ public class Player {
 	  private int Money; //not used until BetRaise is done
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
 	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
-	  private String name = "";
+	  protected String name = "";
 	  
 	  public String getName() {
 		  return name;
