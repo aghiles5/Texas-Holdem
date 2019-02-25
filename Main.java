@@ -1,6 +1,9 @@
 /**
- * This line is required as it is used to get user input
- * for player action during game
+ * Main class for the game as the game is played and started here
+ * Origin of Texas Holdem
+ * 
+ * @author Brayden
+ * @version 02/20/18
  */
 import java.util.Scanner;
 
@@ -27,10 +30,10 @@ public class Main {
 		cardDeck = null;
 		cardDeck = new Deck();
 		//Change this to for loop later on for more players
-		player1.setHole(Deck.dealSingle());
-		player2.setHole(Deck.dealSingle());
-		player1.setHole(Deck.dealSingle());
-		player2.setHole(Deck.dealSingle());
+		player1.setHole(cardDeck.dealSingle());
+		player2.setHole(cardDeck.dealSingle());
+		player1.setHole(cardDeck.dealSingle());
+		player2.setHole(cardDeck.dealSingle());
 	}
 
 	public void startGame() {
