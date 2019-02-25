@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.smartcardio.Card;
+
 /**
  * The Deck class handles methods regarding the creation and handling of 52
  * Card ArrayList objects representing a virtual deck of playing cards.
@@ -9,7 +11,7 @@ import java.util.Random;
  * 
  * THIS CLASS IS FOR TESTING/PROOF OF CONCEPT, DECKS MAY NOT BE IMPLEMENTED AS OBJECTS.
  * 
- * @author Adam
+ * @author Brayden
  * @version 02/20/18
  */
 public class Deck {
@@ -27,6 +29,7 @@ public class Deck {
 				deck.add(new Card(s, r));
 			}
 		}	
+		shuffle();
 	}
 	
 	/**
@@ -44,50 +47,29 @@ public class Deck {
 		deck.addAll(tempDeck); //Returns the shuffled cards from the temp deck to the deck
 	}
 	
-	/**
-	 * From the deck this method will compose a full, five Card hand, stored in 
-	 * another ArrayList. Each Card added to the hand is copied from the front 
-	 * Card of the deck which is then removed so that the next Card in the deck 
-	 * is moved to the from to be potentially dealt to the hand.
-	 * 
-	 * @return a five Card ArrayList
-	 */
-	public ArrayList<Card> dealFullHand() {
-		ArrayList<Card> hand = new ArrayList<Card>();
-		for (int i = 0; i < 5; i++) { //A Card is added to the hand and subsequently removed from the deck five times
-			hand.add(deck.get(0)); 
-			deck.remove(0);
-		}
-		return hand;
-	}
-	
 	public Card dealSingle() {
 		Card card = deck.get(0);
 		deck.remove(0);
 		return card;
 	}
-	
-	public ArrayList<Card> simComm() {
+
+	private void burnCard(){
 		deck.remove(0);
-		ArrayList<Card> comm = new ArrayList<Card>();
-		for (int i = 0; i < 3; i++) { 
-			comm.add(deck.get(0)); 
-			deck.remove(0);
-		}
-		for (int i = 0; i < 2; i++) {
-			deck.remove(0);
-			comm.add(deck.get(0));
-			deck.remove(0);
-		}
-		return comm;
 	}
-	
-	/**
-	 * Every Card in the deck is listed.
-	 */
-	public void printDeck() {
-		for (Card card : deck)
-			System.out.println(card.toString());
-		System.out.println("Number of Cards: " + deck.size() + "\n");
+
+	public ArrayList<Card> dealCard(ArrayList<Card> middleCards){
+		burnCard();
+		if(middleCards.size() <= 3){
+			for(int i = 0; i < 3; i++){
+				middleCards.add(deck.get(0));
+				deck.remove(0);
+			}
+		}
+		else{
+			middleCards.add(deck.get(0));
+			deck.remove(0);
+		}
+		
+		return middleCards;
 	}
 }
