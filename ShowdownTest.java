@@ -38,7 +38,9 @@ public class ShowdownTest {
 				player.setHole(testDeck.dealSingle());
 		}
 		
-		comm = testDeck.simComm();
+		comm = testDeck.dealCard(comm);
+		comm = testDeck.dealCard(comm);
+		comm = testDeck.dealCard(comm);
 		System.out.println("Community Cards:\n");
 		for (Card card : comm)
 			System.out.println(card.toString());
