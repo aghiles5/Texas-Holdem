@@ -11,7 +11,7 @@ import javax.smartcardio.Card;
  * 
  * THIS CLASS IS FOR TESTING/PROOF OF CONCEPT, DECKS MAY NOT BE IMPLEMENTED AS OBJECTS.
  * 
- * @author Brayden
+ * @author Brayden, Adam
  * @version 02/20/18
  */
 public class Deck {
