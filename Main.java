@@ -13,12 +13,24 @@ public class Main {
 	private Player player2 = new Human();
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Card> middleCards = new ArrayList<Card>();
+	private int playerCount;
 
 	public Main(){
 		roundOccur = true;
 		gameOccur = true;
 		players.add(player1);
 		players.add(player2);
+		playerCount = 0;
+	}
+
+	private void setupRound(){
+		cardDeck = null;
+		cardDeck = new Deck();
+		//Change this to for loop later on for more players
+		player1.setHole(Deck.dealSingle());
+		player2.setHole(Deck.dealSingle());
+		player1.setHole(Deck.dealSingle());
+		player2.setHole(Deck.dealSingle());
 	}
 
 	public void startGame() {
@@ -51,9 +63,11 @@ public class Main {
 				}
 			}
 
+			setupRound();
+
 			//Allows for the round to keep going
 			while(roundOccur){
-
+				
 			}
 		}
 	}
