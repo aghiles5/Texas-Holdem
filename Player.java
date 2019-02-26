@@ -110,4 +110,8 @@ public class Player {
 
 		return decision;
 	}
+	  
+	  public void getDecision(String input) {
+		  
+	  }
 }

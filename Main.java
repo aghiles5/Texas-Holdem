@@ -114,6 +114,7 @@ public class Main {
 			}
 
 			//Allows for the round to keep going
+			String input = "";
 			while(roundOccur){
 				for(int i = 0; i < 3; i++){
 					for (Player player : players) {
@@ -128,8 +129,8 @@ public class Main {
 						for (Card card : player.getHole())
 							System.out.println(card.toString());
 						
-						String input = getPlayerInput();
-						player.getDecisionHuman(input);
+						input = getPlayerInput();
+						player.getDecision(input);
 						if(input.equalsIgnoreCase("F")){
 							roundOccur = false;
 							players.remove(player);
