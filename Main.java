@@ -133,6 +133,7 @@ public class Main {
 						player.getDecisionHuman(input);
 						if(input.equalsIgnoreCase("F")){
 							roundOccur = false;
+							players.remove(player);
 							break;
 						}
 					}
