@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import javax.smartcardio.Card;
-
 // Common methods between AI and Player class will be in this super class
 
 public class Player {
