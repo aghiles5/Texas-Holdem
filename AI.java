@@ -10,6 +10,8 @@ import java.util.Random;
 
 public class AI extends Player{
 
+  private static String[] cpuName = {"Asshole Alonzo?", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick"};
+
   // This method pushes the AI decisions to SuperPlayer class
   public void getDecisionAI() {
     // This implements the randomness of the AI
