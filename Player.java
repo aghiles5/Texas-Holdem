@@ -102,7 +102,7 @@ public class Player {
 
 	  public String invalidChoice(String choice){
 		String decision = choice;
-		while(!decision.equalsIgnoreCase("A") || !decision.equalsIgnoreCase("L") || !decision.equalsIgnoreCase("C") || !decision.equalsIgnoreCase("F") || !decision.equalsIgnoreCase("B") || !decision.equalsIgnoreCase("R")){
+		while(!decision.equalsIgnoreCase("A") && !decision.equalsIgnoreCase("L") && !decision.equalsIgnoreCase("C") && !decision.equalsIgnoreCase("F") && !decision.equalsIgnoreCase("B") && !decision.equalsIgnoreCase("R")){
 			System.out.printf("What would you like to do next (C for Check, F for Fold): ");
 			Scanner dcInput = new Scanner(System.in);
 			decision = dcInput.next();
