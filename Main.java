@@ -73,7 +73,12 @@ public class Main {
 	public void startGame() {
 		//Allows for the game to keep going until one of the situations below is met
 		while(gameOccur){
-			if(players.size() == 1){
+			 if(aNewGame == 0){
+				newGame();
+				aNewGame = 1;
+			}
+
+			else if(players.size() == 1){
 				String playAgain = "";
 				System.out.printf("Would you like to play again (Y/N): ");
 				Scanner paInput = new Scanner(System.in);
@@ -92,11 +97,6 @@ public class Main {
 					newGame();
 				}
 
-			}
-
-			else if(aNewGame == 0){
-				newGame();
-				aNewGame = 1;
 			}
 
 			else{
