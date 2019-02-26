@@ -11,20 +11,14 @@ import java.util.Scanner;
 
 public class Main {
 	
-	private boolean roundOccur;
-	private boolean gameOccur;
-	private Deck cardDeck = new Deck();
-	private ArrayList<Player> players = new ArrayList<Player>();
-	private ArrayList<Card> middleCards = new ArrayList<Card>();
-	private int aNewGame;
+	private static boolean roundOccur = true;
+	private static boolean gameOccur = true;
+	private static Deck cardDeck = new Deck();
+	private static ArrayList<Player> players = new ArrayList<Player>();
+	private static ArrayList<Card> middleCards = new ArrayList<Card>();
+	private static int aNewGame = 0;
 
-	public Main(){
-		roundOccur = true;
-		gameOccur = true;
-		aNewGame = 0;
-	}
-
-	private String findName(){
+	private static String findName(){
 		String name = "";
 		System.out.printf("Please enter your name player: ");
 		Scanner nameInput = new Scanner(System.in);
@@ -32,7 +26,7 @@ public class Main {
 		return name;
 	}
 
-	private void newGame(){
+	private static void newGame(){
 		roundOccur = true;
 		players.clear();
 		players.add(new Human(findName()));
@@ -46,7 +40,7 @@ public class Main {
 		}
 	}
 
-	private void setupRound(){
+	private static void setupRound(){
 		roundOccur = true;
 		for (Player player : players){
 			player.emptyHand();
@@ -61,7 +55,7 @@ public class Main {
 		}
 	}
 
-	private String getPlayerInput(){
+	private static String getPlayerInput(){
 		String decision = "";
 		System.out.printf("What would you like to do next (C for Check, F for Fold): ");
 		Scanner dcInput = new Scanner(System.in);
@@ -69,7 +63,11 @@ public class Main {
 		return decision;
 	}
 
-	public void startGame() {
+	private static void clearScreen() {    
+		System.out.flush();  
+	}  
+
+	public static void startGame() {
 		//Allows for the game to keep going until one of the situations below is met
 		while(gameOccur){
 			 if(aNewGame == 0){
@@ -118,8 +116,7 @@ public class Main {
 			while(roundOccur){
 				for(int i = 0; i < 3; i++){
 					for (Player player : players) {
-						Runtime.getRuntime().exec("cls");
-						Runtime.getRuntime().exec("clear");
+						clearScreen();
 						System.out.println("The middle hand is:\n");
 						for (Card card : middleCards){
 							System.out.println(card.toString());
@@ -150,13 +147,13 @@ public class Main {
 		}
 	}
 	
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		//A way to start the game.
 		String start = "";
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);
-		while(!start.equals(" ")) {
-			System.out.println("Enter SPACE to start the game.");
+		while(!start.equals("S")) {
+			System.out.println("Enter S to start the game.");
 			start = input.next();
 		}
 		startGame(); //Starts the game.
