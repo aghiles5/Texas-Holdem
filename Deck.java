@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.smartcardio.Card;
-
 /**
  * The Deck class handles methods regarding the creation and handling of 52
  * Card ArrayList objects representing a virtual deck of playing cards.
