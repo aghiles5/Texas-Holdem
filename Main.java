@@ -141,6 +141,10 @@ public class Main {
 					}
 
 					middleCards = cardDeck.dealCard(middleCards);
+
+					if(i == 3){
+						break;
+					}
 				}
 
 				if(input.equalsIgnoreCase("F")){
@@ -149,6 +153,7 @@ public class Main {
 				}
 
 				Showdown.showdown(players, middleCards);
+				roundOccur = false;
 			}
 		}
 	}
