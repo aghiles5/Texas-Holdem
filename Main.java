@@ -15,19 +15,14 @@ public class Main {
 	private boolean roundOccur;
 	private boolean gameOccur;
 	private Deck cardDeck = new Deck();
-	private Player player1 = new Human("Player1");
-	private Player player2 = new Human("Player2");
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Card> middleCards = new ArrayList<Card>();
-	private ArrayList<Card> playerHole = new ArrayList<Card>();
 	private int playerCount;
 	private int aNewGame;
 
 	public Main(){
 		roundOccur = true;
 		gameOccur = true;
-		players.add(player1);
-		players.add(player2);
 		playerCount = 0;
 		aNewGame = 0;
 	}
@@ -41,35 +36,33 @@ public class Main {
 	}
 
 	private void newGame(){
+		roundOccur = true;
 		players.clear();
-		player1 = null;
-		player2 = null;
-		player1 = new Human(findName());
-		player2 = new Human(findName());
-		players.add(player1);
-		players.add(player2);
+		players.add(new Human(findName()));
+		players.add(new Human(findName()));
 		playerCount = 0;
 		cardDeck = null;
 		cardDeck = new Deck();
 		//Change this to for loop later on for more players
-		player1.setHole(cardDeck.dealSingle());
-		player2.setHole(cardDeck.dealSingle());
-		player1.setHole(cardDeck.dealSingle());
-		player2.setHole(cardDeck.dealSingle());
+		for (int i = 0; i < 2; i++) {
+			for (Player player : players)
+				player.setHole(cardDeck.dealSingle());
+		}
 	}
 
 	private void setupRound(){
-		player1.emptyHole();
-		player1.emptyHand();
-		player2.emptyHole();
-		player2.emptyHand();
+		roundOccur = true;
+		for (Player player : players){
+			player.emptyHand();
+			player.emptyHole();
+		}
 		cardDeck = null;
 		cardDeck = new Deck();
 		//Change this to for loop later on for more players
-		player1.setHole(cardDeck.dealSingle());
-		player2.setHole(cardDeck.dealSingle());
-		player1.setHole(cardDeck.dealSingle());
-		player2.setHole(cardDeck.dealSingle());
+		for (int i = 0; i < 2; i++) {
+			for (Player player : players)
+				player.setHole(cardDeck.dealSingle());
+		}
 	}
 
 	private String getPlayerInput(){
@@ -126,7 +119,35 @@ public class Main {
 
 			//Allows for the round to keep going
 			while(roundOccur){
-				for(int i = 0; i)
+				for(int i = 0; i < 3; i++){
+					for (Player player : players) {
+						Runtime.getRuntime().exec("cls");
+						Runtime.getRuntime().exec("clear");
+						System.out.println("The middle hand is:\n");
+						for (Card card : middleCards){
+							System.out.println(card.toString());
+						}
+
+						System.out.println("\n" + player.getName() + "'s Cards:\n");
+						for (Card card : player.getHole())
+							System.out.println(card.toString());
+						
+						String input = getPlayerInput();
+						player.getDecisionHuman(input);
+						if(input.equalsIgnoreCase("F")){
+							roundOccur = false;
+							break;
+						}
+					}
+
+					if(input.equalsIgnoreCase("F")){
+						roundOccur = false;
+						break;
+					}
+
+					middleCards = cardDeck.dealCard(middleCards);
+				}
+				Showdown.showdown(players, middleCards);
 			}
 		}
 	}
