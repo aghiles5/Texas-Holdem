@@ -18,7 +18,7 @@ public class AI extends Player{
 
     for (int i = 0; i < numOfAI; i++) {
       super.name = cpuName[rName];
-      cpuName.remove(rName);
+      cpuName = ArrayUtils.removeElement(cpuName, rName);
     }
   }
 
