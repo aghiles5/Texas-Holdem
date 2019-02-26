@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,9 +15,9 @@ public class AI extends Player{
 
   public AI(int numOfAI) {
     Random name = new Random();
-    int rName = name.nextInt(10);
 
     for (int i = 0; i < numOfAI; i++) {
+      int rName = name.nextInt(Array.getLength(cpuName));
       super.name = cpuName[rName];
       cpuName = ArrayUtils.removeElement(cpuName, rName);
     }
