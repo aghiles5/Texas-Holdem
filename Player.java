@@ -101,7 +101,8 @@ public class Player {
 	  }
 
 	  public String invalidChoice(String choice){
-		while(!choice.equalsIgnoreCase("A") || !choice.equalsIgnoreCase("L") || !choice.equalsIgnoreCase("C") || !choice.equalsIgnoreCase("F") || !choice.equalsIgnoreCase("B") || !choice.equalsIgnoreCase("R")){
+		String decision = choice;
+		while(!decision.equalsIgnoreCase("A") || !decision.equalsIgnoreCase("L") || !decision.equalsIgnoreCase("C") || !decision.equalsIgnoreCase("F") || !decision.equalsIgnoreCase("B") || !decision.equalsIgnoreCase("R")){
 			String decision = "";
 			System.out.printf("What would you like to do next (C for Check, F for Fold): ");
 			Scanner dcInput = new Scanner(System.in);
