@@ -81,7 +81,7 @@ public class Main {
 				Scanner paInput = new Scanner(System.in);
 				playAgain = paInput.next();
 
-				while(!playAgain.equalsIgnoreCase("Y") || !playAgain.equalsIgnoreCase("N")){
+				while(!playAgain.equalsIgnoreCase("Y") && !playAgain.equalsIgnoreCase("N")){
 					System.out.printf("Enter Y or N to have a valid input: ");
 					playAgain = paInput.next();
 				}
@@ -122,7 +122,7 @@ public class Main {
 							System.out.println(card.toString());
 						}
 
-						System.out.println("\n" + player.getName() + "'s Cards:\n");
+						System.out.println("\n" + player.getName() + "'s Cards:");
 						for (Card card : player.getHole())
 							System.out.println(card.toString());
 						
@@ -142,6 +142,12 @@ public class Main {
 
 					middleCards = cardDeck.dealCard(middleCards);
 				}
+
+				if(input.equalsIgnoreCase("F")){
+					roundOccur = false;
+					break;
+				}
+
 				Showdown.showdown(players, middleCards);
 			}
 		}
@@ -152,7 +158,7 @@ public class Main {
 		String start = "";
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);
-		while(!start.equals("S")) {
+		while(!start.equalsIgnoreCase("S")) {
 			System.out.println("Enter \"S\" to start the game.");
 			start = input.next();
 		}

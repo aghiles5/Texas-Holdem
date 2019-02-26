@@ -57,7 +57,7 @@ public class Deck {
 
 	public ArrayList<Card> dealCard(ArrayList<Card> middleCards){
 		burnCard();
-		if(middleCards.size() <= 3){
+		if(middleCards.size() < 3){
 			for(int i = 0; i < 3; i++){
 				middleCards.add(deck.get(0));
 				deck.remove(0);
