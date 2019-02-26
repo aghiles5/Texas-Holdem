@@ -158,13 +158,8 @@ public class Main {
 		String start = "";
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);
-<<<<<<< HEAD
 		while(!start.equalsIgnoreCase("S")) {
-			System.out.println("Enter S to start the game.");
-=======
-		while(!start.equals("S")) {
 			System.out.println("Enter \"S\" to start the game.");
->>>>>>> f4f56611313939705c1a38fcf9fb0dc611881646
 			start = input.next();
 		}
 		startGame(); //Starts the game.
