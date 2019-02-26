@@ -142,7 +142,7 @@ public class Main {
 
 					middleCards = cardDeck.dealCard(middleCards);
 
-					if(i == 2){
+					if(i == 3){
 						break;
 					}
 				}
@@ -153,7 +153,7 @@ public class Main {
 				}
 
 				Showdown.showdown(players, middleCards);
-				break;
+				roundOccur = false;
 			}
 		}
 	}
