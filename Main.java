@@ -46,6 +46,7 @@ public class Main {
 			player.emptyHand();
 			player.emptyHole();
 		}
+		middleCards.clear();
 		cardDeck = null;
 		cardDeck = new Deck();
 		//Change this to for loop later on for more players
