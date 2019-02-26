@@ -12,7 +12,7 @@ import java.util.Random;
 public class AI extends Player{
 
   // This is an array of CPU player names
-  private static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick", "Magnificent Mick"};
+  public static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick", "Magnificent Mick"};
 
   // This constructor will generate random names for the number of CPU players
   public AI(int numOfAI) {
