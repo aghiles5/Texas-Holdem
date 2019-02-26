@@ -83,7 +83,7 @@ public class Player {
 	  
 	  public void call(String choice, int toCall, int currentBet) {
 		  //need to determine how to compare each player's current Bet to generate a toCall
-		  if (choice.equalsIgnoreCase("C")) {
+		  if (choice.equalsIgnoreCase("L")) {
 			  int bet = toCall - currentBet;
 			  Money -= bet;
 			  //pot += bet;
@@ -100,4 +100,15 @@ public class Player {
 			  System.out.println("Player went all-in!");
 		  }
 	  }
+
+	  public String invalidChoice(String choice){
+		while(!choice.equalsIgnoreCase("A") || !choice.equalsIgnoreCase("L") || !choice.equalsIgnoreCase("C") || !choice.equalsIgnoreCase("F") || !choice.equalsIgnoreCase("B") || !choice.equalsIgnoreCase("R")){
+			String decision = "";
+			System.out.printf("What would you like to do next (C for Check, F for Fold): ");
+			Scanner dcInput = new Scanner(System.in);
+			decision = dcInput.next();
+		}
+
+		return decision;
+	}
 }
