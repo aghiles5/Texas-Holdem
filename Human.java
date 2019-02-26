@@ -7,7 +7,7 @@ public class Human extends Player {
 	}
 
   	// Only implementing check and fold for now since there is no money available
-  	public void getDecisionHuman(String decision) {
+  	public void getDecision(String decision) {
 		decision = super.invalidChoice(decision);
 		super.check(decision);
 		super.fold(decision);
