@@ -153,6 +153,7 @@ public class Main {
 				}
 
 				Showdown.showdown(players, middleCards);
+				roundOccur = false;
 			}
 		}
 	}
