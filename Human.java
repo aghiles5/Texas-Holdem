@@ -1,8 +1,15 @@
 import java.util.ArrayList;
 
-public class Human extends Player{
+public class Human extends Player {
 	//maybe write the player names to a file? Kyle has a little bit of I/O exp
-	Human(String n) {
-	 super.name = n;
+	public Human(String n) {
+		super.name = n;
 	}
+
+  	// Only implementing check and fold for now since there is no money available
+  	public void getDecisionHuman(String decision) {
+		super.check(decision);
+		super.fold(decision);
+	}
+
 }
