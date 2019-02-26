@@ -114,7 +114,7 @@ public class Main {
 			//Allows for the round to keep going
 			String input = "";
 			while(roundOccur){
-				for(int i = 0; i < 3; i++){
+				for(int i = 0; i < 4; i++){
 					for (Player player : players) {
 						clearScreen();
 						System.out.println("The middle hand is:\n");
@@ -153,7 +153,6 @@ public class Main {
 				}
 
 				Showdown.showdown(players, middleCards);
-				roundOccur = false;
 			}
 		}
 	}
