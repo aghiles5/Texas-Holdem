@@ -11,11 +11,17 @@ import java.util.Random;
 
 public class AI extends Player{
 
+  // This is an array of CPU player names
   private static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick"};
 
+  // This constructor will generate random names for the number of CPU players
   public AI(int numOfAI) {
     Random name = new Random();
 
+    /**
+     * This loop takes the argument of the contructor and chooses random names for the CPU players
+     * and removes the name if it is chosen for the CPU so no duplicate CPU players exists
+     */
     for (int i = 0; i < numOfAI; i++) {
       int rName = name.nextInt(Array.getLength(cpuName));
       super.name = cpuName[rName];
