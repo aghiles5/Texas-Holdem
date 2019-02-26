@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class AI extends Player{
 
-  private static String[] cpuName = {"Asshole Alonzo?", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick"};
+  private static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick"};
 
   public AI(int numOfAI) {
     Random name = new Random();
@@ -18,7 +18,7 @@ public class AI extends Player{
 
     for (int i = 0; i < numOfAI; i++) {
       super.name = cpuName[rName];
-      cpuName.remove(rName);
+      cpuName = ArrayUtils.removeElement(cpuName, rName);
     }
   }
 
