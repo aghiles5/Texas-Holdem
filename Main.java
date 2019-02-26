@@ -17,13 +17,11 @@ public class Main {
 	private Deck cardDeck = new Deck();
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Card> middleCards = new ArrayList<Card>();
-	private int playerCount;
 	private int aNewGame;
 
 	public Main(){
 		roundOccur = true;
 		gameOccur = true;
-		playerCount = 0;
 		aNewGame = 0;
 	}
 
@@ -40,7 +38,6 @@ public class Main {
 		players.clear();
 		players.add(new Human(findName()));
 		players.add(new Human(findName()));
-		playerCount = 0;
 		cardDeck = null;
 		cardDeck = new Deck();
 		//Change this to for loop later on for more players
