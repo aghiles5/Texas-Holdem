@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javax.smartcardio.Card;
+
 // Common methods between AI and Player class will be in this super class
 
 public class Player {
@@ -8,6 +10,10 @@ public class Player {
 	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
 	  protected String name = "";
 	  
+	  public void setName(String newName){
+		  name = newName;
+	  }
+
 	  public String getName() {
 		  return name;
 	  }
@@ -33,6 +39,14 @@ public class Player {
 		  return hole;
 	  }
 
+	  public void emptyHole(){
+		  hole.clear();
+	  }
+
+	  public void emptyHand(){
+		  hand.clear();
+	  }
+
 	  public void check(String choice) {
 		  //If the input is c, nothing happens
 		  if (choice.equalsIgnoreCase("C")) {
@@ -43,7 +57,8 @@ public class Player {
 	  public void fold(String choice) {
 		  //if the input is f, the list is emptied
 		  if (choice.equalsIgnoreCase("F")) {
-			  hand.clear(); //list is emptied
+			  emptyHand(); //Clears hand
+			  emptyHole(); //Clears hole
 			  System.out.println("Player folded.");
 		  }
 	  }
