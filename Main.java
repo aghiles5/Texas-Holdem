@@ -69,6 +69,11 @@ public class Main {
 		return decision;
 	}
 
+	private static void clearScreen() {  
+		System.out.print("\033[H\033[2J");  
+		System.out.flush();  
+	}  
+
 	public void startGame() {
 		//Allows for the game to keep going until one of the situations below is met
 		while(gameOccur){
@@ -117,8 +122,7 @@ public class Main {
 			while(roundOccur){
 				for(int i = 0; i < 3; i++){
 					for (Player player : players) {
-						Runtime.getRuntime().exec("cls");
-						Runtime.getRuntime().exec("clear");
+						clearScreen();
 						System.out.println("The middle hand is:\n");
 						for (Card card : middleCards){
 							System.out.println(card.toString());
