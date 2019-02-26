@@ -153,8 +153,8 @@ public class Main {
 		String start = "";
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);
-		while(!start.equals(" ")) {
-			System.out.println("Enter SPACE to start the game.");
+		while(!start.equals("S")) {
+			System.out.println("Enter S to start the game.");
 			start = input.next();
 		}
 		startGame(); //Starts the game.
