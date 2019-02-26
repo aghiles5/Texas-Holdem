@@ -6,7 +6,6 @@
  * @version 02/20/18
  */
 
- //Must change all the player1, player2 things to loops later on when using AI and more players
 import java.util.ArrayList;
 import java.util.Scanner;
 
