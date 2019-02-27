@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * that they may be utilized in AI decision making.
  *
  * @author Adam Hiles
- * @version 02/22/19
+ * @version 02/27/19
  */
 public class Showdown {
 
