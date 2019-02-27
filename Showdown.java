@@ -341,7 +341,7 @@ public class Showdown {
 	 * @param allCards the combined community and a given player's hole cards
 	 * @return An ArrayList of all five card hand combinations
 	 */
-	public static ArrayList<ArrayList<Card>> comb(ArrayList<Card> allCards) {
+	private static ArrayList<ArrayList<Card>> comb(ArrayList<Card> allCards) {
 		ArrayList<ArrayList<Card>> combs = new ArrayList<ArrayList<Card>>(); //A 21 ArrayList ArrayList is created to store all possible combinations
 		for (int i = 0; i < 21; i++)
 			combs.add(new ArrayList<Card>());
