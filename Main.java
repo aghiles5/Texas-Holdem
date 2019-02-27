@@ -8,7 +8,6 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.lang.System.exit()
 
 public class Main {
 	
@@ -65,6 +64,7 @@ public class Main {
 		return decision;
 	}
 
+	/*
 	private static void clearScreen() {    
 		String clearScreenCommand = null;
 		if(System.getProperty("os.name").startsWith("Window"))
@@ -74,6 +74,7 @@ public class Main {
 
 		Runtime.getRuntime().exec(clearScreenCommand);
 	}  
+	*/
 
 	public static void startGame() {
 		//Allows for the game to keep going until one of the situations below is met
@@ -122,9 +123,11 @@ public class Main {
 			//Allows for the round to keep going
 			String input = "";
 			while(roundOccur){
-				for(int i = 0; i < 4; i++){
+				for(int i = 0; i < 4; i++) {
+					if (i != 0)
+						middleCards = cardDeck.dealCard(middleCards);
 					for (Player player : players) {
-						clearScreen();
+						//clearScreen();
 						System.out.println("\nThe middle hand is:");
 						for (Card card : middleCards){
 							System.out.println(card.toString());
@@ -147,12 +150,6 @@ public class Main {
 						roundOccur = false;
 						break;
 					}
-
-					middleCards = cardDeck.dealCard(middleCards);
-
-					if(i == 3){
-						break;
-					}
 				}
 
 				if(input.equalsIgnoreCase("F")){
@@ -164,7 +161,7 @@ public class Main {
 				roundOccur = false;
 			}
 		}
-		System.exit(0)
+		System.exit(0);
 	}
 	
 	public static void main(String[] args) {
