@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class Main {
 	
@@ -64,17 +65,20 @@ public class Main {
 		return decision;
 	}
 
-	/*
 	private static void clearScreen() {    
-		String clearScreenCommand = null;
 		if(System.getProperty("os.name").startsWith("Window"))
-			 clearScreenCommand = "cls";
-		else
-    		clearScreenCommand = "clear";
-
-		Runtime.getRuntime().exec(clearScreenCommand);
+			try {
+				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		else {
+			System.out.print("\033[H\033[2J");
+			System.out.flush();
+		}
 	}  
-	*/
 
 	public static void startGame() {
 		//Allows for the game to keep going until one of the situations below is met
@@ -127,13 +131,16 @@ public class Main {
 					if (i != 0)
 						middleCards = cardDeck.dealCard(middleCards);
 					for (Player player : players) {
-						//clearScreen();
-						System.out.println("\nThe middle hand is:");
-						for (Card card : middleCards){
-							System.out.println(card.toString());
+						clearScreen();
+						if (i != 0) {
+							System.out.println("The Community Cards Are:");
+							for (Card card : middleCards){
+								System.out.println(card.toString());
+							}
+							System.out.println("");
 						}
 
-						System.out.println("\n" + player.getName() + "'s Cards:");
+						System.out.println(player.getName() + "'s Cards:");
 						for (Card card : player.getHole())
 							System.out.println(card.toString());
 						
@@ -157,6 +164,7 @@ public class Main {
 					break;
 				}
 
+				clearScreen();
 				Showdown.showdown(players, middleCards);
 				roundOccur = false;
 			}
@@ -166,6 +174,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		//A way to start the game.
+		clearScreen();
 		String start = "";
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);

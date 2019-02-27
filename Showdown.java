@@ -60,7 +60,7 @@ public class Showdown {
 			winners.add(players.get(i));
 		
 		if (winnerCounter > 1) { //If a stalemate occurs all winners are listed appropriately
-			System.out.print("\nStalemate!\nThe pot will be split between ");
+			System.out.print("Stalemate!\nThe pot will be split between ");
 			if (winnerCounter > 2) {
 				for (int i = 0; i < winnerCounter - 1; i++) {
 					System.out.print(winners.get(i).getName() + ", ");
@@ -71,7 +71,7 @@ public class Showdown {
 			System.out.println("and " + winners.get(winnerCounter - 1).getName() + ".");
 		}
 		else //The sole winner is listed
-			System.out.println("\n" + players.get(0).getName() + " wins the pot!");
+			System.out.println(players.get(0).getName() + " wins the pot!");
 		
 		System.out.println("\nFinal Hands:"); //The highest hands of all players are displayed
 		for (Player player : players) {
