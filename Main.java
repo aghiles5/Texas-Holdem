@@ -19,9 +19,10 @@ public class Main {
 	private static ArrayList<Card> middleCards = new ArrayList<Card>();
 	private static int aNewGame = 0;
 
-	private static String findName(){
+	private static String findName(int playerNum){
+		clearScreen();
 		String name = "";
-		System.out.printf("Please enter your name player: ");
+		System.out.printf("Please enter your name player " + playerNum + " : ");
 		Scanner nameInput = new Scanner(System.in);
 		name = nameInput.next();
 		return name;
@@ -30,8 +31,8 @@ public class Main {
 	private static void newGame(){
 		roundOccur = true;
 		players.clear();
-		players.add(new Human(findName()));
-		players.add(new Human(findName()));
+		players.add(new Human(findName(1)));
+		players.add(new Human(findName(2)));
 		cardDeck = null;
 		cardDeck = new Deck();
 		//Change this to for loop later on for more players
@@ -169,6 +170,7 @@ public class Main {
 				roundOccur = false;
 			}
 		}
+		clearScreen();
 		System.exit(0);
 	}
 	
