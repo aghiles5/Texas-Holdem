@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.lang.System.exit()
 
 public class Main {
 	
@@ -58,14 +59,20 @@ public class Main {
 
 	private static String getPlayerInput(){
 		String decision = "";
-		System.out.printf("What would you like to do next (C for Check, F for Fold): ");
+		System.out.printf("\nWhat would you like to do next (C for Check, F for Fold): ");
 		Scanner dcInput = new Scanner(System.in);
 		decision = dcInput.next();
 		return decision;
 	}
 
 	private static void clearScreen() {    
-		System.out.flush();  
+		String clearScreenCommand = null;
+		if(System.getProperty("os.name").startsWith("Window"))
+			 clearScreenCommand = "cls";
+		else
+    		clearScreenCommand = "clear";
+
+		Runtime.getRuntime().exec(clearScreenCommand);
 	}  
 
 	public static void startGame() {
@@ -78,12 +85,12 @@ public class Main {
 
 			else if(players.size() == 1){
 				String playAgain = "";
-				System.out.printf("Would you like to play again (Y/N): ");
+				System.out.printf("\nWould you like to play again (Y/N): ");
 				Scanner paInput = new Scanner(System.in);
 				playAgain = paInput.next();
 
 				while(!playAgain.equalsIgnoreCase("Y") && !playAgain.equalsIgnoreCase("N")){
-					System.out.printf("Enter Y or N to have a valid input: ");
+					System.out.printf("\nEnter Y or N to have a valid input: ");
 					playAgain = paInput.next();
 				}
 
@@ -99,7 +106,7 @@ public class Main {
 
 			else{
 				String quitGame = "";
-				System.out.printf("Please input Q to Quit Game or Anything else to Continue: ");
+				System.out.printf("\nPlease input Q to Quit Game or Anything else to Continue: ");
 				Scanner quitInput = new Scanner(System.in);
 				quitGame = quitInput.next();
 
@@ -118,7 +125,7 @@ public class Main {
 				for(int i = 0; i < 4; i++){
 					for (Player player : players) {
 						clearScreen();
-						System.out.println("The middle hand is:\n");
+						System.out.println("\nThe middle hand is:");
 						for (Card card : middleCards){
 							System.out.println(card.toString());
 						}
@@ -157,6 +164,7 @@ public class Main {
 				roundOccur = false;
 			}
 		}
+		System.exit(0)
 	}
 	
 	public static void main(String[] args) {
@@ -165,7 +173,7 @@ public class Main {
 		System.out.println("Welcome to Texas-Hold'em Poker!");
 		Scanner input = new Scanner(System.in);
 		while(!start.equalsIgnoreCase("S")) {
-			System.out.println("Enter \"S\" to start the game.");
+			System.out.printf("Enter \"S\" to start the game: ");
 			start = input.next();
 		}
 		startGame(); //Starts the game.
