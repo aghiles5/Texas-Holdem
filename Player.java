@@ -62,30 +62,32 @@ public class Player {
 		  }
 	  }
 	  
-	  public void BetRaise(String choice, int bet) {
+	  public void BetRaise(String choice, int bet, int currentBet) {
 		  if (choice.equalsIgnoreCase("B")) {
 			  //checks to see if the bet is less than the
 			  //money in the player's balance
 			  if (bet <= Money) {
 				  Money = Money - bet;
-				  //pot update
+				  PotControl.POT += bet; //has flaws
 				  System.out.println("Player bet $" + bet + ".");
 			  }
 		  } else if (choice.equalsIgnoreCase("R")) {
 			  //Raise action
-			  //if bet >= 2 times pot && bet <= Money
-			  Money = Money - bet;
-			  System.out.println("Player raised $" + bet + ".");
-			  //pot update
+			  if (bet >= 2*currentBet && bet <= Money) {
+				Money = Money - bet;
+			  	System.out.println("Player raised $" + bet + ".");
+			  	PotControl.POT += bet;
+			  }
 		  }
 	  }
 	  
-	  public void call(String choice, int toCall, int currentBet) {
+	  public void call(String choice, int currentBet) {
+		  int toCall = 0; //= highest bet, track somehow
 		  //need to determine how to compare each player's current Bet to generate a toCall
 		  if (choice.equalsIgnoreCase("L")) {
 			  int bet = toCall - currentBet;
 			  Money -= bet;
-			  //pot += bet;
+			  PotControl.POT += bet;
 			  System.out.println("Player called.");
 		  }
 	  }
@@ -94,8 +96,7 @@ public class Player {
 		  if (choice.equalsIgnoreCase("A")) {
 			  currentBet += Money;
 			  Money = 0;
-			  // adds money to pot
-			  // then sets money to 0
+			  PotControl.POT += currentBet;
 			  System.out.println("Player went all-in!");
 		  }
 	  }
