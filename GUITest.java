@@ -13,10 +13,6 @@ public class GUITest {
 		players.add(new Human("COM 3"));
 		players.add(new Human("COM 4"));
 		players.add(new Human("COM 5"));
-		players.add(new Human("COM 6"));
-		players.add(new Human("COM 7"));
-		players.add(new Human("COM 8"));
-		players.add(new Human("COM 9"));
 		
 		for (int i = 0; i < 2; i++) {
 			for (Player player : players)

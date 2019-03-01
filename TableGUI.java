@@ -61,6 +61,7 @@ public class TableGUI extends Application {
 			cards.getChildren().addAll(new ImageView(card1), new ImageView(card2));
 			
 			comEntry.setAlignment(Pos.CENTER);
+			comEntry.setSpacing(3);
 			comEntry.getChildren().addAll(name, stack, bet, action, cards);
 			comBar.getChildren().add(comEntry);
 		}
