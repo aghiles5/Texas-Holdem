@@ -7,6 +7,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -32,66 +34,54 @@ public class TableGUI extends Application {
 		primaryStage.setFullScreen(true);
 		primaryStage.setFullScreenExitHint("");
 		
-		HBox comBar = new HBox();
-		comBar.setMinSize(windowW, windowH / 4);
-		comBar.setSpacing(100);
+		//Left bar
+		
+		VBox comBar = new VBox();
+		comBar.setMinSize(windowW * (7.0 / 38.0), windowH);
+		comBar.setSpacing(20);
 		comBar.setAlignment(Pos.CENTER);
 		comBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+		        + "-fx-border-width: 1;" + "-fx-border-insets: 5;"
 		        + "-fx-border-color: black;");
 		for (int index = 1; index < players.size(); index++) {
 			VBox comEntry = new VBox();
+			
 			Label name = new Label(players.get(index).getName());
 			Text stack = new Text("Stack: ");
 			Text bet = new Text("Bet: ");
 			Text action = new Text("Action: ");
+			
+			HBox cards = new HBox();
+			cards.setSpacing(10);
+			cards.setAlignment(Pos.CENTER);
+			Image card1 = new Image("/Images/TempCard.png");
+			Image card2 = new Image("/Images/TempCard.png");
+			cards.getChildren().addAll(new ImageView(card1), new ImageView(card2));
+			
 			comEntry.setAlignment(Pos.CENTER);
-			comEntry.getChildren().addAll(name, stack, bet, action);
+			comEntry.getChildren().addAll(name, stack, bet, action, cards);
 			comBar.getChildren().add(comEntry);
 		}
 		
-		//Left Sidebar
+		//Right bar
 		
-		VBox dealerBar = new VBox();
-		dealerBar.setMinSize(windowW / 4, windowH / 2);
-		dealerBar.setAlignment(Pos.CENTER);
-		dealerBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-		        + "-fx-border-color: black;");
-		
-		Text potText = new Text("Pot: ");
-		Text highestBetText = new Text("Highest Bet: ");
-		Label commLabel = new Label("Community Cards");
-		Label flopLabel = new Label("The Flop");
-		
-		HBox flopBox = new HBox();
-		
-		HBox singlesBox = new HBox();
-		Label turnLabel = new Label("The Turn");
-		Label riverLabel = new Label("The River");
-		singlesBox.getChildren().addAll(turnLabel, riverLabel);
-		
-		dealerBar.getChildren().addAll(potText, highestBetText, commLabel, 
-				flopLabel, flopBox, singlesBox);
-		
-		//Lower bar
-		
-		HBox playerBar = new HBox();
-		playerBar.setMinSize(windowW, windowH / 4);
+		VBox playerBar = new VBox();
+		playerBar.setMinSize(windowW * (7.0 / 38.0), windowH);
 		playerBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+		        + "-fx-border-width: 1;" + "-fx-border-insets: 5;"
 		        + "-fx-border-color: black;");
+		
+		//Centre table
 		
 		GridPane table = new GridPane();
-		table.setMinSize(windowW * (3 / 4), windowH / 2);
+		table.setMinSize(windowW * (9.0 / 16.0), windowH);
 		table.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+		        + "-fx-border-width: 1;" + "-fx-border-insets: 5;"
 		        + "-fx-border-color: black;");
 		
-		root.setLeft(dealerBar);
-		root.setBottom(playerBar);
+		root.setRight(playerBar);
 		root.setCenter(table);
-		root.setTop(comBar);
+		root.setLeft(comBar);
 		primaryStage.show();
 	}
 	
