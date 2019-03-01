@@ -1,13 +1,15 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Random;
-
 /**
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 02/20/2019
+ * @version 03/01/2019
  */
+
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Random;
+
 
 public class AI extends Player{
 
