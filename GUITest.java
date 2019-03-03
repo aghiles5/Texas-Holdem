@@ -9,16 +9,12 @@ public class GUITest {
 	public static ArrayList<Player> generatePlayers() {
 		ArrayList<Player> players = new ArrayList<Player>();
 		
-		players.add(new Human("User"));
-		players.add(new Human("COM 1"));
-		players.add(new Human("COM 2"));
-		players.add(new Human("COM 3"));
-		players.add(new Human("COM 4"));
-		players.add(new Human("COM 5"));
-		players.add(new Human("COM 6"));
-		players.add(new Human("COM 7"));
-		players.add(new Human("COM 8"));
-		players.add(new Human("COM 9"));
+		for (int n = 0; n < 10; n++) {
+			if (n ==0)
+				players.add(new Human("You"));
+			else
+				players.add(new Human("COM " + n));
+		}
 		
 		for (int i = 0; i < 2; i++) {
 			for (Player player : players)

@@ -1,17 +1,21 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import jfxtras.scene.layout.CircularPane;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -19,12 +23,24 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+/**
+ * 
+ * @author Adam Hiles
+ * @version 03/03/18
+ */
 public class TableGUI extends Application {
 	private final static double tableWidth = 720; //Referring to the length of the straightway
 	private final static double tableRatio = 1.25;
 	private final static double tableRim = 20;
+	
 	private final static double playerOutset = 60; //The distance of player information from the table
-	private final static double playerInset = 20; //The distance of player bets and cards? inside the table
+	private final static double playerInset = 60; //The distance of player bets and cards? inside the table
+	
+	private final static double seatWidth = 50.0;
+	private final static double seatHeight = 60.0;
+	
+	private final static double placeWidth = 100.0;
+	private final static double placeHeight = 20.0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -51,32 +67,7 @@ public class TableGUI extends Application {
 		actionBar.setPrefSize(windowW, windowH / 6.0);
 		actionBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
 		        + "-fx-border-width: 5;");
-		
-		//Table
-		
-		CircularPane playerRing = new CircularPane();
-		playerRing.setPrefSize(windowW * (5.0 / 6.0), windowH * (5.0 / 6.0));
-		
-		for (Player player : players) {
-			VBox comEntry = new VBox();
-			
-			Label name = new Label(player.getName());
-			Text stack = new Text("Stack: ");
-			Text bet = new Text("Bet: ");
-			Text action = new Text("Action: ");
-			
-			HBox cards = new HBox();
-			cards.setSpacing(10);
-			cards.setAlignment(Pos.CENTER);
-			Image card1 = new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png");
-			Image card2 = new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png");
-			cards.getChildren().addAll(new ImageView(card1), new ImageView(card2));
-			
-			comEntry.setAlignment(Pos.CENTER);
-			comEntry.getChildren().addAll(name, stack, bet, action, cards);
-			playerRing.add(comEntry);
-		}
-		
+
 		//Community cards
 		
 		VBox community = new VBox();
@@ -102,7 +93,7 @@ public class TableGUI extends Application {
 		community.getChildren().addAll(flop, streets);
 		
 		StackPane table = generateTable();
-		StackPane playerInfo = seatPlayers(players);
+		StackPane playerInfo = seatPlayers(players, windowW, windowH);
 		table.getChildren().addAll(community, playerInfo);
 		
 		root.setBottom(actionBar);
@@ -154,72 +145,148 @@ public class TableGUI extends Application {
 		return table;
 	}
 	
-	private static StackPane seatPlayers(ArrayList<Player> players) {
-		double tableBorder = (tableWidth * 2) + (Math.PI * (tableWidth / tableRatio));
-		double playerSpacing = tableBorder / (double) players.size();
-		double bottomEnd = tableWidth / 2;
-		double leftEnd = bottomEnd + Math.PI * ((tableWidth / tableRatio) / 2);
-		double topEnd = leftEnd + tableWidth;
-		double rightEnd = topEnd + Math.PI * ((tableWidth / tableRatio) / 2);
+	/**
+	 * The information regarding every player is arrayed around the oval table
+	 * by utilizing two coordinate systems. First, the position of each player
+	 * is calculated as a scalar around the perimeter of the table with the
+	 * user always being at zero at the centre of the bottom of the table. For
+	 * players along the top or bottom straightaways they are easily set in 
+	 * HBoxes, but those around the hemisphere lobes of the table are put into
+	 * a polar coordinate system with each lobe's centre being the origin. 
+	 * 
+	 * 
+	 * @param players the list of players in the game
+	 * @param windowW the width of the primary screen
+	 * @param windowH the height of the primary screen
+	 * @return the stack of all player information nodes
+	 */
+	private static StackPane seatPlayers(ArrayList<Player> players, double windowW, double windowH) {
+		//=====================================================================
+		//Coordinate Calculations
 		
-		CircularPane leftSeats = new CircularPane();
-		CircularPane rightSeats = new CircularPane();
-		leftSeats.setDiameter((tableWidth / tableRatio) + (playerOutset * 2));
-		rightSeats.setDiameter((tableWidth / tableRatio) + (playerOutset * 2));
+		//Table Perimeter Coordinates
+		double tableBorder = (tableWidth * 2.0) + (Math.PI * (tableWidth / tableRatio));
+		double playerSpacing = tableBorder / (double) players.size();
+		double bottomEnd = tableWidth / 2.0;
+		double leftEnd = bottomEnd + Math.PI * ((tableWidth / tableRatio) / 2.0);
+		double topEnd = leftEnd + tableWidth;
+		double rightEnd = topEnd + Math.PI * ((tableWidth / tableRatio) / 2.0);
+		
+		//Lobe Polar Coordinates
+		double tableOriginX = windowW / 2.0;
+		double tableOriginY = (windowH * (5.0 / 6.0)) / 2.0;
+		double leftPolarOriginX = tableOriginX - (tableWidth / 2.0);
+		double leftStartRad = (3.0 * Math.PI) / 2.0;
+		double rightPolarOriginX = tableOriginX + (tableWidth / 2.0);
+		double rightStartRad = Math.PI / 2.0;
+		double outsetCircleRadius = ((tableWidth / tableRatio)  / 2.0) + playerOutset + tableRim;
+		double insetCircleRadius = ((tableWidth / tableRatio)  / 2.0) - playerInset;
+		
+		//=====================================================================
+		//Parent Nodes
+		
 		HBox bottomSeats = new HBox();
 		bottomSeats.setAlignment(Pos.CENTER);
+		bottomSeats.setSpacing(playerSpacing - seatWidth);
 		HBox topSeats = new HBox();
 		topSeats.setAlignment(Pos.CENTER);
+		topSeats.setSpacing(playerSpacing - seatWidth);
 		
 		VBox sWaySeats = new VBox();
 		sWaySeats.setAlignment(Pos.CENTER);
-		sWaySeats.setSpacing((tableWidth / tableRatio) + playerOutset);
+		sWaySeats.setSpacing((tableWidth / tableRatio) + playerOutset + tableRim);
 		sWaySeats.getChildren().addAll(topSeats, bottomSeats);
+
+		Pane lobeSeats = new Pane();
 		
-		HBox lobeSeats = new HBox();
-		lobeSeats.setAlignment(Pos.CENTER);
-		lobeSeats.setSpacing(tableWidth + (tableWidth / tableRatio) + playerOutset);
-		lobeSeats.getChildren().addAll(leftSeats, rightSeats);
+		HBox bottomPlaces = new HBox();
+		bottomPlaces.setAlignment(Pos.CENTER);
+		bottomPlaces.setSpacing(playerSpacing - placeWidth);
+		HBox topPlaces = new HBox();
+		topPlaces.setAlignment(Pos.CENTER);
+		topPlaces.setSpacing(playerSpacing - placeWidth);
+		
+		VBox sWayPlaces = new VBox();
+		sWayPlaces.setAlignment(Pos.CENTER);
+		sWayPlaces.setSpacing((tableWidth / tableRatio) - playerInset);
+		sWayPlaces.getChildren().addAll(topPlaces, bottomPlaces);
+
+		Pane lobePlaces = new Pane();
+		
+		//=====================================================================
+		//Seat and Placement Child Nodes 
 		
 		int currentPlayer = 0;
 		for (Player player : players) {
 			double distanceFromUser = currentPlayer * playerSpacing;
 			
+			//Seat
 			Label name = new Label(player.getName());
-			Text stack = new Text("Stack: ");
-			Text action = new Text("Action: ");
+			Label stack = new Label("Stack: ");
+			Label action = new Label("Action: ");
 			
 			VBox seat = new VBox();
 			seat.setAlignment(Pos.CENTER);
+			seat.setMinWidth(seatWidth);
+			seat.setMinHeight(seatHeight);
 			seat.getChildren().addAll(name, stack, action);
+			
+			//Placement
+			Label bet = new Label("Current Bet: 0.00");
+			
+			VBox place = new VBox();
+			place.setAlignment(Pos.CENTER);
+			place.setMinWidth(placeWidth);
+			place.setMinHeight(placeHeight);
+			place.getChildren().addAll(bet);
 			
 			if (distanceFromUser < bottomEnd) {
 				bottomSeats.getChildren().add(seat);
+				bottomPlaces.getChildren().add(place);
+				if ((bottomSeats.getChildren().size() == 2)) { //If there are multiple players on the bottom they need to be reversed
+					ObservableList<Node> seatCollec = FXCollections.observableArrayList(bottomSeats.getChildren());
+					Collections.swap(seatCollec, 0, 1);
+					bottomSeats.getChildren().setAll(seatCollec);
+					
+					ObservableList<Node> placeCollec = FXCollections.observableArrayList(bottomPlaces.getChildren());
+					Collections.swap(placeCollec, 0, 1);
+					bottomPlaces.getChildren().setAll(placeCollec);
+				}
 			}
 			else if (distanceFromUser < leftEnd) {
-				leftSeats.add(seat);
+				double phi = leftStartRad - ((distanceFromUser - bottomEnd) / ((tableWidth / tableRatio) / 2));
+				seat.setLayoutX(leftPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (seatWidth / 2));
+				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (seatHeight / 2));
+				place.setLayoutX(leftPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (placeWidth / 2));
+				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (placeHeight / 2));
+				lobeSeats.getChildren().add(seat);
+				lobePlaces.getChildren().add(place);
 			}
 			else if (distanceFromUser < topEnd) {
 				topSeats.getChildren().add(seat);
+				topPlaces.getChildren().add(place);
 			}
 			else if (distanceFromUser < rightEnd){
-				rightSeats.add(seat);
+				double phi = rightStartRad - ((distanceFromUser - topEnd) / ((tableWidth / tableRatio) / 2));
+				seat.setLayoutX(rightPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (seatWidth / 2));
+				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (seatHeight / 2));
+				place.setLayoutX(rightPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (placeWidth / 2));
+				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (placeHeight / 2));
+				lobeSeats.getChildren().add(seat);
+				lobePlaces.getChildren().add(place);
 			}
 			else {
 				bottomSeats.getChildren().add(seat);
+				bottomPlaces.getChildren().add(place);
 			}
 			currentPlayer++;
 		}
-		
-		bottomSeats.setSpacing(playerSpacing);
-		topSeats.setSpacing(playerSpacing);
-		leftSeats.setStartAngle(-135.0);
-		leftSeats.setArc((playerSpacing / (leftSeats.getDiameter() / 2.0)) * (180.0 / Math.PI));
-		rightSeats.setStartAngle(45.0);
-		rightSeats.setArc((playerSpacing / (leftSeats.getDiameter() / 2.0)) * (180.0 / Math.PI));
+
+		if (topSeats.getChildren().size() == 0) //A dummy seat is added to the top seats to make sure the bottom is offset
+			topSeats.getChildren().add(new Label("\n\n\n"));
 		
 		StackPane playerInfo = new StackPane();
-		playerInfo.getChildren().addAll(lobeSeats, sWaySeats);
+		playerInfo.getChildren().addAll(sWaySeats, lobeSeats, sWayPlaces, lobePlaces);
 		return playerInfo;
 	}
 	
