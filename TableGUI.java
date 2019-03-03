@@ -10,7 +10,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -52,10 +54,10 @@ public class TableGUI extends Application {
 		BorderPane root = new BorderPane();
 		
 		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-		double windowW = primaryScreenBounds.getWidth();
-		double windowH = primaryScreenBounds.getHeight();
+		double winWidth = primaryScreenBounds.getWidth();
+		double winHeight = primaryScreenBounds.getHeight();
 		
-		Scene scene = new Scene(root, windowW, windowH);
+		Scene scene = new Scene(root, winWidth, winHeight);
 		primaryStage.setTitle("Texas Hold\'em");
 		primaryStage.setScene(scene);
 		primaryStage.setFullScreen(true);
@@ -63,16 +65,13 @@ public class TableGUI extends Application {
 		
 		//Action Bar
 		
-		HBox actionBar = new HBox();
-		actionBar.setPrefSize(windowW, windowH / 6.0);
-		actionBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 5;");
+		BorderPane actionBar = populateActionBar(players.get(0), winWidth, winHeight);
 
 		//Community cards
 		
 		VBox community = new VBox();
 		community.setAlignment(Pos.CENTER);	
-		community.setSpacing(5);
+		community.setSpacing(20);
 		
 		HBox flop = new HBox();
 		flop.setAlignment(Pos.CENTER);	
@@ -84,16 +83,16 @@ public class TableGUI extends Application {
 		
 		HBox streets = new HBox();
 		streets.setAlignment(Pos.CENTER);	
-		streets.setSpacing(10);
+		streets.setSpacing(20);
 		for (int index = 3; index < 5; index++) {
 			Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-			flop.getChildren().add(new ImageView(cardImage));
+			streets.getChildren().add(new ImageView(cardImage));
 		}
 		
 		community.getChildren().addAll(flop, streets);
 		
 		StackPane table = generateTable();
-		StackPane playerInfo = seatPlayers(players, windowW, windowH);
+		StackPane playerInfo = seatPlayers(players, winWidth, winHeight);
 		table.getChildren().addAll(community, playerInfo);
 		
 		root.setBottom(actionBar);
@@ -160,7 +159,7 @@ public class TableGUI extends Application {
 	 * @param windowH the height of the primary screen
 	 * @return the stack of all player information nodes
 	 */
-	private static StackPane seatPlayers(ArrayList<Player> players, double windowW, double windowH) {
+	private static StackPane seatPlayers(ArrayList<Player> players, double winWidth, double winHeight) {
 		//=====================================================================
 		//Coordinate Calculations
 		
@@ -173,8 +172,8 @@ public class TableGUI extends Application {
 		double rightEnd = topEnd + Math.PI * ((tableWidth / tableRatio) / 2.0);
 		
 		//Lobe Polar Coordinates
-		double tableOriginX = windowW / 2.0;
-		double tableOriginY = (windowH * (5.0 / 6.0)) / 2.0;
+		double tableOriginX = winWidth / 2.0;
+		double tableOriginY = (winHeight * (5.0 / 6.0)) / 2.0;
 		double leftPolarOriginX = tableOriginX - (tableWidth / 2.0);
 		double leftStartRad = (3.0 * Math.PI) / 2.0;
 		double rightPolarOriginX = tableOriginX + (tableWidth / 2.0);
@@ -222,8 +221,12 @@ public class TableGUI extends Application {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			Label stack = new Label("Stack: ");
-			Label action = new Label("Action: ");
+			Label stack = new Label("");
+			Label action = new Label("");
+			if (currentPlayer != 0) {
+				stack.setText("Stack: ");
+				action.setText("Action: ");
+			}
 			
 			VBox seat = new VBox();
 			seat.setAlignment(Pos.CENTER);
@@ -232,8 +235,10 @@ public class TableGUI extends Application {
 			seat.getChildren().addAll(name, stack, action);
 			
 			//Placement
-			Label bet = new Label("Current Bet: 0.00");
-			
+			Label bet = new Label("");
+			if (currentPlayer != 0)
+				bet.setText("Current Bet: 0.00");
+	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
 			place.setMinWidth(placeWidth);
@@ -288,6 +293,69 @@ public class TableGUI extends Application {
 		StackPane playerInfo = new StackPane();
 		playerInfo.getChildren().addAll(sWaySeats, lobeSeats, sWayPlaces, lobePlaces);
 		return playerInfo;
+	}
+	
+	public static BorderPane populateActionBar(Player user, double winWidth, double winHeight) {
+		BorderPane actionBar = new BorderPane();
+		actionBar.setPrefSize(winWidth, winHeight / 6.0);
+		actionBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
+		        + "-fx-border-width: 5;");
+		
+		//Central Money Information/Cards
+		
+		HBox centrePane = new HBox();
+		centrePane.setAlignment(Pos.CENTER);
+		centrePane.setSpacing(100);
+		
+		VBox money = new VBox();
+		money.setAlignment(Pos.CENTER);
+		money.setSpacing(10);
+		
+		Label stack = new Label("Your Stack: ");
+		Label bet = new Label("Your Current Bet: 0.00");
+		
+		money.getChildren().addAll(stack, bet);
+		
+		VBox hole = new VBox();
+		hole.setAlignment(Pos.CENTER);
+		hole.setSpacing(10);
+		
+		Label holeLabel = new Label("Your hole cards:");
+		
+		HBox holeCards = new HBox();
+		holeCards.setAlignment(Pos.CENTER);
+		holeCards.setSpacing(20);
+		
+		for (Card card : user.getHole()) {
+			Image cardImage = new Image("/Images/" + card.getSuit() + "/" + card.getRank() + ".png");
+			holeCards.getChildren().add(new ImageView(cardImage));
+		}
+		
+		hole.getChildren().addAll(holeLabel, holeCards);
+		
+		centrePane.getChildren().addAll(hole, money);
+		
+		//Action Buttons
+		
+		VBox actions = new VBox();
+		
+		HBox buttons = new HBox();
+		
+		Button call = new Button("Call");
+		Button raise = new Button("Raise");
+		Button fold = new Button("Fold");
+		
+		buttons.getChildren().addAll(call, raise, fold);
+		
+		TextField raiseField = new TextField("Enter your wager:");
+		
+		actions.getChildren().addAll(buttons, raiseField);
+		
+		//Settings Buttons
+		
+		actionBar.setLeft(actions);
+		actionBar.setCenter(centrePane);
+		return actionBar;
 	}
 	
 	public static void main(String[] args) {
