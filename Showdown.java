@@ -84,8 +84,6 @@ public class Showdown {
 		return winners;
 	}
 	
-	//Private Methods
-	
 	/**
 	 * Given the community and a player's hole cards, this method will find 
 	 * their highest ranking hand. The rank of each possible hand is determined
@@ -97,7 +95,7 @@ public class Showdown {
 	 * @param comm the five community cards
 	 * @return the highest possible hand from the cards 
 	 */
-	private static ArrayList<Card> getHighestHand(ArrayList<Card> hole, ArrayList<Card> comm) {
+	public static ArrayList<Card> getHighestHand(ArrayList<Card> hole, ArrayList<Card> comm) {
 		int highestRank = -1, rank, result;
 		
 		ArrayList<Card> allCards = new ArrayList<Card>(), highestHand = new ArrayList<Card>(); //The hole and community cards are combined to a single ArrayList
@@ -125,6 +123,8 @@ public class Showdown {
 		
 		return highestHand;
 	}
+	
+	//Private/Protected Methods
 	
 	/**
 	 * For a five Card Arraylist hand this method will determine where it falls
