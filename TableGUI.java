@@ -4,6 +4,8 @@ import java.util.Collections;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -61,6 +63,7 @@ public class TableGUI extends Application {
 		primaryStage.setTitle("Texas Hold\'em");
 		primaryStage.setScene(scene);
 		primaryStage.setFullScreen(true);
+		primaryStage.setResizable(false);
 		primaryStage.setFullScreenExitHint("");
 		
 		//Action Bar
@@ -139,6 +142,7 @@ public class TableGUI extends Application {
 		
 		StackPane table = new StackPane();
 		table.setAlignment(Pos.CENTER);
+		table.setStyle("-fx-background-color: lightblue;");
 		table.getChildren().addAll(tableRectRim, lobesRims, tableRect, lobes);
 		
 		return table;
@@ -298,8 +302,9 @@ public class TableGUI extends Application {
 	public static BorderPane populateActionBar(Player user, double winWidth, double winHeight) {
 		BorderPane actionBar = new BorderPane();
 		actionBar.setPrefSize(winWidth, winHeight / 6.0);
-		actionBar.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 5;");
+		actionBar.setStyle("-fx-border-style: solid inside;"
+		        + "-fx-border-width: 5;" + "-fx-border-color: #4B0905;"
+				+ "-fx-background-color: maroon");
 		
 		//Central Money Information/Cards
 		
@@ -312,7 +317,9 @@ public class TableGUI extends Application {
 		money.setSpacing(10);
 		
 		Label stack = new Label("Your Stack: ");
+		stack.setStyle("-fx-text-fill: goldenrod;");
 		Label bet = new Label("Your Current Bet: 0.00");
+		bet.setStyle("-fx-text-fill: goldenrod;");
 		
 		money.getChildren().addAll(stack, bet);
 		
@@ -321,6 +328,7 @@ public class TableGUI extends Application {
 		hole.setSpacing(10);
 		
 		Label holeLabel = new Label("Your hole cards:");
+		holeLabel.setStyle("-fx-text-fill: goldenrod;");
 		
 		HBox holeCards = new HBox();
 		holeCards.setAlignment(Pos.CENTER);
@@ -337,24 +345,77 @@ public class TableGUI extends Application {
 		
 		//Action Buttons
 		
-		VBox actions = new VBox();
+		StackPane actions = new StackPane();
 		
 		HBox buttons = new HBox();
 		
 		Button call = new Button("Call");
+		call.setPrefSize(200, winHeight / 6 - 10);
+		call.setStyle("-fx-background-color: plum;" + "-fx-font-size: 20;");
 		Button raise = new Button("Raise");
+		raise.setPrefSize(200, winHeight / 6 - 10);
+		raise.setStyle("-fx-background-color: mediumaquamarine;" + "-fx-font-size: 20;");
 		Button fold = new Button("Fold");
+		fold.setPrefSize(200, winHeight / 6 - 10);
+		fold.setStyle("-fx-background-color: seagreen;" + "-fx-font-size: 20;");
 		
 		buttons.getChildren().addAll(call, raise, fold);
 		
-		TextField raiseField = new TextField("Enter your wager:");
+		VBox raiseInput = new VBox();
+		raiseInput.setAlignment(Pos.CENTER);
+		raiseInput.setSpacing(20);
 		
-		actions.getChildren().addAll(buttons, raiseField);
+		Label raiseFieldLabel = new Label("Enter your wager:");
+		TextField raiseField = new TextField();
+		raiseField.setMaxWidth(150);
+		
+		HBox raiseFieldButtons = new HBox();
+		raiseFieldButtons.setAlignment(Pos.CENTER);
+		raiseFieldButtons.setSpacing(5);
+		
+		Button raiseFieldConfirm = new Button("Enter");
+		Button raiseFieldCancel = new Button("Cancel");
+		
+		raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);
+		
+		raiseInput.getChildren().addAll(raiseFieldLabel, raiseField, raiseFieldButtons);
+		raiseInput.setVisible(false);
+		
+		actions.getChildren().addAll(buttons, raiseInput);
 		
 		//Settings Buttons
 		
+		Button escapeClause = new Button("QUIT");
+		escapeClause.setAlignment(Pos.CENTER);
+		
+		//Event Handlers
+		
+		raise.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				raiseInput.setVisible(true);
+			}
+		});
+		
+		raiseFieldCancel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				raiseInput.setVisible(false);
+			}
+		});
+		
+		escapeClause.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				System.exit(0);;
+			}
+		});
+		
+		//Setting to BorderPane to return
+		
 		actionBar.setLeft(actions);
 		actionBar.setCenter(centrePane);
+		actionBar.setRight(escapeClause);
 		return actionBar;
 	}
 	
