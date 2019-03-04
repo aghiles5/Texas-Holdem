@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,14 +11,17 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -25,7 +29,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 /**
  * 
@@ -45,6 +48,8 @@ public class TableGUI extends Application {
 	
 	private final static double placeWidth = 100.0;
 	private final static double placeHeight = 20.0;
+	
+	private static ArrayList<String> imageIDs = new ArrayList<String>();
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -81,7 +86,10 @@ public class TableGUI extends Application {
 		flop.setSpacing(5);
 		for (int index = 0; index < 3; index++) {
 			Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-			flop.getChildren().add(new ImageView(cardImage));
+			ImageView cardView = new ImageView(cardImage);
+			cardView.setId("image" + index);
+			imageIDs.add(cardView.getId());
+			flop.getChildren().add(cardView);
 		}
 		
 		HBox streets = new HBox();
@@ -89,14 +97,16 @@ public class TableGUI extends Application {
 		streets.setSpacing(20);
 		for (int index = 3; index < 5; index++) {
 			Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-			streets.getChildren().add(new ImageView(cardImage));
+			ImageView cardView = new ImageView(cardImage);
+			cardView.setId("image" + index);
+			imageIDs.add(cardView.getId());
+			streets.getChildren().add(cardView);
 		}
 		
 		community.getChildren().addAll(flop, streets);
 		
-		StackPane table = generateTable();
-		StackPane playerInfo = seatPlayers(players, winWidth, winHeight);
-		table.getChildren().addAll(community, playerInfo);
+		StackPane table = new StackPane();
+		table.getChildren().addAll(generateTable(), seatPlayers(players, winWidth, winHeight));
 		
 		root.setBottom(actionBar);
 		root.setCenter(table);
@@ -306,88 +316,120 @@ public class TableGUI extends Application {
 		        + "-fx-border-width: 5;" + "-fx-border-color: #4B0905;"
 				+ "-fx-background-color: maroon");
 		
+		//=====================================================================
 		//Central Money Information/Cards
 		
 		HBox centrePane = new HBox();
 		centrePane.setAlignment(Pos.CENTER);
 		centrePane.setSpacing(100);
 		
-		VBox money = new VBox();
-		money.setAlignment(Pos.CENTER);
-		money.setSpacing(10);
-		
-		Label stack = new Label("Your Stack: ");
-		stack.setStyle("-fx-text-fill: goldenrod;");
-		Label bet = new Label("Your Current Bet: 0.00");
-		bet.setStyle("-fx-text-fill: goldenrod;");
-		
-		money.getChildren().addAll(stack, bet);
-		
-		VBox hole = new VBox();
-		hole.setAlignment(Pos.CENTER);
-		hole.setSpacing(10);
-		
-		Label holeLabel = new Label("Your hole cards:");
-		holeLabel.setStyle("-fx-text-fill: goldenrod;");
-		
-		HBox holeCards = new HBox();
-		holeCards.setAlignment(Pos.CENTER);
-		holeCards.setSpacing(20);
-		
-		for (Card card : user.getHole()) {
-			Image cardImage = new Image("/Images/" + card.getSuit() + "/" + card.getRank() + ".png");
-			holeCards.getChildren().add(new ImageView(cardImage));
-		}
-		
-		hole.getChildren().addAll(holeLabel, holeCards);
+			VBox money = new VBox();
+			money.setAlignment(Pos.CENTER);
+			money.setSpacing(10);
+			
+				Label stack = new Label("Your Stack: ");
+				stack.setStyle("-fx-text-fill: goldenrod;");
+				Label bet = new Label("Your Current Bet: 0.00");
+				bet.setStyle("-fx-text-fill: goldenrod;");
+			
+			money.getChildren().addAll(stack, bet);
+			
+			VBox hole = new VBox();
+			hole.setAlignment(Pos.CENTER);
+			hole.setSpacing(10);
+			
+				Label holeLabel = new Label("Your hole cards:");
+				holeLabel.setStyle("-fx-text-fill: goldenrod;");
+				
+				HBox holeCards = new HBox();
+				holeCards.setAlignment(Pos.CENTER);
+				holeCards.setSpacing(20);
+				
+				for (Card card : user.getHole()) {
+					Image cardImage = new Image("/Images/" + card.getSuit() + "/" + card.getRank() + ".png");
+					holeCards.getChildren().add(new ImageView(cardImage));
+				}
+			
+			hole.getChildren().addAll(holeLabel, holeCards);
 		
 		centrePane.getChildren().addAll(hole, money);
 		
+		//=====================================================================
 		//Action Buttons
 		
 		StackPane actions = new StackPane();
 		
+		//Main buttons
 		HBox buttons = new HBox();
 		
-		Button call = new Button("Call");
-		call.setPrefSize(200, winHeight / 6 - 10);
-		call.setStyle("-fx-background-color: plum;" + "-fx-font-size: 20;");
-		Button raise = new Button("Raise");
-		raise.setPrefSize(200, winHeight / 6 - 10);
-		raise.setStyle("-fx-background-color: mediumaquamarine;" + "-fx-font-size: 20;");
-		Button fold = new Button("Fold");
-		fold.setPrefSize(200, winHeight / 6 - 10);
-		fold.setStyle("-fx-background-color: seagreen;" + "-fx-font-size: 20;");
+			Button call = new Button("Call");
+			call.setPrefSize(200, winHeight / 6 - 10);
+			call.setStyle("-fx-background-color: plum;" + "-fx-font-size: 20;");
+			
+			Button raise = new Button("Raise");
+			raise.setPrefSize(200, winHeight / 6 - 10);
+			raise.setStyle("-fx-background-color: mediumaquamarine;" + "-fx-font-size: 20;");
+			
+			Button fold = new Button("Fold");
+			fold.setPrefSize(200, winHeight / 6 - 10);
+			fold.setStyle("-fx-background-color: seagreen;" + "-fx-font-size: 20;");
 		
 		buttons.getChildren().addAll(call, raise, fold);
 		
+		//Input for raise
 		VBox raiseInput = new VBox();
 		raiseInput.setAlignment(Pos.CENTER);
 		raiseInput.setSpacing(20);
 		
-		Label raiseFieldLabel = new Label("Enter your wager:");
-		TextField raiseField = new TextField();
-		raiseField.setMaxWidth(150);
-		
-		HBox raiseFieldButtons = new HBox();
-		raiseFieldButtons.setAlignment(Pos.CENTER);
-		raiseFieldButtons.setSpacing(5);
-		
-		Button raiseFieldConfirm = new Button("Enter");
-		Button raiseFieldCancel = new Button("Cancel");
-		
-		raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);
+			Label raiseFieldLabel = new Label("Enter your wager:");
+			TextField raiseField = new TextField();
+			raiseField.setMaxWidth(150);
+			
+			HBox raiseFieldButtons = new HBox();
+			raiseFieldButtons.setAlignment(Pos.CENTER);
+			raiseFieldButtons.setSpacing(5);
+			
+			Button raiseFieldConfirm = new Button("Enter");
+			Button raiseFieldCancel = new Button("Cancel");
+			
+			raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);
 		
 		raiseInput.getChildren().addAll(raiseFieldLabel, raiseField, raiseFieldButtons);
 		raiseInput.setVisible(false);
 		
-		actions.getChildren().addAll(buttons, raiseInput);
+		//Grey pane and effect
+		Pane greyPane = new Pane();
+		greyPane.setVisible(false);
 		
+		ColorAdjust greyOut = new ColorAdjust();
+		greyOut.setSaturation(-1.0);
+		
+		actions.getChildren().addAll(buttons, raiseInput, greyPane);
+		
+		//=====================================================================
 		//Settings Buttons
 		
-		Button escapeClause = new Button("QUIT");
-		escapeClause.setAlignment(Pos.CENTER);
+		FlowPane settingButtons = new FlowPane();
+		settingButtons.setAlignment(Pos.CENTER);
 		
+		Button escapeClause = new Button("QUIT");
+		
+		Button greyTest = new Button("GREY TEST");
+		
+		Button flipTest = new Button("FLIP TEST");
+		
+		Image cardFront = new Image("/Images/0/12.png");
+		ImageView cardFrontView = new ImageView(cardFront);
+		
+		Image cardBack = new Image("/Images/Back.png");
+		ImageView cardBackView = new ImageView(cardBack);
+		
+		StackPane cardStack = new StackPane();
+		cardStack.getChildren().addAll(cardFrontView, cardBackView);
+		
+		settingButtons.getChildren().addAll(escapeClause, greyTest, flipTest, cardStack);
+		
+		//=====================================================================
 		//Event Handlers
 		
 		raise.setOnAction(new EventHandler<ActionEvent>() {
@@ -407,16 +449,73 @@ public class TableGUI extends Application {
 		escapeClause.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				System.exit(0);;
+				System.exit(0);
 			}
 		});
 		
+		greyTest.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (greyPane.isVisible()) {
+					greyPane.setVisible(false);
+					actions.setEffect(null);
+				}
+				else {
+					if (raiseInput.isVisible())
+						raiseInput.setVisible(false);
+					greyPane.setVisible(true);
+					actions.setEffect(greyOut);
+				}
+			}
+		});
+		
+		flipTest.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				revealCard(cardBackView, cardFrontView);
+			}
+		});
+
+		//=====================================================================
 		//Setting to BorderPane to return
 		
 		actionBar.setLeft(actions);
 		actionBar.setCenter(centrePane);
-		actionBar.setRight(escapeClause);
+		actionBar.setRight(settingButtons);
 		return actionBar;
+	}
+	
+	private static void revealCard(ImageView cardBack, ImageView cardFront) {
+		ScaleTransition hideFront = new ScaleTransition();
+		hideFront.setByY(-1);
+		hideFront.setDuration(Duration.seconds(0.001));
+		hideFront.setNode(cardFront);
+		
+		ScaleTransition hideBack = new ScaleTransition();
+		hideBack.setByY(-1);
+		hideBack.setDuration(Duration.seconds(0.25));
+		hideBack.setNode(cardBack);
+		
+		ScaleTransition showFront = new ScaleTransition();
+		showFront.setByY(1);
+		showFront.setDuration(Duration.seconds(0.25));
+		showFront.setNode(cardFront);
+		
+		hideFront.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				hideBack.play();
+			}
+		});
+		
+		hideBack.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				showFront.play();
+			}
+		});
+		
+		hideFront.play();
 	}
 	
 	public static void main(String[] args) {
