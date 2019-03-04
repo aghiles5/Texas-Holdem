@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
@@ -78,19 +79,22 @@ public class TableGUI extends Application {
 		StackPane table = new StackPane();
 		table.getChildren().addAll(setTable(), setPlayers(players, winWidth, winHeight), setCommunity(comm));
 		
-		/*
-		((Button) table.lookup("flipButton")).setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				for (int i = 0; i < 5; i++)
-					revealCard(table.lookup("commBack" + i), table.lookup("commFront" + i));
-			}
-		});
-		*/
-		
 		root.setBottom(actionBar);
 		root.setCenter(table);
 		primaryStage.show();
+		
+		Button flipButton = (Button) scene.lookup("#flipButton");
+		
+		flipButton.setOnAction(new EventHandler<ActionEvent>() {
+			int i = 0;
+			@Override
+			public void handle(ActionEvent event) {
+				if (i < 5) {
+					revealCard((ImageView) scene.lookup("#commBack" + i), (ImageView) scene.lookup("#commFront" + i));
+					i++;
+				}
+			}
+		});
 	}
 	
 	/**
@@ -239,6 +243,8 @@ public class TableGUI extends Application {
 			place.setMinHeight(placeHeight);
 			place.getChildren().addAll(bet);
 			
+			
+			
 			if (distanceFromUser < bottomEnd) {
 				bottomSeats.getChildren().add(seat);
 				bottomPlaces.getChildren().add(place);
@@ -342,19 +348,19 @@ public class TableGUI extends Application {
 		//Main buttons
 		HBox buttons = new HBox();
 		
-			Button call = new Button("Call");
-			call.setPrefSize(200, winHeight / 6 - 10);
-			call.setStyle("-fx-background-color: plum;" + "-fx-font-size: 20;");
+			Button fold = new Button("Fold");
+			fold.setPrefSize(200, winHeight / 6 - 10);
+			fold.setStyle("-fx-background-color: darkred;" + "-fx-font-size: 20;");
 			
 			Button raise = new Button("Raise");
 			raise.setPrefSize(200, winHeight / 6 - 10);
-			raise.setStyle("-fx-background-color: mediumaquamarine;" + "-fx-font-size: 20;");
+			raise.setStyle("-fx-background-color: darkgreen;" + "-fx-font-size: 20;");
 			
-			Button fold = new Button("Fold");
-			fold.setPrefSize(200, winHeight / 6 - 10);
-			fold.setStyle("-fx-background-color: seagreen;" + "-fx-font-size: 20;");
+			Button call = new Button("Call");
+			call.setPrefSize(200, winHeight / 6 - 10);
+			call.setStyle("-fx-background-color: darkblue;" + "-fx-font-size: 20;");
 		
-		buttons.getChildren().addAll(call, raise, fold);
+		buttons.getChildren().addAll(fold, raise, call);
 		
 		//Input for raise
 		VBox raiseInput = new VBox();
