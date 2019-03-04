@@ -6,10 +6,10 @@ public class GUITest {
 	public static void main(String args[]) {
 	}
 	
-	public static ArrayList<Player> generatePlayers() {
+	public static ArrayList<Player> generatePlayers(int numOfPlayers) {
 		ArrayList<Player> players = new ArrayList<Player>();
 		
-		for (int n = 0; n < 10; n++) {
+		for (int n = 0; n < numOfPlayers; n++) {
 			if (n ==0)
 				players.add(new Human("You"));
 			else

@@ -37,7 +37,7 @@ import javafx.scene.shape.Rectangle;
  * @version 03/03/18
  */
 public class TableGUI extends Application {
-	private final static double tableWidth = 720; //Referring to the length of the straightway
+	private final static double tableWidth = 720; //Referring to the length of the straightaway
 	private final static double tableRatio = 1.25;
 	private final static double tableRim = 20;
 	
@@ -47,15 +47,14 @@ public class TableGUI extends Application {
 	private final static double seatWidth = 50.0;
 	private final static double seatHeight = 60.0;
 	
-	private final static double placeWidth = 100.0;
+	private final static double placeWidth = 150.0;
 	private final static double placeHeight = 20.0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		GUITest.testDeck.shuffle();
 		ArrayList<Card> comm = GUITest.generateComm();
-		ArrayList<Player> players = GUITest.generatePlayers();
-		
+		ArrayList<Player> players = GUITest.generatePlayers(10);
 		
 		BorderPane root = new BorderPane();
 		
