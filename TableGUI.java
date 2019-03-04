@@ -54,7 +54,7 @@ public class TableGUI extends Application {
 	public void start(Stage primaryStage) throws Exception{
 		GUITest.testDeck.shuffle();
 		ArrayList<Card> comm = GUITest.generateComm();
-		ArrayList<Player> players = GUITest.generatePlayers(10);
+		ArrayList<Player> players = GUITest.generatePlayers(8);
 		
 		BorderPane root = new BorderPane();
 		
@@ -516,17 +516,17 @@ public class TableGUI extends Application {
 	
 	private static void revealCard(ImageView cardBack, ImageView cardFront) {
 		ScaleTransition hideFront = new ScaleTransition();
-		hideFront.setByY(-1);
+		hideFront.setByX(-1);
 		hideFront.setDuration(Duration.seconds(0.001));
 		hideFront.setNode(cardFront);
 		
 		ScaleTransition hideBack = new ScaleTransition();
-		hideBack.setByY(-1);
+		hideBack.setByX(-1);
 		hideBack.setDuration(Duration.seconds(0.25));
 		hideBack.setNode(cardBack);
 		
 		ScaleTransition showFront = new ScaleTransition();
-		showFront.setByY(1);
+		showFront.setByX(1);
 		showFront.setDuration(Duration.seconds(0.25));
 		showFront.setNode(cardFront);
 		
