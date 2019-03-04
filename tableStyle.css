@@ -22,9 +22,7 @@
 }
 
 .button:disabled{
-	-fx-opacity: 1.0;
-	-fx-background-color: #7f4646;
-	-fx-text-fill: #dbba69;
+	-fx-opacity: 0.5;
 }
 
 .button-large{
