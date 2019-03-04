@@ -37,25 +37,25 @@ import javafx.scene.shape.Rectangle;
  * @version 03/03/18
  */
 public class TableGUI extends Application {
-	private final static double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
-	private final static double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
+	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
+	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
-	private final static double TABLE_TO_SCREEN_RATIO = 8.0 / 3.0;
-	private final static double TABLE_HEIGHT_RATIO = 1.25;
-	private final static double TABLE_RIM_RATIO = 1.0 / 36.0;
-	private final static double TABLE_OFFSET_RATIO = 1.0 / 12.0;
+	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.0;
+	private final double TABLE_HEIGHT_RATIO = 1.25;
+	private final double TABLE_RIM_RATIO = 1.0 / 36.0;
+	private final double TABLE_OFFSET_RATIO = 1.0 / 12.0;
 	
-	private final static double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
-	private final static double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
+	private final double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
+	private final double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
 	
-	private final static double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player information from the table
-	private final static double PLAYER_INSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player bets and cards? inside the table
+	private final double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player information from the table
+	private final double PLAYER_INSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player bets and cards? inside the table
 	
-	private final static double SEAT_WIDTH = 50.0;
-	private final static double SEAT_HEIGHT = 60.0;
+	private final double SEAT_WIDTH = 50.0;
+	private final double SEAT_HEIGHT = 60.0;
 	
-	private final static double PLACE_WIDTH = 150.0;
-	private final static double PLACE_HEIGHT = 20.0;
+	private final double PLACE_WIDTH = 150.0;
+	private final double PLACE_HEIGHT = 20.0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -109,7 +109,7 @@ public class TableGUI extends Application {
 	 * @param none.
 	 * @return the nodes making up the table
 	 */
-	private static StackPane setTable() {
+	private StackPane setTable() {
 		Rectangle tableRectRim = new Rectangle(TABLE_WIDTH, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) + (TABLE_RIM * 2));
 		tableRectRim.setFill(Color.BLACK);
 		
@@ -161,7 +161,7 @@ public class TableGUI extends Application {
 	 * @param windowH the height of the primary screen
 	 * @return the stack of all player information nodes
 	 */
-	private static StackPane setPlayers(ArrayList<Player> players, double winWidth, double winHeight) {
+	private StackPane setPlayers(ArrayList<Player> players, double winWidth, double winHeight) {
 		//=====================================================================
 		//Coordinate Calculations
 		
@@ -299,7 +299,7 @@ public class TableGUI extends Application {
 		return playerInfo;
 	}
 	
-	public static BorderPane setActionBar(Player user, double winWidth, double winHeight) {
+	public BorderPane setActionBar(Player user, double winWidth, double winHeight) {
 		BorderPane actionBar = new BorderPane();
 		actionBar.setPrefSize(winWidth, winHeight / 6.0);
 		actionBar.setStyle("-fx-border-style: solid inside;"
@@ -456,7 +456,7 @@ public class TableGUI extends Application {
 		return actionBar;
 	}
 	
-	private static StackPane setCommunity(ArrayList<Card> comm) {
+	private StackPane setCommunity(ArrayList<Card> comm) {
 		StackPane commFull = new StackPane();
 			
 			VBox community = new VBox();
@@ -515,7 +515,7 @@ public class TableGUI extends Application {
 		return commFull;
 	}
 	
-	private static void revealCard(ImageView cardBack, ImageView cardFront) {
+	private void revealCard(ImageView cardBack, ImageView cardFront) {
 		ScaleTransition hideFront = new ScaleTransition();
 		hideFront.setByX(-1);
 		hideFront.setDuration(Duration.seconds(0.001));
