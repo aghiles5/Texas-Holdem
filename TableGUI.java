@@ -15,13 +15,13 @@ import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -49,8 +49,6 @@ public class TableGUI extends Application {
 	private final static double placeWidth = 100.0;
 	private final static double placeHeight = 20.0;
 	
-	private static ArrayList<String> imageIDs = new ArrayList<String>();
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		GUITest.testDeck.shuffle();
@@ -73,40 +71,22 @@ public class TableGUI extends Application {
 		
 		//Action Bar
 		
-		BorderPane actionBar = populateActionBar(players.get(0), winWidth, winHeight);
-
-		//Community cards
+		BorderPane actionBar = setActionBar(players.get(0), winWidth, winHeight);
 		
-		VBox community = new VBox();
-		community.setAlignment(Pos.CENTER);	
-		community.setSpacing(20);
-		
-		HBox flop = new HBox();
-		flop.setAlignment(Pos.CENTER);	
-		flop.setSpacing(5);
-		for (int index = 0; index < 3; index++) {
-			Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-			ImageView cardView = new ImageView(cardImage);
-			cardView.setId("image" + index);
-			imageIDs.add(cardView.getId());
-			flop.getChildren().add(cardView);
-		}
-		
-		HBox streets = new HBox();
-		streets.setAlignment(Pos.CENTER);	
-		streets.setSpacing(20);
-		for (int index = 3; index < 5; index++) {
-			Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-			ImageView cardView = new ImageView(cardImage);
-			cardView.setId("image" + index);
-			imageIDs.add(cardView.getId());
-			streets.getChildren().add(cardView);
-		}
-		
-		community.getChildren().addAll(flop, streets);
+		//Main table
 		
 		StackPane table = new StackPane();
-		table.getChildren().addAll(generateTable(), seatPlayers(players, winWidth, winHeight));
+		table.getChildren().addAll(setTable(), setPlayers(players, winWidth, winHeight), setCommunity(comm));
+		
+		/*
+		((Button) table.lookup("flipButton")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				for (int i = 0; i < 5; i++)
+					revealCard(table.lookup("commBack" + i), table.lookup("commFront" + i));
+			}
+		});
+		*/
 		
 		root.setBottom(actionBar);
 		root.setCenter(table);
@@ -121,7 +101,7 @@ public class TableGUI extends Application {
 	 * @param none.
 	 * @return the nodes making up the table
 	 */
-	private static StackPane generateTable() {
+	private static StackPane setTable() {
 		Rectangle tableRectRim = new Rectangle(tableWidth, (tableWidth / tableRatio) + (tableRim * 2));
 		tableRectRim.setFill(Color.BLACK);
 		
@@ -173,7 +153,7 @@ public class TableGUI extends Application {
 	 * @param windowH the height of the primary screen
 	 * @return the stack of all player information nodes
 	 */
-	private static StackPane seatPlayers(ArrayList<Player> players, double winWidth, double winHeight) {
+	private static StackPane setPlayers(ArrayList<Player> players, double winWidth, double winHeight) {
 		//=====================================================================
 		//Coordinate Calculations
 		
@@ -309,7 +289,7 @@ public class TableGUI extends Application {
 		return playerInfo;
 	}
 	
-	public static BorderPane populateActionBar(Player user, double winWidth, double winHeight) {
+	public static BorderPane setActionBar(Player user, double winWidth, double winHeight) {
 		BorderPane actionBar = new BorderPane();
 		actionBar.setPrefSize(winWidth, winHeight / 6.0);
 		actionBar.setStyle("-fx-border-style: solid inside;"
@@ -409,7 +389,7 @@ public class TableGUI extends Application {
 		//=====================================================================
 		//Settings Buttons
 		
-		FlowPane settingButtons = new FlowPane();
+		VBox settingButtons = new VBox();
 		settingButtons.setAlignment(Pos.CENTER);
 		
 		Button escapeClause = new Button("QUIT");
@@ -417,17 +397,9 @@ public class TableGUI extends Application {
 		Button greyTest = new Button("GREY TEST");
 		
 		Button flipTest = new Button("FLIP TEST");
+		flipTest.setId("flipButton");
 		
-		Image cardFront = new Image("/Images/0/12.png");
-		ImageView cardFrontView = new ImageView(cardFront);
-		
-		Image cardBack = new Image("/Images/Back.png");
-		ImageView cardBackView = new ImageView(cardBack);
-		
-		StackPane cardStack = new StackPane();
-		cardStack.getChildren().addAll(cardFrontView, cardBackView);
-		
-		settingButtons.getChildren().addAll(escapeClause, greyTest, flipTest, cardStack);
+		settingButtons.getChildren().addAll(escapeClause, greyTest, flipTest);
 		
 		//=====================================================================
 		//Event Handlers
@@ -468,13 +440,6 @@ public class TableGUI extends Application {
 				}
 			}
 		});
-		
-		flipTest.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				revealCard(cardBackView, cardFrontView);
-			}
-		});
 
 		//=====================================================================
 		//Setting to BorderPane to return
@@ -483,6 +448,65 @@ public class TableGUI extends Application {
 		actionBar.setCenter(centrePane);
 		actionBar.setRight(settingButtons);
 		return actionBar;
+	}
+	
+	private static StackPane setCommunity(ArrayList<Card> comm) {
+		StackPane commFull = new StackPane();
+			
+			VBox community = new VBox();
+			community.setAlignment(Pos.CENTER);	
+			community.setSpacing(20);
+			
+				HBox flop = new HBox();
+				flop.setAlignment(Pos.CENTER);	
+				flop.setSpacing(5);
+				for (int index = 0; index < 3; index++) {
+					Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+					ImageView cardView = new ImageView(cardImage);
+					cardView.setId("commFront" + index);
+					flop.getChildren().add(cardView);
+				}
+				
+				HBox streets = new HBox();
+				streets.setAlignment(Pos.CENTER);	
+				streets.setSpacing(20);
+				for (int index = 3; index < 5; index++) {
+					Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+					ImageView cardView = new ImageView(cardImage);
+					cardView.setId("commFront" + index);
+					streets.getChildren().add(cardView);
+				}
+				
+			community.getChildren().addAll(flop, streets);
+			
+			VBox communityCover = new VBox();
+			communityCover.setAlignment(Pos.CENTER);	
+			communityCover.setSpacing(20);
+				
+				HBox flopCover = new HBox();
+				flopCover.setAlignment(Pos.CENTER);	
+				flopCover.setSpacing(5);
+				Image backImage = new Image("/Images/Back.png");
+				for (int i = 0; i < 3; i++) {		
+					ImageView backView = new ImageView(backImage);
+					backView.setId("commBack" + i);
+					flopCover.getChildren().add(backView);
+				}
+				
+				HBox streetsCover = new HBox();
+				streetsCover.setAlignment(Pos.CENTER);	
+				streetsCover.setSpacing(20);
+				for (int i = 3; i < 5; i++) {
+					ImageView backView = new ImageView(backImage);
+					backView.setId("commBack" + i);
+					streetsCover.getChildren().add(backView);
+				}
+				
+			communityCover.getChildren().addAll(flopCover, streetsCover);
+			
+		commFull.getChildren().addAll(community, communityCover);
+		
+		return commFull;
 	}
 	
 	private static void revealCard(ImageView cardBack, ImageView cardFront) {
