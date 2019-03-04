@@ -1,9 +1,9 @@
 .label{
-	-fx-font-family: "Times New Roman";
+	-fx-font-family: "Georgia";
 }
 
 .button{
-	-fx-font-family: "Times New Roman";
+	-fx-font-family: "Georgia";
 	-fx-background-color: maroon;
 	-fx-text-fill: goldenrod;
 	-fx-border-color: goldenrod;
@@ -36,5 +36,5 @@
 .text-field{
 	-fx-background-color: brown;
 	-fx-text-fill: goldenrod;
-	-fx-font-family: "Times New Roman";
+	-fx-font-family: "Georgia";
 }

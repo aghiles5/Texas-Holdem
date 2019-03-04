@@ -40,14 +40,16 @@ public class TableGUI extends Application {
 	private final static double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final static double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
-	private final static double SCREEN_TO_TABLE_RATIO = 8.0 / 3.0;
-	private final static double TABLE_WIDTH = WIN_WIDTH / SCREEN_TO_TABLE_RATIO; //Referring to the length of the straightaway
+	private final static double TABLE_TO_SCREEN_RATIO = 8.0 / 3.0;
 	private final static double TABLE_HEIGHT_RATIO = 1.25;
 	private final static double TABLE_RIM_RATIO = 1.0 / 36.0;
+	private final static double TABLE_OFFSET_RATIO = 1.0 / 12.0;
+	
+	private final static double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
 	private final static double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
 	
-	private final static double PLAYER_OUTSET = 60; //The distance of player information from the table
-	private final static double PLAYER_INSET = 60; //The distance of player bets and cards? inside the table
+	private final static double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player information from the table
+	private final static double PLAYER_INSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player bets and cards? inside the table
 	
 	private final static double SEAT_WIDTH = 50.0;
 	private final static double SEAT_HEIGHT = 60.0;
