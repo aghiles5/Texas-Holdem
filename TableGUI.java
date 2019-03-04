@@ -349,15 +349,15 @@ public class TableGUI extends Application {
 		
 			Button fold = new Button("Fold");
 			fold.setPrefSize(200, winHeight / 6 - 10);
-			fold.setStyle("-fx-background-color: darkred;" + "-fx-font-size: 20;");
+			fold.setStyle("-fx-font-size: 20;");
 			
 			Button raise = new Button("Raise");
 			raise.setPrefSize(200, winHeight / 6 - 10);
-			raise.setStyle("-fx-background-color: darkgreen;" + "-fx-font-size: 20;");
+			raise.setStyle("-fx-font-size: 20;");
 			
 			Button call = new Button("Call");
 			call.setPrefSize(200, winHeight / 6 - 10);
-			call.setStyle("-fx-background-color: darkblue;" + "-fx-font-size: 20;");
+			call.setStyle("-fx-font-size: 20;");
 		
 		buttons.getChildren().addAll(fold, raise, call);
 		
