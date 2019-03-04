@@ -1,0 +1,40 @@
+.label{
+	-fx-font-family: "Times New Roman";
+}
+
+.button{
+	-fx-font-family: "Times New Roman";
+	-fx-background-color: maroon;
+	-fx-text-fill: goldenrod;
+	-fx-border-color: goldenrod;
+	-fx-border-radius: 2;
+	-fx-border-width: 2;
+}
+
+.button:hover{
+	-fx-background-color: darkred;
+}
+
+.button:armed{
+	-fx-background-color: brown;
+}
+
+.button:disabled{
+	-fx-opacity: 1.0;
+	-fx-background-color: #7f4646;
+	-fx-text-fill: #dbba69;
+}
+
+.button-large{
+	-fx-font-size: 20;
+}
+
+.bar-label{
+	-fx-text-fill: goldenrod;
+}
+
+.text-field{
+	-fx-background-color: brown;
+	-fx-text-fill: goldenrod;
+	-fx-font-family: "Times New Roman";
+}

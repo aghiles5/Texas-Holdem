@@ -37,46 +37,49 @@ import javafx.scene.shape.Rectangle;
  * @version 03/03/18
  */
 public class TableGUI extends Application {
-	private final static double tableWidth = 720; //Referring to the length of the straightaway
-	private final static double tableRatio = 1.25;
-	private final static double tableRim = 20;
+	private final static double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
+	private final static double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
-	private final static double playerOutset = 60; //The distance of player information from the table
-	private final static double playerInset = 60; //The distance of player bets and cards? inside the table
+	private final static double SCREEN_TO_TABLE_RATIO = 8.0 / 3.0;
+	private final static double TABLE_WIDTH = WIN_WIDTH / SCREEN_TO_TABLE_RATIO; //Referring to the length of the straightaway
+	private final static double TABLE_HEIGHT_RATIO = 1.25;
+	private final static double TABLE_RIM_RATIO = 1.0 / 36.0;
+	private final static double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
 	
-	private final static double seatWidth = 50.0;
-	private final static double seatHeight = 60.0;
+	private final static double PLAYER_OUTSET = 60; //The distance of player information from the table
+	private final static double PLAYER_INSET = 60; //The distance of player bets and cards? inside the table
 	
-	private final static double placeWidth = 150.0;
-	private final static double placeHeight = 20.0;
+	private final static double SEAT_WIDTH = 50.0;
+	private final static double SEAT_HEIGHT = 60.0;
+	
+	private final static double PLACE_WIDTH = 150.0;
+	private final static double PLACE_HEIGHT = 20.0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		GUITest.testDeck.shuffle();
 		ArrayList<Card> comm = GUITest.generateComm();
-		ArrayList<Player> players = GUITest.generatePlayers(8);
+		ArrayList<Player> players = GUITest.generatePlayers(10);
 		
 		BorderPane root = new BorderPane();
 		
-		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-		double winWidth = primaryScreenBounds.getWidth();
-		double winHeight = primaryScreenBounds.getHeight();
+		Scene scene = new Scene(root, WIN_WIDTH, WIN_HEIGHT);
+		scene.getStylesheets().add("tableStyle.css");
 		
-		Scene scene = new Scene(root, winWidth, winHeight);
 		primaryStage.setTitle("Texas Hold\'em");
 		primaryStage.setScene(scene);
 		primaryStage.setFullScreen(true);
-		primaryStage.setResizable(false);
+		primaryStage.setResizable(true);
 		primaryStage.setFullScreenExitHint("");
 		
 		//Action Bar
 		
-		BorderPane actionBar = setActionBar(players.get(0), winWidth, winHeight);
+		BorderPane actionBar = setActionBar(players.get(0), WIN_WIDTH, WIN_HEIGHT);
 		
 		//Main table
 		
 		StackPane table = new StackPane();
-		table.getChildren().addAll(setTable(), setPlayers(players, winWidth, winHeight), setCommunity(comm));
+		table.getChildren().addAll(setTable(), setPlayers(players, WIN_WIDTH, WIN_HEIGHT), setCommunity(comm));
 		
 		root.setBottom(actionBar);
 		root.setCenter(table);
@@ -105,32 +108,32 @@ public class TableGUI extends Application {
 	 * @return the nodes making up the table
 	 */
 	private static StackPane setTable() {
-		Rectangle tableRectRim = new Rectangle(tableWidth, (tableWidth / tableRatio) + (tableRim * 2));
+		Rectangle tableRectRim = new Rectangle(TABLE_WIDTH, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) + (TABLE_RIM * 2));
 		tableRectRim.setFill(Color.BLACK);
 		
-		Ellipse tableLeftRim = new Ellipse(((tableWidth / tableRatio) / 2) + tableRim, ((tableWidth / tableRatio) / 2) + tableRim);
+		Ellipse tableLeftRim = new Ellipse(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM);
 		tableLeftRim.setFill(Color.BLACK);
 		
-		Ellipse tableRightRim = new Ellipse(((tableWidth / tableRatio) / 2) + tableRim, ((tableWidth / tableRatio) / 2) + tableRim);
+		Ellipse tableRightRim = new Ellipse(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM);
 		tableRightRim.setFill(Color.BLACK);
 		
-		Rectangle tableRect = new Rectangle(tableWidth, tableWidth / tableRatio);
+		Rectangle tableRect = new Rectangle(TABLE_WIDTH, TABLE_WIDTH / TABLE_HEIGHT_RATIO);
 		tableRect.setFill(Color.FORESTGREEN);
 		
-		Ellipse tableLeft = new Ellipse((tableWidth / tableRatio) / 2, (tableWidth / tableRatio) / 2);
+		Ellipse tableLeft = new Ellipse((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2);
 		tableLeft.setFill(Color.FORESTGREEN);
 		
-		Ellipse tableRight = new Ellipse((tableWidth / tableRatio) / 2, (tableWidth / tableRatio) / 2);
+		Ellipse tableRight = new Ellipse((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2);
 		tableRight.setFill(Color.FORESTGREEN);
 		
 		HBox lobesRims = new HBox();
 		lobesRims.setAlignment(Pos.CENTER);
-		lobesRims.setSpacing(tableWidth - (tableWidth / tableRatio) - (tableRim * 2));
+		lobesRims.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (TABLE_RIM * 2));
 		lobesRims.getChildren().addAll(tableLeftRim, tableRightRim);
 		
 		HBox lobes = new HBox();
 		lobes.setAlignment(Pos.CENTER);
-		lobes.setSpacing(tableWidth - (tableWidth / tableRatio));
+		lobes.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO));
 		lobes.getChildren().addAll(tableLeft, tableRight);
 		
 		StackPane table = new StackPane();
@@ -161,50 +164,50 @@ public class TableGUI extends Application {
 		//Coordinate Calculations
 		
 		//Table Perimeter Coordinates
-		double tableBorder = (tableWidth * 2.0) + (Math.PI * (tableWidth / tableRatio));
+		double tableBorder = (TABLE_WIDTH * 2.0) + (Math.PI * (TABLE_WIDTH / TABLE_HEIGHT_RATIO));
 		double playerSpacing = tableBorder / (double) players.size();
-		double bottomEnd = tableWidth / 2.0;
-		double leftEnd = bottomEnd + Math.PI * ((tableWidth / tableRatio) / 2.0);
-		double topEnd = leftEnd + tableWidth;
-		double rightEnd = topEnd + Math.PI * ((tableWidth / tableRatio) / 2.0);
+		double bottomEnd = TABLE_WIDTH / 2.0;
+		double leftEnd = bottomEnd + Math.PI * ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2.0);
+		double topEnd = leftEnd + TABLE_WIDTH;
+		double rightEnd = topEnd + Math.PI * ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2.0);
 		
 		//Lobe Polar Coordinates
 		double tableOriginX = winWidth / 2.0;
 		double tableOriginY = (winHeight * (5.0 / 6.0)) / 2.0;
-		double leftPolarOriginX = tableOriginX - (tableWidth / 2.0);
+		double leftPolarOriginX = tableOriginX - (TABLE_WIDTH / 2.0);
 		double leftStartRad = (3.0 * Math.PI) / 2.0;
-		double rightPolarOriginX = tableOriginX + (tableWidth / 2.0);
+		double rightPolarOriginX = tableOriginX + (TABLE_WIDTH / 2.0);
 		double rightStartRad = Math.PI / 2.0;
-		double outsetCircleRadius = ((tableWidth / tableRatio)  / 2.0) + playerOutset + tableRim;
-		double insetCircleRadius = ((tableWidth / tableRatio)  / 2.0) - playerInset;
+		double outsetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + PLAYER_OUTSET + TABLE_RIM;
+		double insetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
 		
 		//=====================================================================
 		//Parent Nodes
 		
 		HBox bottomSeats = new HBox();
 		bottomSeats.setAlignment(Pos.CENTER);
-		bottomSeats.setSpacing(playerSpacing - seatWidth);
+		bottomSeats.setSpacing(playerSpacing - SEAT_WIDTH);
 		HBox topSeats = new HBox();
 		topSeats.setAlignment(Pos.CENTER);
-		topSeats.setSpacing(playerSpacing - seatWidth);
+		topSeats.setSpacing(playerSpacing - SEAT_WIDTH);
 		
 		VBox sWaySeats = new VBox();
 		sWaySeats.setAlignment(Pos.CENTER);
-		sWaySeats.setSpacing((tableWidth / tableRatio) + playerOutset + tableRim);
+		sWaySeats.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) + PLAYER_OUTSET + TABLE_RIM);
 		sWaySeats.getChildren().addAll(topSeats, bottomSeats);
 
 		Pane lobeSeats = new Pane();
 		
 		HBox bottomPlaces = new HBox();
 		bottomPlaces.setAlignment(Pos.CENTER);
-		bottomPlaces.setSpacing(playerSpacing - placeWidth);
+		bottomPlaces.setSpacing(playerSpacing - PLACE_WIDTH);
 		HBox topPlaces = new HBox();
 		topPlaces.setAlignment(Pos.CENTER);
-		topPlaces.setSpacing(playerSpacing - placeWidth);
+		topPlaces.setSpacing(playerSpacing - PLACE_WIDTH);
 		
 		VBox sWayPlaces = new VBox();
 		sWayPlaces.setAlignment(Pos.CENTER);
-		sWayPlaces.setSpacing((tableWidth / tableRatio) - playerInset);
+		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - PLAYER_INSET);
 		sWayPlaces.getChildren().addAll(topPlaces, bottomPlaces);
 
 		Pane lobePlaces = new Pane();
@@ -227,8 +230,8 @@ public class TableGUI extends Application {
 			
 			VBox seat = new VBox();
 			seat.setAlignment(Pos.CENTER);
-			seat.setMinWidth(seatWidth);
-			seat.setMinHeight(seatHeight);
+			seat.setMinWidth(SEAT_WIDTH);
+			seat.setMinHeight(SEAT_HEIGHT);
 			seat.getChildren().addAll(name, stack, action);
 			
 			//Placement
@@ -238,8 +241,8 @@ public class TableGUI extends Application {
 	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
-			place.setMinWidth(placeWidth);
-			place.setMinHeight(placeHeight);
+			place.setMinWidth(PLACE_WIDTH);
+			place.setMinHeight(PLACE_HEIGHT);
 			place.getChildren().addAll(bet);
 			
 			
@@ -258,11 +261,11 @@ public class TableGUI extends Application {
 				}
 			}
 			else if (distanceFromUser < leftEnd) {
-				double phi = leftStartRad - ((distanceFromUser - bottomEnd) / ((tableWidth / tableRatio) / 2));
-				seat.setLayoutX(leftPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (seatWidth / 2));
-				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (seatHeight / 2));
-				place.setLayoutX(leftPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (placeWidth / 2));
-				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (placeHeight / 2));
+				double phi = leftStartRad - ((distanceFromUser - bottomEnd) / ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2));
+				seat.setLayoutX(leftPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (SEAT_WIDTH / 2));
+				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (SEAT_HEIGHT / 2));
+				place.setLayoutX(leftPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (PLACE_WIDTH / 2));
+				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (PLACE_HEIGHT / 2));
 				lobeSeats.getChildren().add(seat);
 				lobePlaces.getChildren().add(place);
 			}
@@ -271,11 +274,11 @@ public class TableGUI extends Application {
 				topPlaces.getChildren().add(place);
 			}
 			else if (distanceFromUser < rightEnd){
-				double phi = rightStartRad - ((distanceFromUser - topEnd) / ((tableWidth / tableRatio) / 2));
-				seat.setLayoutX(rightPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (seatWidth / 2));
-				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (seatHeight / 2));
-				place.setLayoutX(rightPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (placeWidth / 2));
-				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (placeHeight / 2));
+				double phi = rightStartRad - ((distanceFromUser - topEnd) / ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2));
+				seat.setLayoutX(rightPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (SEAT_WIDTH / 2));
+				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (SEAT_HEIGHT / 2));
+				place.setLayoutX(rightPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (PLACE_WIDTH / 2));
+				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (PLACE_HEIGHT / 2));
 				lobeSeats.getChildren().add(seat);
 				lobePlaces.getChildren().add(place);
 			}
@@ -313,9 +316,9 @@ public class TableGUI extends Application {
 			money.setSpacing(10);
 			
 				Label stack = new Label("Your Stack: ");
-				stack.setStyle("-fx-text-fill: goldenrod;");
+				stack.getStyleClass().add("bar-label");
 				Label bet = new Label("Your Current Bet: 0.00");
-				bet.setStyle("-fx-text-fill: goldenrod;");
+				bet.getStyleClass().add("bar-label");
 			
 			money.getChildren().addAll(stack, bet);
 			
@@ -324,7 +327,7 @@ public class TableGUI extends Application {
 			hole.setSpacing(10);
 			
 				Label holeLabel = new Label("Your hole cards:");
-				holeLabel.setStyle("-fx-text-fill: goldenrod;");
+				holeLabel.getStyleClass().add("bar-label");
 				
 				HBox holeCards = new HBox();
 				holeCards.setAlignment(Pos.CENTER);
@@ -349,15 +352,15 @@ public class TableGUI extends Application {
 		
 			Button fold = new Button("Fold");
 			fold.setPrefSize(200, winHeight / 6 - 10);
-			fold.setStyle("-fx-font-size: 20;");
-			
+			fold.getStyleClass().add("button-large");
+
 			Button raise = new Button("Raise");
 			raise.setPrefSize(200, winHeight / 6 - 10);
-			raise.setStyle("-fx-font-size: 20;");
+			raise.getStyleClass().add("button-large");
 			
 			Button call = new Button("Call");
 			call.setPrefSize(200, winHeight / 6 - 10);
-			call.setStyle("-fx-font-size: 20;");
+			call.getStyleClass().add("button-large");
 		
 		buttons.getChildren().addAll(fold, raise, call);
 		
@@ -367,6 +370,7 @@ public class TableGUI extends Application {
 		raiseInput.setSpacing(20);
 		
 			Label raiseFieldLabel = new Label("Enter your wager:");
+			raiseFieldLabel.getStyleClass().add("bar-label");
 			TextField raiseField = new TextField();
 			raiseField.setMaxWidth(150);
 			
@@ -382,14 +386,7 @@ public class TableGUI extends Application {
 		raiseInput.getChildren().addAll(raiseFieldLabel, raiseField, raiseFieldButtons);
 		raiseInput.setVisible(false);
 		
-		//Grey pane and effect
-		Pane greyPane = new Pane();
-		greyPane.setVisible(false);
-		
-		ColorAdjust greyOut = new ColorAdjust();
-		greyOut.setSaturation(-1.0);
-		
-		actions.getChildren().addAll(buttons, raiseInput, greyPane);
+		actions.getChildren().addAll(buttons, raiseInput);
 		
 		//=====================================================================
 		//Settings Buttons
@@ -399,12 +396,12 @@ public class TableGUI extends Application {
 		
 		Button escapeClause = new Button("QUIT");
 		
-		Button greyTest = new Button("GREY TEST");
+		Button disableTest = new Button("DISABLE TEST");
 		
 		Button flipTest = new Button("FLIP TEST");
 		flipTest.setId("flipButton");
 		
-		settingButtons.getChildren().addAll(escapeClause, greyTest, flipTest);
+		settingButtons.getChildren().addAll(escapeClause, disableTest, flipTest);
 		
 		//=====================================================================
 		//Event Handlers
@@ -430,18 +427,20 @@ public class TableGUI extends Application {
 			}
 		});
 		
-		greyTest.setOnAction(new EventHandler<ActionEvent>() {
+		disableTest.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if (greyPane.isVisible()) {
-					greyPane.setVisible(false);
-					actions.setEffect(null);
+				if (fold.isDisabled()) {
+					fold.setDisable(false);
+					raise.setDisable(false);
+					call.setDisable(false);
 				}
 				else {
 					if (raiseInput.isVisible())
 						raiseInput.setVisible(false);
-					greyPane.setVisible(true);
-					actions.setEffect(greyOut);
+					fold.setDisable(true);
+					raise.setDisable(true);
+					call.setDisable(true);
 				}
 			}
 		});
