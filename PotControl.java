@@ -19,4 +19,12 @@ public class PotControl {
 		//not the best for now
 		System.out.println("Small Blind: " + blinds[0] + "\nBig Blind: " + blinds[1]);
 	}
+	
+	public int CalcPot() {
+		for (int i = 0; i < Main.players.size(); i++) {
+			POT += players(i).getBet();
+		}
+		
+		return POT;
+	}
 }
