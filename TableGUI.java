@@ -43,7 +43,7 @@ public class TableGUI extends Application {
 	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.0;
 	private final double TABLE_HEIGHT_RATIO = 1.25;
 	private final double TABLE_RIM_RATIO = 1.0 / 36.0;
-	private final double TABLE_OFFSET_RATIO = 1.0 / 12.0;
+	private final double TABLE_OFFSET_RATIO = 1.0 / 10.0;
 	
 	private final double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
 	private final double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
