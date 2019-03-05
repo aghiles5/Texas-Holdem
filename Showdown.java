@@ -10,6 +10,7 @@ import java.util.ArrayList;
  *
  * @author Adam Hiles
  * @version 03/02/19
+ * @deprecated
  */
 public class Showdown {
 
