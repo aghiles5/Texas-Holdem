@@ -7,7 +7,7 @@ public class Player {
 	  private int Money; //Tracks money
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
 	  //switch to hand object
-	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
+	  protected Hand hand = new Hand(); //player's 5 card hand
 	  protected String name = "";
 	  private int totBet = 0;
 	  //method in main that sets the blinds
