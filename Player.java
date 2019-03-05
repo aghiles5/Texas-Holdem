@@ -8,6 +8,9 @@ public class Player {
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
 	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
 	  protected String name = "";
+	  private int bet = 0;
+	  //method in main that sets the blinds
+	  //make the current player bet into a list.
 	  
 	  public void setName(String newName){
 		  name = newName;
@@ -92,11 +95,11 @@ public class Player {
 		  }
 	  }
 
-	  public void allIn(String choice, int currentBet) {
+	  public void allIn(String choice) {
 		  if (choice.equalsIgnoreCase("A")) {
-			  currentBet += Money;
+			  bet += Money;
 			  Money = 0;
-			  PotControl.POT += currentBet;
+			  PotControl.POT += bet;
 			  System.out.println("Player went all-in!");
 		  }
 	  }
