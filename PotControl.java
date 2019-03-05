@@ -3,6 +3,7 @@ import java.util.ArrayList;
 //frame work for the money stuff will be done here.
 //AI and Player objects need a base money value on start up.
 //needs: a way to check the current highest bet, blinds
+//sml bLind = 250, 500
 public class PotControl {
 	public static int POT;
 	public static int[] blinds = new int[2]; //can be done in main?
