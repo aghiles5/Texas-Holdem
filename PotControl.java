@@ -5,7 +5,7 @@ import java.util.ArrayList;
 //needs: a way to check the current highest bet, blinds
 public class PotControl {
 	public static int POT;
-	public static int[] blinds = new int[2];
+	public static int[] blinds = new int[2]; //can be done in main?
 	//track the current money value
 	public static ArrayList<Integer> PlayerMoney = new ArrayList<Integer>();
 	
