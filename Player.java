@@ -50,6 +50,10 @@ public class Player {
 		  hand.clear();
 	  }
 
+	  public int getBet() {
+		  return totBet;
+	  }
+	  
 	  public void check(String choice) {
 		  //If the input is c, nothing happens
 		  if (choice.equalsIgnoreCase("C")) {

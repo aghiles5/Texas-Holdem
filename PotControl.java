@@ -25,6 +25,6 @@ public class PotControl {
 			POT += players(i).getBet();
 		}
 		
-		return POT;
+		return POT; //might not need to return POT
 	}
 }
