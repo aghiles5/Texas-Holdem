@@ -8,9 +8,9 @@ public class Player {
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
 	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
 	  protected String name = "";
-	  private int bet = 0;
+	  private int totBet = 0;
 	  //method in main that sets the blinds
-	  //make the current player bet into a list.
+	  //make the current player bet into a list
 	  
 	  public void setName(String newName){
 		  name = newName;
@@ -65,27 +65,28 @@ public class Player {
 		  }
 	  }
 	  
-	  public void BetRaise(String choice, int bet, int currentBet) {
+	  public void BetRaise(String choice, int newBet) {
 		  if (choice.equalsIgnoreCase("B")) {
 			  //checks to see if the bet is less than the
 			  //money in the player's balance
-			  if (bet <= Money) {
-				  Money = Money - bet;
-				  PotControl.POT += bet; //has flaws
-				  System.out.println("Player bet $" + bet + ".");
+			  if (newBet <= Money) {
+				  Money = Money - newBet;
+				  totBet += newBet;
+				  PotControl.POT += newBet;
+				  System.out.println("Player bet $" + newBet + ".");
 			  }
 		  } else if (choice.equalsIgnoreCase("R")) {
 			  //Raise action
-			  if (bet >= 2*currentBet && bet <= Money) {
-				Money = Money - bet;
-			  	System.out.println("Player raised $" + bet + ".");
-			  	PotControl.POT += bet;
+			  if (newBet >= 2*totBet && newBet <= Money) {
+				Money = Money - newBet;
+			  	System.out.println("Player raised $" + newBet + ".");
+			  	PotControl.POT += newBet;
 			  }
 		  }
 	  }
 	  
 	  public void call(String choice, int currentBet) {
-		  int toCall = 0; //= highest bet, track somehow
+		  int toCall = highBet - totBet; //highBet must be tracked
 		  //need to determine how to compare each player's current Bet to generate a toCall
 		  if (choice.equalsIgnoreCase("L")) {
 			  int bet = toCall - currentBet;
@@ -97,9 +98,9 @@ public class Player {
 
 	  public void allIn(String choice) {
 		  if (choice.equalsIgnoreCase("A")) {
-			  bet += Money;
+			  totBet += Money;
 			  Money = 0;
-			  PotControl.POT += bet;
+			  PotControl.POT += totBet;
 			  System.out.println("Player went all-in!");
 		  }
 	  }
@@ -116,6 +117,6 @@ public class Player {
 	}
 	  
 	  public void getDecision(String input) {
-		  
+		 //HUH??? 
 	  }
 }

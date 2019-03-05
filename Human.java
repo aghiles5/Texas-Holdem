@@ -8,7 +8,7 @@ public class Human extends Player {
   	public void getDecision(String decision) {
 		decision = super.invalidChoice(decision);
 		//super.call(decision, currentBet);
-		//super.BetRaise(decision, bet, currentBet(need to track the current bet somehow));
+		//super.BetRaise(decision, newBet);
 		//super.allIn(decision, currentBet);
 		super.check(decision);
 		super.fold(decision);
