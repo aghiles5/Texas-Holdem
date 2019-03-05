@@ -5,6 +5,7 @@
  * @version 03/01/2019
  */
 
+ // ABSTRACT THE SHIT OUT OF THIS THING MOTHER LOVER
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class AI extends Player{
   // This is an array of CPU player names
   public static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick", "Magnificent Mick", "Speedy Gonzalez"};
 
-  // This constructor will generate random names for the number of CPU players
+  // !!!!!!!!This constructor will generate random names for the number of CPU players!!!!!!!!!!!
   public AI(int numOfAI) {
     Random name = new Random();
 
@@ -31,7 +32,7 @@ public class AI extends Player{
     }
   }
 
-  // This method pushes the AI decisions to SuperPlayer class
+  // This method pushes the AI decisions to Player class
   public void getDecisionAI() {
     // This implements the randomness of the AI
     Random choice = new Random();
