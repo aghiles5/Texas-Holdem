@@ -4,7 +4,7 @@ import java.util.Scanner;
 // Common methods between AI and Player class will be in this super class
 
 public class Player {
-	  private int Money; //not used until BetRaise is done
+	  private int Money; //Tracks money
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
 	  protected ArrayList<Card> hand = new ArrayList<Card>(); //player's 5 card hand
 	  protected String name = "";
