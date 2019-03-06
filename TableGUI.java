@@ -43,19 +43,20 @@ public class TableGUI extends Application {
 	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.0;
 	private final double TABLE_HEIGHT_RATIO = 1.25;
 	private final double TABLE_RIM_RATIO = 1.0 / 36.0;
-	private final double TABLE_OFFSET_RATIO = 1.0 / 10.0;
+	private final double TABLE_OUTSET_RATIO = 1.0 / 10.0;
+	private final double TABLE_INSET_RATIO = 1.0 / 8.0;
 	
 	private final double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
 	private final double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
 	
-	private final double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player information from the table
-	private final double PLAYER_INSET = TABLE_WIDTH * TABLE_OFFSET_RATIO; //The distance of player bets and cards? inside the table
+	private final double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OUTSET_RATIO; //The distance of player information from the table
+	private final double PLAYER_INSET = TABLE_WIDTH * TABLE_INSET_RATIO; //The distance of player bets and cards? inside the table
 	
 	private final double SEAT_WIDTH = 50.0;
 	private final double SEAT_HEIGHT = 60.0;
 	
 	private final double PLACE_WIDTH = 150.0;
-	private final double PLACE_HEIGHT = 20.0;
+	private final double PLACE_HEIGHT = 80.0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -86,20 +87,18 @@ public class TableGUI extends Application {
 		root.setBottom(actionBar);
 		root.setCenter(table);
 		primaryStage.show();
-		
-		Button flipButton = (Button) scene.lookup("#flipButton");
-		
-		flipButton.setOnAction(new EventHandler<ActionEvent>() {
-			int i = 0;
-			@Override
-			public void handle(ActionEvent event) {
-				if (i < 5) {
-					revealCard((ImageView) scene.lookup("#commBack" + i), (ImageView) scene.lookup("#commFront" + i));
-					i++;
-				}
-			}
-		});
 	}
+	
+	/*
+	private void blind(Scene scene, Game game) {
+		boolean roundRunning = true;
+		while (roundRunning) {
+			Player player = game.processTurn();
+			VBox seat = (VBox) scene.lookup("#" + game.getCurrentPlayer() + "Seat");
+		}
+		game.updatePot();
+	}
+	*/
 	
 	/**
 	 * The geometry of the image of the poker table is formed from the
@@ -175,7 +174,7 @@ public class TableGUI extends Application {
 		
 		//Lobe Polar Coordinates
 		double tableOriginX = winWidth / 2.0;
-		double tableOriginY = (winHeight * (5.0 / 6.0)) / 2.0;
+		double tableOriginY = (winHeight * (7.0 / 8.0)) / 2.0;
 		double leftPolarOriginX = tableOriginX - (TABLE_WIDTH / 2.0);
 		double leftStartRad = (3.0 * Math.PI) / 2.0;
 		double rightPolarOriginX = tableOriginX + (TABLE_WIDTH / 2.0);
@@ -209,7 +208,7 @@ public class TableGUI extends Application {
 		
 		VBox sWayPlaces = new VBox();
 		sWayPlaces.setAlignment(Pos.CENTER);
-		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - PLAYER_INSET);
+		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (2 * PLAYER_INSET));
 		sWayPlaces.getChildren().addAll(topPlaces, bottomPlaces);
 
 		Pane lobePlaces = new Pane();
@@ -223,12 +222,11 @@ public class TableGUI extends Application {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			Label stack = new Label("");
-			Label action = new Label("");
-			if (currentPlayer != 0) {
-				stack.setText("Stack: ");
-				action.setText("Action: ");
-			}
+			Label stack = new Label("Stack: ");
+			Label action = new Label("Action: ");
+			
+			stack.setId(player.getName() + "Stack");
+			action.setId(player.getName() + "Action");
 			
 			VBox seat = new VBox();
 			seat.setAlignment(Pos.CENTER);
@@ -237,17 +235,32 @@ public class TableGUI extends Application {
 			seat.getChildren().addAll(name, stack, action);
 			
 			//Placement
-			Label bet = new Label("");
-			if (currentPlayer != 0)
-				bet.setText("Current Bet: 0.00");
+			Label bet = new Label("Current Bet: 0.00");
+			bet.setId(player.getName() + "Bet");
+			
+			HBox cardPane = new HBox();
+			cardPane.setAlignment(Pos.CENTER);
+			cardPane.setSpacing(10);
+			
+			Image card1;
+			Image card2;
+			if (player instanceof Human) {
+				card1 = new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png", 40, 56, false, false);
+				card2 = new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png", 40, 56, false, false);
+			}
+			else {
+				card1 = new Image("/Images/Back.png", 40, 56, false, false);
+				card2 = new Image("/Images/Back.png", 40, 56, false, false);
+			}
+			
+			cardPane.getChildren().addAll(new ImageView(card1), new ImageView(card2));
 	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
+			place.setSpacing(5);
 			place.setMinWidth(PLACE_WIDTH);
 			place.setMinHeight(PLACE_HEIGHT);
-			place.getChildren().addAll(bet);
-			
-			
+			place.getChildren().addAll(bet, cardPane);
 			
 			if (distanceFromUser < bottomEnd) {
 				bottomSeats.getChildren().add(seat);
@@ -301,48 +314,10 @@ public class TableGUI extends Application {
 	
 	public BorderPane setActionBar(Player user, double winWidth, double winHeight) {
 		BorderPane actionBar = new BorderPane();
-		actionBar.setPrefSize(winWidth, winHeight / 6.0);
+		actionBar.setPrefSize(winWidth, winHeight / 10.0);
 		actionBar.setStyle("-fx-border-style: solid inside;"
 		        + "-fx-border-width: 5;" + "-fx-border-color: #4B0905;"
 				+ "-fx-background-color: maroon");
-		
-		//=====================================================================
-		//Central Money Information/Cards
-		
-		HBox centrePane = new HBox();
-		centrePane.setAlignment(Pos.CENTER);
-		centrePane.setSpacing(100);
-		
-			VBox money = new VBox();
-			money.setAlignment(Pos.CENTER);
-			money.setSpacing(10);
-			
-				Label stack = new Label("Your Stack: ");
-				stack.getStyleClass().add("bar-label");
-				Label bet = new Label("Your Current Bet: 0.00");
-				bet.getStyleClass().add("bar-label");
-			
-			money.getChildren().addAll(stack, bet);
-			
-			VBox hole = new VBox();
-			hole.setAlignment(Pos.CENTER);
-			hole.setSpacing(10);
-			
-				Label holeLabel = new Label("Your hole cards:");
-				holeLabel.getStyleClass().add("bar-label");
-				
-				HBox holeCards = new HBox();
-				holeCards.setAlignment(Pos.CENTER);
-				holeCards.setSpacing(20);
-				
-				for (Card card : user.getHole()) {
-					Image cardImage = new Image("/Images/" + card.getSuit() + "/" + card.getRank() + ".png");
-					holeCards.getChildren().add(new ImageView(cardImage));
-				}
-			
-			hole.getChildren().addAll(holeLabel, holeCards);
-		
-		centrePane.getChildren().addAll(hole, money);
 		
 		//=====================================================================
 		//Action Buttons
@@ -353,23 +328,23 @@ public class TableGUI extends Application {
 		HBox buttons = new HBox();
 		
 			Button fold = new Button("Fold");
-			fold.setPrefSize(200, winHeight / 6 - 10);
+			fold.setPrefSize(600, winHeight / 10 - 10);
 			fold.getStyleClass().add("button-large");
 
 			Button raise = new Button("Raise");
-			raise.setPrefSize(200, winHeight / 6 - 10);
+			raise.setPrefSize(600, winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
 			
 			Button call = new Button("Call");
-			call.setPrefSize(200, winHeight / 6 - 10);
+			call.setPrefSize(600, winHeight / 10 - 10);
 			call.getStyleClass().add("button-large");
 		
 		buttons.getChildren().addAll(fold, raise, call);
 		
 		//Input for raise
-		VBox raiseInput = new VBox();
+		HBox raiseInput = new HBox();
 		raiseInput.setAlignment(Pos.CENTER);
-		raiseInput.setSpacing(20);
+		raiseInput.setSpacing(10);
 		
 			Label raiseFieldLabel = new Label("Enter your wager:");
 			raiseFieldLabel.getStyleClass().add("bar-label");
@@ -398,12 +373,7 @@ public class TableGUI extends Application {
 		
 		Button escapeClause = new Button("QUIT");
 		
-		Button disableTest = new Button("DISABLE TEST");
-		
-		Button flipTest = new Button("FLIP TEST");
-		flipTest.setId("flipButton");
-		
-		settingButtons.getChildren().addAll(escapeClause, disableTest, flipTest);
+		settingButtons.getChildren().addAll(escapeClause);
 		
 		//=====================================================================
 		//Event Handlers
@@ -428,30 +398,11 @@ public class TableGUI extends Application {
 				System.exit(0);
 			}
 		});
-		
-		disableTest.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (fold.isDisabled()) {
-					fold.setDisable(false);
-					raise.setDisable(false);
-					call.setDisable(false);
-				}
-				else {
-					if (raiseInput.isVisible())
-						raiseInput.setVisible(false);
-					fold.setDisable(true);
-					raise.setDisable(true);
-					call.setDisable(true);
-				}
-			}
-		});
 
 		//=====================================================================
 		//Setting to BorderPane to return
 		
 		actionBar.setLeft(actions);
-		actionBar.setCenter(centrePane);
 		actionBar.setRight(settingButtons);
 		return actionBar;
 	}
