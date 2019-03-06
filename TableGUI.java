@@ -40,7 +40,7 @@ public class TableGUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
-	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.0;
+	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.5;
 	private final double TABLE_HEIGHT_RATIO = 1.25;
 	private final double TABLE_RIM_RATIO = 1.0 / 36.0;
 	private final double TABLE_OUTSET_RATIO = 1.0 / 10.0;
@@ -93,8 +93,23 @@ public class TableGUI extends Application {
 	private void blind(Scene scene, Game game) {
 		boolean roundRunning = true;
 		while (roundRunning) {
-			Player player = game.processTurn();
-			VBox seat = (VBox) scene.lookup("#" + game.getCurrentPlayer() + "Seat");
+			if (game.getCurrentPlayer() instanceof Human) {
+				boolean playerDeciding = true;
+				while (playerDeciding) {}
+				Human player = game.getCurrentPlayer();
+			}
+			else
+				AI player = game.processTurn();
+			if (player.getAction() == "") {
+				((Label) scene.lookup("#" + player.getName() + "Stack")).setText("");
+				((Label) scene.lookup("#" + player.getName() + "Action")).setText("");
+				((Label) scene.lookup("#" + player.getName() + "Bet")).setText("");
+			}
+			else {
+				((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
+				((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
+				((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());	
+			}
 		}
 		game.updatePot();
 	}
@@ -253,7 +268,12 @@ public class TableGUI extends Application {
 				card2 = new Image("/Images/Back.png", 40, 56, false, false);
 			}
 			
-			cardPane.getChildren().addAll(new ImageView(card1), new ImageView(card2));
+			ImageView card1View = new ImageView(card1);
+			ImageView card2View = new ImageView(card2);
+			card1View.setId(player.getName() + "Card1");
+			card1View.setId(player.getName() + "Card2");
+			
+			cardPane.getChildren().addAll(card1View, card2View);
 	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
