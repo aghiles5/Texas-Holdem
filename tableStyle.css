@@ -14,6 +14,14 @@
 	-fx-border-width: 2;
 }
 
+.slider{
+	-fx-base: brown;
+}
+
+.slider .axis{ 
+	-fx-tick-label-fill: goldenrod;
+}
+
 .button:hover{
 	-fx-background-color: darkred;
 }

@@ -34,7 +34,6 @@ public class MainMenu {
 				Label title = new Label("Texas Hold'em");
 				title.setStyle("-fx-font-size: 36;"
 						+ "-fx-text-fill: goldenrod;");
-				title.getStyleClass().add(".bar-label");
 				
 				Label stacks = new Label("Stack Amount: $100 000");
 				stacks.setStyle("-fx-text-fill: goldenrod;");
@@ -44,8 +43,6 @@ public class MainMenu {
 				sliderLabel.setStyle("-fx-text-fill: goldenrod;");
 				
 				Slider comSlider = new Slider(1, 9, 5);
-				comSlider.setStyle("-fx-text-fill: goldenrod;"
-						+ "-fx-base: brown;");
 				comSlider.setMaxWidth(300);
 				comSlider.setShowTickLabels(true);
 				comSlider.setShowTickMarks(true);
