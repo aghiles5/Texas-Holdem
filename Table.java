@@ -281,81 +281,92 @@ public class Table {
 		return playerInfo;
 	}
 	
-	private HBox setTableCentre(ArrayList<Card> comm) {
-		HBox tableCentre = new HBox();
-		tableCentre.setAlignment(Pos.CENTER);
-		tableCentre.setSpacing(50);
-		
-			StackPane commFull = new StackPane();
-			commFull.setAlignment(Pos.CENTER);
-				
-				VBox community = new VBox();
-				community.setAlignment(Pos.CENTER);	
-				community.setSpacing(20);
-				
-					HBox flop = new HBox();
-					flop.setAlignment(Pos.CENTER);	
-					flop.setSpacing(5);
-					for (int index = 0; index < 3; index++) {
-						Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-						ImageView cardView = new ImageView(cardImage);
-						cardView.setId("commFront" + index);
-						flop.getChildren().add(cardView);
-					}
-					
-					HBox streets = new HBox();
-					streets.setAlignment(Pos.CENTER);	
-					streets.setSpacing(20);
-					for (int index = 3; index < 5; index++) {
-						Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-						ImageView cardView = new ImageView(cardImage);
-						cardView.setId("commFront" + index);
-						streets.getChildren().add(cardView);
-					}
-					
-				community.getChildren().addAll(flop, streets);
-				
-				VBox communityCover = new VBox();
-				communityCover.setAlignment(Pos.CENTER);	
-				communityCover.setSpacing(20);
-					
-					HBox flopCover = new HBox();
-					flopCover.setAlignment(Pos.CENTER);	
-					flopCover.setSpacing(5);
-					Image backImage = new Image("/Images/Back.png");
-					for (int i = 0; i < 3; i++) {		
-						ImageView backView = new ImageView(backImage);
-						backView.setId("commBack" + i);
-						flopCover.getChildren().add(backView);
-					}
-					
-					HBox streetsCover = new HBox();
-					streetsCover.setAlignment(Pos.CENTER);	
-					streetsCover.setSpacing(20);
-					for (int i = 3; i < 5; i++) {
-						ImageView backView = new ImageView(backImage);
-						backView.setId("commBack" + i);
-						streetsCover.getChildren().add(backView);
-					}
-					
-				communityCover.getChildren().addAll(flopCover, streetsCover);
-				
-			commFull.getChildren().addAll(community, communityCover);
+	private StackPane setTableCentre(ArrayList<Card> comm) {
+		StackPane tableCentre = new StackPane();
+			HBox centreProps = new HBox();
+			centreProps.setAlignment(Pos.CENTER);
+			centreProps.setSpacing(50);
 			
-			VBox dealerMoney = new VBox();
-			dealerMoney.setAlignment(Pos.CENTER);
-			dealerMoney.setSpacing(5);
-			
-				Label pot = new Label("Pot: $0");
-				pot.setId("pot");
-				pot.setAlignment(Pos.CENTER);
-				Label wager = new Label("Highest Wager: $0");
-				wager.setId("wager");
-				wager.setAlignment(Pos.CENTER);
+				StackPane commFull = new StackPane();
+				commFull.setAlignment(Pos.CENTER);
+					
+					VBox community = new VBox();
+					community.setAlignment(Pos.CENTER);	
+					community.setSpacing(20);
+					
+						HBox flop = new HBox();
+						flop.setAlignment(Pos.CENTER);	
+						flop.setSpacing(5);
+						for (int index = 0; index < 3; index++) {
+							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+							ImageView cardView = new ImageView(cardImage);
+							cardView.setId("commFront" + index);
+							flop.getChildren().add(cardView);
+						}
+						
+						HBox streets = new HBox();
+						streets.setAlignment(Pos.CENTER);	
+						streets.setSpacing(20);
+						for (int index = 3; index < 5; index++) {
+							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+							ImageView cardView = new ImageView(cardImage);
+							cardView.setId("commFront" + index);
+							streets.getChildren().add(cardView);
+						}
+						
+					community.getChildren().addAll(flop, streets);
+					
+					VBox communityCover = new VBox();
+					communityCover.setAlignment(Pos.CENTER);	
+					communityCover.setSpacing(20);
+						
+						HBox flopCover = new HBox();
+						flopCover.setAlignment(Pos.CENTER);	
+						flopCover.setSpacing(5);
+						Image backImage = new Image("/Images/Back.png");
+						for (int i = 0; i < 3; i++) {		
+							ImageView backView = new ImageView(backImage);
+							backView.setId("commBack" + i);
+							flopCover.getChildren().add(backView);
+						}
+						
+						HBox streetsCover = new HBox();
+						streetsCover.setAlignment(Pos.CENTER);	
+						streetsCover.setSpacing(20);
+						for (int i = 3; i < 5; i++) {
+							ImageView backView = new ImageView(backImage);
+							backView.setId("commBack" + i);
+							streetsCover.getChildren().add(backView);
+						}
+						
+					communityCover.getChildren().addAll(flopCover, streetsCover);
+					
+				commFull.getChildren().addAll(community, communityCover);
 				
-			dealerMoney.getChildren().addAll(pot, wager);
+				VBox dealerMoney = new VBox();
+				dealerMoney.setAlignment(Pos.CENTER);
+				dealerMoney.setSpacing(5);
+				
+					Label pot = new Label("Pot: $0");
+					pot.setId("pot");
+					pot.setAlignment(Pos.CENTER);
+					Label wager = new Label("Highest Wager: $0");
+					wager.setId("wager");
+					wager.setAlignment(Pos.CENTER);
+					
+				dealerMoney.getChildren().addAll(pot, wager);
+				
+			centreProps.getChildren().addAll(commFull, dealerMoney);
 			
-		tableCentre.getChildren().addAll(commFull, dealerMoney);
+			Label roundNotif = new Label("Blind Round");
+			roundNotif.setAlignment(Pos.CENTER);
+			roundNotif.setStyle("-fx-text-fill: goldenrod;" + "-fx-font-size: 20;");
+			roundNotif.getStyleClass().add("popup");
+			roundNotif.setMinSize(360, 180);
+			roundNotif.setId("roundNotif");
+			roundNotif.setVisible(false);
+			
+		tableCentre.getChildren().addAll(centreProps, roundNotif);
 		
 		return tableCentre;
 	}

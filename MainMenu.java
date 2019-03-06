@@ -25,22 +25,20 @@ public class MainMenu {
 		
 			VBox menuBox = new VBox();
 			menuBox.setAlignment(Pos.CENTER);
-			menuBox.setStyle("-fx-background-color: maroon;" 
-					+ "-fx-border-color: goldenrod;" + "-fx-border-radius: 5;"
-					+ "-fx-border-width: 5;" + "-fx-border-insets: 10;");
+			menuBox.getStyleClass().add("popup");
 			menuBox.setSpacing(10);
 			menuBox.setMaxSize(480, 600);
 			
 				Label title = new Label("Texas Hold'em");
-				title.setStyle("-fx-font-size: 36;"
-						+ "-fx-text-fill: goldenrod;");
+				title.setStyle("-fx-font-size: 36;");
+				title.getStyleClass().add("bar-label");
 				
 				Label stacks = new Label("Stack Amount: $100 000");
-				stacks.setStyle("-fx-text-fill: goldenrod;");
+				stacks.getStyleClass().add("bar-label");
 				Label blinds = new Label("Blinds: $250/$500");
-				blinds.setStyle("-fx-text-fill: goldenrod;");
+				blinds.getStyleClass().add("bar-label");
 				Label sliderLabel = new Label("Choose number of coms:");
-				sliderLabel.setStyle("-fx-text-fill: goldenrod;");
+				sliderLabel.getStyleClass().add("bar-label");
 				
 				Slider comSlider = new Slider(1, 9, 5);
 				comSlider.setMaxWidth(300);
@@ -57,10 +55,10 @@ public class MainMenu {
 				buttonBox.setSpacing(10);
 				
 					Button start = new Button("Start Game");
-					start.getStyleClass().add(".button-large");
+					start.getStyleClass().add("button-large");
 					start.setId("startButton");
 					Button exit = new Button("Exit");
-					exit.getStyleClass().add(".button-large");
+					exit.getStyleClass().add("button-large");
 				
 				buttonBox.getChildren().addAll(start, exit);
 				

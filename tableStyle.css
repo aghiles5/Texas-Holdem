@@ -14,14 +14,6 @@
 	-fx-border-width: 2;
 }
 
-.slider{
-	-fx-base: brown;
-}
-
-.slider .axis{ 
-	-fx-tick-label-fill: goldenrod;
-}
-
 .button:hover{
 	-fx-background-color: darkred;
 }
@@ -34,15 +26,32 @@
 	-fx-opacity: 0.5;
 }
 
+.slider{
+	-fx-base: brown;
+}
+
+.slider .axis{ 
+	-fx-tick-label-fill: goldenrod;
+}
+
+
+.text-field{
+	-fx-background-color: brown;
+	-fx-text-fill: goldenrod;
+}
+
+.popup{
+	-fx-background-color: maroon;
+	-fx-border-color: goldenrod;
+	-fx-border-radius: 5;
+	-fx-border-width: 5;
+	-fx-border-insets: 10;
+}
+
 .button-large{
 	-fx-font-size: 20;
 }
 
 .bar-label{
-	-fx-text-fill: goldenrod;
-}
-
-.text-field{
-	-fx-background-color: brown;
 	-fx-text-fill: goldenrod;
 }

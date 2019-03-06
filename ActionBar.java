@@ -3,6 +3,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -36,15 +37,15 @@ public class ActionBar {
 		HBox buttons = new HBox();
 		
 			Button fold = new Button("Fold");
-			fold.setPrefSize(600, winHeight / 10 - 10);
+			fold.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			fold.getStyleClass().add("button-large");
 
 			Button raise = new Button("Raise");
-			raise.setPrefSize(600, winHeight / 10 - 10);
+			raise.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
 			
 			Button call = new Button("Call");
-			call.setPrefSize(600, winHeight / 10 - 10);
+			call.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			call.getStyleClass().add("button-large");
 		
 		buttons.getChildren().addAll(fold, raise, call);
@@ -56,8 +57,15 @@ public class ActionBar {
 		
 			Label raiseFieldLabel = new Label("Enter your wager:");
 			raiseFieldLabel.getStyleClass().add("bar-label");
-			TextField raiseField = new TextField();
-			raiseField.setMaxWidth(150);
+			
+			Slider raiseSlider = new Slider(0, 100000, 50000);
+			raiseSlider.setMinWidth(250);
+			raiseSlider.setShowTickLabels(true);
+			raiseSlider.setShowTickMarks(true);
+			raiseSlider.setMajorTickUnit(10000);
+			raiseSlider.setMinorTickCount(4);
+			raiseSlider.setSnapToTicks(true);
+			raiseSlider.setId("raiseSlider");
 			
 			HBox raiseFieldButtons = new HBox();
 			raiseFieldButtons.setAlignment(Pos.CENTER);
@@ -68,7 +76,7 @@ public class ActionBar {
 			
 			raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);
 		
-		raiseInput.getChildren().addAll(raiseFieldLabel, raiseField, raiseFieldButtons);
+		raiseInput.getChildren().addAll(raiseFieldLabel, raiseSlider, raiseFieldButtons);
 		raiseInput.setVisible(false);
 		
 		actions.getChildren().addAll(buttons, raiseInput);
@@ -90,6 +98,7 @@ public class ActionBar {
 			@Override
 			public void handle(ActionEvent event) {
 				raiseInput.setVisible(true);
+				raise.setText("");
 			}
 		});
 		
@@ -97,6 +106,7 @@ public class ActionBar {
 			@Override
 			public void handle(ActionEvent event) {
 				raiseInput.setVisible(false);
+				raise.setText("Raise");
 			}
 		});
 		
