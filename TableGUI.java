@@ -52,10 +52,10 @@ public class TableGUI extends Application {
 	private final double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OUTSET_RATIO; //The distance of player information from the table
 	private final double PLAYER_INSET = TABLE_WIDTH * TABLE_INSET_RATIO; //The distance of player bets and cards? inside the table
 	
-	private final double SEAT_WIDTH = 50.0;
+	private final double SEAT_WIDTH = 180.0;
 	private final double SEAT_HEIGHT = 60.0;
 	
-	private final double PLACE_WIDTH = 150.0;
+	private final double PLACE_WIDTH = 200.0;
 	private final double PLACE_HEIGHT = 80.0;
 	
 	@Override
@@ -82,11 +82,27 @@ public class TableGUI extends Application {
 		//Main table
 		
 		StackPane table = new StackPane();
-		table.getChildren().addAll(setTable(), setPlayers(players, WIN_WIDTH, WIN_HEIGHT), setCommunity(comm));
+		table.getChildren().addAll(setTable(), setPlayers(players, WIN_WIDTH, WIN_HEIGHT), setTableCentre(comm));
 		
 		root.setBottom(actionBar);
 		root.setCenter(table);
 		primaryStage.show();
+		
+		((Button) scene.lookup("#flipTest")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				for (Player player : players) {
+					ImageView card1Front = ((ImageView) scene.lookup("#" + player.getName() + "Card1"));
+					ImageView card2Front = ((ImageView) scene.lookup("#" + player.getName() + "Card2"));
+					
+					ImageView card1Back = ((ImageView) scene.lookup("#" + player.getName() + "Card1Back"));
+					ImageView card2Back = ((ImageView) scene.lookup("#" + player.getName() + "Card2Back"));
+					
+					revealCard(card1Back, card1Front);
+					revealCard(card2Back, card2Front);
+				}
+			}
+		});
 	}
 	
 	/*
@@ -96,10 +112,10 @@ public class TableGUI extends Application {
 			if (game.getCurrentPlayer() instanceof Human) {
 				boolean playerDeciding = true;
 				while (playerDeciding) {}
-				Human player = game.getCurrentPlayer();
+				Player player = game.getCurrentPlayer();
 			}
 			else
-				AI player = game.processTurn();
+				Player player = game.processTurn();
 			if (player.getAction() == "") {
 				((Label) scene.lookup("#" + player.getName() + "Stack")).setText("");
 				((Label) scene.lookup("#" + player.getName() + "Action")).setText("");
@@ -250,30 +266,42 @@ public class TableGUI extends Application {
 			seat.getChildren().addAll(name, stack, action);
 			
 			//Placement
-			Label bet = new Label("Current Bet: 0.00");
+			Label bet = new Label("Current Bet: ");
 			bet.setId(player.getName() + "Bet");
 			
-			HBox cardPane = new HBox();
+			StackPane cardPane = new StackPane();
 			cardPane.setAlignment(Pos.CENTER);
-			cardPane.setSpacing(10);
 			
-			Image card1;
-			Image card2;
-			if (player instanceof Human) {
-				card1 = new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png", 40, 56, false, false);
-				card2 = new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png", 40, 56, false, false);
-			}
-			else {
-				card1 = new Image("/Images/Back.png", 40, 56, false, false);
-				card2 = new Image("/Images/Back.png", 40, 56, false, false);
-			}
+				HBox cardFrontPane = new HBox();
+				cardFrontPane.setAlignment(Pos.CENTER);
+				cardFrontPane.setSpacing(10);
+				
+				HBox cardBackPane = new HBox();
+				cardBackPane.setAlignment(Pos.CENTER);
+				cardBackPane.setSpacing(10);
+				
+					Image card1 = new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png", 40, 56, false, false);
+					Image card2 = new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png", 40, 56, false, false);
+					
+					ImageView card1Front = new ImageView(card1);
+					ImageView card2Front = new ImageView(card2);
+					
+					card1Front.setId(player.getName() + "Card1");
+					card1Front.setId(player.getName() + "Card2");
+					
+				cardFrontPane.getChildren().addAll(card1Front, card2Front);
+					
+					if (player instanceof Human) {
+						Image cardBack = new Image("/Images/Back.png", 40, 56, false, false);
+						ImageView card1Back = new ImageView(cardBack);
+						ImageView card2Back = new ImageView(cardBack);
+						card1Back.setId(player.getName() + "Card1Back");
+						card2Back.setId(player.getName() + "Card2Back");
+						
+						cardBackPane.getChildren().addAll(card1Back, card2Back);
+					}
 			
-			ImageView card1View = new ImageView(card1);
-			ImageView card2View = new ImageView(card2);
-			card1View.setId(player.getName() + "Card1");
-			card1View.setId(player.getName() + "Card2");
-			
-			cardPane.getChildren().addAll(card1View, card2View);
+			cardPane.getChildren().addAll(cardFrontPane, cardBackPane);
 	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
@@ -393,7 +421,10 @@ public class TableGUI extends Application {
 		
 		Button escapeClause = new Button("QUIT");
 		
-		settingButtons.getChildren().addAll(escapeClause);
+		Button flipTest = new Button("FLIP");
+		flipTest.setId("flipTest");
+		
+		settingButtons.getChildren().addAll(escapeClause, flipTest);
 		
 		//=====================================================================
 		//Event Handlers
@@ -427,63 +458,83 @@ public class TableGUI extends Application {
 		return actionBar;
 	}
 	
-	private StackPane setCommunity(ArrayList<Card> comm) {
-		StackPane commFull = new StackPane();
-			
-			VBox community = new VBox();
-			community.setAlignment(Pos.CENTER);	
-			community.setSpacing(20);
-			
-				HBox flop = new HBox();
-				flop.setAlignment(Pos.CENTER);	
-				flop.setSpacing(5);
-				for (int index = 0; index < 3; index++) {
-					Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-					ImageView cardView = new ImageView(cardImage);
-					cardView.setId("commFront" + index);
-					flop.getChildren().add(cardView);
-				}
-				
-				HBox streets = new HBox();
-				streets.setAlignment(Pos.CENTER);	
-				streets.setSpacing(20);
-				for (int index = 3; index < 5; index++) {
-					Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
-					ImageView cardView = new ImageView(cardImage);
-					cardView.setId("commFront" + index);
-					streets.getChildren().add(cardView);
-				}
-				
-			community.getChildren().addAll(flop, streets);
-			
-			VBox communityCover = new VBox();
-			communityCover.setAlignment(Pos.CENTER);	
-			communityCover.setSpacing(20);
-				
-				HBox flopCover = new HBox();
-				flopCover.setAlignment(Pos.CENTER);	
-				flopCover.setSpacing(5);
-				Image backImage = new Image("/Images/Back.png");
-				for (int i = 0; i < 3; i++) {		
-					ImageView backView = new ImageView(backImage);
-					backView.setId("commBack" + i);
-					flopCover.getChildren().add(backView);
-				}
-				
-				HBox streetsCover = new HBox();
-				streetsCover.setAlignment(Pos.CENTER);	
-				streetsCover.setSpacing(20);
-				for (int i = 3; i < 5; i++) {
-					ImageView backView = new ImageView(backImage);
-					backView.setId("commBack" + i);
-					streetsCover.getChildren().add(backView);
-				}
-				
-			communityCover.getChildren().addAll(flopCover, streetsCover);
-			
-		commFull.getChildren().addAll(community, communityCover);
+	private HBox setTableCentre(ArrayList<Card> comm) {
+		HBox tableCentre = new HBox();
+		tableCentre.setAlignment(Pos.CENTER);
+		tableCentre.setSpacing(50);
 		
-		return commFull;
+			StackPane commFull = new StackPane();
+			commFull.setAlignment(Pos.CENTER);
+				
+				VBox community = new VBox();
+				community.setAlignment(Pos.CENTER);	
+				community.setSpacing(20);
+				
+					HBox flop = new HBox();
+					flop.setAlignment(Pos.CENTER);	
+					flop.setSpacing(5);
+					for (int index = 0; index < 3; index++) {
+						Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+						ImageView cardView = new ImageView(cardImage);
+						cardView.setId("commFront" + index);
+						flop.getChildren().add(cardView);
+					}
+					
+					HBox streets = new HBox();
+					streets.setAlignment(Pos.CENTER);	
+					streets.setSpacing(20);
+					for (int index = 3; index < 5; index++) {
+						Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+						ImageView cardView = new ImageView(cardImage);
+						cardView.setId("commFront" + index);
+						streets.getChildren().add(cardView);
+					}
+					
+				community.getChildren().addAll(flop, streets);
+				
+				VBox communityCover = new VBox();
+				communityCover.setAlignment(Pos.CENTER);	
+				communityCover.setSpacing(20);
+					
+					HBox flopCover = new HBox();
+					flopCover.setAlignment(Pos.CENTER);	
+					flopCover.setSpacing(5);
+					Image backImage = new Image("/Images/Back.png");
+					for (int i = 0; i < 3; i++) {		
+						ImageView backView = new ImageView(backImage);
+						backView.setId("commBack" + i);
+						flopCover.getChildren().add(backView);
+					}
+					
+					HBox streetsCover = new HBox();
+					streetsCover.setAlignment(Pos.CENTER);	
+					streetsCover.setSpacing(20);
+					for (int i = 3; i < 5; i++) {
+						ImageView backView = new ImageView(backImage);
+						backView.setId("commBack" + i);
+						streetsCover.getChildren().add(backView);
+					}
+					
+				communityCover.getChildren().addAll(flopCover, streetsCover);
+				
+			commFull.getChildren().addAll(community, communityCover);
+			
+			VBox dealerMoney = new VBox();
+			dealerMoney.setAlignment(Pos.CENTER);
+			dealerMoney.setSpacing(5);
+			
+				Label pot = new Label("Pot: $100 000");
+				pot.setId("pot");
+				pot.setAlignment(Pos.CENTER);
+				Label wager = new Label("Highest Wager: $100 000");
+				wager.setId("wager");
+				wager.setAlignment(Pos.CENTER);
+				
+			dealerMoney.getChildren().addAll(pot, wager);
+			
+		tableCentre.getChildren().addAll(commFull, dealerMoney);
+		
+		return tableCentre;
 	}
 	
 	private void revealCard(ImageView cardBack, ImageView cardFront) {
