@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Adam Hiles
+ * @version 03/05/18
+ */
 public class Hand {
 	private ArrayList<Card> cards = new ArrayList<Card>();
 	private int rank;
@@ -25,12 +30,21 @@ public class Hand {
 	
 	public Hand() {}
 	
+	public Hand(Hand toCopy) {
+		rank = toCopy.getRank();
+		for (Card card : toCopy.getCards())
+			addCard(card);
+	}
+	
 	public int getRank() {
 		return rank;
 	}
 	
 	public ArrayList<Card> getCards() {
-		return cards;
+		ArrayList<Card> passArray = new ArrayList<Card>();
+		for (Card card : cards)
+			passArray.add(card);
+		return passArray;
 	}
 	
 	public void addCard(Card card) {
@@ -38,6 +52,14 @@ public class Hand {
 			cards.add(card);
 			if (cards.size() == 5)
 				detRank();
+	}
+	
+	public String toString() {
+		return RANKING_KEY[rank];
+	}
+	
+	public void clear() {
+		cards.clear();
 	}
 	
 	public int compareHand(Hand hand) {
@@ -240,7 +262,7 @@ public class Hand {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		if (((hand1.get(0).getRank() == 12) && (hand1.get(4).getRank() == 0)) || ((hand2.get(0).getRank() == 12) && (hand2.get(4).getRank() == 0))) { //Ace special case
 			if ((hand2.get(0).getRank() != 12) && (hand2.get(4).getRank() != 0))
 				return OTHER_HAND_GREATER;
@@ -270,7 +292,7 @@ public class Hand {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static int disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private int disputeNonConsec(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		for (int i = 0; i < hand1.size(); i++) {
 			if (hand1.get(i).getRank() > hand2.get(i).getRank())
 				return THIS_HAND_GREATER;
@@ -294,7 +316,7 @@ public class Hand {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static int disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private int disputeOneRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		int hand1SetRank = -1, hand2SetRank = -1;
 		ArrayList<Card> hand1Kicker = new ArrayList<Card>(), hand2Kicker = new ArrayList<Card>();
 		
@@ -344,7 +366,7 @@ public class Hand {
 	 * @param hand2 the second hand for the comparison
 	 * @return a byte corresponding to the evaluated relation
 	 */
-	private static int disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
+	private int disputeTwoRankSet(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		int hand1SetRankA = -1, hand1SetRankB = -1, hand2SetRankA = -1, hand2SetRankB = -1; //The higher value set in the hands will be set A, the other set B
 		ArrayList<Card> hand1Kicker = new ArrayList<Card>(), hand2Kicker = new ArrayList<Card>();
 		
