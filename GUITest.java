@@ -13,7 +13,7 @@ public class GUITest {
 			if (n ==0)
 				players.add(new Human("You"));
 			else
-				players.add(new Human("COM " + n));
+				players.add(new Human("COM" + n));
 		}
 		
 		for (int i = 0; i < 2; i++) {
