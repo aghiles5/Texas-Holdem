@@ -133,7 +133,7 @@ public class Table {
 		double rightPolarOriginX = tableOriginX + (TABLE_WIDTH / 2.0);
 		double rightStartRad = Math.PI / 2.0;
 		double outsetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + (PLAYER_OUTSET / 2) + (SEAT_HEIGHT / 2) + TABLE_RIM;
-		double insetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
+		double insetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET + (PLACE_HEIGHT / 2.5);
 		
 		//=====================================================================
 		//Parent Nodes
