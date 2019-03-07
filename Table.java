@@ -222,7 +222,7 @@ public class Table {
 						cardBackPane.getChildren().addAll(card1Back, card2Back);
 					}
 			
-			cardPane.getChildren().addAll(cardFrontPane);
+			cardPane.getChildren().addAll(cardFrontPane, cardBackPane);
 	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
@@ -343,7 +343,7 @@ public class Table {
 						
 					communityCover.getChildren().addAll(flopCover, streetsCover);
 					
-				commFull.getChildren().addAll(community);
+				commFull.getChildren().addAll(community, communityCover);
 				
 				VBox dealerMoney = new VBox();
 				dealerMoney.setAlignment(Pos.CENTER);
