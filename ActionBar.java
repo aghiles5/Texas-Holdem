@@ -4,7 +4,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -13,8 +12,8 @@ import javafx.scene.layout.VBox;
 public class ActionBar {
 	BorderPane barPane;
 	
-	public ActionBar() {
-		barPane = setActionBar(1920, 1080); 
+	public ActionBar(double winWidth, double winHeight) {
+		barPane = setActionBar(winWidth, winHeight); 
 	}
 	
 	public BorderPane getBarPane() {
@@ -34,7 +33,8 @@ public class ActionBar {
 		StackPane actions = new StackPane();
 		
 		//Main buttons
-		HBox buttons = new HBox();
+		HBox controls = new HBox();
+		controls.setId("controls");
 		
 			Button fold = new Button("Fold");
 			fold.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
@@ -47,13 +47,15 @@ public class ActionBar {
 			Button call = new Button("Call");
 			call.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			call.getStyleClass().add("button-large");
+			call.setId("call");
 		
-		buttons.getChildren().addAll(fold, raise, call);
+		controls.getChildren().addAll(fold, raise, call);
 		
 		//Input for raise
 		HBox raiseInput = new HBox();
 		raiseInput.setAlignment(Pos.CENTER);
 		raiseInput.setSpacing(10);
+		raiseInput.setId("raiseInput");
 		
 			Label raiseFieldLabel = new Label("Enter your wager:");
 			raiseFieldLabel.getStyleClass().add("bar-label");
@@ -79,7 +81,7 @@ public class ActionBar {
 		raiseInput.getChildren().addAll(raiseFieldLabel, raiseSlider, raiseFieldButtons);
 		raiseInput.setVisible(false);
 		
-		actions.getChildren().addAll(buttons, raiseInput);
+		actions.getChildren().addAll(controls, raiseInput);
 		
 		//=====================================================================
 		//Settings Buttons
@@ -88,8 +90,10 @@ public class ActionBar {
 		settingButtons.setAlignment(Pos.CENTER);
 		
 		Button escapeClause = new Button("QUIT");
+		
+		Button disableTest = new Button("Test Control Disable");
 
-		settingButtons.getChildren().addAll(escapeClause);
+		settingButtons.getChildren().addAll(escapeClause, disableTest);
 		
 		//=====================================================================
 		//Event Handlers
@@ -114,6 +118,20 @@ public class ActionBar {
 			@Override
 			public void handle(ActionEvent event) {
 				System.exit(0);
+			}
+		});
+		
+		disableTest.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (controls.isDisable()) {
+					controls.setDisable(false);
+				}
+				else {
+					controls.setDisable(true);
+					raiseInput.setVisible(false);
+					raise.setText("Raise");
+				}
 			}
 		});
 

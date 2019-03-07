@@ -29,7 +29,6 @@ public class Table {
 	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.5;
 	private final double TABLE_HEIGHT_RATIO = 1.25;
 	private final double TABLE_OUTER_RIM_RATIO = 1.0 / 36.0;
-	private final double TABLE_INNER_TIM_RATIO = 1.0 / 12.0;
 	private final double TABLE_OUTSET_RATIO = 1.0 / 10.0;
 	private final double TABLE_INSET_RATIO = 1.0 / 8.0;
 	
@@ -363,7 +362,7 @@ public class Table {
 			
 			Label roundNotif = new Label("Blind Round");
 			roundNotif.setAlignment(Pos.CENTER);
-			roundNotif.setStyle("-fx-text-fill: goldenrod;" + "-fx-font-size: 20;");
+			roundNotif.setStyle("-fx-text-fill: goldenrod;" + "-fx-font-size: 36;");
 			roundNotif.getStyleClass().add("popup");
 			roundNotif.setMinSize(360, 180);
 			roundNotif.setId("roundNotif");
