@@ -28,12 +28,13 @@ public class Table {
 	
 	private final double TABLE_TO_SCREEN_RATIO = 8.0 / 3.5;
 	private final double TABLE_HEIGHT_RATIO = 1.25;
-	private final double TABLE_RIM_RATIO = 1.0 / 36.0;
+	private final double TABLE_OUTER_RIM_RATIO = 1.0 / 36.0;
+	private final double TABLE_INNER_TIM_RATIO = 1.0 / 12.0;
 	private final double TABLE_OUTSET_RATIO = 1.0 / 10.0;
 	private final double TABLE_INSET_RATIO = 1.0 / 8.0;
 	
 	private final double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
-	private final double TABLE_RIM = TABLE_WIDTH * TABLE_RIM_RATIO;
+	private final double TABLE_RIM = TABLE_WIDTH * TABLE_OUTER_RIM_RATIO;
 	
 	private final double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OUTSET_RATIO; //The distance of player information from the table
 	private final double PLAYER_INSET = TABLE_WIDTH * TABLE_INSET_RATIO; //The distance of player bets and cards? inside the table
@@ -201,8 +202,8 @@ public class Table {
 				cardBackPane.setAlignment(Pos.CENTER);
 				cardBackPane.setSpacing(10);
 				
-					Image card1 = new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png", 40, 56, false, false);
-					Image card2 = new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png", 40, 56, false, false);
+					Image card1 = new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png");
+					Image card2 = new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png");
 					
 					ImageView card1Front = new ImageView(card1);
 					ImageView card2Front = new ImageView(card2);
@@ -213,7 +214,7 @@ public class Table {
 				cardFrontPane.getChildren().addAll(card1Front, card2Front);
 					
 					if (player instanceof Human) {
-						Image cardBack = new Image("/Images/Back.png", 40, 56, false, false);
+						Image cardBack = new Image("/Images/Back.png");
 						ImageView card1Back = new ImageView(cardBack);
 						ImageView card2Back = new ImageView(cardBack);
 						card1Back.setId(player.getName() + "Card1Back");
@@ -222,7 +223,7 @@ public class Table {
 						cardBackPane.getChildren().addAll(card1Back, card2Back);
 					}
 			
-			cardPane.getChildren().addAll(cardFrontPane, cardBackPane);
+			cardPane.getChildren().addAll(cardFrontPane);
 	
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
@@ -273,8 +274,10 @@ public class Table {
 			currentPlayer++;
 		}
 
-		if (topSeats.getChildren().size() == 0) //A dummy seat is added to the top seats to make sure the bottom is offset
+		if (topSeats.getChildren().size() == 0) {//A dummy seat is added to the top seats to make sure the bottom is offset
 			topSeats.getChildren().add(new Label("\n\n\n"));
+			topPlaces.getChildren().add(new Label("\n\n\n\n"));
+		}
 		
 		StackPane playerInfo = new StackPane();
 		playerInfo.getChildren().addAll(sWaySeats, lobeSeats, sWayPlaces, lobePlaces);
@@ -341,7 +344,7 @@ public class Table {
 						
 					communityCover.getChildren().addAll(flopCover, streetsCover);
 					
-				commFull.getChildren().addAll(community, communityCover);
+				commFull.getChildren().addAll(community);
 				
 				VBox dealerMoney = new VBox();
 				dealerMoney.setAlignment(Pos.CENTER);
