@@ -9,6 +9,7 @@ import java.util.ArrayList;
  *
  * @author Adam Hiles
  * @version 02/22/19
+ * @deprecated
  */
 public class ShowdownTest {
 
