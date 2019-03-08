@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.shape.Ellipse;
 
 /**
  * 
@@ -53,6 +54,15 @@ public class GUI extends Application {
 				playArea.setBottom(actionBar.getBarPane());
 				playArea.setCenter(table.getTablePane());
 				scene.setRoot(playArea);
+				
+				((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE);
+				((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
+				((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setFill(Color.YELLOW);
+				((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setVisible(true);
+				if (players.size() != 2) {
+					((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setFill(Color.WHITE);
+					((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
+				}
 			}
 		});
 

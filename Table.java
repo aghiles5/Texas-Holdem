@@ -42,7 +42,7 @@ public class Table {
 	private final double SEAT_HEIGHT = 60.0;
 	
 	private final double PLACE_WIDTH = 200.0;
-	private final double PLACE_HEIGHT = 80.0;
+	private final double PLACE_HEIGHT = 100.0;
 	
 	private StackPane tablePane = new StackPane();
 	
@@ -160,7 +160,7 @@ public class Table {
 		
 		VBox sWayPlaces = new VBox();
 		sWayPlaces.setAlignment(Pos.CENTER);
-		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (2 * PLAYER_INSET));
+		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (2.5 * PLAYER_INSET));
 		sWayPlaces.getChildren().addAll(topPlaces, bottomPlaces);
 
 		Pane lobePlaces = new Pane();
@@ -224,12 +224,16 @@ public class Table {
 			
 			cardPane.getChildren().addAll(cardFrontPane, cardBackPane);
 	
+			Ellipse chip = new Ellipse(12, 12);
+			chip.setId(player.getName() + "Chip");
+			chip.setVisible(false);
+			
 			VBox place = new VBox();
 			place.setAlignment(Pos.CENTER);
 			place.setSpacing(5);
 			place.setMinWidth(PLACE_WIDTH);
 			place.setMinHeight(PLACE_HEIGHT);
-			place.getChildren().addAll(bet, cardPane);
+			place.getChildren().addAll(bet, cardPane, chip);
 			
 			if (distanceFromUser < bottomEnd) {
 				bottomSeats.getChildren().add(seat);
