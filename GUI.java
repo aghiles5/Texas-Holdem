@@ -61,28 +61,30 @@ public class GUI extends Application {
 	}
 	
 	/*
-	private void blind(Scene scene, Game game) {
-		boolean roundRunning = true, playerDeciding;
-		
-		Label roundNotif = ((Label) scene.lookup("#roundNotif"));
-		roundNotif.setText("Blind Round");
-		roundNotif.setVisible(true);
-		TimeUnit.SECONDS.sleep(3);
-		roundNotif.setVisible(false);
-		
-		while (roundRunning) {
-			Player player = game.getCurrentPlayer();
-			if (player instanceof Human) {
-				player = userTurn(player, scene, game);
-				game.incrementPlayer();
+	private void runGame(Scene scene, Game game) {
+		while (game.isGameRunning()) {
+			while (game.isPlayRoundRunning()) {
+				Label roundNotif = ((Label) scene.lookup("#roundNotif"));
+				roundNotif.setText(game.getRoundString());
+				roundNotif.setVisible(true);
+				TimeUnit.SECONDS.sleep(3);
+				roundNotif.setVisible(false);
+				
+				while (game.isBetRoundRunning()) {
+					Player player = game.getCurrentPlayer();
+					if (player instanceof Human) {
+						player = userTurn(player, scene, game);
+						game.incrementPlayer();
+					}
+					else
+						player = game.processTurn();
+					
+					updatePlayerInfo(player, scene);
+					}
+				game.updatePot();
 			}
-			else
-				player = game.processTurn();
-			
-			updatePlayerInfo(player, scene);
-			}
-		roundRunning = game.isRoundRunning();
-		game.updatePot();
+			//Showdown code/cleanup goes here
+		}
 	}
 	
 	private Player userTurn(Player user, Scene scene, Game game) {
@@ -98,8 +100,8 @@ public class GUI extends Application {
 		
 		controls.setDisable(false);
 		
-		boolean playerDeciding = true;
-		while (playerDeciding) {}
+		boolean userDeciding = game.isUserDeciding();
+		while (userDeciding) {userDeciding = game.isUserDeciding();}
 		
 		controls.setDisable(true);
 		raiseInput.setVisible(false);
@@ -109,16 +111,9 @@ public class GUI extends Application {
 	}
 	
 	private void updatePlayerInfo(Player player, Scene scene) {
-		if (player.getAction() == "BUSTED OUT") {
-			((Label) scene.lookup("#" + player.getName() + "Stack")).setText("");
-			((Label) scene.lookup("#" + player.getName() + "Action")).setText("BUSTED OUT");
-			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("");
-		}
-		else {
-			((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
-			((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
-			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
-		}
+		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
+		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
+		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
 	}
 	*/
 	
