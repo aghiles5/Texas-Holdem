@@ -197,7 +197,7 @@ public abstract class Player {
 			  	PotControl.POT += newBet; //check logic
 			  }
 		  }
-	  }
+	  
 	  
 	  /**
 	   * pre: A player decision has been made.
