@@ -157,7 +157,8 @@ public abstract class Player {
 	  
 	  /**
 	   * pre: A player decision has been made.
-	   * post: 
+	   * post: The player's hand has been cleared as they have
+	   * given up on this round.
 	   * @param choice
 	   */
 	  public void fold(String choice) {
@@ -169,37 +170,58 @@ public abstract class Player {
 		  }
 	  }
 	  
+	  /**
+	   * pre: A player decision and their increased bet have been entered.
+	   * post: The player has added money to the pot with their total
+	   * amount of money decreasing appropriately.
+	   * @param choice
+	   * @param newBet
+	   */
 	  public void BetRaise(String choice, int newBet) {
 		  if (choice.equalsIgnoreCase("B")) {
 			  //checks to see if the bet is less than the
 			  //money in the player's balance
 			  if (newBet <= Money) {
-				  Money = Money - newBet;
-				  totBet += newBet;
-				  PotControl.POT += newBet;
+				  Money = Money - newBet; //decreases the player's money value.
+				  totBet += newBet; //adds the bet to the player's total bet.
+				  PotControl.POT += newBet; //check logic
 				  System.out.println("Player bet $" + newBet + ".");
 			  }
 		  } else if (choice.equalsIgnoreCase("R")) {
 			  //Raise action
-			  if (newBet >= 2*totBet && newBet <= Money) {
+			  //must be 2x the amount to call
+			  int toCall = highBet - totBet; //highBet must be tracked
+			  if (newBet >= 2*toCall && newBet <= Money)//This is incorrect!!! {
 				Money = Money - newBet;
 			  	System.out.println("Player raised $" + newBet + ".");
-			  	PotControl.POT += newBet;
+			  	PotControl.POT += newBet; //check logic
 			  }
 		  }
 	  }
 	  
-	  public void call(String choice, int currentBet) {
+	  /**
+	   * pre: A player decision has been made.
+	   * post: The player has called.
+	   * Calculates the amount to call and adds that amount to the pot.
+	   * @param choice
+	   * @param currentBet
+	   */
+	  public void call(String choice) {
 		  int toCall = highBet - totBet; //highBet must be tracked
 		  //need to determine how to compare each player's current Bet to generate a toCall
 		  if (choice.equalsIgnoreCase("L")) {
-			  int bet = toCall - currentBet;
-			  Money -= bet;
-			  PotControl.POT += bet;
+			  Money -= toCall;
+			  totBet += toCall;
+			  PotControl.POT += toCall;
 			  System.out.println("Player called.");
 		  }
 	  }
-
+	  
+	  /**
+	   * pre: A player decision has been made.
+	   * post: The player has $0 remaining and has gone "All-In."
+	   * @param choice
+	   */
 	  public void allIn(String choice) {
 		  if (choice.equalsIgnoreCase("A")) {
 			  totBet += Money;
@@ -208,7 +230,15 @@ public abstract class Player {
 			  System.out.println("Player went all-in!");
 		  }
 	  }
-
+	  
+	  /**
+	   * pre: A player decision has been entered.
+	   * post: A valid player decision has been made.
+	   * Checks the current player decision to see if it is invalid.
+	   * If so, it re-prompts the user for a valid response.
+	   * @param choice
+	   * @return decision
+	   */
 	  public String invalidChoice(String choice){
 		String decision = choice;
 		while(!decision.equalsIgnoreCase("A") && !decision.equalsIgnoreCase("L") && !decision.equalsIgnoreCase("C") && !decision.equalsIgnoreCase("F") && !decision.equalsIgnoreCase("B") && !decision.equalsIgnoreCase("R")){
@@ -221,7 +251,7 @@ public abstract class Player {
 	}
 	  
 	  public void getDecision(String input) {
-		 //HUH??? 
+		  
 	  }
 	
 	/**
