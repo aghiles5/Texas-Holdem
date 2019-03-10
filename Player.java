@@ -248,11 +248,9 @@ public abstract class Player {
 		}
 
 		return decision;
-	}
-	  
-	  public void getDecision(String input) {
-		  
 	  }
+	  
+	  public abstract void getDecision(String input);
 	
 	/**
 	 * All six unique combinations of five card hands from a six card set are
