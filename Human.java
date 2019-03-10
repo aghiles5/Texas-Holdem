@@ -35,6 +35,7 @@ public class Human extends Player {
 	 */
   	public void getDecision(String decision, int newBet) {
   			//Check to see if implemented properly
+  			//overloads the above method to handle BetRaise
   			super.BetRaise(decision, newBet);
   			
   	}
