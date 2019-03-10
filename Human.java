@@ -1,17 +1,42 @@
-
+/**
+ * Retrieves the human player's decision 
+ * and calls the appropriate action method.
+ * @author Kyle Wen
+ */
 public class Human extends Player {
+	/**
+	 * Constructor that gets the name of the player.
+	 * @param n
+	 */
 	public Human(String n) {
 		super.name = n;
 	}
 
-  	// Only implementing check and fold for now since there is no money available
+	/**
+	 * pre: The player has entered a decision.
+	 * post: The appropriate method has been called.
+	 * Gets the player's decision and calls the corresponding method.
+	 * @param decision
+	 */
   	public void getDecision(String decision) {
 		decision = super.invalidChoice(decision);
-		//super.call(decision, currentBet);
-		//super.BetRaise(decision, newBet);
-		//super.allIn(decision, currentBet);
+		//check to see if allIn is implemented properly
+		super.allIn(decision);
 		super.check(decision);
 		super.fold(decision);
 	}
+  	
+  	/**
+	 * pre: The player has entered a decision that involves a specified bet.
+	 * post: The appropriate method has been called.
+	 * Gets the player's decision and calls the corresponding method.
+	 * @param decision, newBet
+	 */
+  	public void getDecision(String decision, int newBet) {
+  			//Check to see if implemented properly
+  			super.call(decision, newBet);
+  			super.BetRaise(decision, newBet);
+  			
+  	}
 
 }
