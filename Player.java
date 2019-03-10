@@ -2,21 +2,38 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 // Common methods between AI and Player class will be in this super class
-
+/**
+ * An abstract class that;
+ * Manages each players' amount of money, 
+ * their two card hand or "hole",their total bet per round, and who wins each round.
+ * The AI will also utilize these methods.
+ * @author Kyle Wen, Adam Hiles
+ *
+ */
 public abstract class Player {
 	  private int Money; //Tracks money
-	  protected ArrayList<Card> hole = new ArrayList<Card>(); //player's 2 card hand
-	  //switch to hand object
-	  protected Hand hand; //player's 5 card hand
-	  protected String name = "";
-	  private int totBet = 0;
+	  protected ArrayList<Card> hole = new ArrayList<Card>(); //the player's 2 card hand
+	  protected Hand hand; //player's 5 card hand as an object
+	  protected String name = ""; //the name of the human player
+	  private int totBet = 0; //the player's total bet for the round
 	  //method in main that sets the blinds
-	  //make the current player bet into a list
+	  //make the current player bet into a list?
 	  
+	  /**
+	   * pre: A name for the player has been set.
+	   * post: The player's name has been set.
+	   * @param newName
+	   */
 	  public void setName(String newName){
 		  name = newName;
 	  }
-
+	  
+	  /**
+	   * pre:
+	   * post: The player's name has been returned.
+	   * Gets and returns the name of the player.
+	   * @return name
+	   */
 	  public String getName() {
 		  return name;
 	  }
@@ -68,39 +85,81 @@ public abstract class Player {
 		hand = highestHand;
 	}
 	  
-	  //gets the player's hand
+	  /**
+	   * pre: none
+	   * post: The player's hand has been returned.
+	   * @return new Hand object
+	   */
 	  public Hand getHand() {
 	    return new Hand(hand);
 	  }
 	  
+	  /**
+	   * pre: A card has been chosen.
+	   * post: A card has been added to the player's hole.
+	   * @param c
+	   */
 	  public void setHole(Card c) {
 		  //adds the cards to the hand list
 		  hole.add(c);
 	  }
 	  
+	  /**
+	   * pre: none
+	   * post: Returns the player's hole.
+	   * The player's hole has been returned.
+	   * @return hole
+	   */
 	  public ArrayList<Card> getHole() {
 		  return hole;
 	  }
-
+	  
+	  /**
+	   * pre: none
+	   * post: The player's hole has been reset
+	   * The hole ArrayList has been cleared to reset
+	   * for the next round.
+	   */
 	  public void emptyHole(){
 		  hole.clear();
 	  }
-
+	  
+	  /**
+	   * pre: none
+	   * post: The player's hand has been reset
+	   * The hole ArrayList has been cleared to reset
+	   * for the next round.
+	   */
 	  public void emptyHand(){
 		  hand.clear();
 	  }
-
+	  
+	  /**
+	   * pre: none
+	   * post: The player's total bet has been returned.
+	   * @return totBet
+	   */
 	  public int getBet() {
 		  return totBet;
 	  }
 	  
+	  /**
+	   * pre: A player decision has been made.
+	   * post: The player has "checked" and chosen to do nothing.
+	   * @param choice
+	   */
 	  public void check(String choice) {
-		  //If the input is c, nothing happens
+		  //If the input is c, play moves to the next player
 		  if (choice.equalsIgnoreCase("C")) {
 			  System.out.println("Player Checked.");
 		  }
 	  }
 	  
+	  /**
+	   * pre: A player decision has been made.
+	   * post: 
+	   * @param choice
+	   */
 	  public void fold(String choice) {
 		  //if the input is f, the list is emptied
 		  if (choice.equalsIgnoreCase("F")) {
