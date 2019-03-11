@@ -389,15 +389,7 @@ public class Table {
 				
 			centreProps.getChildren().addAll(commFull, dealerMoney);
 			
-			Label roundNotif = new Label("Blind Round");
-			roundNotif.setAlignment(Pos.CENTER);
-			roundNotif.setStyle("-fx-text-fill: goldenrod;" + "-fx-font-size: 36;");
-			roundNotif.getStyleClass().add("popup");
-			roundNotif.setMinSize(360, 180);
-			roundNotif.setId("roundNotif");
-			roundNotif.setVisible(false);
-			
-		tableCentre.getChildren().addAll(centreProps, roundNotif);
+		tableCentre.getChildren().addAll(centreProps);
 		
 		return tableCentre;
 	}

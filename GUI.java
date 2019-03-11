@@ -48,17 +48,17 @@ public class GUI extends Application {
 		scene.getStylesheets().add("tableStyle.css");
 		scene.setFill(Color.BLACK);
 
-		GUITest.testDeck.shuffle();
-		ArrayList<Card> comm = GUITest.generateComm();
-		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-		ArrayList<Player> players = GUITest.generatePlayers(playerNum);
-		
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
 			@Override
 			public void handle(ActionEvent event) {
+				GUITest.testDeck.shuffle();
+				ArrayList<Card> comm = GUITest.generateComm();
+				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
+				ArrayList<Player> players = GUITest.generatePlayers(playerNum);
+				
 				BorderPane playArea = new BorderPane();
 				ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT);
 				Table table = new Table(players, comm);
@@ -82,12 +82,19 @@ public class GUI extends Application {
 					}
 				});
 				
+				((Button) scene.lookup("#notifCont")).setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						((HBox) scene.lookup("#notif")).setVisible(false);
+					}
+				});
+				
 				/*
 				((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
 						game.raise(((Slider) scene.lookup("#raiseSlider")).getValue());
-						game.setUserDeciding(false);
+						finishUserTurn(scene, game);
 					}
 				});
 				
@@ -95,7 +102,7 @@ public class GUI extends Application {
 					@Override
 					public void handle(ActionEvent event) {
 						game.call();
-						game.setUserDeciding(false);
+						finishUserTurn(scene, game);
 					}
 				});
 				*/
@@ -105,33 +112,40 @@ public class GUI extends Application {
 	
 	/*
 	private void runGame(Scene scene, Game game) {
-		while (game.isGameRunning()) {
-			while (game.isPlayRoundRunning()) {
-				Label roundNotif = ((Label) scene.lookup("#roundNotif"));
-				roundNotif.setText(game.getRoundString());
-				roundNotif.setVisible(true);
-				TimeUnit.SECONDS.sleep(3);
-				roundNotif.setVisible(false);
-				
-				while (game.isBetRoundRunning()) {
-					Player player = game.getCurrentPlayer();
-					if (player instanceof Human) {
-						player = userTurn(player, scene, game);
-						game.incrementPlayer();
-					}
-					else {
-						player = game.processTurn();
-						TimeUnit.SECONDS.sleep(3);
-					}
-					updatePlayerInfo(player, scene);
-					}
-				game.updatePot();
-			}
-			revealAllCards(game.getPlayers(), scene);
+		runPlayRound(scene, game);
+	}
+	
+	private void runPlayRound(Scene scene, Game game) {
+		runBetRound(scene, game);
+		revealAllCards(game.getPlayers(), scene);
+	}
+	
+	private void notifyRound(Scene scene, Game game) {
+		HBox notif = (HBox) scene.lookup("#notif");
+		Label notifLabel = (Label) scene.lookup("#notifLabel");
+		notifLabel.setText(game.getRoundString());
+		notif.setVisible(true);
+	}
+	
+	private void runBetRound(Scene scene, Game game) {
+		runTurn(scene, game);
+		notifyRound(scene, game);
+	}
+	
+	private void runTurn(Scene scene, Game game) {
+		Player player = game.getCurrentPlayer();
+		if (player instanceof Human) {
+			setupUserTurn(player, scene, game);
+		}
+		else {
+			player = game.processTurn();
+			TimeUnit.SECONDS.sleep(3);
+			updatePlayerInfo(player, scene);
+			runTurn(scene, game);
 		}
 	}
 	
-	private Player userTurn(Player user, Scene scene, Game game) {
+	private void setupUserTurn(Player user, Scene scene, Game game) {
 		Button call = (Button) scene.lookup("#call");
 		Button raise = (Button) scene.lookup("#raise");
 		HBox controls = (HBox) scene.lookup("#controls");
@@ -146,15 +160,19 @@ public class GUI extends Application {
 		raiseSlider.setMax(user.getStack());
 		
 		controls.setDisable(false);
-		
-		boolean userDeciding = game.isUserDeciding();
-		while (userDeciding) {userDeciding = game.isUserDeciding();}
+	}
+	
+	private void finishUserTurn(Scene scene, Game game) {
+		HBox controls = (HBox) scene.lookup("#controls");
+		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
+		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
+		Button raise = (Button) scene.lookup("#raise");
 		
 		controls.setDisable(true);
 		raiseInput.setVisible(false);
 		raise.setText("Raise");
-		
-		return game.getCurrentPlayer();
+		game.incrementPlayer();
+		runTurn(scene, game);
 	}
 	
 	private void updatePlayerInfo(Player player, Scene scene) {
@@ -167,8 +185,13 @@ public class GUI extends Application {
 	private void revealAllCards(ArrayList<Player> players, Scene scene) {
 		for (Player player : players) {
 			if (player instanceof Human) {
-				revealCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"));
-				revealCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"), (ImageView) scene.lookup("#" + player.getName() + "Card2"));
+				ScaleTransition showFrontA = revealCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"));
+				showFrontA.setOnFinished(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						revealCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"), (ImageView) scene.lookup("#" + player.getName() + "Card2"));
+					}
+				});	
 			}
 		}
 	}
@@ -180,7 +203,7 @@ public class GUI extends Application {
 	 * @param cardBack the ImageView of the card's back
 	 * @param cardFront the ImageView of the card's face
 	 */
-	private void revealCard(ImageView cardBack, ImageView cardFront) {
+	private ScaleTransition revealCard(ImageView cardBack, ImageView cardFront) {
 		ScaleTransition hideFront = new ScaleTransition(); //The face is initially hidden from view
 		hideFront.setByX(-1);
 		hideFront.setDuration(Duration.seconds(0.001));
@@ -211,6 +234,8 @@ public class GUI extends Application {
 		});
 		
 		hideFront.play();
+		
+		return showFront;
 	}
 	
 	/**

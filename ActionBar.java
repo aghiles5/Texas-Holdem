@@ -112,7 +112,23 @@ public class ActionBar {
 		raiseInput.getChildren().addAll(raiseFieldLabel, raiseSlider, raiseFieldButtons);
 		raiseInput.setVisible(false);
 		
-		actions.getChildren().addAll(controls, raiseInput);
+		//Notification window
+		HBox notif = new HBox();
+		notif.getStyleClass().add("popup");
+		notif.setAlignment(Pos.CENTER);
+		notif.setSpacing(50);
+		notif.setId("notif");
+		Label notifLabel = new Label("Blind Round");
+		notifLabel.getStyleClass().add("bar-label");
+		notifLabel.setStyle("-fx-font-size: 32;");
+		notifLabel.setId("notifLabel");
+		Button notifCont = new Button("Continue");
+		notifCont.getStyleClass().add("button-large");
+		notifCont.setId("notifCont");
+		notif.getChildren().addAll(notifLabel, notifCont);
+		
+		
+		actions.getChildren().addAll(controls, raiseInput, notif);
 		
 		//=====================================================================
 		//Settings Buttons
@@ -121,10 +137,8 @@ public class ActionBar {
 		settingButtons.setAlignment(Pos.CENTER);
 		
 		Button escapeClause = new Button("QUIT");
-		
-		Button disableTest = new Button("Test Control Disable");
 
-		settingButtons.getChildren().addAll(escapeClause, disableTest);
+		settingButtons.getChildren().addAll(escapeClause);
 		
 		//=====================================================================
 		//Event Handlers
@@ -152,20 +166,6 @@ public class ActionBar {
 			}
 		});
 		
-		disableTest.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (controls.isDisable()) {
-					controls.setDisable(false);
-				}
-				else {
-					controls.setDisable(true);
-					raiseInput.setVisible(false);
-					raise.setText("Raise");
-				}
-			}
-		});
-
 		//=====================================================================
 		//Setting to BorderPane to return
 		
