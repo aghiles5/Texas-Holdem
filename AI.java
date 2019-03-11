@@ -23,7 +23,7 @@ public class AI extends Player{
 
     /**
      * This loop takes the argument of the contructor and chooses random names for the CPU players
-     * and removes the name if it is chosen for the CPU so no duplicate CPU players 
+     * and removes the name if it is chosen for the CPU so there are no duplicate CPU players 
      */
     for (int i = 0; i < numOfAI; i++) {
       int rName = name.nextInt(Array.getLength(cpuName));
