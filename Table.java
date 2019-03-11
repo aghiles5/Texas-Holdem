@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
 /**
+ * All aspects relating to the poker table image in the GUI are created here.
  * 
  * @author Adam Hiles
  * @version 03/06/19
@@ -46,10 +47,23 @@ public class Table {
 	
 	private StackPane tablePane = new StackPane();
 	
+	/**
+	 * Construction creates the three elements of the table and combines them
+	 * into the root StackPane.
+	 * 
+	 * @param players the Game's player list
+	 * @param comm the pre-drawn community card list
+	 */
 	public Table(ArrayList<Player> players, ArrayList<Card> comm) {
 		tablePane.getChildren().addAll(setTable(), setPlayers(players), setTableCentre(comm));
 	}
 	
+	/**
+	 * The table's root StackPane is returned to the caller to be put into the
+	 * scene tree.
+	 * 
+	 * @return the root table node
+	 */
 	public StackPane getTablePane() {
 		return tablePane;
 	}
@@ -63,6 +77,8 @@ public class Table {
 	 * @return the nodes making up the table
 	 */
 	private StackPane setTable() {
+		
+		//The table's black rubber rim geometry
 		Rectangle tableRectRim = new Rectangle(TABLE_WIDTH, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) + (TABLE_RIM * 2));
 		tableRectRim.setFill(Color.BLACK);
 		
@@ -72,6 +88,12 @@ public class Table {
 		Ellipse tableRightRim = new Ellipse(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM);
 		tableRightRim.setFill(Color.BLACK);
 		
+		HBox lobesRims = new HBox();
+		lobesRims.setAlignment(Pos.CENTER);
+		lobesRims.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (TABLE_RIM * 2));
+		lobesRims.getChildren().addAll(tableLeftRim, tableRightRim);
+		
+		//The table's green felt geometry
 		Rectangle tableRect = new Rectangle(TABLE_WIDTH, TABLE_WIDTH / TABLE_HEIGHT_RATIO);
 		tableRect.setFill(Color.FORESTGREEN);
 		
@@ -81,16 +103,12 @@ public class Table {
 		Ellipse tableRight = new Ellipse((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2);
 		tableRight.setFill(Color.FORESTGREEN);
 		
-		HBox lobesRims = new HBox();
-		lobesRims.setAlignment(Pos.CENTER);
-		lobesRims.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (TABLE_RIM * 2));
-		lobesRims.getChildren().addAll(tableLeftRim, tableRightRim);
-		
 		HBox lobes = new HBox();
 		lobes.setAlignment(Pos.CENTER);
 		lobes.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO));
 		lobes.getChildren().addAll(tableLeft, tableRight);
 		
+		//The background for the table to be placed on
 		StackPane table = new StackPane();
 		table.setAlignment(Pos.CENTER);
 		table.setStyle("-fx-background-color: lightblue;");
@@ -190,6 +208,7 @@ public class Table {
 			Label bet = new Label("Current Bet: $0");
 			bet.setId(player.getName() + "Bet");
 			
+			//The pane containing the player's hole cards and their backs
 			StackPane cardPane = new StackPane();
 			cardPane.setAlignment(Pos.CENTER);
 			
@@ -212,7 +231,7 @@ public class Table {
 					
 				cardFrontPane.getChildren().addAll(card1Front, card2Front);
 					
-					if (player instanceof Human) {
+					if (player instanceof Human) { //If the player is a computer back's are imposed on top of their cards
 						Image cardBack = new Image("/Images/Back.png");
 						ImageView card1Back = new ImageView(cardBack);
 						ImageView card2Back = new ImageView(cardBack);
@@ -235,6 +254,7 @@ public class Table {
 			place.setMinHeight(PLACE_HEIGHT);
 			place.getChildren().addAll(bet, cardPane, chip);
 			
+			//Based on the distance from the origin player each player's seat and place is set in the appropriate position
 			if (distanceFromUser < bottomEnd) {
 				bottomSeats.getChildren().add(seat);
 				bottomPlaces.getChildren().add(place);
@@ -287,6 +307,11 @@ public class Table {
 		return playerInfo;
 	}
 	
+	/**
+	 * 
+	 * @param comm the Game's community cards
+	 * @return
+	 */
 	private StackPane setTableCentre(ArrayList<Card> comm) {
 		StackPane tableCentre = new StackPane();
 			HBox centreProps = new HBox();

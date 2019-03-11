@@ -9,17 +9,46 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * This class creates new action bars, containing all player controls such as
+ * fold, call, and raise actions and quitting the game. End of round of play
+ * and end game messages and controls are also displayed here.
+ * 
+ * @author Adam Hiles
+ * @version 03/10/19
+ */
 public class ActionBar {
 	BorderPane barPane;
 	
+	/**
+	 * On construction all the elements of the action bar are created.
+	 * 
+	 * @param winWidth the width of the window
+	 * @param winHeight the heigh of the window
+	 */
 	public ActionBar(double winWidth, double winHeight) {
 		barPane = setActionBar(winWidth, winHeight); 
 	}
 	
+	/**
+	 * The action bar's root node is returned to the caller to be added to
+	 * a scene tree.
+	 * 
+	 * @return the master action bar node
+	 */
 	public BorderPane getBarPane() {
 		return barPane;
 	}
 	
+	/**
+	 * Here, all buttons, panels, labels, and controls of the action bar are
+	 * generated, id'd if applicable, and returned to the constructor packaged
+	 * in a root node.
+	 * 
+	 * @param winWidth the width of the window
+	 * @param winHeight the heigh of the window
+	 * @return the root action bar node
+	 */
 	private BorderPane setActionBar(double winWidth, double winHeight) {
 		BorderPane actionBar = new BorderPane();
 		actionBar.setPrefSize(winWidth, winHeight / 10.0);

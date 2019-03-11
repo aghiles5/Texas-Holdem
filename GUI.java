@@ -19,6 +19,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.shape.Ellipse;
 
 /**
+ * This method is the entry point for a new, GUI-based game. The menu is 
+ * displayed, new Games are created, and the main game loop is run from here.
  * 
  * @author Adam Hiles
  * @version 03/03/18
@@ -27,6 +29,12 @@ public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
+	
+	/**
+	 * 
+	 * 
+	 * @param the stage of the GUI
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		primaryStage.setTitle("Texas Hold\'em");
@@ -40,7 +48,7 @@ public class GUI extends Application {
 		scene.getStylesheets().add("tableStyle.css");
 		scene.setFill(Color.BLACK);
 		
-		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
 			@Override
 			public void handle(ActionEvent event) {
 				GUITest.testDeck.shuffle();
@@ -127,30 +135,37 @@ public class GUI extends Application {
 	}
 	*/
 	
+	/**
+	 * The set of ImageViews passed into this method will be swapped by an
+	 * appropriate flipping animation.
+	 * 
+	 * @param cardBack the ImageView of the card's back
+	 * @param cardFront the ImageView of the card's face
+	 */
 	private void revealCard(ImageView cardBack, ImageView cardFront) {
-		ScaleTransition hideFront = new ScaleTransition();
+		ScaleTransition hideFront = new ScaleTransition(); //The face is initially hidden from view
 		hideFront.setByX(-1);
 		hideFront.setDuration(Duration.seconds(0.001));
 		hideFront.setNode(cardFront);
 		
-		ScaleTransition hideBack = new ScaleTransition();
+		ScaleTransition hideBack = new ScaleTransition(); //The back is scaled to a line to be invisible
 		hideBack.setByX(-1);
 		hideBack.setDuration(Duration.seconds(0.25));
 		hideBack.setNode(cardBack);
 		
-		ScaleTransition showFront = new ScaleTransition();
+		ScaleTransition showFront = new ScaleTransition(); //The face is returned from a line to full size
 		showFront.setByX(1);
 		showFront.setDuration(Duration.seconds(0.25));
 		showFront.setNode(cardFront);
 		
-		hideFront.setOnFinished(new EventHandler<ActionEvent>() {
+		hideFront.setOnFinished(new EventHandler<ActionEvent>() { //Once the face is hidden the back is flipped
 			@Override
 			public void handle(ActionEvent event) {
 				hideBack.play();
 			}
 		});
 		
-		hideBack.setOnFinished(new EventHandler<ActionEvent>() {
+		hideBack.setOnFinished(new EventHandler<ActionEvent>() { //Once the back is flipped the front is flipped
 			@Override
 			public void handle(ActionEvent event) {
 				showFront.play();
@@ -160,6 +175,12 @@ public class GUI extends Application {
 		hideFront.play();
 	}
 	
+	/**
+	 * On launch the extended Application handles the launch of the GUI,
+	 * eventually leading to the start method.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

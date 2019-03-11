@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 
 /**
+ * The Hand class adds extra functionality to a five Card ArrayList. Mainly,
+ * once a Hand is fully populated with Cards it will automatically calculate
+ * its rank and assign such to the rank variable. Hands can also be compared
+ * to one another, which will first compare the ranks for difference. If the
+ * ranks are equal than the two hands will go through the internal dispute
+ * methods to find the highest.
  * 
  * @author Adam Hiles
  * @version 03/05/18
@@ -28,18 +34,41 @@ public class Hand {
 	private static final int OTHER_HAND_GREATER = 2;
 	private static final int HANDS_EQUAL = 0;
 	
+	/**
+	 * The default constructor does nothing. Cards are added individually to a
+	 * new hand so that a limit can be reached and the automatic ranking can be
+	 * carried out at maximum capacity.
+	 */
 	public Hand() {}
 	
+	/**
+	 * If a Hand is passed as a parameter to a constructor its rank and Cards
+	 * will be transferred to the new hand.
+	 * 
+	 * @param toCopy the Hand to be copied to a new object
+	 */
 	public Hand(Hand toCopy) {
 		rank = toCopy.getRank();
 		for (Card card : toCopy.getCards())
 			addCard(card);
 	}
 	
+	/**
+	 * The rank of the Hand is returned to the caller.
+	 * 
+	 * @return the rank of the Hand
+	 */
 	public int getRank() {
 		return rank;
 	}
 	
+	
+	/**
+	 * The Hand's Cards are returned to the caller as an encapsulated
+	 * ArrayList.
+	 * 
+	 * @return an ArrayList of the Hand's Cards
+	 */
 	public ArrayList<Card> getCards() {
 		ArrayList<Card> passArray = new ArrayList<Card>();
 		for (Card card : cards)
@@ -47,6 +76,13 @@ public class Hand {
 		return passArray;
 	}
 	
+	/**
+	 * The given Card is added to the Hand's cards ArrayList if it is not
+	 * already full. If the added card fills the Hand then its rank is
+	 * determined through the appropriate method.
+	 * 
+	 * @param card the Card to be added to the Hand
+	 */
 	public void addCard(Card card) {
 		if (cards.size() < 5)
 			cards.add(card);
@@ -54,14 +90,33 @@ public class Hand {
 				detRank();
 	}
 	
+	/**
+	 * Through the ranking key constant the rank of the Hand is returned to the
+	 * caller as a string of its proper name.
+	 * 
+	 * @return the named rank of the hand
+	 */
 	public String toString() {
 		return RANKING_KEY[rank];
 	}
 	
+	/**
+	 * For new rounds of play the Hand's Card ArrayList is cleared so that it
+	 * may be repopulated.
+	 */
 	public void clear() {
 		cards.clear();
 	}
 	
+	/**
+	 * The relative ranking of this Hand is compared with another Hand by first
+	 * checking their rank attributes. If this does not produce a result the
+	 * passed hand is further passed to be evaluated by the more complicated
+	 * dispute methods.
+	 * 
+	 * @param hand the Hand to be compared to this object
+	 * @return a integer corresponding to the relation state
+	 */
 	public int compareHand(Hand hand) {
 		if (rank > hand.getRank())
 			return THIS_HAND_GREATER;
@@ -102,12 +157,9 @@ public class Hand {
 	}
 	
 	/**
-	 * For a five Card Arraylist hand this method will determine where it falls
-	 * on the Texas Holdem hand rankings, listed in the RANKING_KEY array from
-	 * lowest to highest. The correct rank number is returned to the caller.
-	 * 
-	 * @param hand the Card Arraylist hand to have its ranking determined
-	 * @return the integer ranking of the hand
+	 * For a Hand this method will determine where it falls on the Texas Holdem
+	 * hand rankings, listed in the RANKING_KEY array from lowest to highest. 
+	 * The correct rank number is assigned to the rank attribute.
 	 */
 	private void detRank() {
 		ArrayList<Card> oCards = orderCards(); //The Cards are ordered from highest to lowest rank
@@ -163,14 +215,12 @@ public class Hand {
 	}
 	
 	/**
-	 * This method checks if a five Card hand is flush, or the suits of all
+	 * This method checks if a Hand is flush, or the suits of all
 	 * five cards match. For each Card after the first, a counter is 
 	 * incremented when its suit matches the first Card's suit. If four matches
 	 * are registered then the hand is determined to be flush.
 	 * 
-	 * 
-	 * @param hand the five Card ArrayList to be evaluated
-	 * @return the appropriate boolean condition for the hand's flush state
+	 * @return the appropriate boolean condition for the Hand's flush state
 	 */
 	private boolean isFlush() {
 		boolean isFlush = false;
@@ -188,8 +238,8 @@ public class Hand {
 	}
 	
 	/**
-	 * This method checks if a five Card hand is straight, or all of its Card's
-	 * ranks are consecutive. Once a hand is ordered the number of decrement
+	 * This method checks if a Hand is straight, or all of its Card's
+	 * ranks are consecutive. Once a Hand is ordered the number of decrement
 	 * matches are counted, where the highest ranking Card's rank minus one
 	 * should equal the rank of the Card one index from it and so on. If four
 	 * of these matches are registered the hand is determined to be straight. 
@@ -199,26 +249,27 @@ public class Hand {
 	 * straight if these four begin with either a King or Five rank card.  
 	 * 
 	 * 
-	 * @param hand the five Card ArrayList to be evaluated
 	 * @return the appropriate boolean condition for the hand's straight state
 	 */
 	private boolean isStraight() {
 		boolean isStraight = false;
 		int decMatchCount = 0;
 		
-		if (cards.get(0).getRank() == 12) { //Ace special case
+		ArrayList<Card> oCards = orderCards();
+		
+		if (oCards.get(0).getRank() == 12) { //Ace special case
 			for (int i = 2; i < 5; i++) {
-				if (cards.get(1).getRank() - i + 1 == cards.get(i).getRank())
+				if (oCards.get(1).getRank() - i + 1 == oCards.get(i).getRank())
 					decMatchCount++;
 			}
-			if ((decMatchCount == 3) && ((cards.get(1).getRank() == 11) || (cards.get(1).getRank() == 3)))
+			if ((decMatchCount == 3) && ((oCards.get(1).getRank() == 11) || (oCards.get(1).getRank() == 3)))
 				isStraight = true;
 		}
 		
 		else { //General straight check
 			decMatchCount = 0;
 			for (int i = 1; i < 5; i++) {
-				if (cards.get(0).getRank() - i == cards.get(i).getRank())
+				if (oCards.get(0).getRank() - i == oCards.get(i).getRank())
 					decMatchCount++;
 			}
 			if (decMatchCount == 4)
@@ -232,10 +283,8 @@ public class Hand {
 	 * The first step in the dispute process is to direct the hands to the 
 	 * appropriate dispute method, achieved in the below if-else branches.
 	 * 
-	 * @param hand1 the first hand for the comparison
-	 * @param hand2 the second hand for the comparison
-	 * @param commonRank the common rank between the two hands
-	 * @return a byte corresponding to the evaluated relation
+	 * @param hand the other hand for the evaluation
+	 * @return a integer corresponding to the evaluated relation
 	 */
 	public int dispute(Hand hand) {
 		ArrayList<Card> thisHand = orderCards(); //Hands are ordered at this stage to mitigate repeated code
