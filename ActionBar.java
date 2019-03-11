@@ -68,6 +68,7 @@ public class ActionBar {
 			Button fold = new Button("Fold");
 			fold.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			fold.getStyleClass().add("button-large");
+			fold.setId("fold");
 
 			Button raise = new Button("Raise");
 			raise.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
@@ -103,6 +104,7 @@ public class ActionBar {
 			raiseFieldButtons.setSpacing(5);
 			
 			Button raiseFieldConfirm = new Button("Enter");
+			raiseFieldConfirm.setId("raiseConfirm");
 			Button raiseFieldCancel = new Button("Cancel");
 			
 			raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);

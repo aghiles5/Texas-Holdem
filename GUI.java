@@ -47,15 +47,18 @@ public class GUI extends Application {
 		Scene scene = new Scene(menu.getMenu(), WIN_WIDTH, WIN_HEIGHT);
 		scene.getStylesheets().add("tableStyle.css");
 		scene.setFill(Color.BLACK);
+
+		GUITest.testDeck.shuffle();
+		ArrayList<Card> comm = GUITest.generateComm();
+		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
+		ArrayList<Player> players = GUITest.generatePlayers(playerNum);
+		
+		primaryStage.setScene(scene);
+		primaryStage.show();
 		
 		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
 			@Override
 			public void handle(ActionEvent event) {
-				GUITest.testDeck.shuffle();
-				ArrayList<Card> comm = GUITest.generateComm();
-				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-				ArrayList<Player> players = GUITest.generatePlayers(playerNum);
-				
 				BorderPane playArea = new BorderPane();
 				ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT);
 				Table table = new Table(players, comm);
@@ -71,11 +74,33 @@ public class GUI extends Application {
 					((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setFill(Color.WHITE);
 					((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
 				}
+				
+				((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						revealAllCards(players, scene);
+					}
+				});
+				
+				/*
+				((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						game.raise(((Slider) scene.lookup("#raiseSlider")).getValue());
+						game.setUserDeciding(false);
+					}
+				});
+				
+				((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						game.call();
+						game.setUserDeciding(false);
+					}
+				});
+				*/
 			}
 		});
-
-		primaryStage.setScene(scene);
-		primaryStage.show();
 	}
 	
 	/*
@@ -94,27 +119,31 @@ public class GUI extends Application {
 						player = userTurn(player, scene, game);
 						game.incrementPlayer();
 					}
-					else
+					else {
 						player = game.processTurn();
-					
+						TimeUnit.SECONDS.sleep(3);
+					}
 					updatePlayerInfo(player, scene);
 					}
 				game.updatePot();
 			}
-			//Showdown code/cleanup goes here
+			revealAllCards(game.getPlayers(), scene);
 		}
 	}
 	
 	private Player userTurn(Player user, Scene scene, Game game) {
-		Button call = ((Button) scene.lookup("#call"));
-		Button raise = ((Button) scene.lookup("#raise"));
-		HBox controls = ((HBox) scene.lookup("#controls"));
-		HBox raiseInput = ((HBox) scene.lookup("#raiseInput"));
+		Button call = (Button) scene.lookup("#call");
+		Button raise = (Button) scene.lookup("#raise");
+		HBox controls = (HBox) scene.lookup("#controls");
+		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
+		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
 		if (user.getBet() == game.getBet())
 			call.setText("Check");
 		else
 			call.setText("Call");
+		
+		raiseSlider.setMax(user.getStack());
 		
 		controls.setDisable(false);
 		
@@ -134,6 +163,15 @@ public class GUI extends Application {
 		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
 	}
 	*/
+	
+	private void revealAllCards(ArrayList<Player> players, Scene scene) {
+		for (Player player : players) {
+			if (player instanceof Human) {
+				revealCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"));
+				revealCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"), (ImageView) scene.lookup("#" + player.getName() + "Card2"));
+			}
+		}
+	}
 	
 	/**
 	 * The set of ImageViews passed into this method will be swapped by an
