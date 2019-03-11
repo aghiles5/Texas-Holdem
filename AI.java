@@ -2,10 +2,10 @@
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/01/2019
+ * @version 03/11/2019
  */
 
- // ABSTRACT THE SHIT OUT OF THIS THING MOTHER LOVER
+ 
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -38,10 +38,12 @@ public class AI extends Player{
     Random choice = new Random();
     int decision = choice.nextInt(6);
 
+    // AI randomly checks as a decision
     if (decision == 0) {
       super.check("C");
     }
 
+    // AI randomly folds as a decision
     else if (decision == 1) {
       super.fold("F");
     }
