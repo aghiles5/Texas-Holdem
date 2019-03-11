@@ -117,7 +117,6 @@ public class GUI extends Application {
 	
 	private void runPlayRound(Scene scene, Game game) {
 		runBetRound(scene, game);
-		revealAllCards(game.getPlayers(), scene);
 	}
 	
 	private void notifyRound(Scene scene, Game game) {
@@ -129,7 +128,6 @@ public class GUI extends Application {
 	
 	private void runBetRound(Scene scene, Game game) {
 		runTurn(scene, game);
-		notifyRound(scene, game);
 	}
 	
 	private void runTurn(Scene scene, Game game) {
