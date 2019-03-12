@@ -75,7 +75,7 @@ public class GUI extends Application {
 		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				revealFlop(scene);
+				revealAllCards(players, scene);
 			}
 		});
 		
@@ -195,6 +195,8 @@ public class GUI extends Application {
 	
 	private void showdown(Scene scene, Game game) {
 		revealAllCards(game.getPlayers, scene);
+		ArrayList<Player> winners = game.showdown();
+		
 	}
 	*/
 	

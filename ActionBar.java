@@ -70,7 +70,7 @@ public class ActionBar {
 			fold.getStyleClass().add("button-large");
 			fold.setId("fold");
 
-			Button raise = new Button("Raise");
+			Button raise = new Button("Bet");
 			raise.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
 			
@@ -155,7 +155,7 @@ public class ActionBar {
 			@Override
 			public void handle(ActionEvent event) {
 				raiseInput.setVisible(false);
-				raise.setText("Raise");
+				raise.setText("Bet");
 			}
 		});
 		
