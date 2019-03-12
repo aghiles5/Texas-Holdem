@@ -28,8 +28,8 @@ public class Deck {
 	}
 
 	/**
-	 * To shuffle the deck Cards are transferred at random to a temporary deck then
-	 * moved back.
+	 * pre: N/A post: The deck is shuffled Turns the created deck into a shuffled
+	 * deck
 	 */
 	public void shuffle() {
 		ArrayList<Card> tempDeck = new ArrayList<Card>();
@@ -42,16 +42,30 @@ public class Deck {
 		deck.addAll(tempDeck); // Returns the shuffled cards from the temp deck to the deck
 	}
 
+	/**
+	 * pre: N/A post: Card taken out of deck and into a hole/hand/middlecard Deals a
+	 * single card from the deck
+	 */
 	public Card dealSingle() {
 		Card card = deck.get(0);
-		deck.remove(0);
+		burnCard();
 		return card;
 	}
 
+	/**
+	 * pre: N/A post: Card removed out of the deck Burns a card from the deck.
+	 */
 	private void burnCard() {
 		deck.remove(0);
 	}
 
+	/**
+	 * pre: The community cards are taken post: More cards are added to the middle
+	 * community cards. Adds cards to the middle cards after all the players have
+	 * completed their turns
+	 * 
+	 * @param middleCards ArrayList
+	 */
 	public ArrayList<Card> dealCard(ArrayList<Card> middleCards) {
 		burnCard();
 		if (middleCards.size() < 3) {
