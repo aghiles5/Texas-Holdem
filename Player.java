@@ -3,88 +3,90 @@ import java.util.Scanner;
 
 // Common methods between AI and Player class will be in this super class
 /**
- * An abstract class that;
- * Manages each players' amount of money, 
- * their two card hand or "hole",their total bet per round, and who wins each round.
- * The AI will also utilize these methods.
+ * An abstract class that; Manages each players' amount of money, their two card
+ * hand or "hole",their total bet per round, and who wins each round. The AI
+ * will also utilize these methods.
+ * 
  * @author Kyle Wen, Adam Hiles, John Lowie
  * @version 03/12/2019
  *
  */
 public abstract class Player {
-	  private int stack; //Tracks money
-	  protected ArrayList<Card> hole = new ArrayList<Card>(); //the player's 2 card hand
-	  protected Hand hand; //player's 5 card hand as an object
-	  protected String name = ""; //the name of the human player
-	  private int totBet = 0; //the player's total bet for the round
-	  //method in main that sets the blinds
-	  //make the current player bet into a list?
-	  
+	private int stack; // Tracks money
+	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
+	protected Hand hand; // player's 5 card hand as an object
+	protected String name = ""; // the name of the human player
+	private int totBet = 0; // the player's total bet for the round
+	// method in main that sets the blinds
+	// make the current player bet into a list?
+
 	/**
-	 * pre:
-	 * post: The player's stack of money amount is returned.
-	 * Gets and returns the stack of money of player.
+	 * pre: post: The player's stack of money amount is returned. Gets and returns
+	 * the stack of money of player.
+	 * 
 	 * @return stack
 	 */
 	public int getStack() {
 		return stack;
 	}
 
-	  /**
-	   * pre: A name for the player has been set.
-	   * post: The player's name has been set.
-	   * @param newName
-	   */
-	  public void setName(String newName){
-		  name = newName;
-	  }
-	  
-	  /**
-	   * pre:
-	   * post: The player's name has been returned.
-	   * Gets and returns the name of the player.
-	   * @return name
-	   */
-	  public String getName() {
-		  return name;
-	  }
-	  
 	/**
-	 * Given the community and a player's hole cards, this method will find 
-	 * their highest ranking hand. The rank of each possible hand is determined
-	 * and compared to one and another to find the highest. If two hands share
-	 * the highest rank they are passed through to the dispute methods to find
-	 * the highest.
+	 * pre: A name for the player has been set. post: The player's name has been
+	 * set.
+	 * 
+	 * @param newName
+	 */
+	public void setName(String newName) {
+		name = newName;
+	}
+
+	/**
+	 * pre: post: The player's name has been returned. Gets and returns the name of
+	 * the player.
+	 * 
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Given the community and a player's hole cards, this method will find their
+	 * highest ranking hand. The rank of each possible hand is determined and
+	 * compared to one and another to find the highest. If two hands share the
+	 * highest rank they are passed through to the dispute methods to find the
+	 * highest.
 	 * 
 	 * @param comm the community cards
 	 * @return none
 	 */
 	public void setHand(ArrayList<Card> comm) {
 		int highestRank = -1, result;
-		
-		ArrayList<Card> allCards = new ArrayList<Card>(); 
-		Hand highestHand = new Hand(); 
-		allCards.addAll(comm); //The hole and community cards are combined to a single ArrayList
+
+		ArrayList<Card> allCards = new ArrayList<Card>();
+		Hand highestHand = new Hand();
+		allCards.addAll(comm); // The hole and community cards are combined to a single ArrayList
 		allCards.addAll(hole);
-		
+
 		if (allCards.size() == 5) {
 			for (Card card : allCards)
 				hand.addCard(card);
-		}
-		else {
+		} else {
 			ArrayList<Hand> combs = new ArrayList<Hand>();
 			if (allCards.size() == 6)
-				combs = combSix(allCards); //All six combinations of the cards are found for a six card set
+				combs = combSix(allCards); // All six combinations of the cards are found for a six card set
 			else if (allCards.size() == 7)
-				combs = combSeven(allCards); //All 21 combinations of the cards are found for a seven card set
-			
+				combs = combSeven(allCards); // All 21 combinations of the cards are found for a seven card set
+
 			for (Hand potenHand : combs) {
-				if (potenHand.getRank() > highestRank) { //A potential hand becomes the new highest if its rank surpasses the previous highest
+				if (potenHand.getRank() > highestRank) { // A potential hand becomes the new highest if its rank
+															// surpasses the previous highest
 					highestRank = potenHand.getRank();
 					highestHand = potenHand;
 				}
-				
-				else if (potenHand.getRank() == highestRank) { //If its rank is equal the two are disputed, the new only succeeding the old if it is greater in value
+
+				else if (potenHand.getRank() == highestRank) { // If its rank is equal the two are disputed, the new
+																// only succeeding the old if it is greater in value
 					result = potenHand.compareHand(highestHand);
 					if (result == 1) {
 						highestRank = potenHand.getRank();
@@ -95,222 +97,235 @@ public abstract class Player {
 		}
 		hand = highestHand;
 	}
-	  
-	  /**
-	   * pre: none
-	   * post: The player's hand has been returned.
-	   * @return new Hand object
-	   */
-	  public Hand getHand() {
-	    return new Hand(hand);
-	  }
-	  
-	  /**
-	   * pre: A card has been chosen.
-	   * post: A card has been added to the player's hole.
-	   * @param c
-	   */
-	  public void setHole(Card c) {
-		  //adds the cards to the hand list
-		  hole.add(c);
-	  }
-	  
-	  /**
-	   * pre: none
-	   * post: Returns the player's hole.
-	   * The player's hole has been returned.
-	   * @return hole
-	   */
-	  public ArrayList<Card> getHole() {
-		  return hole;
-	  }
-	  
-	  /**
-	   * pre: none
-	   * post: The player's hole has been reset
-	   * The hole ArrayList has been cleared to reset
-	   * for the next round.
-	   */
-	  public void emptyHole(){
-		  hole.clear();
-	  }
-	  
-	  /**
-	   * pre: none
-	   * post: The player's hand has been reset
-	   * The hole ArrayList has been cleared to reset
-	   * for the next round.
-	   */
-	  public void emptyHand(){
-		  hand.clear();
-	  }
-	  
-	  /**
-	   * pre: none
-	   * post: The player's total bet has been returned.
-	   * @return totBet
-	   */
-	  public int getBet() {
-		  return totBet;
-	  }
-	  
-	  /**
-	   * pre: A player decision has been made.
-	   * post: The player has "checked" and chosen to do nothing.
-	   * @param choice
-	   */
-	  public void check(String choice) {
-		  //If the input is c, play moves to the next player
-		  if (choice.equalsIgnoreCase("C")) {
-			  System.out.println("Player Checked.");
-		  }
-	  }
-	  
-	  /**
-	   * pre: A player decision has been made.
-	   * post: The player's hand has been cleared as they have
-	   * given up on this round.
-	   * @param choice
-	   */
-	  public void fold(String choice) {
-		  //if the input is f, the list is emptied
-		  if (choice.equalsIgnoreCase("F")) {
-			  emptyHand(); //Clears hand
-			  emptyHole(); //Clears hole
-			  System.out.println("Player folded.");
-		  }
-	  }
-	  
-	  /**
-	   * pre: A player decision and their increased bet have been entered.
-	   * post: The player has added money to the pot with their total
-	   * amount of money decreasing appropriately.
-	   * @param choice
-	   * @param newBet
-	   */
-	  public void BetRaise(String choice, int newBet) {
-		  if (choice.equalsIgnoreCase("B")) {
-			  //checks to see if the bet is less than the
-			  //money in the player's balance
-			  if (newBet <= stack) {
-				  stack -= newBet; //decreases the player's money value.
-				  totBet += newBet; //adds the bet to the player's total bet.
-				  PotControl.POT += newBet; //check logic
-				  System.out.println("Player bet $" + newBet + ".");
-			  }
-		  } else if (choice.equalsIgnoreCase("R")) {
-			  //Raise action
-			  //must be 2x the amount to call
-			  int toCall = highBet - totBet; //highBet must be tracked
-			  if (newBet >= 2*toCall && newBet <= stack)//This is incorrect!!! {
+
+	/**
+	 * pre: none post: The player's hand has been returned.
+	 * 
+	 * @return new Hand object
+	 */
+	public Hand getHand() {
+		return new Hand(hand);
+	}
+
+	/**
+	 * pre: A card has been chosen. post: A card has been added to the player's
+	 * hole.
+	 * 
+	 * @param c
+	 */
+	public void setHole(Card c) {
+		// adds the cards to the hand list
+		hole.add(c);
+	}
+
+	/**
+	 * pre: none post: Returns the player's hole. The player's hole has been
+	 * returned.
+	 * 
+	 * @return hole
+	 */
+	public ArrayList<Card> getHole() {
+		return hole;
+	}
+
+	/**
+	 * pre: none post: The player's hole has been reset The hole ArrayList has been
+	 * cleared to reset for the next round.
+	 */
+	public void emptyHole() {
+		hole.clear();
+	}
+
+	/**
+	 * pre: none post: The player's hand has been reset The hole ArrayList has been
+	 * cleared to reset for the next round.
+	 */
+	public void emptyHand() {
+		hand.clear();
+	}
+
+	/**
+	 * pre: none post: The player's total bet has been returned.
+	 * 
+	 * @return totBet
+	 */
+	public int getBet() {
+		return totBet;
+	}
+
+	/**
+	 * pre: A player decision has been made. post: The player has "checked" and
+	 * chosen to do nothing.
+	 * 
+	 * @param choice
+	 */
+	public void check(String choice) {
+		// If the input is c, play moves to the next player
+		if (choice.equalsIgnoreCase("C")) {
+			System.out.println("Player Checked.");
+		}
+	}
+
+	/**
+	 * pre: A player decision has been made. post: The player's hand has been
+	 * cleared as they have given up on this round.
+	 * 
+	 * @param choice
+	 */
+	public void fold(String choice) {
+		// if the input is f, the list is emptied
+		if (choice.equalsIgnoreCase("F")) {
+			emptyHand(); // Clears hand
+			emptyHole(); // Clears hole
+			System.out.println("Player folded.");
+		}
+	}
+
+	/**
+	 * pre: A player decision and their increased bet have been entered. post: The
+	 * player has added money to the pot with their total amount of money decreasing
+	 * appropriately.
+	 * 
+	 * @param choice
+	 * @param newBet
+	 */
+	public void BetRaise(String choice, int newBet) {
+		if (choice.equalsIgnoreCase("B")) {
+			// checks to see if the bet is less than the
+			// money in the player's balance
+			if (newBet <= stack) {
+				stack -= newBet; // decreases the player's money value.
+				totBet += newBet; // adds the bet to the player's total bet.
+				PotControl.POT += newBet; // check logic
+				System.out.println("Player bet $" + newBet + ".");
+			}
+		} else if (choice.equalsIgnoreCase("R")) {
+			// Raise action
+			// must be 2x the amount to call
+			int toCall = highBet - totBet; // highBet must be tracked
+			if (newBet >= 2 * toCall && newBet <= stack)// This is incorrect!!! {
 				stack -= newBet;
-			  	System.out.println("Player raised $" + newBet + ".");
-			  	PotControl.POT += newBet; //check logic
-			  }
-		  }
-	  
-	  
-	  /**
-	   * pre: A player decision has been made.
-	   * post: The player has called.
-	   * Calculates the amount to call and adds that amount to the pot.
-	   * @param choice
-	   * @param currentBet
-	   */
-	  public void call(String choice) {
-		  int toCall = highBet - totBet; //highBet must be tracked
-		  //need to determine how to compare each player's current Bet to generate a toCall
-		  if (choice.equalsIgnoreCase("L")) {
-			  stack -= toCall;
-			  totBet += toCall;
-			  PotControl.POT += toCall;
-			  System.out.println("Player called.");
-		  }
-	  }
-	  
-	  /**
-	   * pre: A player decision has been made.
-	   * post: The player has $0 remaining and has gone "All-In."
-	   * @param choice
-	   */
-	  public void allIn(String choice) {
-		  if (choice.equalsIgnoreCase("A")) {
-			  totBet += stack;
-			  stack = 0;
-			  PotControl.POT += totBet;
-			  System.out.println("Player went all-in!");
-		  }
-	  }
-	  
-	  /**
-	   * pre: A player decision has been entered.
-	   * post: A valid player decision has been made.
-	   * Checks the current player decision to see if it is invalid.
-	   * If so, it re-prompts the user for a valid response.
-	   * @param choice
-	   * @return decision
-	   */
-	  public String invalidChoice(String choice){
+			System.out.println("Player raised $" + newBet + ".");
+			PotControl.POT += newBet; // check logic
+		}
+	}
+
+	/**
+	 * pre: A player decision has been made. post: The player has called. Calculates
+	 * the amount to call and adds that amount to the pot.
+	 * 
+	 * @param choice
+	 * @param currentBet
+	 */
+	public void call(String choice) {
+		int toCall = highBet - totBet; // highBet must be tracked
+		// need to determine how to compare each player's current Bet to generate a
+		// toCall
+		if (choice.equalsIgnoreCase("L")) {
+			stack -= toCall;
+			totBet += toCall;
+			PotControl.POT += toCall;
+			System.out.println("Player called.");
+		}
+	}
+
+	/**
+	 * pre: A player decision has been made. post: The player has $0 remaining and
+	 * has gone "All-In."
+	 * 
+	 * @param choice
+	 */
+	public void allIn(String choice) {
+		if (choice.equalsIgnoreCase("A")) {
+			totBet += stack;
+			stack = 0;
+			PotControl.POT += totBet;
+			System.out.println("Player went all-in!");
+		}
+	}
+
+	/**
+	 * pre: A player decision has been entered. post: A valid player decision has
+	 * been made. Checks the current player decision to see if it is invalid. If so,
+	 * it re-prompts the user for a valid response.
+	 * 
+	 * @param choice
+	 * @return decision
+	 */
+	public String invalidChoice(String choice) {
 		String decision = choice;
-		while(!decision.equalsIgnoreCase("A") && !decision.equalsIgnoreCase("L") && !decision.equalsIgnoreCase("C") && !decision.equalsIgnoreCase("F") && !decision.equalsIgnoreCase("B") && !decision.equalsIgnoreCase("R")){
+		while (!decision.equalsIgnoreCase("A") && !decision.equalsIgnoreCase("L") && !decision.equalsIgnoreCase("C")
+				&& !decision.equalsIgnoreCase("F") && !decision.equalsIgnoreCase("B")
+				&& !decision.equalsIgnoreCase("R")) {
 			System.out.printf("What would you like to do next (C for Check, F for Fold): ");
 			Scanner dcInput = new Scanner(System.in);
 			decision = dcInput.next();
 		}
 
 		return decision;
-	  }
-	  
-	  public abstract void getDecision(String input);
-	
+	}
+
+	public abstract void getDecision(String input);
+
+	public abstract void getDecision(String input, int raise);
+
+	public abstract void getDecisionAI();
+
 	/**
-	 * All six unique combinations of five card hands from a six card set are
-	 * found by the below algorithm. One blank space is cycled through all the
-	 * indices of the passed Card ArrayList, writing those Cards not occupied
-	 * by the blank space to a new Hand.
+	 * All six unique combinations of five card hands from a six card set are found
+	 * by the below algorithm. One blank space is cycled through all the indices of
+	 * the passed Card ArrayList, writing those Cards not occupied by the blank
+	 * space to a new Hand.
 	 * 
 	 * @param allCards the combined community and a given player's hole cards
 	 * @return An ArrayList of all five card hand combinations
 	 */
 	private ArrayList<Hand> combSix(ArrayList<Card> allCards) {
-		ArrayList<Hand> combs = new ArrayList<Hand>(); //A six Hand ArrayList is created to store all possible combinations
+		ArrayList<Hand> combs = new ArrayList<Hand>(); // A six Hand ArrayList is created to store all possible
+														// combinations
 		for (int i = 0; i < 6; i++)
 			combs.add(new Hand());
-		
-		for (int blank = 0; blank < 6; blank++) { //The blank space is moved through each index, also doubles as the index in the Hand ArrayList to write to
-			for (int index = 0; index < 6; index++) { //Each Card index in allCards is ran through
-				if (index != blank) //If the index of the card doesn't fall on the blank it is written to the current combination index
+
+		for (int blank = 0; blank < 6; blank++) { // The blank space is moved through each index, also doubles as the
+													// index in the Hand ArrayList to write to
+			for (int index = 0; index < 6; index++) { // Each Card index in allCards is ran through
+				if (index != blank) // If the index of the card doesn't fall on the blank it is written to the
+									// current combination index
 					combs.get(blank).addCard(allCards.get(index));
 			}
 		}
 		return combs;
 	}
-	  
+
 	/**
-	 * All 21 unique combinations of five card hands from a seven card set are
-	 * found by the below algorithm. Two blank spaces in the seven card set are
-	 * cycled, their indices being exempt from a hand possibility when it is 
-	 * written to the master list.
+	 * All 21 unique combinations of five card hands from a seven card set are found
+	 * by the below algorithm. Two blank spaces in the seven card set are cycled,
+	 * their indices being exempt from a hand possibility when it is written to the
+	 * master list.
 	 * 
 	 * @param allCards the combined community and a given player's hole cards
 	 * @return An ArrayList of all five card hand combinations
 	 */
 	private ArrayList<Hand> combSeven(ArrayList<Card> allCards) {
-		ArrayList<Hand> combs = new ArrayList<Hand>(); //A 21 Hand ArrayList is created to store all possible combinations
+		ArrayList<Hand> combs = new ArrayList<Hand>(); // A 21 Hand ArrayList is created to store all possible
+														// combinations
 		for (int i = 0; i < 21; i++)
 			combs.add(new Hand());
-		
-		int writeIndex = 0; //The index of the 21 ArrayList ArrayList is cycled for each blank2 change
-		for (int blank1 = 0; blank1 < 6; blank1++) { //The first blank advanced after the second has gone through each space following it
-			for (int blank2 = blank1 + 1; blank2 < 7; blank2++) { //The second blank cycles through each index following the first blank
-				for (int index = 0; index < 7; index++) { //Each Card index in allCards is ran through
-					if ((index != blank1) && (index != blank2)) //If the index of the card doesn't fall on a blank it is written to the current combination index
+
+		int writeIndex = 0; // The index of the 21 ArrayList ArrayList is cycled for each blank2 change
+		for (int blank1 = 0; blank1 < 6; blank1++) { // The first blank advanced after the second has gone through each
+														// space following it
+			for (int blank2 = blank1 + 1; blank2 < 7; blank2++) { // The second blank cycles through each index
+																	// following the first blank
+				for (int index = 0; index < 7; index++) { // Each Card index in allCards is ran through
+					if ((index != blank1) && (index != blank2)) // If the index of the card doesn't fall on a blank it
+																// is written to the current combination index
 						combs.get(writeIndex).addCard(allCards.get(index));
 				}
 				writeIndex++;
 			}
-		}	
+		}
 		return combs;
 	}
-	  
+
 }
