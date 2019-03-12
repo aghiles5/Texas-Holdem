@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 // Common methods between AI and Player class will be in this super class
+
 /**
  * An abstract class that; Manages each players' amount of money, their two card
  * hand or "hole",their total bet per round, and who wins each round. The AI
@@ -12,7 +13,7 @@ import java.util.Scanner;
  *
  */
 public abstract class Player {
-	private int stack; // Tracks money
+	private int stack; // Tracks each player's stack of money
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
