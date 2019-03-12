@@ -29,6 +29,7 @@
  * - where am i calling allin, fold, and check? am i calling them?
  * - if we have more than one player, we need a screen before table that asks for their names
  * - fix AI to where its not a for loop in constructor with no AI amt in constructor? 
+ * - get rid of or fix player.emptyHand???
  */
 
 /**
