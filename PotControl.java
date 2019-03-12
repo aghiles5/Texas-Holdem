@@ -21,6 +21,7 @@ public class PotControl {
 		System.out.println("Small Blind: " + blinds[0] + "\nBig Blind: " + blinds[1]);
 	}
 	
+	//not necessary
 	public int CalcPot() {
 		for (int i = 0; i < Main.players.size(); i++) {
 			POT += players(i).getBet();
