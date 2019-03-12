@@ -29,11 +29,12 @@
  * - where am i calling allin, fold, and check? am i calling them?
  * - if we have more than one player, we need a screen before table that asks for their names
  * - fix AI to where its not a for loop in constructor with no AI amt in constructor? 
+ * - are we implementing the full game or just the GUI? We can just deal with money and AI later and focus on check, fold and two players like before for now
  * - get rid of or fix player.emptyHand???
  */
 
 /**
- * Main class for the game as the game is played and started here
+ * Main class for the game as the game is controlled here
  * Origin of Texas Holdem
  * 
  * @author Brayden Schmaltz - Campbell
