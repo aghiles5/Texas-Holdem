@@ -48,6 +48,9 @@ public class AI extends Player{
       super.fold("F");
     }
 
+    /**
+     * START FROM HERE ------------------------------------------------------------------------------------------
+     */
     else if (decision == 2) {
       checkAIBets(decision, super.getStack());
       super.BetRaise("B", bet);
