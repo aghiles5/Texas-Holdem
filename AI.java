@@ -17,19 +17,17 @@ public class AI extends Player{
   // This is an array of CPU player names
   public static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick", "Magnificent Mick", "Speedy Gonzalez"};
 
-  // !!!!!!!!This constructor will generate random names for the number of CPU players!!!!!!!!!!!
-  public AI(int numOfAI) {
+  /**
+   * This constructor will generate random names for the number of CPU players
+   * This takes the argument of the contructor and chooses random names for the CPU players
+   * and removes the name if it is chosen for the CPU so there are no duplicate CPU players
+   */
+  public AI() {
     Random name = new Random();
 
-    /**
-     * This loop takes the argument of the contructor and chooses random names for the CPU players
-     * and removes the name if it is chosen for the CPU so there are no duplicate CPU players 
-     */
-    for (int i = 0; i < numOfAI; i++) {
-      int rName = name.nextInt(Array.getLength(cpuName));
-      super.name = cpuName[rName];
-      cpuName = ArrayUtils.removeElement(cpuName, rName);
-    }
+    int rName = name.nextInt(Array.getLength(cpuName));
+    super.name = cpuName[rName];
+    cpuName = ArrayUtils.removeElement(cpuName, rName);
   }
 
   // This method pushes the AI decisions to Player class
@@ -120,10 +118,7 @@ public class AI extends Player{
         return betting;
       }
     }
-
-    else {
-      return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT
-    }
+    return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT
   }
 
 }
