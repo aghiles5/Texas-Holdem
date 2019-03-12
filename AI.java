@@ -38,6 +38,8 @@ public class AI extends Player{
     Random choice = new Random();
     int decision = choice.nextInt(6);
 
+    Random betting = new Random();
+
     // AI randomly checks as a decision
     if (decision == 0) {
       super.check("C");
@@ -48,25 +50,22 @@ public class AI extends Player{
       super.fold("F");
     }
 
-    /**
-     * START FROM HERE ------------------------------------------------------------------------------------------
-     */
     else if (decision == 2) {
       checkAIBets(decision, super.getStack());
+      int bet = choice.nextInt(super.getStack());
       super.BetRaise("B", bet);
     }
 
     else if (decision == 3) {
-      // update this call of method
-      // money argument needs updating
-      checkAIBets(decision, money);
-      // super.BetRaise("R", bet);
+      checkAIBets(decision, super.getStack());
+      int bet = choice.nextInt(super.getStack());
+      super.BetRaise("R", bet);
     }
 
+    // START HERE -------------------------------------------------------------------
     else if (decision == 4) {
-      // update this call of method
-      // money argument needs updating
-      checkAIBets(decision, money);
+      checkAIBets(decision, super.getStack());
+      int bet = choice.nextInt(super.getStack());
       // super.call("C", something, something);
     }
 
