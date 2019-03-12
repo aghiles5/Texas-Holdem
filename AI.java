@@ -52,13 +52,13 @@ public class AI extends Player{
 
     else if (decision == 2) {
       checkAIBets(decision, super.getStack());
-      int bet = choice.nextInt(super.getStack());
+      int bet = betting.nextInt(super.getStack());
       super.BetRaise("B", bet);
     }
 
     else if (decision == 3) {
       checkAIBets(decision, super.getStack());
-      int bet = choice.nextInt(super.getStack());
+      int bet = betting.nextInt(super.getStack());
       super.BetRaise("R", bet);
     }
 
@@ -75,7 +75,6 @@ public class AI extends Player{
   }
 
   // This method will randomly bet and check if AI has sufficient money
-  // money argument must ge retrieved from somewhere
   public int checkAIBets(int playDecision, int money) {
     Random bet = new Random();
     // int betting = bet.nextInt(money + 1);
@@ -89,8 +88,6 @@ public class AI extends Player{
       int betting = bet.nextInt(money + 1);
       
       if (betting == 0) {
-        // must retrieve money
-        // money argument is not working
         checkAIBets(playDecision, money);
       }
 
@@ -99,7 +96,7 @@ public class AI extends Player{
       }
 
       else {
-        return 0;
+        return betting;
       }
     }
 
@@ -112,8 +109,6 @@ public class AI extends Player{
       int betting = bet.nextInt(money + 1);
 
       if (betting == 0) {
-        // must retrieve money
-        // money argument is not working
         checkAIBets(playDecision, money);
       }
 
@@ -122,17 +117,13 @@ public class AI extends Player{
       }
 
       else {
-        return 0;
+        return betting;
       }
     }
 
-    // This handles AI's call action which matches the previous player's bet
-    // This statement will have to be updated in the future
-    else if (playDecision == 4) {
-      return 0;
+    else {
+      return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT
     }
-    
-    return 0;
   }
 
 }
