@@ -104,7 +104,7 @@ public class Game {
     public static ArrayList<Player> generateHole() {
         for (int i = 0; i < 2; i++) {
             for (Player player : players)
-                player.setHole(testDeck.dealSingle());
+                player.setHole(cardDeck.dealSingle());
         }
     }
 
