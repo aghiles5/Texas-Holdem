@@ -24,7 +24,7 @@ public class PotControl {
 	//not necessary
 	public int CalcPot() {
 		for (int i = 0; i < Main.players.size(); i++) {
-			POT += players(i).getBet();
+			POT += players.getIndex(i).getBet();
 		}
 		
 		return POT; //might not need to return POT
