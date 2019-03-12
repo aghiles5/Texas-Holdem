@@ -31,6 +31,9 @@
  * - fix AI to where its not a for loop in constructor with no AI amt in constructor? 
  * - are we implementing the full game or just the GUI? We can just deal with money and AI later and focus on check, fold and two players like before for now
  * - get rid of or fix player.emptyHand???
+ * 
+ * Thought:
+ * - For demo 2 we should do the same as demo 1 where we just focus on fold and check. add ai this time while having 1 other player, which is us.
  */
 
 /**
