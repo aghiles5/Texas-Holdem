@@ -49,10 +49,8 @@ public class AI extends Player{
     }
 
     else if (decision == 2) {
-      // update this call of method
-      // money argument needs updating
-      checkAIBets(decision, money);
-      // super.BetRaise("B", bet);
+      checkAIBets(decision, super.getStack());
+      super.BetRaise("B", bet);
     }
 
     else if (decision == 3) {
