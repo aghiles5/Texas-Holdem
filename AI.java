@@ -62,16 +62,14 @@ public class AI extends Player{
       super.BetRaise("R", bet);
     }
 
-    // START HERE -------------------------------------------------------------------
+    // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     else if (decision == 4) {
-      checkAIBets(decision, super.getStack());
-      int bet = choice.nextInt(super.getStack());
-      // super.call("C", something, something);
+      super.call("L");
     }
 
+    // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     else if (decision == 5) {
-      // Update this
-      super.allIn("A", something);
+      super.allIn("A");
     }
 
   }
