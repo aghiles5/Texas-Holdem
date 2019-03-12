@@ -7,11 +7,12 @@ import java.util.Scanner;
  * Manages each players' amount of money, 
  * their two card hand or "hole",their total bet per round, and who wins each round.
  * The AI will also utilize these methods.
- * @author Kyle Wen, Adam Hiles
+ * @author Kyle Wen, Adam Hiles, John Lowie
+ * @version 03/12/2019
  *
  */
 public abstract class Player {
-	  private int Money; //Tracks money
+	  private int stack; //Tracks money
 	  protected ArrayList<Card> hole = new ArrayList<Card>(); //the player's 2 card hand
 	  protected Hand hand; //player's 5 card hand as an object
 	  protected String name = ""; //the name of the human player
@@ -19,6 +20,16 @@ public abstract class Player {
 	  //method in main that sets the blinds
 	  //make the current player bet into a list?
 	  
+	/**
+	 * pre:
+	 * post: The player's stack of money amount is returned.
+	 * Gets and returns the stack of money of player.
+	 * @return stack
+	 */
+	public int getStack() {
+		return stack;
+	}
+
 	  /**
 	   * pre: A name for the player has been set.
 	   * post: The player's name has been set.
@@ -181,8 +192,8 @@ public abstract class Player {
 		  if (choice.equalsIgnoreCase("B")) {
 			  //checks to see if the bet is less than the
 			  //money in the player's balance
-			  if (newBet <= Money) {
-				  Money = Money - newBet; //decreases the player's money value.
+			  if (newBet <= stack) {
+				  stack -= newBet; //decreases the player's money value.
 				  totBet += newBet; //adds the bet to the player's total bet.
 				  PotControl.POT += newBet; //check logic
 				  System.out.println("Player bet $" + newBet + ".");
@@ -191,8 +202,8 @@ public abstract class Player {
 			  //Raise action
 			  //must be 2x the amount to call
 			  int toCall = highBet - totBet; //highBet must be tracked
-			  if (newBet >= 2*toCall && newBet <= Money)//This is incorrect!!! {
-				Money = Money - newBet;
+			  if (newBet >= 2*toCall && newBet <= stack)//This is incorrect!!! {
+				stack -= newBet;
 			  	System.out.println("Player raised $" + newBet + ".");
 			  	PotControl.POT += newBet; //check logic
 			  }
@@ -210,7 +221,7 @@ public abstract class Player {
 		  int toCall = highBet - totBet; //highBet must be tracked
 		  //need to determine how to compare each player's current Bet to generate a toCall
 		  if (choice.equalsIgnoreCase("L")) {
-			  Money -= toCall;
+			  stack -= toCall;
 			  totBet += toCall;
 			  PotControl.POT += toCall;
 			  System.out.println("Player called.");
@@ -224,8 +235,8 @@ public abstract class Player {
 	   */
 	  public void allIn(String choice) {
 		  if (choice.equalsIgnoreCase("A")) {
-			  totBet += Money;
-			  Money = 0;
+			  totBet += stack;
+			  stack = 0;
 			  PotControl.POT += totBet;
 			  System.out.println("Player went all-in!");
 		  }
