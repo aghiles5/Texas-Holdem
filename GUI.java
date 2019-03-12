@@ -54,60 +54,63 @@ public class GUI extends Application {
 		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
 			@Override
 			public void handle(ActionEvent event) {
-				GUITest.testDeck.shuffle();
-				ArrayList<Card> comm = GUITest.generateComm();
-				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-				ArrayList<Player> players = GUITest.generatePlayers(playerNum);
-				
-				BorderPane playArea = new BorderPane();
-				ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT);
-				Table table = new Table(players, comm);
-				playArea.setBottom(actionBar.getBarPane());
-				playArea.setCenter(table.getTablePane());
-				scene.setRoot(playArea);
-				
-				((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE);
-				((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
-				((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setFill(Color.YELLOW);
-				((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setVisible(true);
-				if (players.size() != 2) {
-					((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setFill(Color.WHITE);
-					((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
-				}
-				
-				((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						revealAllCards(players, scene);
-					}
-				});
-				
-				((Button) scene.lookup("#notifCont")).setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						((HBox) scene.lookup("#notif")).setVisible(false);
-					}
-				});
-				
-				/*
-				((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						game.raise(((Slider) scene.lookup("#raiseSlider")).getValue());
-						finishUserTurn(scene, game);
-					}
-				});
-				
-				((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						game.call();
-						finishUserTurn(scene, game);
-					}
-				});
-				*/
+				generatePlayArea(scene);
 			}
 		});
+	}
+	
+	private void generatePlayArea(Scene scene) {
+		GUITest.testDeck.shuffle();
+		ArrayList<Card> comm = GUITest.generateComm();
+		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
+		ArrayList<Player> players = GUITest.generatePlayers(playerNum);
+		
+		BorderPane playArea = new BorderPane();
+		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT);
+		Table table = new Table(players, comm);
+		playArea.setBottom(actionBar.getBarPane());
+		playArea.setCenter(table.getTablePane());
+		scene.setRoot(playArea);
+		
+		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				revealFlop(scene);
+			}
+		});
+		
+		((Button) scene.lookup("#notifCont")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				((HBox) scene.lookup("#notif")).setVisible(false);
+				/*
+				 if (game.getRound < 4)
+				 	runTurn(scene, game);
+				 else if (game.getRound == 4)
+				 	showdown(scene, game);
+				 else
+				 	runPlayRound(scene, game);
+				 */
+			}
+		});
+		
+		/*
+		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				game.raise(((Slider) scene.lookup("#raiseSlider")).getValue());
+				finishUserTurn(scene, game);
+			}
+		});
+		
+		((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				game.call();
+				finishUserTurn(scene, game);
+			}
+		});
+		*/
 	}
 	
 	/*
@@ -116,18 +119,28 @@ public class GUI extends Application {
 	}
 	
 	private void runPlayRound(Scene scene, Game game) {
-		runBetRound(scene, game);
+		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE);
+		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
+		((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setFill(Color.YELLOW);
+		((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setVisible(true);
+		if (players.size() != 2) {
+			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setFill(Color.WHITE);
+			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
+		}
+		notifyRound(scene, game);
 	}
 	
 	private void notifyRound(Scene scene, Game game) {
+		if (game.getRound() == 1)
+			revealFlop(scene);
+		else if (game.getRound() == 2)
+			revealCard((ImageView) scene.lookup("#commBack3"), (ImageView) scene.lookup("#commFront3"));
+		else if (game.getRound() == 3)
+			revealCard((ImageView) scene.lookup("#commBack4"), (ImageView) scene.lookup("#commFront4"));
 		HBox notif = (HBox) scene.lookup("#notif");
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		notifLabel.setText(game.getRoundString());
 		notif.setVisible(true);
-	}
-	
-	private void runBetRound(Scene scene, Game game) {
-		runTurn(scene, game);
 	}
 	
 	private void runTurn(Scene scene, Game game) {
@@ -169,6 +182,7 @@ public class GUI extends Application {
 		controls.setDisable(true);
 		raiseInput.setVisible(false);
 		raise.setText("Raise");
+		updatePlayerInfo(game.getCurrentPlayer(), scene);
 		game.incrementPlayer();
 		runTurn(scene, game);
 	}
@@ -177,6 +191,10 @@ public class GUI extends Application {
 		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
 		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
+	}
+	
+	private void showdown(Scene scene, Game game) {
+		revealAllCards(game.getPlayers, scene);
 	}
 	*/
 	
@@ -192,6 +210,22 @@ public class GUI extends Application {
 				});	
 			}
 		}
+	}
+	
+	private void revealFlop(Scene scene) {
+		ScaleTransition showFrontA = revealCard((ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"));
+		showFrontA.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				ScaleTransition showFrontB = revealCard((ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"));
+				showFrontB.setOnFinished(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						revealCard((ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"));
+					}
+				});	
+			}
+		});	
 	}
 	
 	/**
