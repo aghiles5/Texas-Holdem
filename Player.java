@@ -244,27 +244,6 @@ public abstract class Player {
 		}
 	}
 
-	/**
-	 * pre: A player decision has been entered. post: A valid player decision has
-	 * been made. Checks the current player decision to see if it is invalid. If so,
-	 * it re-prompts the user for a valid response.
-	 * 
-	 * @param choice
-	 * @return decision
-	 */
-	public String invalidChoice(String choice) {
-		String decision = choice;
-		while (!decision.equalsIgnoreCase("A") && !decision.equalsIgnoreCase("L") && !decision.equalsIgnoreCase("C")
-				&& !decision.equalsIgnoreCase("F") && !decision.equalsIgnoreCase("B")
-				&& !decision.equalsIgnoreCase("R")) {
-			System.out.printf("What would you like to do next (C for Check, F for Fold): ");
-			Scanner dcInput = new Scanner(System.in);
-			decision = dcInput.next();
-		}
-
-		return decision;
-	}
-
 	public abstract void getDecision(String input);
 
 	public abstract void getDecision(String input, int raise);
