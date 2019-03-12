@@ -15,7 +15,7 @@ import java.util.Random;
 public class AI extends Player{
 
   // This is an array of CPU player names
-  public static String[] cpuName = {"Adventurous Alonzo", "Butcher Boone", "Clever Clayton", "Dickhead Dallas", "Easy Earle", "Frenchman Frank", "Gallant Gary", "Hearty Henry", "Idiot Ignacio", "Prospector Patrick", "Magnificent Mick", "Speedy Gonzalez"};
+  public static String[] cpuName = {"AdventurousAlonzo", "ButcherBoone", "CleverClayton", "DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio", "ProspectorPatrick", "MagnificentMick", "SpeedyGonzales"};
 
   /**
    * This constructor will generate random names for the number of CPU players
@@ -34,7 +34,7 @@ public class AI extends Player{
   public void getDecisionAI() {
     // This implements the randomness of the AI
     Random choice = new Random();
-    int decision = choice.nextInt(6);
+    int decision = choice.nextInt(1); // TMPORARY CHANGE
 
     Random betting = new Random();
 
@@ -48,7 +48,8 @@ public class AI extends Player{
       super.fold("F");
     }
 
-    else if (decision == 2) {
+    // THIS COMMENT IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /*else if (decision == 2) {
       checkAIBets(decision, super.getStack());
       int bet = betting.nextInt(super.getStack());
       super.BetRaise("B", bet);
@@ -68,7 +69,7 @@ public class AI extends Player{
     // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     else if (decision == 5) {
       super.allIn("A");
-    }
+    }*/
 
   }
 
