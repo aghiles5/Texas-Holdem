@@ -101,12 +101,12 @@ public class Game {
         return players;
     }
 
-    public static ArrayList<Player> generateHole() {
-        for (int i = 0; i < 2; i++) {
-            for (Player player : players)
-                player.setHole(cardDeck.dealSingle());
-        }
-    }
+    /*
+     * public static ArrayList<Player> generateHole() { for (int i = 0; i < 2; i++)
+     * { for (Player player : players) player.setHole(cardDeck.dealSingle()); }
+     * 
+     * return players; }
+     */
 
     public static void generateMidCards() {
         middleCards = cardDeck.dealCard(middleCards);
