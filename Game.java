@@ -15,8 +15,8 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Player> roundPlayers = new ArrayList<Player>();
     private ArrayList<Card> middleCards = new ArrayList<Card>();
-    private Player curPlayer = new Player();
     private Deck cardDeck = new Deck();
+    private Player lastPlayer;
     private int roundNum;
     private int playerCount;
     private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Turnover", "Showdown" };
@@ -106,15 +106,20 @@ public class Game {
         return roundPlayers.get(playerCount);
     }
 
+    public void setLastPlayer(Player theLastPlayer) {
+        lastPlayer = theLastPlayer;
+    }
+
     public Player getLastPlayer() {
-        return curPlayer;
+        return lastPlayer;
     }
 
     public Player processTurn() {
-        // Player curPlayer = roundPlayers.get(playerCount);
+        Player curPlayer = roundPlayers.get(playerCount);
         roundPlayers.get(playerCount).getDecision();
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
+            setLastPlayer(roundPlayers.get(playerCount));
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
