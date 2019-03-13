@@ -15,6 +15,7 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Player> roundPlayers = new ArrayList<Player>();
     private ArrayList<Card> middleCards = new ArrayList<Card>();
+    private Player curPlayer = new Player();
     private Deck cardDeck = new Deck();
     private int roundNum;
     private int playerCount;
@@ -105,8 +106,14 @@ public class Game {
         return roundPlayers.get(playerCount);
     }
 
+    public Player getLastPlayer() {
+        if (curPlayer.getAction() == "Folded") {
+            return curPlayer;
+        }
+    }
+
     public Player processTurn() {
-        Player curPlayer = roundPlayers.get(playerCount);
+        // Player curPlayer = roundPlayers.get(playerCount);
         roundPlayers.get(playerCount).getDecision();
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
