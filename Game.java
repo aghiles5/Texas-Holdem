@@ -105,7 +105,6 @@ public class Game {
 
     public Player processTurn() {
         players.get(playerCount).getDecision();
-        incrementPlayer();
         return players.get(playerCount);
     }
 
