@@ -149,7 +149,6 @@ public class Game {
         for (Player player : tempRPlayers) {
             if (player.getAction() == "Folded") {
                 roundPlayers.remove(player);
-                playerCount -= 1;
             }
         }
     }
