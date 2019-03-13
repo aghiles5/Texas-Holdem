@@ -115,4 +115,12 @@ public class Game {
             return false;
         }
     }
+
+    public void fold() {
+        players.get(playerCount).fold("F");
+    }
+
+    public void tempCheck() {
+        players.get(playerCount).check("C");
+    }
 }

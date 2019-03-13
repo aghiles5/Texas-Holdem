@@ -163,7 +163,7 @@ public class Player {
 	public void check(String choice) {
 		// If the input is c, play moves to the next player
 		if (choice.equalsIgnoreCase("C")) {
-			System.out.println("Player Checked.");
+			// Nothing
 		}
 	}
 
@@ -178,7 +178,7 @@ public class Player {
 		if (choice.equalsIgnoreCase("F")) {
 			emptyHand(); // Clears hand
 			emptyHole(); // Clears hole
-			System.out.println("Player folded.");
+			// Nothing
 		}
 	}
 
