@@ -34,7 +34,7 @@ public class AI extends Player {
   public void setCPUName() {
     Random name = new Random();
     int rName = name.nextInt(cpuName.size());
-    super.name = newNames[rName];
+    super.name = cpuName.get(rName);
     cpuName.remove(rName);
   }
 
