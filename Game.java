@@ -40,7 +40,9 @@ public class Game {
                 player.setHole(cardDeck.dealSingle());
         }
 
-        roundPlayers = players;
+        for (Player player : players) {
+            roundPlayers.add(player);
+        }
 
         return roundPlayers;
     }
