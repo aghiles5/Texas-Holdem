@@ -15,17 +15,16 @@ public class AI extends Player {
   public static ArrayList<String> cpuName = new ArrayList<String>();
 
   // This is a list of names for the CPU player
-  public final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
+  public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
       "DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
       "ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
 
   public AI() {
-    addCPUName();
     setCPUName();
   }
 
   // This method adds the list of names to the empty array of CPU names
-  public void addCPUName() {
+  public static void addCPUName() {
     for (int i = 0; i < newNames.length; i++) {
       cpuName.add(newNames[i]);
     }
