@@ -66,7 +66,7 @@ public class Game {
     }
 
     public void incrementPlayer() {
-        if (playerCount == roundPlayers.size()) {
+        if (playerCount == roundPlayers.size() - 1) {
             playerCount = 0;
         } else {
             playerCount += 1;
