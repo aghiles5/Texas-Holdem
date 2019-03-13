@@ -76,7 +76,7 @@ public class Game {
     public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
-        checkAction();
+        // checkAction();
         for (Card roundCard : middleCards) {
             roundComm.add(roundCard);
         }
@@ -107,6 +107,11 @@ public class Game {
 
     public Player processTurn() {
         roundPlayers.get(playerCount).getDecision();
+        if (roundPlayers.get(playerCount).getAction() == "Folded") {
+            Player curPlayer = roundPlayers.get(playerCount);
+            roundPlayers.remove(playerCount);
+            playerCount -= 1;
+        }
         return roundPlayers.get(playerCount);
     }
 
@@ -143,15 +148,12 @@ public class Game {
         }
     }
 
-    public void checkAction() {
-        ArrayList<Player> tempRPlayers = new ArrayList<Player>();
-        tempRPlayers.addAll(roundPlayers);
-        for (Player player : tempRPlayers) {
-            if (player.getAction() == "Folded") {
-                roundPlayers.remove(player);
-            }
-        }
-    }
+    /*
+     * public void checkAction() { ArrayList<Player> tempRPlayers = new
+     * ArrayList<Player>(); tempRPlayers.addAll(roundPlayers); for (Player player :
+     * tempRPlayers) { if (player.getAction() == "Folded") {
+     * roundPlayers.remove(player); } } }
+     */
 
     public ArrayList<Player> showdown() {
         ArrayList<Player> encapPlayers = new ArrayList<Player>(), winners = new ArrayList<Player>();
@@ -176,10 +178,12 @@ public class Game {
     }
 
     public void fold() {
-        players.get(playerCount).fold("F");
+        roundPlayers.get(playerCount).fold("F");
+        roundPlayers.remove(playerCount);
+        playerCount -= 1;
     }
 
     public void tempCheck() {
-        players.get(playerCount).check("C");
+        roundPlayers.get(playerCount).check("C");
     }
 }
