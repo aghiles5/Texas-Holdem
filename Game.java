@@ -133,6 +133,8 @@ public class Game {
             }
         }
 
+        incrementRound();
+
         if (actionCounter == roundPlayers.size()) {
             return false;
         }
