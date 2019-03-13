@@ -49,6 +49,10 @@ public class Game {
             player.emptyHand();
             player.emptyHole();
         }
+        for (int i = 0; i < 2; i++) {
+            for (Player player : players)
+                player.setHole(cardDeck.dealSingle());
+        }
         for (Player player : players) {
             roundPlayers.add(player);
         }
@@ -65,6 +69,19 @@ public class Game {
             playerCount = 0;
         } else {
             playerCount += 1;
+        }
+    }
+
+    public void incrementRound() {
+        ArrayList<Card> roundComm = new ArrayList<Card>();
+        roundNum++;
+        if (roundNum == 1) {
+            for (int i = 0; i < middleCards.size() - 2; i++) {
+                roundComm.add(middleCard.get(i));
+            }
+        }
+        for (Player player : roundPlayers) {
+            player.setHand(roundComm);
         }
     }
 
