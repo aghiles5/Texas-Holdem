@@ -40,11 +40,7 @@ public class Game {
                 player.setHole(cardDeck.dealSingle());
         }
 
-        for (Player player : players) {
-            roundPlayers.add(player);
-        }
-
-        return roundPlayers;
+        return players;
     }
 
     public void setupRound() {
@@ -53,7 +49,9 @@ public class Game {
             player.emptyHand();
             player.emptyHole();
         }
-        roundPlayers = players;
+        for (Player player : players) {
+            roundPlayers.add(player);
+        }
         middleCards.clear();
         cardDeck = null;
         cardDeck = new Deck();
@@ -118,27 +116,27 @@ public class Game {
             return false;
         }
     }
-    
+
     public ArrayList<Player> showdown() {
-    	ArrayList<Player> encapPlayers = new ArrayList<Player>(), winners = new ArrayList<Player>();
-		encapPlayers.addAll(roundPlayers); //The player ArrayList is encapsulated by the proxy encapPlayers ArrayList
-		
-		Player highestPlayer = encapPlayers.get(0);
-		int highPlayerIndex = -1;
-		for  (int index = 1; index < encapPlayers.size(); index++){
-			if (encapPlayers.get(index).getHand().compareHand(highestPlayer.getHand()) == 1)
-				highestPlayer = encapPlayers.get(index);
-				highPlayerIndex = index;
-		}
-		winners.add(highestPlayer);
-		encapPlayers.remove(highPlayerIndex);
-		
-		for (Player player : encapPlayers) {
-			if (player.getHand().compareHand(highestPlayer.getHand()) == 0)
-				winners.add(player);
-		}
-		
-		return winners;
+        ArrayList<Player> encapPlayers = new ArrayList<Player>(), winners = new ArrayList<Player>();
+        encapPlayers.addAll(roundPlayers); // The player ArrayList is encapsulated by the proxy encapPlayers ArrayList
+
+        Player highestPlayer = encapPlayers.get(0);
+        int highPlayerIndex = -1;
+        for (int index = 1; index < encapPlayers.size(); index++) {
+            if (encapPlayers.get(index).getHand().compareHand(highestPlayer.getHand()) == 1)
+                highestPlayer = encapPlayers.get(index);
+            highPlayerIndex = index;
+        }
+        winners.add(highestPlayer);
+        encapPlayers.remove(highPlayerIndex);
+
+        for (Player player : encapPlayers) {
+            if (player.getHand().compareHand(highestPlayer.getHand()) == 0)
+                winners.add(player);
+        }
+
+        return winners;
     }
 
     public void fold() {
