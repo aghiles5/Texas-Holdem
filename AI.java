@@ -42,16 +42,16 @@ public class AI extends Player {
   public void getDecision() {
     // This implements the randomness of the AI
     Random choice = new Random();
-    int decision = choice.nextInt(21); // TMPORARY CHANGE
+    int decision = choice.nextInt(100); // TMPORARY CHANGE
     Random betting = new Random();
 
     // AI randomly checks as a decision
-    if (decision <= 15) {
+    if (decision <= 94) {
       super.check("C");
     }
 
     // AI randomly folds as a decision
-    else if (decision >= 16) {
+    else if (decision >= 95) {
       super.fold("F");
     }
 
