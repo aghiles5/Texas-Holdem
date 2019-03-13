@@ -194,7 +194,7 @@ public class Player {
 	 * @param choice
 	 * @param newBet
 	 */
-	/*
+	/** 
 	 * public void BetRaise(String choice, int newBet) { if
 	 * (choice.equalsIgnoreCase("B")) { // checks to see if the bet is less than the
 	 * // money in the player's balance if (newBet <= stack) { stack -= newBet; //
@@ -215,7 +215,7 @@ public class Player {
 	 * @param choice
 	 * @param currentBet
 	 */
-	/*
+	/** 
 	 * public void call(String choice) { int toCall = highBet - totBet; // highBet
 	 * must be tracked // need to determine how to compare each player's current Bet
 	 * to generate a // toCall if (choice.equalsIgnoreCase("L")) { stack -= toCall;
@@ -229,7 +229,7 @@ public class Player {
 	 * 
 	 * @param choice
 	 */
-	/*
+	/** 
 	 * public void allIn(String choice) { if (choice.equalsIgnoreCase("A")) { totBet
 	 * += stack; stack = 0; PotControl.POT += totBet;
 	 * System.out.println("Player went all-in!"); } }
