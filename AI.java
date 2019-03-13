@@ -42,7 +42,7 @@ public class AI extends Player {
   public void getDecision() {
     // This implements the randomness of the AI
     Random choice = new Random();
-    int decision = choice.nextInt(1); // TMPORARY CHANGE
+    int decision = choice.nextInt(2); // TMPORARY CHANGE
     Random betting = new Random();
 
     // AI randomly checks as a decision
