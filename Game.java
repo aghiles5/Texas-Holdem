@@ -117,9 +117,9 @@ public class Game {
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
         roundPlayers.get(playerCount).getDecision();
+        setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
-            setLastPlayer(roundPlayers.get(playerCount));
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
