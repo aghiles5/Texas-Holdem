@@ -24,8 +24,8 @@ public class Player {
 	// make the current player bet into a list?
 
 	/**
-	 * pre: action variable has no action
-	 * post: returns the player's action after player finishes his/her round
+	 * pre: action variable has no action post: returns the player's action after
+	 * player finishes his/her round
 	 * 
 	 */
 	public String getAction() {
@@ -153,7 +153,8 @@ public class Player {
 	 * cleared to reset for the next round.
 	 */
 	public void emptyHand() {
-		hand.clear();
+		hand = null;
+		hand = new Hand();
 	}
 
 	/**
@@ -204,7 +205,7 @@ public class Player {
 	 * @param choice
 	 * @param newBet
 	 */
-	/** 
+	/**
 	 * public void BetRaise(String choice, int newBet) { if
 	 * (choice.equalsIgnoreCase("B")) { // checks to see if the bet is less than the
 	 * // money in the player's balance if (newBet <= stack) { stack -= newBet; //
@@ -225,12 +226,12 @@ public class Player {
 	 * @param choice
 	 * @param currentBet
 	 */
-	/** 
+	/**
 	 * public void call(String choice) { int toCall = highBet - totBet; // highBet
 	 * must be tracked // need to determine how to compare each player's current Bet
 	 * to generate a // toCall if (choice.equalsIgnoreCase("L")) { stack -= toCall;
-	 * totBet += toCall; PotControl.POT += toCall;
-	 * System.out.println("Player called."); } }
+	 * totBet += toCall; PotControl.POT += toCall; System.out.println("Player
+	 * called."); } }
 	 */
 
 	/**
@@ -239,10 +240,10 @@ public class Player {
 	 * 
 	 * @param choice
 	 */
-	/** 
+	/**
 	 * public void allIn(String choice) { if (choice.equalsIgnoreCase("A")) { totBet
-	 * += stack; stack = 0; PotControl.POT += totBet;
-	 * System.out.println("Player went all-in!"); } }
+	 * += stack; stack = 0; PotControl.POT += totBet; System.out.println("Player
+	 * went all-in!"); } }
 	 */
 
 	public void getDecision() {
