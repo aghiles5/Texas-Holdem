@@ -52,6 +52,10 @@ public class Player {
 		name = newName;
 	}
 
+	public void setCPUName() {
+		// Calls AI setCPUName
+	}
+
 	/**
 	 * pre: post: The player's name has been returned. Gets and returns the name of
 	 * the player.
