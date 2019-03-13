@@ -3,7 +3,9 @@
  * method.
  * 
  * @author Kyle Wen, Brayden Schmaltz
+ * @version 03/13/2019
  */
+
 public class Human extends Player {
 	/**
 	 * Constructor that gets the name of the player.
