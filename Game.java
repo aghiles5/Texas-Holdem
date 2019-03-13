@@ -133,16 +133,12 @@ public class Game {
             }
         }
 
-        if (roundPlayers.size() > 1) {
-            return true;
-        }
-
-        else if (roundNum < 4) {
-            return true;
-        }
-
-        else if (actionCounter == roundPlayers.size()) {
+        if (actionCounter == roundPlayers.size()) {
             return false;
+        }
+
+        else if (roundPlayers.size() > 1) {
+            return true;
         }
 
         else {
