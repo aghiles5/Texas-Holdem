@@ -7,27 +7,32 @@
 
  
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.*;
 
 
 public class AI extends Player{
 
   // This is an array of CPU player names
-  public static String[] cpuName = {"AdventurousAlonzo", "ButcherBoone", "CleverClayton", "DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio", "ProspectorPatrick", "MagnificentMick", "SpeedyGonzales"};
+  public ArrayList<String> cpuName = new ArrayList<String>();
 
-  /**
-   * This constructor will generate random names for the number of CPU players
-   * This takes the argument of the contructor and chooses random names for the CPU players
-   * and removes the name if it is chosen for the CPU so there are no duplicate CPU players
-   */
-  public AI() {
+  String[] newNames = new String[] {"AdventurousAlonzo", "ButcherBoone", "CleverClayton", "DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio", "ProspectorPatrick", "MagnificentMick", "SpeedyGonzales"};
+
+  public void addName() {
+    for (int i = 0; i < newNames.length; i++) {
+      cpuName.add(newNames[i]);
+    }
+  }
+
+  public void setName() {
     Random name = new Random();
 
-    int rName = name.nextInt(Array.getLength(cpuName));
-    super.name = cpuName[rName];
-    cpuName = ArrayUtils.removeElement(cpuName, rName);
+    int rName = name.nextInt(cpuName.size());
+
+    super.name = newNames[rName];
+    cpuName.remove(rName);
   }
 
   // This method pushes the AI decisions to Player class
