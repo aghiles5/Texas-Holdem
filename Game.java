@@ -75,6 +75,8 @@ public class Game {
 
     public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
+        playerCount = 0;
+        checkAction();
         for (Card roundCard : middleCards) {
             roundComm.add(roundCard);
         }
@@ -89,8 +91,6 @@ public class Game {
         for (Player player : roundPlayers) {
             player.setHand(roundComm);
         }
-
-        playerCount = 0;
     }
 
     public int getRound() {
@@ -106,13 +106,8 @@ public class Game {
     }
 
     public Player processTurn() {
-        Player curPlayer = roundPlayers.get(playerCount);
         roundPlayers.get(playerCount).getDecision();
-        if (roundPlayers.get(playerCount).getAction() == "Folded") {
-            roundPlayers.remove(playerCount);
-            playerCount -= 1;
-        }
-        return curPlayer;
+        return roundPlayers.get(playerCount);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -127,6 +122,8 @@ public class Game {
         int actionCounter = 0;
         for (Player player : roundPlayers) {
             if (player.getAction() == "Checked") {
+                actionCounter += 1;
+            } else if (player.getAction() == "Folded") {
                 actionCounter += 1;
             }
         }
@@ -143,6 +140,15 @@ public class Game {
         else {
             incrementRound();
             return false;
+        }
+    }
+
+    public void checkAction() {
+        for (Player player : roundPlayers) {
+            if (player.getAction() == "Folded") {
+                roundPlayers.remove(player);
+                playerCount -= 1;
+            }
         }
     }
 
