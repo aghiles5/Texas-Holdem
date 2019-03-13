@@ -21,10 +21,9 @@ public class Human extends Player {
 	 * @param decision
 	 */
 	public void getDecision(String decision) {
-		decision = super.invalidChoice(decision);
 		// check to see if allIn is implemented properly
-		super.allIn(decision);
-		super.call(decision);
+		// super.allIn(decision);
+		// super.call(decision);
 		super.check(decision);
 		super.fold(decision);
 	}
@@ -39,8 +38,7 @@ public class Human extends Player {
 	public void getDecision(String decision, int newBet) {
 		// Check to see if implemented properly
 		// overloads the above method to handle BetRaise
-		super.BetRaise(decision, newBet);
+		// super.BetRaise(decision, newBet);
 
 	}
-
 }
