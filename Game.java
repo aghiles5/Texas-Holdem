@@ -35,6 +35,12 @@ public class Game {
                 players.add(new AI());
         }
 
+        for (Player player : players) {
+            if (player instanceof AI) {
+                player.setCPUName();
+            }
+        }
+
         for (int i = 0; i < 2; i++) {
             for (Player player : players)
                 player.setHole(cardDeck.dealSingle());
