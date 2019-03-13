@@ -80,10 +80,10 @@ public class Game {
         }
         roundNum++;
         if (roundNum == 0) {
-            roundComm.remove(middleCards.size());
             roundComm.remove(middleCards.size() - 1);
+            roundComm.remove(middleCards.size() - 2);
         } else if (roundNum == 1) {
-            roundComm.remove(middleCards.size());
+            roundComm.remove(middleCards.size() - 1);
         }
 
         for (Player player : roundPlayers) {
