@@ -9,6 +9,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -86,10 +87,12 @@ public class GUI extends Application {
 				/*
 				 if (game.getRound < 4)
 				 	runTurn(scene, game);
-				 else if (game.getRound == 4)
-				 	showdown(scene, game);
-				 else
+				 else if (game.getRound == 4) {
+				 	if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
+				 		showdown(scene, game);
+				 	else
 				 	runPlayRound(scene, game);
+				 	}
 				 */
 			}
 		});
@@ -113,12 +116,12 @@ public class GUI extends Application {
 		*/
 	}
 	
-	/*
 	private void runGame(Scene scene, Game game) {
 		runPlayRound(scene, game);
 	}
 	
 	private void runPlayRound(Scene scene, Game game) {
+		ArrayList<Player> players = game.getPlayers();
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE);
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
 		((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setFill(Color.YELLOW);
@@ -127,6 +130,17 @@ public class GUI extends Application {
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setFill(Color.WHITE);
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
 		}
+		
+		for (Player player : players) {
+			((ImageView) scene.lookup("#" + player.getName() + "Card1Front")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
+			((ImageView) scene.lookup("#" + player.getName() + "Card2Front")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
+		}
+		
+		for(int index = 0; index < 5; index++) {
+			ArrayList<Card> comm = game.getComm();
+			((ImageView) scene.lookup("#commFront" + index)).setImage(new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png"));
+		}
+		
 		notifyRound(scene, game);
 	}
 	
@@ -149,10 +163,15 @@ public class GUI extends Application {
 			setupUserTurn(player, scene, game);
 		}
 		else {
+			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-border-color: lime;");
 			player = game.processTurn();
 			TimeUnit.SECONDS.sleep(3);
 			updatePlayerInfo(player, scene);
-			runTurn(scene, game);
+			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-border-color: lightblue;");
+			if (game.isBetRoundRunning())
+				runTurn(scene, game);
+			else
+				notifyRound(scene, game);
 		}
 	}
 	
@@ -163,12 +182,16 @@ public class GUI extends Application {
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
+		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-border-color: lime;");
+		
+		/*
 		if (user.getBet() == game.getBet())
 			call.setText("Check");
 		else
 			call.setText("Call");
 		
 		raiseSlider.setMax(user.getStack());
+		*/
 		
 		controls.setDisable(false);
 	}
@@ -179,30 +202,74 @@ public class GUI extends Application {
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		Button raise = (Button) scene.lookup("#raise");
 		
+		Player user = game.getCurrentPlayer();
 		controls.setDisable(true);
 		raiseInput.setVisible(false);
-		raise.setText("Raise");
-		updatePlayerInfo(game.getCurrentPlayer(), scene);
+		raise.setText("Bet");
+		updatePlayerInfo(user, scene);
+		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-border-color: lightblue;");
 		game.incrementPlayer();
-		runTurn(scene, game);
+		
+		if (game.isBetRoundRunning())
+			runTurn(scene, game);
+		else
+			notifyRound(scene, game);
 	}
 	
 	private void updatePlayerInfo(Player player, Scene scene) {
-		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
+		//((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
-		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
+		//((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
 	}
 	
 	private void showdown(Scene scene, Game game) {
 		revealAllCards(game.getPlayers, scene);
-		ArrayList<Player> winners = game.showdown();
+		for (Player player : game.getPlayers())
+			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Hand: " + player.getHand().toString());
 		
+		ArrayList<Player> winners = game.showdown();
+		HBox notif = (HBox) scene.lookup("#notif");
+		Label notifLabel = (Label) scene.lookup("#notifLabel");
+		if (winners.size() == 1)
+			notifLabel.setText(winners.get(0).getName() + " Wins the Pot");
+		else if (winners.size() == 2)
+			notifLabel.setText(winners.get(0).getName() + " and " + winners.get(1).getName() + " Wins the Pot");
+		else if (winners.size() == game.getPlayers().size())
+			notifLabel.setText("The Pot Will Be Divided Evenly");
+		notif.setVisible(true);
 	}
-	*/
 	
+	private void cleanup(Scene scene, Game game) {
+		ScaleTransition showBack = new ScaleTransition();
+		showBack.setByX(1);
+		showBack.setDuration(Duration.seconds(0.001));
+		for (Player player : game.getPlayers) {
+			if (player instanceof AI) {
+				showBack.setNode((ImageView) scene.lookup("#" + player.getName() + "Card1Back"));
+				showBack.play();
+				showBack.setNode((ImageView) scene.lookup("#" + player.getName() + "Card2Back"));
+				showBack.play();
+			}
+		((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+		}
+		for (int index = 0; index < 5; index++) {
+			showBack.setNode((ImageView) scene.lookup("#commBack" + index));
+			showBack.play();
+		}
+		runPlayRound(scene, game);
+	}
+	
+	/**
+	 * For each AI player in the passed list, i.e. those whose cards are
+	 * covered, their hole cards are revealed through the card reveal 
+	 * animation.
+	 * 
+	 * @param players the players still in the game
+	 * @param scene the game node tree
+	 */
 	private void revealAllCards(ArrayList<Player> players, Scene scene) {
 		for (Player player : players) {
-			if (player instanceof Human) {
+			if (player instanceof AI) {
 				ScaleTransition showFrontA = revealCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"));
 				showFrontA.setOnFinished(new EventHandler<ActionEvent>() {
 					@Override
@@ -214,6 +281,13 @@ public class GUI extends Application {
 		}
 	}
 	
+	/**
+	 * For the second betting round the first three community cards are
+	 * revealed sequentially via the below method and the card reveal
+	 * animation.
+	 * 
+	 * @param scene the game node tree
+	 */
 	private void revealFlop(Scene scene) {
 		ScaleTransition showFrontA = revealCard((ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"));
 		showFrontA.setOnFinished(new EventHandler<ActionEvent>() {

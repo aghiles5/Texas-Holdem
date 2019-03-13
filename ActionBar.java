@@ -126,6 +126,7 @@ public class ActionBar {
 		notifCont.getStyleClass().add("button-large");
 		notifCont.setId("notifCont");
 		notif.getChildren().addAll(notifLabel, notifCont);
+		notif.setVisible(false);
 		
 		
 		actions.getChildren().addAll(controls, raiseInput, notif);

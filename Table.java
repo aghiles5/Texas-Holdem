@@ -192,8 +192,9 @@ public class Table {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			Label stack = new Label("Stack: $0");
-			Label action = new Label("Action: ");
+			name.setStyle("-fx-border-color: lightblue;" + "-fx-border-width: 5;");
+			Label stack = new Label("Stack: $0.00");
+			Label action = new Label(" ");
 			
 			stack.setId(player.getName() + "Stack");
 			action.setId(player.getName() + "Action");
@@ -205,7 +206,7 @@ public class Table {
 			seat.getChildren().addAll(name, stack, action);
 			
 			//Placement
-			Label bet = new Label("Current Bet: $0");
+			Label bet = new Label("Current Bet: $0.00");
 			bet.setId(player.getName() + "Bet");
 			
 			//The pane containing the player's hole cards and their backs
@@ -231,7 +232,7 @@ public class Table {
 					
 				cardFrontPane.getChildren().addAll(card1Front, card2Front);
 					
-					if (player instanceof Human) { //If the player is a computer back's are imposed on top of their cards
+					if (player instanceof AI) { //If the player is a computer back's are imposed on top of their cards
 						Image cardBack = new Image("/Images/Back.png");
 						ImageView card1Back = new ImageView(cardBack);
 						ImageView card2Back = new ImageView(cardBack);
@@ -308,9 +309,13 @@ public class Table {
 	}
 	
 	/**
+	 * The nodes at the centre of the table will consist of the community card
+	 * depictions, their backs, and the pot and highest bet labels. These nodes
+	 * are appropriately placed and passed back to the caller to be 
+	 * superimposed on the table geometry and player information.
 	 * 
 	 * @param comm the Game's community cards
-	 * @return
+	 * @return the StackPane of centre table nodes
 	 */
 	private StackPane setTableCentre(ArrayList<Card> comm) {
 		StackPane tableCentre = new StackPane();
@@ -318,9 +323,14 @@ public class Table {
 			centreProps.setAlignment(Pos.CENTER);
 			centreProps.setSpacing(50);
 			
+				//=============================================================
+				// Community Cards
+			
 				StackPane commFull = new StackPane();
 				commFull.setAlignment(Pos.CENTER);
 					
+					// Card Faces
+				
 					VBox community = new VBox();
 					community.setAlignment(Pos.CENTER);	
 					community.setSpacing(20);
@@ -346,6 +356,8 @@ public class Table {
 						}
 						
 					community.getChildren().addAll(flop, streets);
+					
+					// Card Backs
 					
 					VBox communityCover = new VBox();
 					communityCover.setAlignment(Pos.CENTER);	
@@ -374,14 +386,17 @@ public class Table {
 					
 				commFull.getChildren().addAll(community, communityCover);
 				
+				//=============================================================
+				// Centre Money Indicators
+				
 				VBox dealerMoney = new VBox();
 				dealerMoney.setAlignment(Pos.CENTER);
 				dealerMoney.setSpacing(5);
 				
-					Label pot = new Label("Pot: $0");
+					Label pot = new Label("Pot: $0.00");
 					pot.setId("pot");
 					pot.setAlignment(Pos.CENTER);
-					Label wager = new Label("Highest Wager: $0");
+					Label wager = new Label("Highest Wager: $0.00");
 					wager.setId("wager");
 					wager.setAlignment(Pos.CENTER);
 					
