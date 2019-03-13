@@ -134,6 +134,7 @@ public class Game {
         }
 
         if (actionCounter == roundPlayers.size()) {
+            incrementRound();
             return false;
         }
 
@@ -142,6 +143,7 @@ public class Game {
         }
 
         else {
+            incrementRound();
             return false;
         }
     }
