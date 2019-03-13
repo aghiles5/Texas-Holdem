@@ -106,13 +106,14 @@ public class Game {
     }
 
     public Player processTurn() {
+        Player curPlayer = roundPlayers.get(playerCount);
         roundPlayers.get(playerCount).getDecision();
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
-            Player curPlayer = roundPlayers.get(playerCount);
+            curPlayer = roundPlayers.get(playerCount);
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
-        return roundPlayers.get(playerCount);
+        return curPlayer;
     }
 
     public ArrayList<Player> getPlayers() {
