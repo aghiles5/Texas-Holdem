@@ -106,8 +106,13 @@ public class Game {
     }
 
     public Player processTurn() {
-        players.get(playerCount).getDecision();
-        return players.get(playerCount);
+        Player curPlayer = roundPlayers.get(playerCount);
+        roundPlayers.get(playerCount).getDecision();
+        if (roundPlayers.get(playerCount).getAction() == "Folded") {
+            roundPlayers.remove(playerCount);
+            playerCount -= 1;
+        }
+        return curPlayer;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -121,13 +126,6 @@ public class Game {
     public boolean isBetRoundRunning() {
         int actionCounter = 0;
         for (Player player : roundPlayers) {
-            if (player.hole.size() == 0) {
-                if (playerCount == roundPlayers.size() - 1) {
-                    playerCount -= 1;
-                }
-                roundPlayers.remove(player);
-            }
-
             if (player.getAction() == "Checked") {
                 actionCounter += 1;
             }
