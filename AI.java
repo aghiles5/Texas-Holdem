@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.*;
+
 /**
  * The AI class handles the random decisions that the AI commits
  * 
@@ -5,29 +9,24 @@
  * @version 03/11/2019
  */
 
- 
-
-
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.*;
-
 
 public class AI extends Player{
 
-    // This is an array of CPU player names
+    // This is an empty array of CPU player names
     public ArrayList<String> cpuName = new ArrayList<String>();
 
-
+    // This is a list of names for the CPU player
     String[] newNames = new String[] {"AdventurousAlonzo", "ButcherBoone", "CleverClayton", "DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio", "ProspectorPatrick", "MagnificentMick", "SpeedyGonzales"};
 
-    public void addName() {
+    // This method adds the list of names to the empty array of CPU names
+    public void addCPUName() {
         for (int i = 0; i < newNames.length; i++) {
         cpuName.add(newNames[i]);
         }
     }
 
-    public void setName() {
+    // This method sets the name of the CPU player
+    public void setCPUName() {
         Random name = new Random();
 
         int rName = name.nextInt(cpuName.size());
@@ -125,7 +124,7 @@ public class AI extends Player{
                 return betting;
             }
         }
-        
+
         return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT
     }
 
