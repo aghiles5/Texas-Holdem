@@ -23,6 +23,10 @@ public class Player {
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
+	public void setAction(String newAction) {
+		action = newAction;
+	}
+
 	/**
 	 * pre: action variable has no action post: returns the player's action after
 	 * player finishes his/her round
