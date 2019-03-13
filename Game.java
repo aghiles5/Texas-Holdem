@@ -107,9 +107,7 @@ public class Game {
     }
 
     public Player getLastPlayer() {
-        if (curPlayer.getAction() == "Folded") {
-            return curPlayer;
-        }
+        return curPlayer;
     }
 
     public Player processTurn() {
