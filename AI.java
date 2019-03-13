@@ -28,9 +28,7 @@ public class AI extends Player{
     // This method sets the name of the CPU player
     public void setCPUName() {
         Random name = new Random();
-
         int rName = name.nextInt(cpuName.size());
-
         super.name = newNames[rName];
         cpuName.remove(rName);
     }
@@ -40,7 +38,6 @@ public class AI extends Player{
         // This implements the randomness of the AI
         Random choice = new Random();
         int decision = choice.nextInt(1); // TMPORARY CHANGE
-
         Random betting = new Random();
 
         // AI randomly checks as a decision
@@ -90,15 +87,12 @@ public class AI extends Player{
          */
         if (playDecision == 2) {
             int betting = bet.nextInt(money + 1);
-            
             if (betting == 0) {
                 checkAIBets(playDecision, money);
             }
-
             else if (betting == money) {
                 checkAIBets(playDecision, money);
             }
-
             else {
                 return betting;
             }
@@ -111,20 +105,16 @@ public class AI extends Player{
          */
         else if (playDecision == 3) {
             int betting = bet.nextInt(money + 1);
-
             if (betting == 0) {
                 checkAIBets(playDecision, money);
             }
-
             else if (betting == money) {
                 checkAIBets(playDecision, money);
             }
-
             else {
                 return betting;
             }
         }
-
         return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT
     }
 

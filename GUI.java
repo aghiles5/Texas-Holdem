@@ -107,25 +107,21 @@ public class GUI extends Application {
 			}
 		});
 		
-		/*
 		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				game.raise(((Slider) scene.lookup("#raiseSlider")).getValue());
-				finishUserTurn(scene, game);
 			}
 		});
 		
 		((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				game.call();
+				game.tempCheck();
 				finishUserTurn(scene, game);
 			}
 		});
-		*/
 	}
-	/*
+	
 	private void runGame(Scene scene, Game game) {
 		runPlayRound(scene, game);
 	}
@@ -224,7 +220,7 @@ public class GUI extends Application {
 	}
 	
 	private void showdown(Scene scene, Game game) {
-		revealAllCards(game.getPlayers, scene);
+		revealAllCards(game.getPlayers(), scene);
 		for (Player player : game.getPlayers())
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Hand: " + player.getHand().toString());
 		
@@ -275,7 +271,7 @@ public class GUI extends Application {
 		}
 		runPlayRound(scene, game);
 	}
-	*/
+	
 	/**
 	 * For each AI player in the passed list, i.e. those whose cards are
 	 * covered, their hole cards are revealed through the card reveal 
