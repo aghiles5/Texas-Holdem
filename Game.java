@@ -89,6 +89,8 @@ public class Game {
         for (Player player : roundPlayers) {
             player.setHand(roundComm);
         }
+
+        playerCount = 0;
     }
 
     public int getRound() {
@@ -127,12 +129,10 @@ public class Game {
         }
 
         if (roundPlayers.size() > 1) {
-            playerCount = 0;
             return true;
         }
 
         else if (roundNum < 4) {
-            playerCount = 0;
             return true;
         }
 
