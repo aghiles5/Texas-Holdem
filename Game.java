@@ -119,12 +119,17 @@ public class Game {
     }
 
     public boolean isBetRoundRunning() {
+        int actionCounter = 0;
         for (Player player : roundPlayers) {
             if (player.hole.size() == 0) {
-                if (playerCount == roundPlayers.size()) {
+                if (playerCount == roundPlayers.size() - 1) {
                     playerCount -= 1;
                 }
                 roundPlayers.remove(player);
+            }
+
+            if (player.getAction() == "Checked") {
+                actionCounter += 1;
             }
         }
 
@@ -134,6 +139,10 @@ public class Game {
 
         else if (roundNum < 4) {
             return true;
+        }
+
+        else if (actionCounter == roundPlayers.size()) {
+            return false;
         }
 
         else {
