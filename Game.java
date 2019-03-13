@@ -144,7 +144,9 @@ public class Game {
     }
 
     public void checkAction() {
-        for (Player player : roundPlayers) {
+        ArrayList<Player> tempRPlayers = new ArrayList<Player>();
+        tempRPlayers.addAll(roundPlayers);
+        for (Player player : tempRPlayers) {
             if (player.getAction() == "Folded") {
                 roundPlayers.remove(player);
                 playerCount -= 1;
