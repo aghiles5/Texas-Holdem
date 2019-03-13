@@ -181,8 +181,6 @@ public class Player {
 			emptyHole(); // Clears hole
 			// Nothing
 
-			// Not sure if this line is temporary or not but Adam needed it
-			System.out.println("Player has folded.");
 		}
 	}
 
