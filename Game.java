@@ -190,8 +190,6 @@ public class Game {
 
     public void fold() {
         roundPlayers.get(playerCount).fold("F");
-        roundPlayers.remove(playerCount);
-        playerCount -= 1;
     }
 
     public void tempCheck() {
