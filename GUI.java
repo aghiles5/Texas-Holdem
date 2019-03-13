@@ -87,17 +87,14 @@ public class GUI extends Application {
 		playArea.setCenter(table.getTablePane());
 		scene.setRoot(playArea);
 		
-		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				game.fold();
-			}
-		});
-		
 		((Button) scene.lookup("#notifCont")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				((HBox) scene.lookup("#notif")).setVisible(false);
+				for (Player player : game.getPlayers()) {
+					player.setAction(" ");
+					((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+				}
 				 if (game.getRound() < 4)
 				 	runTurn(scene, game);
 				 else if (game.getRound() == 4) {
@@ -106,6 +103,13 @@ public class GUI extends Application {
 				 	else
 				 		cleanup(scene, game);
 				 	}
+			}
+		});
+		
+		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				game.fold();
 			}
 		});
 		
@@ -162,11 +166,6 @@ public class GUI extends Application {
 		else if (game.getRound() == 3)
 			revealCard((ImageView) scene.lookup("#commBack4"), (ImageView) scene.lookup("#commFront4"));
 		
-		for (Player player : game.getPlayers()) {
-			player.setAction(" ");
-			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
-		}
-		
 		HBox notif = (HBox) scene.lookup("#notif");
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		notifLabel.setText(game.getRoundString());
@@ -179,7 +178,7 @@ public class GUI extends Application {
 			setupUserTurn(player, scene, game);
 		}
 		else {
-			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: lime;");
+			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
 			player = game.processTurn();
 			
 			PauseTransition pause = new PauseTransition(new Duration(1000));
@@ -212,7 +211,7 @@ public class GUI extends Application {
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
-		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: lime;");
+		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
 		controls.setDisable(false);
 	}
@@ -251,11 +250,12 @@ public class GUI extends Application {
 		ArrayList<Player> winners = game.showdown();
 		HBox notif = (HBox) scene.lookup("#notif");
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
+		
 		StringBuilder winnerString = new StringBuilder();
-		if (winners.size() == game.getPlayers().size())
+		if ((winners.size() == game.getPlayers().size()) &&(game.getPlayers().size() != 1))
 			winnerString.append("The Pot Will Be Divided Evenly");
 		else {
-			if(winners.size() == 1)
+			if (winners.size() == 1)
 				winnerString.append(winners.get(0).getName());
 			else {
 				int index = 0;
@@ -271,8 +271,8 @@ public class GUI extends Application {
 			}
 			winnerString.append(" Won the Pot");
 		}
-		notifLabel.setText(winnerString.toString());
 		
+		notifLabel.setText(winnerString.toString());
 		notif.setVisible(true);
 	}
 	
