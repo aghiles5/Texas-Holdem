@@ -74,12 +74,13 @@ public class ActionBar {
 			raise.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
 			
-			Button call = new Button("Call");
+			Button call = new Button("Check");
 			call.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			call.getStyleClass().add("button-large");
 			call.setId("call");
 		
 		controls.getChildren().addAll(fold, raise, call);
+		controls.setDisable(true);
 		
 		//Input for raise
 		HBox raiseInput = new HBox();
@@ -128,9 +129,8 @@ public class ActionBar {
 		notif.getChildren().addAll(notifLabel, notifCont);
 		notif.setVisible(false);
 		
-		
 		actions.getChildren().addAll(controls, raiseInput, notif);
-		
+				
 		//=====================================================================
 		//Settings Buttons
 		
