@@ -50,7 +50,7 @@ public class AI extends Player{
 
         // AI randomly folds as a decision
         else if (decision == 1) {
-        super.fold("F");
+            super.fold("F");
         }
 
         // THIS COMMENT IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
