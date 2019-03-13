@@ -18,7 +18,7 @@ public class Game {
     private Deck cardDeck = new Deck();
     private int roundNum;
     private int playerCount;
-    private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Showdown" };
+    private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Turnover", "Showdown" };
 
     public Game() {
         roundNum = 0;
@@ -74,12 +74,17 @@ public class Game {
 
     public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
-        roundNum++;
-        if (roundNum == 1) {
-            for (int i = 0; i < middleCards.size() - 2; i++) {
-                roundComm.add(middleCard.get(i));
-            }
+        for (Card roundCard : middleCards) {
+            roundComm.add(roundCard);
         }
+        roundNum++;
+        if (roundNum == 0) {
+            roundComm.remove(middleCards.size());
+            roundComm.remove(middleCards.size() - 1);
+        } else if (roundNum == 1) {
+            roundComm.remove(middleCards.size());
+        }
+
         for (Player player : roundPlayers) {
             player.setHand(roundComm);
         }
@@ -122,10 +127,12 @@ public class Game {
         }
 
         if (roundPlayers.size() > 1) {
+            playerCount = 0;
             return true;
         }
 
-        else if (roundNum <= 3) {
+        else if (roundNum < 4) {
+            playerCount = 0;
             return true;
         }
 
