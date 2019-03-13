@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javafx.animation.ScaleTransition;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -72,10 +73,12 @@ public class GUI extends Application {
 	 * @param scene the GUI scene
 	 */
 	private void generatePlayArea(Scene scene) {
-		GUITest.testDeck.shuffle();
-		ArrayList<Card> comm = GUITest.generateComm();
+		Game game = new Game();
 		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-		ArrayList<Player> players = GUITest.generatePlayers(playerNum);
+		ArrayList<Player> players = game.generatePlayers(playerNum);
+		game.setupRound();
+		ArrayList<Card> comm = game.getComm();
+		
 		
 		BorderPane playArea = new BorderPane();
 		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT);
@@ -87,6 +90,7 @@ public class GUI extends Application {
 		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				game.fold();
 			}
 		});
 		
@@ -94,16 +98,14 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				((HBox) scene.lookup("#notif")).setVisible(false);
-				/*
-				 if (game.getRound < 4)
+				 if (game.getRound() < 4)
 				 	runTurn(scene, game);
-				 else if (game.getRound == 4) {
+				 else if (game.getRound() == 4) {
 				 	if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
 				 		showdown(scene, game);
 				 	else
-				 	runPlayRound(scene, game);
+				 		cleanup(scene, game);
 				 	}
-				 */
 			}
 		});
 		
@@ -120,6 +122,8 @@ public class GUI extends Application {
 				finishUserTurn(scene, game);
 			}
 		});
+		
+		runGame(scene, game);
 	}
 	
 	private void runGame(Scene scene, Game game) {
@@ -138,8 +142,8 @@ public class GUI extends Application {
 		}
 		
 		for (Player player : players) {
-			((ImageView) scene.lookup("#" + player.getName() + "Card1Front")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
-			((ImageView) scene.lookup("#" + player.getName() + "Card2Front")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
+			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
+			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
 		}
 		
 		for(int index = 0; index < 5; index++) {
@@ -157,6 +161,12 @@ public class GUI extends Application {
 			revealCard((ImageView) scene.lookup("#commBack3"), (ImageView) scene.lookup("#commFront3"));
 		else if (game.getRound() == 3)
 			revealCard((ImageView) scene.lookup("#commBack4"), (ImageView) scene.lookup("#commFront4"));
+		
+		for (Player player : game.getPlayers()) {
+			player.setAction(" ");
+			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+		}
+		
 		HBox notif = (HBox) scene.lookup("#notif");
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		notifLabel.setText(game.getRoundString());
@@ -169,16 +179,30 @@ public class GUI extends Application {
 			setupUserTurn(player, scene, game);
 		}
 		else {
-			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-border-color: lime;");
+			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: lime;");
 			player = game.processTurn();
-			TimeUnit.SECONDS.sleep(3);
-			updatePlayerInfo(player, scene);
-			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-border-color: lightblue;");
-			if (game.isBetRoundRunning())
-				runTurn(scene, game);
-			else
-				notifyRound(scene, game);
+			
+			PauseTransition pause = new PauseTransition(new Duration(1000));
+			pause.setOnFinished(new EventHandler<ActionEvent>() { 
+				@Override
+				public void handle(ActionEvent event) {
+					finishAITurn(scene, game);
+				}
+			});
+			
+			pause.play();
 		}
+	}
+	
+	private void finishAITurn(Scene scene, Game game) {
+		Player player = game.getLastPlayer();
+		updatePlayerInfo(player, scene);
+		game.incrementPlayer();
+		((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: black;");
+		if (game.isBetRoundRunning())
+			runTurn(scene, game);
+		else
+			notifyRound(scene, game);
 	}
 	
 	private void setupUserTurn(Player user, Scene scene, Game game) {
@@ -188,7 +212,7 @@ public class GUI extends Application {
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
-		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-border-color: lime;");
+		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: lime;");
 		
 		controls.setDisable(false);
 	}
@@ -204,7 +228,7 @@ public class GUI extends Application {
 		raiseInput.setVisible(false);
 		raise.setText("Bet");
 		updatePlayerInfo(user, scene);
-		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-border-color: lightblue;");
+		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		game.incrementPlayer();
 		
 		if (game.isBetRoundRunning())
@@ -269,6 +293,7 @@ public class GUI extends Application {
 			showBack.setNode((ImageView) scene.lookup("#commBack" + index));
 			showBack.play();
 		}
+		game.setupRound();
 		runPlayRound(scene, game);
 	}
 	

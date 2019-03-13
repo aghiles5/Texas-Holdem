@@ -87,7 +87,7 @@ public class Hand {
 		if (cards.size() < 5)
 			cards.add(card);
 			if (cards.size() == 5)
-				detRank();
+				rank = detRank();
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public class Hand {
 	 * hand rankings, listed in the RANKING_KEY array from lowest to highest. 
 	 * The correct rank number is assigned to the rank attribute.
 	 */
-	private void detRank() {
+	private int detRank() {
 		ArrayList<Card> oCards = orderCards(); //The Cards are ordered from highest to lowest rank
 		
 		//Checks for flush/straight type hands
@@ -173,13 +173,13 @@ public class Hand {
 		//The appropriate flush/straight type ranking is returned based on the above test results, else the method continues
 		
 		if ((isFlush == true) && (isStraight == true) && (oCards.get(0).getRank() == 12) && (oCards.get(4).getRank() == 8)) 
-			rank = ROYAL_FLUSH;
+			return ROYAL_FLUSH;
 		else if ((isFlush == true) && (isStraight == true))
-			rank = STRAIGHT_FLUSH;
+			return STRAIGHT_FLUSH;
 		else if (isFlush == true)
-			rank = FLUSH;
+			return FLUSH;
 		else if (isStraight == true)
-			rank = STRAIGHT;
+			return STRAIGHT;
 		
 		// Pair checking
 		
@@ -193,7 +193,7 @@ public class Hand {
 					rankMatches++;
 			}
 			if (rankMatches == 3) //If four cards have matching ranks "Four of a Kind" is immediately returned
-				rank = FOUR_OF_A_KIND;
+				return FOUR_OF_A_KIND;
 			else if (rankMatches == 2)
 				threeKind = true;
 			else if (rankMatches == 1)
@@ -203,15 +203,15 @@ public class Hand {
 		//Based on the above determined sets of equal ranks the appropriate rank based rankings are returned
 		
 		if ((threeKind == true) && (pairs == 1.0))
-			rank = FULL_HOUSE;
+			return FULL_HOUSE;
 		else if (threeKind == true)
-			rank = THREE_OF_A_KIND;
+			return THREE_OF_A_KIND;
 		else if (pairs == 2.0)
-			rank = TWO_PAIRS;
+			return TWO_PAIRS;
 		else if (pairs == 1.0)
-			rank = ONE_PAIR;
+			return ONE_PAIR;
 		
-		rank = HIGH_CARD; // The ranking defaults to "High Card"
+		return HIGH_CARD; // The ranking defaults to "High Card"
 	}
 	
 	/**

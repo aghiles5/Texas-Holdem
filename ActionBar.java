@@ -73,6 +73,7 @@ public class ActionBar {
 			Button raise = new Button("Bet");
 			raise.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
+			raise.setId("raise");
 			
 			Button call = new Button("Check");
 			call.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);

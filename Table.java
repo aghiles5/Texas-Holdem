@@ -192,10 +192,10 @@ public class Table {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			name.setStyle("-fx-border-color: lightblue;" + "-fx-border-width: 5;");
 			Label stack = new Label("Stack: $0.00");
 			Label action = new Label(" ");
 			
+			name.setId(player.getName() + "Name");
 			stack.setId(player.getName() + "Stack");
 			action.setId(player.getName() + "Action");
 			
