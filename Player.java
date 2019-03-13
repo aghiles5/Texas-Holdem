@@ -19,8 +19,18 @@ public class Player {
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
 	private int totBet = 0; // the player's total bet for the round
+	private String action = "";
 	// method in main that sets the blinds
 	// make the current player bet into a list?
+
+	/**
+	 * pre: action variable has no action
+	 * post: returns the player's action after player finishes his/her round
+	 * 
+	 */
+	public String getAction() {
+		return action;
+	}
 
 	/**
 	 * pre: post: The player's stack of money amount is returned. Gets and returns
@@ -164,6 +174,7 @@ public class Player {
 	public void check(String choice) {
 		// If the input is c, play moves to the next player
 		if (choice.equalsIgnoreCase("C")) {
+			action = "Checked";
 			// Nothing
 		}
 	}
@@ -179,6 +190,7 @@ public class Player {
 		if (choice.equalsIgnoreCase("F")) {
 			emptyHand(); // Clears hand
 			emptyHole(); // Clears hole
+			action = "Folded";
 			// Nothing
 
 		}
