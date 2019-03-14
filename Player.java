@@ -28,7 +28,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: action variable has no action post: returns the player's action after
+	 * pre: action variable has no action
+	 * post: returns the player's action after
 	 * player finishes his/her round
 	 * 
 	 */
@@ -37,7 +38,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: post: The player's stack of money amount is returned. Gets and returns
+	 * pre: none
+	 * post: The player's stack of money amount is returned. Gets and returns
 	 * the stack of money of player.
 	 * 
 	 * @return stack
@@ -47,8 +49,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A name for the player has been set. post: The player's name has been
-	 * set.
+	 * pre: A name for the player has been set.
+	 * post: The player's name has been set.
 	 * 
 	 * @param newName
 	 */
@@ -61,7 +63,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: post: The player's name has been returned. Gets and returns the name of
+	 * pre: none 
+	 * post: The player's name has been returned. Gets and returns the name of
 	 * the player.
 	 * 
 	 * @return name
@@ -119,8 +122,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hand has been returned.
-	 * 
+	 * pre: none 
+	 * post: The player's hand has been returned.
 	 * @return new Hand object
 	 */
 	public Hand getHand() {
@@ -128,9 +131,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A card has been chosen. post: A card has been added to the player's
-	 * hole.
-	 * 
+	 * pre: A card has been chosen.
+	 * post: A card has been added to the player's hole.
 	 * @param c
 	 */
 	public void setHole(Card c) {
@@ -139,9 +141,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: Returns the player's hole. The player's hole has been
+	 * pre: none
+	 * post: Returns the player's hole. The player's hole has been
 	 * returned.
-	 * 
 	 * @return hole
 	 */
 	public ArrayList<Card> getHole() {
@@ -149,7 +151,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hole has been reset The hole ArrayList has been
+	 * pre: none 
+	 * post: The player's hole has been reset The hole ArrayList has been
 	 * cleared to reset for the next round.
 	 */
 	public void emptyHole() {
@@ -157,7 +160,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hand has been reset The hole ArrayList has been
+	 * pre: none
+	 * post: The player's hand has been reset The hole ArrayList has been
 	 * cleared to reset for the next round.
 	 */
 	public void emptyHand() {
@@ -166,8 +170,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's total bet has been returned.
-	 * 
+	 * pre: none
+	 * post: The player's total bet has been returned.
 	 * @return totBet
 	 */
 	public int getBet() {
@@ -175,9 +179,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player has "checked" and
-	 * chosen to do nothing.
-	 * 
+	 * pre: A player decision has been made.
+	 * post: The player has "checked" and chosen to do nothing.
 	 * @param choice
 	 */
 	public void check(String choice) {
@@ -189,9 +192,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player's hand has been
+	 * pre: A player decision has been made.
+	 * post: The player's hand has been
 	 * cleared as they have given up on this round.
-	 * 
 	 * @param choice
 	 */
 	public void fold(String choice) {
@@ -206,9 +209,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision and their increased bet have been entered. post: The
-	 * player has added money to the pot with their total amount of money decreasing
-	 * appropriately.
+	 * pre: A player decision and their increased bet have been entered.
+	 * post: The player has added money to the pot with their total 
+	 * amount of money decreasing appropriately.
 	 * 
 	 * @param choice
 	 * @param newBet
