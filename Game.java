@@ -47,6 +47,7 @@ public class Game {
 
     public void setupRound() {
         roundPlayers.clear();
+        roundNum = 0;
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -171,14 +172,14 @@ public class Game {
         encapPlayers.addAll(roundPlayers); // The player ArrayList is encapsulated by the proxy encapPlayers ArrayList
 
         Player highestPlayer = encapPlayers.get(0);
-        int highPlayerIndex = -1;
+        int highPlayerIndex = 0;
         for (int index = 1; index < encapPlayers.size(); index++) {
             if (encapPlayers.get(index).getHand().compareHand(highestPlayer.getHand()) == 1)
                 highestPlayer = encapPlayers.get(index);
             highPlayerIndex = index;
         }
         winners.add(highestPlayer);
-        encapPlayers.remove(highPlayerIndex);
+        encapPlayers.remove(highestPlayer);
 
         for (Player player : encapPlayers) {
             if (player.getHand().compareHand(highestPlayer.getHand()) == 0)

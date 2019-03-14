@@ -322,7 +322,6 @@ public class GUI extends Application {
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		
 		StringBuilder winnerString = new StringBuilder();
-		System.out.println(winners.size());
 		if ((winners.size() == game.getPlayers().size()) &&(game.getPlayers().size() != 1))
 			winnerString.append("The Pot Will Be Divided Evenly");
 		else {
@@ -356,21 +355,16 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void cleanup(Scene scene, Game game) {
-		ScaleTransition showBack = new ScaleTransition();
-		showBack.setByX(1);
-		showBack.setDuration(Duration.seconds(0.001));
 		for (Player player : game.getPlayers()) {
 			if (player instanceof AI) {
-				showBack.setNode((ImageView) scene.lookup("#" + player.getName() + "Card1Back"));
-				showBack.play();
-				showBack.setNode((ImageView) scene.lookup("#" + player.getName() + "Card2Back"));
-				showBack.play();
+				hideCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"));
+				hideCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"));
 			}
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0.00");
 		}
 		for (int index = 0; index < 5; index++) {
-			showBack.setNode((ImageView) scene.lookup("#commBack" + index));
-			showBack.play();
+			hideCard((ImageView) scene.lookup("#commBack" + index));
 		}
 		game.setupRound();
 		runPlayRound(scene, game);
@@ -461,6 +455,20 @@ public class GUI extends Application {
 		hideFront.play();
 		
 		return showFront;
+	}
+	
+	/**
+	 * To hide cards for cleanup the back will simply be near instantly
+	 * stretch back to its original width.
+	 * 
+	 * @param cardBack the ImageView of the card's back
+	 */
+	private void hideCard(ImageView cardBack) {
+		ScaleTransition showBack = new ScaleTransition();
+		showBack.setByX(1);
+		showBack.setDuration(Duration.seconds(0.001));
+		showBack.setNode(cardBack);
+		showBack.play();
 	}
 	
 	/**
