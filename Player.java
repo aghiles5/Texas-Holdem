@@ -31,7 +31,6 @@ public class Player {
 	 * pre: action variable has no action
 	 * post: returns the player's action after
 	 * player finishes his/her round
-	 * 
 	 */
 	public String getAction() {
 		return action;
@@ -41,7 +40,6 @@ public class Player {
 	 * pre: none
 	 * post: The player's stack of money amount is returned. Gets and returns
 	 * the stack of money of player.
-	 * 
 	 * @return stack
 	 */
 	public int getStack() {
@@ -51,7 +49,6 @@ public class Player {
 	/**
 	 * pre: A name for the player has been set.
 	 * post: The player's name has been set.
-	 * 
 	 * @param newName
 	 */
 	public void setName(String newName) {
@@ -66,7 +63,6 @@ public class Player {
 	 * pre: none 
 	 * post: The player's name has been returned. Gets and returns the name of
 	 * the player.
-	 * 
 	 * @return name
 	 */
 	public String getName() {
@@ -231,9 +227,9 @@ public class Player {
 	 */
 
 	/**
-	 * pre: A player decision has been made. post: The player has called. Calculates
+	 * pre: A player decision has been made.
+	 * post: The player has called. Calculates
 	 * the amount to call and adds that amount to the pot.
-	 * 
 	 * @param choice
 	 * @param currentBet
 	 */
@@ -246,9 +242,9 @@ public class Player {
 	 */
 
 	/**
-	 * pre: A player decision has been made. post: The player has $0 remaining and
+	 * pre: A player decision has been made. 
+	 * post: The player has $0 remaining and
 	 * has gone "All-In."
-	 * 
 	 * @param choice
 	 */
 	/**
