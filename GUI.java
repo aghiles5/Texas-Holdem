@@ -25,7 +25,7 @@ import javafx.scene.shape.Ellipse;
  * displayed, new Games are created, and the main game loop is run from here.
  * 
  * @author Adam Hiles
- * @version 03/03/18
+ * @version 03/13/18
  */
 public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
@@ -43,7 +43,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		primaryStage.setTitle("Texas Hold\'em");
-		primaryStage.setFullScreen(true);
+		primaryStage.setFullScreen(false);
 		primaryStage.setResizable(false);
 		primaryStage.setFullScreenExitHint("");
 		

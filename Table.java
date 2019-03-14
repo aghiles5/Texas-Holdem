@@ -21,7 +21,7 @@ import javafx.stage.Screen;
  * All aspects relating to the poker table image in the GUI are created here.
  * 
  * @author Adam Hiles
- * @version 03/06/19
+ * @version 03/13/19
  */
 public class Table {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();

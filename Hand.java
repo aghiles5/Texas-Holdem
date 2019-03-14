@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * methods to find the highest.
  * 
  * @author Adam Hiles
- * @version 03/05/18
+ * @version 03/13/18
  */
 public class Hand {
 	private ArrayList<Card> cards = new ArrayList<Card>();
