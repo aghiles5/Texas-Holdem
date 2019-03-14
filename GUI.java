@@ -43,7 +43,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		primaryStage.setTitle("Texas Hold\'em");
-		primaryStage.setFullScreen(false);
+		primaryStage.setFullScreen(true);
 		primaryStage.setResizable(false);
 		primaryStage.setFullScreenExitHint("");
 		
