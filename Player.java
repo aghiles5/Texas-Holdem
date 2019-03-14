@@ -20,8 +20,32 @@ public class Player {
 	protected String name = ""; // the name of the human player
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
+	private double wins;
+	private double lost;
+	private double winPercent;
 	// method in main that sets the blinds
 	// make the current player bet into a list?
+
+	public double getWinPercent() {
+		winPercent = getWins() / (getWins() + getLost());
+		return winPercent;
+	}
+	
+	public double getWins() {
+		return wins;
+	}
+
+	public double getLost() {
+		return lost;
+	}
+
+	public void setWins() {
+		wins += 1;
+	}
+
+	public void setLost() {
+		lost += 1;
+	}
 
 	public void setAction(String newAction) {
 		action = newAction;
