@@ -21,11 +21,21 @@ public class Game {
     private int playerCount;
     private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Turnover", "Showdown" };
 
+    /*
+     * Constructor to ensure that roundNum and playerCount are reset to 0 when a
+     * game object is created
+     */
     public Game() {
         roundNum = 0;
         playerCount = 0;
     }
 
+    /**
+     * Generates the players needed to be recorded throughout the game and in gui
+     * 
+     * @param number of players decided by gui
+     * @return arraylist of the generated players
+     */
     public ArrayList<Player> generatePlayers(int numOfPlayers) {
         Random playerPos = new Random();
         int position = playerPos.nextInt(numOfPlayers);
@@ -45,6 +55,9 @@ public class Game {
         return players;
     }
 
+    /**
+     * Sets up the next round for the game, used for GUI calling and game setup
+     */
     public void setupRound() {
         roundPlayers.clear();
         roundNum = 0;
@@ -67,6 +80,10 @@ public class Game {
         }
     }
 
+    /**
+     * Increases the player count by one so that the next player and his decisions
+     * can be recorded
+     */
     public void incrementPlayer() {
         if (playerCount == roundPlayers.size() - 1) {
             playerCount = 0;
@@ -75,6 +92,10 @@ public class Game {
         }
     }
 
+    /**
+     * Increases the round by one in order to reset all of the players actions and
+     * continue the game
+     */
     public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
@@ -95,18 +116,37 @@ public class Game {
         }
     }
 
+    /**
+     * Gets the round number for GUI
+     * 
+     * @return a integer corresponding to the evaluated relation
+     */
     public int getRound() {
         return roundNum;
     }
 
+    /**
+     * Gets the string for the current round number for GUI
+     * 
+     * @return a string corresponding to the evaluated relation
+     */
     public String getRoundString() {
         return ROUNDKEY[roundNum];
     }
 
+    /**
+     * Gets the player that the round is currently on for GUI
+     * 
+     * @return a Player object corresponding to the evaluated relation
+     */
     public Player getCurrentPlayer() {
         return roundPlayers.get(playerCount);
     }
 
+    /**
+     * Sets an object of type player to the last player that the game was just
+     * getting input from
+     */
     public void setLastPlayer(Player theLastPlayer) {
         lastPlayer = theLastPlayer;
     }
@@ -127,10 +167,20 @@ public class Game {
         return curPlayer;
     }
 
+    /**
+     * Gives GUI the players used in the round
+     * 
+     * @return an arraylist of type player corresponding to the evaluated relation
+     */
     public ArrayList<Player> getPlayers() {
         return roundPlayers;
     }
 
+    /**
+     * Gives GUI the middle community cards used for the round
+     * 
+     * @return an arraylist of type card corresponding to the evaluated relation
+     */
     public ArrayList<Card> getComm() {
         return middleCards;
     }
@@ -160,13 +210,11 @@ public class Game {
         }
     }
 
-    /*
-     * public void checkAction() { ArrayList<Player> tempRPlayers = new
-     * ArrayList<Player>(); tempRPlayers.addAll(roundPlayers); for (Player player :
-     * tempRPlayers) { if (player.getAction() == "Folded") {
-     * roundPlayers.remove(player); } } }
+    /**
+     * Figures out the winner by determining which player has the highest card rank
+     * 
+     * @return an arraylist of type player corresponding to the evaluated relation
      */
-
     public ArrayList<Player> showdown() {
         ArrayList<Player> encapPlayers = new ArrayList<Player>(), winners = new ArrayList<Player>();
         encapPlayers.addAll(roundPlayers); // The player ArrayList is encapsulated by the proxy encapPlayers ArrayList
@@ -189,6 +237,10 @@ public class Game {
         return winners;
     }
 
+    /**
+     * Calls the player's action when the player chooses to fold and removes him
+     * from the round
+     */
     public void fold() {
         roundPlayers.get(playerCount).fold("F");
         setLastPlayer(roundPlayers.get(playerCount));
@@ -196,6 +248,10 @@ public class Game {
         playerCount -= 1;
     }
 
+    /**
+     * A temporary method used for DEMO 2, calls the player's action when the player
+     * chooses to check
+     */
     public void tempCheck() {
         roundPlayers.get(playerCount).check("C");
         setLastPlayer(roundPlayers.get(playerCount));
