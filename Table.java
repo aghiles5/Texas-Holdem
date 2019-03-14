@@ -192,7 +192,7 @@ public class Table {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			Label stack = new Label("Stack: $0.00");
+			Label stack = new Label("Stack: $100 0000");
 			Label action = new Label(" ");
 			
 			name.setId(player.getName() + "Name");
@@ -206,7 +206,7 @@ public class Table {
 			seat.getChildren().addAll(name, stack, action);
 			
 			//Placement
-			Label bet = new Label("Current Bet: $0.00");
+			Label bet = new Label("Current Bet: $0");
 			bet.setId(player.getName() + "Bet");
 			
 			//The pane containing the player's hole cards and their backs
@@ -393,10 +393,10 @@ public class Table {
 				dealerMoney.setAlignment(Pos.CENTER);
 				dealerMoney.setSpacing(5);
 				
-					Label pot = new Label("Pot: $0.00");
+					Label pot = new Label("Pot: $0");
 					pot.setId("pot");
 					pot.setAlignment(Pos.CENTER);
-					Label wager = new Label("Highest Wager: $0.00");
+					Label wager = new Label("Highest Wager: $0");
 					wager.setId("wager");
 					wager.setAlignment(Pos.CENTER);
 					

@@ -31,6 +31,7 @@ public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
+	private boolean userFolded = false;
 	
 	/**
 	 * On the start of the GUI the main menu will be displayed and an
@@ -154,6 +155,8 @@ public class GUI extends Application {
 		for (Player player : players) {
 			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
 			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
+			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
 		}
 		
 		for(int index = 0; index < 5; index++) {
@@ -182,6 +185,22 @@ public class GUI extends Application {
 		HBox notif = (HBox) scene.lookup("#notif");
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		notifLabel.setText(game.getRoundString());
+		
+		if (userFolded) { //If the user folded, fast track to showdown
+			if (game.getRound() == 4)
+				showdown(scene, game);
+			else
+				runTurn(scene, game);
+		}
+		
+		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
+			while (game.getRound() != 4) {
+				game.incrementRound();
+				notifyRound(scene, game);
+			}
+			showdown(scene, game);
+		}
+		
 		notif.setVisible(true);
 	}
 	
@@ -205,6 +224,10 @@ public class GUI extends Application {
 			player = game.processTurn();
 			
 			PauseTransition pause = new PauseTransition(new Duration(1000));
+			
+			if (userFolded)
+				pause.setDuration(new Duration(1));
+			
 			pause.setOnFinished(new EventHandler<ActionEvent>() { 
 				@Override
 				public void handle(ActionEvent event) {
@@ -282,6 +305,9 @@ public class GUI extends Application {
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		game.incrementPlayer();
 		
+		if (user.getAction() == "Folded")
+			userFolded = true;
+		
 		if (game.isBetRoundRunning())
 			runTurn(scene, game);
 		else
@@ -301,6 +327,8 @@ public class GUI extends Application {
 		//((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
 		//((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
+		if (player.getAction() == "Folded")
+			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
 	}
 	
 	/**
@@ -360,12 +388,14 @@ public class GUI extends Application {
 				hideCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"));
 				hideCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"));
 			}
-		((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
-		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0.00");
 		}
+		
+		userFolded = false;
+		
 		for (int index = 0; index < 5; index++) {
 			hideCard((ImageView) scene.lookup("#commBack" + index));
 		}
+		
 		game.setupRound();
 		runPlayRound(scene, game);
 	}
