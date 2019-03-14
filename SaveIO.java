@@ -15,13 +15,16 @@ public class SaveIO extends Game {
 		FileWriter out;
 		BufferedWriter writeScore;
 		
-		name = copy.getName(); //Need method to get name.
-		stacks = copy.getStack(); //Need method to get stack.
+		for (int k = 0; k < copy.size(); k++) {
+			name.add(copy.get(k).getName());
+			stacks.add(copy.get(k).getStack());
+		}
 		
 		try {
 			out = new FileWriter(dataFile);
 			writeScore = new BufferedWriter(out);
 			for (int i = 0; i < super.getPlayerList().size(); i++) {
+				//doesn't write with separate lines just one jumbled mess
 				writeScore.write(name.get(i));
 				writeScore.write(stacks.get(i));
 			}
