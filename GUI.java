@@ -68,7 +68,7 @@ public class GUI extends Application {
 	 * new Game object, ActionBar and Table objects based on Game information,
 	 * and creating EventHandlers for the user's action buttons. These 
 	 * EventHandlers will likely be moved to their own class for future
-	 * iterations.
+	 * iterations. The start of a round is called once all this is set up.
 	 * 
 	 * @param scene the GUI scene
 	 */
@@ -127,13 +127,18 @@ public class GUI extends Application {
 			}
 		});
 		
-		runGame(scene, game);
-	}
-	
-	private void runGame(Scene scene, Game game) {
 		runPlayRound(scene, game);
 	}
 	
+	/**
+	 * Before starting a round of play the small blind, big blind, and dealer
+	 * chips are set in their appropriate spot, players' hole cards are
+	 * updated, and the community cards are updated. After these actions are
+	 * carried out the first round notification is called.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void runPlayRound(Scene scene, Game game) {
 		ArrayList<Player> players = game.getPlayers();
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE);
@@ -158,6 +163,13 @@ public class GUI extends Application {
 		notifyRound(scene, game);
 	}
 	
+	/**
+	 * In between rounds a notification window will appear, prompting the user
+	 * to continue. The community cards will also be revealed as appropriate.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void notifyRound(Scene scene, Game game) {
 		if (game.getRound() == 1)
 			revealFlop(scene);
@@ -172,6 +184,16 @@ public class GUI extends Application {
 		notif.setVisible(true);
 	}
 	
+	/**
+	 * To run a player turn this method retrieves the current player from the
+	 * game. If the player is the user the method for setting up a user turn is
+	 * called. Else, if they are an AI, the game will process their turn, and,
+	 * after a short pause for effect, a method will be called to finish their
+	 * turn.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
 		if (player instanceof Human) {
@@ -193,6 +215,15 @@ public class GUI extends Application {
 		}
 	}
 	
+	/**
+	 * After an AI's turn is processed, their on screen information will be
+	 * updated, the counter for the next player will be incremented, and either
+	 * the program will continue to that next player's turn or a new round
+	 * notification will appear, granted the betting round is over.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void finishAITurn(Scene scene, Game game) {
 		Player player = game.getLastPlayer();
 		updatePlayerInfo(player, scene);
@@ -204,6 +235,17 @@ public class GUI extends Application {
 			notifyRound(scene, game);
 	}
 	
+	/**
+	 * To setup the user's turn their control buttons are simply enabled and 
+	 * their name is colored to mark them as the current player. Additional
+	 * scene lookups are included for future iterations where this method
+	 * will have to dynamically change call/raise button names and change the
+	 * bounds of the raise slide to reflect the user's stack.
+	 * 
+	 * @param user the human player
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void setupUserTurn(Player user, Scene scene, Game game) {
 		Button call = (Button) scene.lookup("#call");
 		Button raise = (Button) scene.lookup("#raise");
@@ -216,6 +258,15 @@ public class GUI extends Application {
 		controls.setDisable(false);
 	}
 	
+	/**
+	 * At the end of the user's turn their controls are disabled, the raise
+	 * menu is closed, button names are defaulted, and the current player is
+	 * incremented and the call to run their turn is made. If the betting round
+	 * is over the call to setup the next round is made.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void finishUserTurn(Scene scene, Game game) {
 		HBox controls = (HBox) scene.lookup("#controls");
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
@@ -236,12 +287,30 @@ public class GUI extends Application {
 			notifyRound(scene, game);
 	}
 	
+	/**
+	 * After a player has carried out their turn their information as displayed
+	 * on the GUI needs to be updated. Currently, only their action is updated
+	 * but their stack and bet will also be updated once money systems are
+	 * 
+	 * 
+	 * @param player the player whose information needs to be updated
+	 * @param scene the GUI scene
+	 */
 	private void updatePlayerInfo(Player player, Scene scene) {
 		//((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
 		//((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
 	}
 	
+	/**
+	 * For the showdown phase of play each remaining player's bet label is
+	 * set to display their highest hand rank. After game is called to 
+	 * process the showdown the notification window is shown with a dynamic
+	 * string listing the round's victors.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void showdown(Scene scene, Game game) {
 		revealAllCards(game.getPlayers(), scene);
 		for (Player player : game.getPlayers())
@@ -276,6 +345,14 @@ public class GUI extends Application {
 		notif.setVisible(true);
 	}
 	
+	/**
+	 * To cleanup for the next round of play the backs of all AI and community
+	 * cards are returned and game is called to setup a new round. The GUI
+	 * event loop is returned to runPlayRound and the game continues.
+	 * 
+	 * @param scene the GUI scene
+	 * @param game the Game object
+	 */
 	private void cleanup(Scene scene, Game game) {
 		ScaleTransition showBack = new ScaleTransition();
 		showBack.setByX(1);
