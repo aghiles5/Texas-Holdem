@@ -69,7 +69,7 @@ public class Player {
 	public void setLost() {
 		lost += 1;
 	}
-
+	
 	public void setAction(String newAction) {
 		action = newAction;
 	}
