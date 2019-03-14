@@ -26,23 +26,46 @@ public class Player {
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
+
+
+	// CHANGE THIS TO RATIOS OF WINS AND LOSSES -----------------------
+	/**
+	 * pre: none
+	 * post: calculates the percentage of winning for the player and returns a double
+	 */
 	public double getWinPercent() {
-		winPercent = getWins() / (getWins() + getLost());
+		winPercent = (getWins() / (getWins() + getLost())) * 100; // multiply by 100 to get a percentage number
 		return winPercent;
 	}
 	
+	/**
+	 * pre: none
+	 * post: returns the number of rounds the player has won
+	 */
 	public double getWins() {
 		return wins;
 	}
 
+	/**
+	 * pre: none
+	 * post: returns the nuumber of rounds lost for the player
+	 */
 	public double getLost() {
 		return lost;
 	}
 
+	/**
+	 * pre: none
+	 * post: adds another round of win when player wins the round
+	 */
 	public void setWins() {
 		wins += 1;
 	}
 
+	/**
+	 * pre: none
+	 * post: adds another round of lost when player losses round
+	 */
 	public void setLost() {
 		lost += 1;
 	}
