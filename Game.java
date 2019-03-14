@@ -29,6 +29,10 @@ public class Game {
         roundNum = 0;
         playerCount = 0;
     }
+    
+    public ArrayList<Player> getPlayerList() {
+    	return players;
+    }
 
     /**
      * Generates the players needed to be recorded throughout the game and in gui
