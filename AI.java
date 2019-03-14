@@ -19,10 +19,12 @@ public class AI extends Player {
       	"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
       	"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
 
-	// Temporary
-	// This constructor calls setCPUName() to set up the CPU name
+	// This constructor sets up the CPU name for each CPU player
   	public AI() {
-    	setCPUName();
+    	Random name = new Random();
+    	int rName = name.nextInt(cpuName.size());
+    	super.name = cpuName.get(rName);
+    	cpuName.remove(rName);
   	}
 
   	// This method adds the list of names to the empty array of CPU names
@@ -30,14 +32,6 @@ public class AI extends Player {
     	for (int i = 0; i < newNames.length; i++) {
       	cpuName.add(newNames[i]);
 		}
-  	}
-
-  	// This method sets the name of the CPU player
-  	public void setCPUName() {
-    	Random name = new Random();
-    	int rName = name.nextInt(cpuName.size());
-    	super.name = cpuName.get(rName);
-    	cpuName.remove(rName);
   	}
 
   	// This method pushes the AI decisions to Player class
