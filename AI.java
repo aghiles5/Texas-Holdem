@@ -19,6 +19,8 @@ public class AI extends Player {
       	"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
       	"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
 
+	// Temporary
+	// This constructor calls setCPUName() to set up the CPU name
   	public AI() {
     	setCPUName();
   	}
