@@ -65,6 +65,8 @@ public class Game {
             player.emptyHand();
             player.emptyHole();
         }
+        cardDeck = null;
+        cardDeck = new Deck();
         for (int i = 0; i < 2; i++) {
             for (Player player : players)
                 player.setHole(cardDeck.dealSingle());
@@ -73,8 +75,6 @@ public class Game {
             roundPlayers.add(player);
         }
         middleCards.clear();
-        cardDeck = null;
-        cardDeck = new Deck();
         for (int i = 0; i < 3; i++) {
             middleCards = cardDeck.dealCard(middleCards);
         }

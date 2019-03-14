@@ -361,7 +361,7 @@ public class GUI extends Application {
 					if (index == 0)
 						winnerString.append(player.getName());
 					else if (index == winners.size() - 1)
-						winnerString.append("and " + player.getName());
+						winnerString.append(" and " + player.getName());
 					else
 						winnerString.append(", " + player.getName());
 					index++;
