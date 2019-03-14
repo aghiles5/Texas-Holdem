@@ -110,6 +110,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				game.fold();
+				finishUserTurn(scene, game);
 			}
 		});
 		
@@ -273,7 +274,7 @@ public class GUI extends Application {
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		Button raise = (Button) scene.lookup("#raise");
 		
-		Player user = game.getCurrentPlayer();
+		Player user = game.getLastPlayer();
 		controls.setDisable(true);
 		raiseInput.setVisible(false);
 		raise.setText("Bet");
