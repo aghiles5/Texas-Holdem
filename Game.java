@@ -197,5 +197,6 @@ public class Game {
 
     public void tempCheck() {
         roundPlayers.get(playerCount).check("C");
+        setLastPlayer(roundPlayers.get(playerCount));
     }
 }

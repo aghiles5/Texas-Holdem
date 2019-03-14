@@ -322,6 +322,7 @@ public class GUI extends Application {
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		
 		StringBuilder winnerString = new StringBuilder();
+		System.out.println(winners.size());
 		if ((winners.size() == game.getPlayers().size()) &&(game.getPlayers().size() != 1))
 			winnerString.append("The Pot Will Be Divided Evenly");
 		else {
