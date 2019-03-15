@@ -26,7 +26,6 @@ public class AI extends Player {
 
 	public AI() {
 		setCPUName();
-		super.setName(getCPUName());
 	}
 
 	public void setCPUName() {
