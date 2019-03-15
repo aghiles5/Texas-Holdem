@@ -6,7 +6,7 @@ import java.util.*;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/13/2019
+ * @version 03/15/2019
  */
 
 public class AI extends Player {
