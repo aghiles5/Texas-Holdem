@@ -32,6 +32,7 @@ public class AI extends Player {
 		}
 	}
 
+	// This method chooses a random name for each CPU player
 	public void setCPUName() {
 		Random name = new Random();
     	int rName = name.nextInt(cpuName.size());
