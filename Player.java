@@ -34,6 +34,7 @@ public abstract class Player {
 	/**
 	 * pre: none
 	 * post: calculates the percentage of winning for the player and returns a double
+	 * @return winPercent
 	 */
 	public double getWinPercent() {
 		winPercent = (getWins() / (getWins() + getLost())) * 100; // multiply by 100 to get a percentage number
@@ -43,6 +44,7 @@ public abstract class Player {
 	/**
 	 * pre: none
 	 * post: returns the number of rounds the player has won
+	 * @return wins
 	 */
 	public double getWins() {
 		return wins;
@@ -51,6 +53,7 @@ public abstract class Player {
 	/**
 	 * pre: none
 	 * post: returns the nuumber of rounds lost for the player
+	 * @return lost
 	 */
 	public double getLost() {
 		return lost;
@@ -78,8 +81,8 @@ public abstract class Player {
 
 	/**
 	 * pre: action variable has no action
-	 * post: returns the player's action after
-	 * player finishes his/her round
+	 * post: returns the player's action after player finishes his/her round
+	 * @return action
 	 */
 	public String getAction() {
 		return action;
@@ -102,10 +105,6 @@ public abstract class Player {
 	 */
 	public void setName(String newName) {
 		name = newName;
-	}
-
-	public void setCPUName() {
-		// Calls AI setCPUName
 	}
 
 	/**
