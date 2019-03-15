@@ -31,7 +31,6 @@ public abstract class Player {
 		name = oName;
 	}
 
-	// CHANGE THIS TO RATIOS OF WINS AND LOSSES -----------------------
 	/**
 	 * pre: none
 	 * post: calculates the percentage of winning for the player and returns a double
