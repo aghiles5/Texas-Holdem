@@ -26,7 +26,10 @@ public class Player {
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
-
+	Player(String oName, int oStack) {
+		stack = oStack;
+		name = oName;
+	}
 
 	// CHANGE THIS TO RATIOS OF WINS AND LOSSES -----------------------
 	/**

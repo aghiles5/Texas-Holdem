@@ -47,12 +47,18 @@ public class SaveIO extends Game {
 			System.out.println("Game Saved.");
 			saves++; //test logic
 		} catch (IOException e) {
-			System.out.println("Game not saved!");
+			System.out.println("Game not saved.");
 			System.err.println("IOException: " + e.getMessage());
 		}
 	}
 	
 	public void loadState() {
-		
+		try {
+			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
+			ArrayList<>
+		} catch (FileNotFoundException e) {
+			System.out.println("Game could not be loaded.");
+			System.err.println("IOException: " + e.getMessage());
+		}
 	}
 }
