@@ -19,12 +19,10 @@ public class AI extends Player {
       	"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
       	"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
 
+
 	// This constructor sets up the CPU name for each CPU player
   	public AI() {
-    	Random name = new Random();
-    	int rName = name.nextInt(cpuName.size());
-    	super.name = cpuName.get(rName);
-    	cpuName.remove(rName);
+    	setCPUName();
   	}
 
   	// This method adds the list of names to the empty array of CPU names
@@ -32,7 +30,14 @@ public class AI extends Player {
     	for (int i = 0; i < newNames.length; i++) {
       	cpuName.add(newNames[i]);
 		}
-  	}
+	}
+
+	public void setCPUName() {
+		Random name = new Random();
+    	int rName = name.nextInt(cpuName.size());
+    	super.name = cpuName.get(rName);
+    	cpuName.remove(rName);
+	}
 
   	// This method pushes the AI decisions to Player class
   	public void getDecision() {
@@ -52,19 +57,28 @@ public class AI extends Player {
     	}
 
     	// THIS COMMENT IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    	/*
-    	 * else if (decision == 2) { checkAIBets(decision, super.getStack()); int bet =
-    	 * betting.nextInt(super.getStack()); super.BetRaise("B", bet); }
-    	 * 
-    	 * else if (decision == 3) { checkAIBets(decision, super.getStack()); int bet =
-    	 * betting.nextInt(super.getStack()); super.BetRaise("R", bet); }
-    	 * 
-    	 * // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!! else if
-    	 * (decision == 4) { super.call("L"); }
-    	 * 
-    	 * // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!! else if
-    	 * (decision == 5) { super.allIn("A"); }
-    	 */
+		/*
+    	else if (decision == 2) { 
+			checkAIBets(decision, super.getStack());
+			int bet = betting.nextInt(super.getStack());
+			super.BetRaise("B", bet);
+		}
+    	
+    	else if (decision == 3) {
+			checkAIBets(decision, super.getStack());
+			int bet = betting.nextInt(super.getStack());
+			super.BetRaise("R", bet);
+		}
+    	
+		// THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		else if (decision == 4) {
+			super.call("L");
+		}
+    	 
+		// THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+		else if (decision == 5) {
+			super.allIn("A");
+		}*/
 
   	}
 
