@@ -1,8 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.*;
-
-// Common methods between AI and Player class will be in this super class
 
 /**
  * An abstract class that; Manages each players' amount of money, their two card
@@ -26,6 +22,8 @@ public abstract class Player {
 	private double winPercent;
 	// method in main that sets the blinds
 	// make the current player bet into a list?
+
+	protected abstract String getCPUName();
 
 	Player(String oName, int oStack) {
 		stack = oStack;
