@@ -11,13 +11,11 @@ import java.util.*;
 
 public class AI extends Player {
 
-	// This is an empty array of CPU player names
-  	public static ArrayList<String> cpuName = new ArrayList<String>();
-
-  	// This is a list of names for the CPU player
+	String tempName = ""; // Empty string of a CPU name
+  	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
   	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
       	"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
-      	"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
+      	"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" }; // This is a list of names for the CPU player
 
   	// This method adds the list of names to the empty array of CPU names
   	public static void addCPUName() {
@@ -26,18 +24,19 @@ public class AI extends Player {
 		}
 	}
 
-	/**
-	 * This method chooses a random name for each CPU player
-	 * pre:
-	 * post: returns a random instance variable of type string for CPU player
-	 * @return tempName
-	 */
-	public String getCPUName() {
-		String tempName = ""; // Empty string of a CPU name
+	public AI() {
+		setCPUName();
+		super.setName(getCPUName());
+	}
+
+	public void setCPUName() {
 		Random name = new Random();
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
     	tempName = cpuName.get(rName); // From rName, this will set the CPU player's name
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
+	}
+
+	public String getCPUName() {
 		return tempName;
 	}
 
