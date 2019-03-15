@@ -55,7 +55,26 @@ public class SaveIO extends Game {
 	public void loadState() {
 		try {
 			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
-			ArrayList<>
+			ArrayList<String> name = new ArrayList<String>();
+			ArrayList<Integer> stacks = new ArrayList<Integer>();
+			String names;
+			int Money;
+			try {
+				names = saveState.readLine();
+				while (names != null) {
+					names = saveState.readLine();
+					Money = Integer.parseInt(saveState.readLine());
+					name.add(names);
+					stacks.add(Money);
+				}
+				
+				for (int i = 0; i < name.size(); i++) {
+					
+				}
+			} catch (IOException e) {
+				System.out.println("File could not be read.");
+				System.err.println("IOException: " + e.getMessage());
+			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
