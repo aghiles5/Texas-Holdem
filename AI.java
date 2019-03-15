@@ -19,12 +19,6 @@ public class AI extends Player {
       	"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
       	"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
 
-
-	// This constructor sets up the CPU name for each CPU player
-  	public AI() {
-    	setCPUName();
-  	}
-
   	// This method adds the list of names to the empty array of CPU names
   	public static void addCPUName() {
     	for (int i = 0; i < newNames.length; i++) { // For loop runs as long as the length to add names from newNames to cpuName
@@ -32,12 +26,19 @@ public class AI extends Player {
 		}
 	}
 
-	// This method chooses a random name for each CPU player
-	public void setCPUName() {
+	/**
+	 * This method chooses a random name for each CPU player
+	 * pre:
+	 * post: returns a random instance variable of type string for CPU player
+	 * @return tempName
+	 */
+	public String getCPUName() {
+		String tempName = ""; // Empty string of a CPU name
 		Random name = new Random();
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
-    	super.name = cpuName.get(rName); // From rName, this will set the CPU player's name
-    	cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
+    	tempName = cpuName.get(rName); // From rName, this will set the CPU player's name
+		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
+		return tempName;
 	}
 
   	// This method pushes the AI decisions to Player class
