@@ -11,7 +11,7 @@ public class SaveIO extends Game {
 	 * pre: none
 	 * post: The players' names and their stack values are saved to a .txt file.
 	 */
-	public void SaveState(){
+	public void saveState(){
 		/*Copies the player list to a new ArrayList*/
 		ArrayList<Player> copy = new ArrayList<Player>(super.getPlayerList());
 		/*Two separate lists contain the name and stack of each player*/
@@ -47,5 +47,9 @@ public class SaveIO extends Game {
 			System.out.println("Game not saved!");
 			System.err.println("IOException: " + e.getMessage());
 		}
+	}
+	
+	public void loadState() {
+		
 	}
 }
