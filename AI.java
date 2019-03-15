@@ -27,24 +27,24 @@ public class AI extends Player {
 
   	// This method adds the list of names to the empty array of CPU names
   	public static void addCPUName() {
-    	for (int i = 0; i < newNames.length; i++) {
-      	cpuName.add(newNames[i]);
+    	for (int i = 0; i < newNames.length; i++) { // For loop runs as long as the length to add names from newNames to cpuName
+      		cpuName.add(newNames[i]); // Adds newNames into cpuName
 		}
 	}
 
 	// This method chooses a random name for each CPU player
 	public void setCPUName() {
 		Random name = new Random();
-    	int rName = name.nextInt(cpuName.size());
-    	super.name = cpuName.get(rName);
-    	cpuName.remove(rName);
+		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
+    	super.name = cpuName.get(rName); // From rName, this will set the CPU player's name
+    	cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
 	}
 
   	// This method pushes the AI decisions to Player class
   	public void getDecision() {
     	// This implements the randomness of the AI
     	Random choice = new Random();
-    	int decision = choice.nextInt(100); // TMPORARY CHANGE
+    	int decision = choice.nextInt(100); // TMPORARY CHANGE!!!!!!!!!!!!!!!!!!!!!!!
     	Random betting = new Random();
 
     	// AI randomly checks as a decision
@@ -86,7 +86,7 @@ public class AI extends Player {
   	// This method will randomly bet and check if AI has sufficient money
   	public int checkAIBets(int playDecision, int money) {
     	Random bet = new Random();
-    	// int betting = bet.nextInt(money + 1);
+    	// int betting = bet.nextInt(money + 1); TEMPORARY!!!!!!!!!!!!!!
 
     	/**
     	 * This handle the AI's betting decisions If the bets are 0 or it is the same as
