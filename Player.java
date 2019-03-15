@@ -22,6 +22,7 @@ public abstract class Player {
 	private String action = "";
 	private double wins;
 	private double lost;
+	private double folds;
 	private double winPercent;
 	// method in main that sets the blinds
 	// make the current player bet into a list?
@@ -39,6 +40,15 @@ public abstract class Player {
 	public double getWinPercent() {
 		winPercent = (getWins() / (getWins() + getLost())) * 100; // multiply by 100 to get a percentage number
 		return winPercent;
+	}
+
+	/**
+	 * pre: none
+	 * post: returns the number of times the player has folded during a game
+	 * @return folds
+	 */
+	public double getFolds() {
+		return folds;
 	}
 	
 	/**
@@ -247,6 +257,7 @@ public abstract class Player {
 			emptyHand(); // Clears hand
 			emptyHole(); // Clears hole
 			action = "Folded";
+			folds += 1;
 			// Nothing
 
 		}
