@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * @version March 15, 2019
  */
 public class SaveIO extends Game {
+	
+	private int saves = 1;
+	
 	/**
 	 * pre: none
 	 * post: The players' names and their stack values are saved to a .txt file.
@@ -17,7 +20,6 @@ public class SaveIO extends Game {
 		/*Two separate lists contain the name and stack of each player*/
 		ArrayList<String> name = new ArrayList<String>();
 		ArrayList<Integer> stacks = new ArrayList<Integer>();
-		int saves = 1;
 		//writes to a new file each save
 		File dataFile = new File("Save" + saves + ".txt");
 		//how to load?
@@ -43,6 +45,7 @@ public class SaveIO extends Game {
 			writeScore.close();
 			out.close();
 			System.out.println("Game Saved.");
+			saves++; //test logic
 		} catch (IOException e) {
 			System.out.println("Game not saved!");
 			System.err.println("IOException: " + e.getMessage());
