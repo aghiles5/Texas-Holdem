@@ -10,5 +10,8 @@ import java.util.*;
  */
 
 public class PlayerTest {
-
+    @Test
+    public void testPlayersName() {
+        
+    }
 }
