@@ -226,22 +226,26 @@ public class Table {
 					
 					ImageView card1Front = new ImageView(card1);
 					ImageView card2Front = new ImageView(card2);
+					card1Front.setVisible(true);
+					card2Front.setVisible(true);
 					
 					card1Front.setId(player.getName() + "Card1");
 					card2Front.setId(player.getName() + "Card2");
 					
 				cardFrontPane.getChildren().addAll(card1Front, card2Front);
 					
-					if (player instanceof AI) { //If the player is a computer back's are imposed on top of their cards
-						Image cardBack = new Image("/Images/Back.png");
-						ImageView card1Back = new ImageView(cardBack);
-						ImageView card2Back = new ImageView(cardBack);
-						card1Back.setId(player.getName() + "Card1Back");
-						card2Back.setId(player.getName() + "Card2Back");
-						
-						cardBackPane.getChildren().addAll(card1Back, card2Back);
-					}
-			
+				if (player instanceof AI) {
+					Image cardBack = new Image("/Images/Back.png");
+					ImageView card1Back = new ImageView(cardBack);
+					ImageView card2Back = new ImageView(cardBack);
+					card1Back.setVisible(true);
+					card2Back.setVisible(true);
+					card1Back.setId(player.getName() + "Card1Back");
+					card2Back.setId(player.getName() + "Card2Back");
+					
+					cardBackPane.getChildren().addAll(card1Back, card2Back);
+				}
+				
 			cardPane.getChildren().addAll(cardFrontPane, cardBackPane);
 	
 			Ellipse chip = new Ellipse(12, 12);
@@ -324,6 +328,21 @@ public class Table {
 			centreProps.setSpacing(50);
 			
 				//=============================================================
+				// Deck Image
+			
+				StackPane deck = new StackPane();
+				deck.setAlignment(Pos.CENTER);
+					
+					ImageView deckA = new ImageView(new Image("/Images/Deck.png"));
+					ImageView deckB = new ImageView(new Image("/Images/Deck.png"));
+					ImageView drawCard = new ImageView(new Image("/Images/Back.png"));
+					deckA.setId("deckA");
+					deckB.setId("deckB");
+					drawCard.setId("drawCard");
+				
+				deck.getChildren().addAll(deckA, deckB, drawCard);
+			
+				//=============================================================
 				// Community Cards
 			
 				StackPane commFull = new StackPane();
@@ -402,7 +421,7 @@ public class Table {
 					
 				dealerMoney.getChildren().addAll(pot, wager);
 				
-			centreProps.getChildren().addAll(commFull, dealerMoney);
+			centreProps.getChildren().addAll(deck, commFull, dealerMoney);
 			
 		tableCentre.getChildren().addAll(centreProps);
 		

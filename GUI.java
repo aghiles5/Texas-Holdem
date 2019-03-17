@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -165,6 +166,7 @@ public class GUI extends Application {
 		}
 		
 		notifyRound(scene, game);
+		//dealCard(scene, (ImageView) scene.lookup("#YouCard1Back"), (ImageView) scene.lookup("#YouCard1"));
 	}
 	
 	/**
@@ -443,6 +445,61 @@ public class GUI extends Application {
 				});	
 			}
 		});	
+	}
+	
+	private void dealPlayerHole(Scene scene, Game game, int index) {
+		Player subPlayer = game.getPlayers().get(index);
+		ImageView cardAFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1");
+		ImageView cardBFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2");
+		ImageView cardABack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1Back");
+		ImageView cardBBack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2Back");
+		
+		TranslateTransition moveDrawCardA = dealCard(scene, cardABack, cardAFront);
+		
+		moveDrawCardA.setOnFinished(new EventHandler<ActionEvent>() { 
+			@Override
+			public void handle(ActionEvent event) {
+				TranslateTransition moveDrawCardB = dealCard(scene, cardBBack, cardBFront);
+				moveDrawCardB.setOnFinished(new EventHandler<ActionEvent>() { 
+					@Override
+					public void handle(ActionEvent event) {
+						if (index < game.getPlayers().size() - 1)
+							dealPlayerHole(scene, game, index + 1);
+						else
+							notifyRound(scene, game);
+					}
+				});
+			}
+		});
+	}
+	
+	private TranslateTransition dealCard(Scene scene, ImageView cardBack, ImageView cardFront) {
+		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
+		double originX = drawCard.localToScene(drawCard.getBoundsInLocal()).getMinX(); 
+		double originY = drawCard.localToScene(drawCard.getBoundsInLocal()).getMinY(); 
+		double targetX = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinX(); 
+		double targetY = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinY(); 
+		
+		System.out.println(originX + ", " + originY);
+		System.out.println(targetX + ", " + targetY);
+		
+		TranslateTransition moveDrawCard = new TranslateTransition(new Duration(2000), drawCard);
+		moveDrawCard.setFromX(originX);
+		moveDrawCard.setFromY(originY);
+		moveDrawCard.setToX(targetX - originX);
+		moveDrawCard.setToY(targetY - originY);
+		
+		moveDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
+			@Override
+			public void handle(ActionEvent event) {
+				cardBack.setVisible(true);
+				cardFront.setVisible(true);
+			}
+		});
+		
+		moveDrawCard.play();
+		
+		return moveDrawCard;
 	}
 	
 	/**
