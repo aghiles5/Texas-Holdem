@@ -9,3 +9,11 @@ import java.util.*;
  * @author John Lowie
  * @version 03/15/19
  */
+
+ public class PlayerTest {
+     
+    @Test
+    public void testNames() {
+        
+    }
+ }
