@@ -34,12 +34,7 @@ public class AI extends Player {
 		Random name = new Random();
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
 		tempName = cpuName.get(rName); // From rName, this will set the CPU player's name
-		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker
-								// table
-	}
-
-	public String getCPUName() {
-		return tempName;
+		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
 	}
 
 	// This method pushes the AI decisions to Player class
