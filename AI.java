@@ -26,6 +26,7 @@ public class AI extends Player {
 	}
 
 	public AI() {
+		addCPUName();
 		setCPUName();
 	}
 
@@ -42,7 +43,7 @@ public class AI extends Player {
 		// This implements the randomness of the AI
 		Random choice = new Random();
 		int decision = choice.nextInt(100); // TMPORARY CHANGE!!!!!!!!!!!!!!!!!!!!!!!
-		Random betting = new Random();
+		//Random betting = new Random();
 
 		// AI randomly checks as a decision
 		if (decision <= 94) {
