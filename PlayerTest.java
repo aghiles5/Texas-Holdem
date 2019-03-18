@@ -12,12 +12,25 @@
  public class PlayerTest {
 
     public static void main(String[] args) {
-        testing();
+        testingAI();
     }
 
-    public static void testing() {
+    public static void testingAI() {
         AI a = new AI();
+        AI b = new AI();
+        AI c = new AI();
+        AI d = new AI();
+        AI e = new AI();
+        AI f = new AI();
+        AI g = new AI();
         System.out.println(a.getName());
+        System.out.println(b.getName());
+        System.out.println(c.getName());
+        System.out.println(d.getName());
+        System.out.println(e.getName());
+        System.out.println(f.getName());
+        System.out.println(g.getName());
+        // NAMING ERRORS: REPEATED NAMES OF AI PLAYERS
     }
 
  }
