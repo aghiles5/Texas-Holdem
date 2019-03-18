@@ -228,25 +228,23 @@ public class Table {
 					
 					ImageView card1Front = new ImageView(card1);
 					ImageView card2Front = new ImageView(card2);
-					card1Front.setVisible(true);
-					card2Front.setVisible(true);
+					card1Front.setVisible(false);
+					card2Front.setVisible(false);
 					
 					card1Front.setId(player.getName() + "Card1");
 					card2Front.setId(player.getName() + "Card2");
 					
 				cardFrontPane.getChildren().addAll(card1Front, card2Front);
 					
-				if (player instanceof AI) {
 					Image cardBack = new Image("/Images/Back.png");
 					ImageView card1Back = new ImageView(cardBack);
 					ImageView card2Back = new ImageView(cardBack);
-					card1Back.setVisible(true);
-					card2Back.setVisible(true);
+					card1Back.setVisible(false);
+					card2Back.setVisible(false);
 					card1Back.setId(player.getName() + "Card1Back");
 					card2Back.setId(player.getName() + "Card2Back");
 					
-					cardBackPane.getChildren().addAll(card1Back, card2Back);
-				}
+				cardBackPane.getChildren().addAll(card1Back, card2Back);
 				
 			cardPane.getChildren().addAll(cardFrontPane, cardBackPane);
 	

@@ -166,14 +166,7 @@ public class GUI extends Application {
 			((ImageView) scene.lookup("#commFront" + index)).setImage(new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png"));
 		}
 		
-		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
-		double nodeMinX = drawCard.getLayoutBounds().getMinX();
-	    double nodeMinY = drawCard.getLayoutBounds().getMinY();
-		Point2D nodeInScene = drawCard.localToScene(nodeMinX, nodeMinY);
-		System.out.println(nodeInScene.getX() + ", " + nodeInScene.getY());
-		
-		notifyRound(scene, game);
-		//dealCard(scene, (ImageView) scene.lookup("#YouCard1Back"), (ImageView) scene.lookup("#YouCard1"));
+		dealPlayerHole(scene, game, 0);
 	}
 	
 	/**
@@ -461,15 +454,20 @@ public class GUI extends Application {
 		ImageView cardABack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1Back");
 		ImageView cardBBack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2Back");
 		
-		TranslateTransition moveDrawCardA = dealCard(scene, cardABack, cardAFront);
+		TranslateTransition returnDrawCardA = dealCard(scene, cardABack, cardAFront);
 		
-		moveDrawCardA.setOnFinished(new EventHandler<ActionEvent>() { 
+		returnDrawCardA.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				TranslateTransition moveDrawCardB = dealCard(scene, cardBBack, cardBFront);
-				moveDrawCardB.setOnFinished(new EventHandler<ActionEvent>() { 
+				TranslateTransition returnDrawCardB = dealCard(scene, cardBBack, cardBFront);
+				returnDrawCardB.setOnFinished(new EventHandler<ActionEvent>() { 
 					@Override
 					public void handle(ActionEvent event) {
+						if (subPlayer instanceof Human) {
+							revealCard(cardABack, cardAFront);
+							revealCard(cardBBack, cardBFront);
+						}
+							
 						if (index < game.getPlayers().size() - 1)
 							dealPlayerHole(scene, game, index + 1);
 						else
@@ -490,23 +488,26 @@ public class GUI extends Application {
 		System.out.println(originX + ", " + originY);
 		System.out.println(targetX + ", " + targetY);
 		
-		TranslateTransition moveDrawCard = new TranslateTransition(new Duration(2000), drawCard);
-		moveDrawCard.setFromX(originX);
-		moveDrawCard.setFromY(originY);
+		TranslateTransition moveDrawCard = new TranslateTransition(Duration.millis(2000), drawCard);
 		moveDrawCard.setToX(targetX - originX);
 		moveDrawCard.setToY(targetY - originY);
+		
+		TranslateTransition returnDrawCard = new TranslateTransition(Duration.millis(1), drawCard);
+		returnDrawCard.setToX(originX - targetX);
+		returnDrawCard.setToX(originY - targetY);
 		
 		moveDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
 				cardBack.setVisible(true);
 				cardFront.setVisible(true);
+				returnDrawCard.play();
 			}
 		});
 		
 		moveDrawCard.play();
 		
-		return moveDrawCard;
+		return returnDrawCard;
 	}
 	
 	/**
@@ -519,7 +520,7 @@ public class GUI extends Application {
 	private ScaleTransition revealCard(ImageView cardBack, ImageView cardFront) {
 		ScaleTransition hideFront = new ScaleTransition(); //The face is initially hidden from view
 		hideFront.setByX(-1);
-		hideFront.setDuration(Duration.seconds(0.001));
+		hideFront.setDuration(Duration.millis(1));
 		hideFront.setNode(cardFront);
 		
 		ScaleTransition hideBack = new ScaleTransition(); //The back is scaled to a line to be invisible
