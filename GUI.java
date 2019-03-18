@@ -7,6 +7,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -164,6 +165,12 @@ public class GUI extends Application {
 			ArrayList<Card> comm = game.getComm();
 			((ImageView) scene.lookup("#commFront" + index)).setImage(new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png"));
 		}
+		
+		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
+		double nodeMinX = drawCard.getLayoutBounds().getMinX();
+	    double nodeMinY = drawCard.getLayoutBounds().getMinY();
+		Point2D nodeInScene = drawCard.localToScene(nodeMinX, nodeMinY);
+		System.out.println(nodeInScene.getX() + ", " + nodeInScene.getY());
 		
 		notifyRound(scene, game);
 		//dealCard(scene, (ImageView) scene.lookup("#YouCard1Back"), (ImageView) scene.lookup("#YouCard1"));
