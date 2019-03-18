@@ -9,6 +9,8 @@ import java.util.*;
  * @version 03/15/2019
  */
 
+// FIX THE AI NAMING SYSTEM!!!!!!!!!!!!!!!!!
+
 public class AI extends Player {
 
 	String tempName = ""; // Empty string of a CPU name
