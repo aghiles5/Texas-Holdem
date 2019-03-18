@@ -23,6 +23,8 @@ public abstract class Player {
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
+	public Player() {
+	}
 
 	Player(String oName, int oStack) {
 		stack = oStack;
