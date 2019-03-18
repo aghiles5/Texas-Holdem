@@ -26,7 +26,7 @@ public abstract class Player {
 	public Player() {
 	}
 
-	Player(String oName, int oStack) {
+	public Player(String oName, int oStack) {
 		stack = oStack;
 		name = oName;
 	}
