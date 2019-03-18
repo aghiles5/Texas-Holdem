@@ -8,15 +8,18 @@ import java.util.Random;
  * @version 03/18/2019
  */
 
-// FIX THE AI NAMING SYSTEM!!!!!!!!!!!!!!!!!
-
 public class AI extends Player {
 
-	//String tempName = ""; // Empty string of a CPU name
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
 			"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" }; // This is a list of names for the CPU player
+
+	// Constructor that initiates the name of AI
+	public AI() {
+		addCPUName();
+		setCPUName();
+	}
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
@@ -25,11 +28,7 @@ public class AI extends Player {
 		}
 	}
 
-	public AI() {
-		addCPUName();
-		setCPUName();
-	}
-
+	// This method sets the name of AI and removes the name from the list to avoid duplicates
 	public void setCPUName() {
 		Random name = new Random();
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
