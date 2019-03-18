@@ -39,11 +39,11 @@ public class Table {
 	private final double PLAYER_OUTSET = TABLE_WIDTH * TABLE_OUTSET_RATIO; //The distance of player information from the table
 	private final double PLAYER_INSET = TABLE_WIDTH * TABLE_INSET_RATIO; //The distance of player bets and cards? inside the table
 	
-	private final double SEAT_WIDTH = 180.0;
+	private final double SEAT_WIDTH = 160.0;
 	private final double SEAT_HEIGHT = 60.0;
 	
 	private final double PLACE_WIDTH = 200.0;
-	private final double PLACE_HEIGHT = 100.0;
+	private final double PLACE_HEIGHT = 90.0;
 	
 	private StackPane tablePane = new StackPane();
 	
@@ -149,8 +149,10 @@ public class Table {
 		double leftStartRad = (3.0 * Math.PI) / 2.0;
 		double rightPolarOriginX = tableOriginX + (TABLE_WIDTH / 2.0);
 		double rightStartRad = Math.PI / 2.0;
-		double outsetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + (PLAYER_OUTSET / 2) + (SEAT_HEIGHT / 2) + TABLE_RIM;
-		double insetCircleRadius = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
+		double outsetEllipseRadiusY = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + (PLAYER_OUTSET / 2) + (SEAT_HEIGHT / 2) + TABLE_RIM;
+		double outsetEllipseRadiusX = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + (PLAYER_OUTSET / 2) + (SEAT_WIDTH / 3) + TABLE_RIM;
+		double insetEllipseRadiusY = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
+		double insetEllipseRadiusX = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
 		
 		//=====================================================================
 		//Parent Nodes
@@ -275,10 +277,10 @@ public class Table {
 			}
 			else if (distanceFromUser < leftEnd) {
 				double phi = leftStartRad - ((distanceFromUser - bottomEnd) / ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2));
-				seat.setLayoutX(leftPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (SEAT_WIDTH / 2));
-				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (SEAT_HEIGHT / 2));
-				place.setLayoutX(leftPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (PLACE_WIDTH / 2));
-				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (PLACE_HEIGHT / 2));
+				seat.setLayoutX(leftPolarOriginX + (outsetEllipseRadiusX * Math.cos(phi)) - (SEAT_WIDTH / 2));
+				seat.setLayoutY(tableOriginY - (outsetEllipseRadiusY * Math.sin(phi)) - (SEAT_HEIGHT / 2));
+				place.setLayoutX(leftPolarOriginX + (insetEllipseRadiusX * Math.cos(phi)) - (PLACE_WIDTH / 2));
+				place.setLayoutY(tableOriginY - (insetEllipseRadiusY * Math.sin(phi)) - (PLACE_HEIGHT / 2));
 				lobeSeats.getChildren().add(seat);
 				lobePlaces.getChildren().add(place);
 			}
@@ -288,10 +290,10 @@ public class Table {
 			}
 			else if (distanceFromUser < rightEnd){
 				double phi = rightStartRad - ((distanceFromUser - topEnd) / ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2));
-				seat.setLayoutX(rightPolarOriginX + (outsetCircleRadius * Math.cos(phi)) - (SEAT_WIDTH / 2));
-				seat.setLayoutY(tableOriginY - (outsetCircleRadius * Math.sin(phi)) - (SEAT_HEIGHT / 2));
-				place.setLayoutX(rightPolarOriginX + (insetCircleRadius * Math.cos(phi)) - (PLACE_WIDTH / 2));
-				place.setLayoutY(tableOriginY - (insetCircleRadius * Math.sin(phi)) - (PLACE_HEIGHT / 2));
+				seat.setLayoutX(rightPolarOriginX + (outsetEllipseRadiusX * Math.cos(phi)) - (SEAT_WIDTH / 2));
+				seat.setLayoutY(tableOriginY - (outsetEllipseRadiusY * Math.sin(phi)) - (SEAT_HEIGHT / 2));
+				place.setLayoutX(rightPolarOriginX + (insetEllipseRadiusX * Math.cos(phi)) - (PLACE_WIDTH / 2));
+				place.setLayoutY(tableOriginY - (insetEllipseRadiusY * Math.sin(phi)) - (PLACE_HEIGHT / 2));
 				lobeSeats.getChildren().add(seat);
 				lobePlaces.getChildren().add(place);
 			}
