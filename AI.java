@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class AI extends Player {
 
-	String tempName = ""; // Empty string of a CPU name
+	//String tempName = ""; // Empty string of a CPU name
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
@@ -32,9 +32,9 @@ public class AI extends Player {
 	public void setCPUName() {
 		Random name = new Random();
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
-		tempName = cpuName.get(rName); // From rName, this will set the CPU player's name
+		super.name = cpuName.get(rName); // From rName, this will set the CPU player's name
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
-		super.name = tempName;
+		//super.name = tempName;
 	}
 
 	// This method pushes the AI decisions to Player class
