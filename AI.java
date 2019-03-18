@@ -71,7 +71,13 @@ public class AI extends Player {
 
 	}
 
-	// This method will randomly bet and check if AI has sufficient money
+	/**
+	 * This method will check if AI has sufficient money in it's stack for the desired game actions bet,
+	 * raise, and call
+	 * 
+	 * @param playDecision AI's decision during round
+	 * @param money AI's current amount of stacks
+	 */
 	public int checkAIBets(int playDecision, int money) {
 		Random bet = new Random();
 		// int betting = bet.nextInt(money + 1); TEMPORARY!!!!!!!!!!!!!!
