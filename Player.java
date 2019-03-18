@@ -23,7 +23,6 @@ public abstract class Player {
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
-	protected abstract String getCPUName();
 
 	Player(String oName, int oStack) {
 		stack = oStack;
