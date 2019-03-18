@@ -336,11 +336,13 @@ public class Table {
 					ImageView deckA = new ImageView(new Image("/Images/Deck.png"));
 					ImageView deckB = new ImageView(new Image("/Images/Deck.png"));
 					ImageView drawCard = new ImageView(new Image("/Images/Back.png"));
+					ImageView returnCard = new ImageView(new Image("/Images/Back.png"));
 					deckA.setId("deckA");
 					deckB.setId("deckB");
 					drawCard.setId("drawCard");
+					returnCard.setId("returnCard");
 				
-				deck.getChildren().addAll(deckA, deckB, drawCard);
+				deck.getChildren().addAll(returnCard, deckA, deckB, drawCard);
 			
 				//=============================================================
 				// Community Cards
@@ -361,6 +363,7 @@ public class Table {
 							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
 							ImageView cardView = new ImageView(cardImage);
 							cardView.setId("commFront" + index);
+							cardView.setVisible(false);
 							flop.getChildren().add(cardView);
 						}
 						
@@ -371,6 +374,7 @@ public class Table {
 							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
 							ImageView cardView = new ImageView(cardImage);
 							cardView.setId("commFront" + index);
+							cardView.setVisible(false);
 							streets.getChildren().add(cardView);
 						}
 						
@@ -389,6 +393,7 @@ public class Table {
 						for (int i = 0; i < 3; i++) {		
 							ImageView backView = new ImageView(backImage);
 							backView.setId("commBack" + i);
+							backView.setVisible(false);
 							flopCover.getChildren().add(backView);
 						}
 						
@@ -398,6 +403,7 @@ public class Table {
 						for (int i = 3; i < 5; i++) {
 							ImageView backView = new ImageView(backImage);
 							backView.setId("commBack" + i);
+							backView.setVisible(false);
 							streetsCover.getChildren().add(backView);
 						}
 						
