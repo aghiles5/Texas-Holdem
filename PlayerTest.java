@@ -14,6 +14,10 @@ import java.util.*;
  public class PlayerTest {
 
     public static void main(String[] args) {
+        testing();
+    }
+
+    public static void testing() {
         AI a = new AI();
         AI b = new AI();
         AI c = new AI();
@@ -34,7 +38,6 @@ import java.util.*;
         System.out.println(h.getCPUName());
         System.out.println(i.getCPUName());
         System.out.println(j.getCPUName());
-
     }
 
  }
