@@ -16,7 +16,8 @@
     }
 
     public static void testing() {
-        
+        AI a = new AI();
+        System.out.println(a.tempName);
     }
 
  }
