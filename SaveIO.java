@@ -69,9 +69,6 @@ public class SaveIO extends Game {
 					stacks.add(Money);
 				}
 				
-				for (int i = 0; i < name.size(); i++) {
-					
-				}
 			} catch (IOException e) {
 				System.out.println("File could not be read.");
 				System.err.println("IOException: " + e.getMessage());
