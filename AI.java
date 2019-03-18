@@ -5,7 +5,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/15/2019
+ * @version 03/18/2019
  */
 
 // FIX THE AI NAMING SYSTEM!!!!!!!!!!!!!!!!!
@@ -20,15 +20,13 @@ public class AI extends Player {
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
-		for (int i = 0; i < newNames.length; i++) { // For loop runs as long as the length to add names from newNames to
-													// cpuName
+		for (int i = 0; i < newNames.length; i++) { // For loop runs as long as the length to add names from newNames to cpuName
 			cpuName.add(newNames[i]); // Adds newNames into cpuName
 		}
 	}
 
 	public AI() {
 		setCPUName();
-		super.setName(tempName);
 	}
 
 	public void setCPUName() {
@@ -36,6 +34,7 @@ public class AI extends Player {
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
 		tempName = cpuName.get(rName); // From rName, this will set the CPU player's name
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
+		super.setName(tempName);
 	}
 
 	// This method pushes the AI decisions to Player class
