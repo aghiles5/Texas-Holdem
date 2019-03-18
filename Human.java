@@ -15,6 +15,11 @@ public class Human extends Player {
 	public Human(String n) {
 		super.name = n;
 	}
+	
+	public Human(String n, int Money) {
+		super.name = n;
+		super.stack = Money;
+	}
 
 	/**
 	 * pre: The player has entered a decision. post: The appropriate method has been

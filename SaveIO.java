@@ -57,6 +57,7 @@ public class SaveIO extends Game {
 			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
 			ArrayList<String> name = new ArrayList<String>();
 			ArrayList<Integer> stacks = new ArrayList<Integer>();
+			ArrayList<Player> players = new ArrayList<Player>();
 			String names;
 			int Money;
 			try {
