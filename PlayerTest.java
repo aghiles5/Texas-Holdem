@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * This is a test file for the Player class and its child classes, AI class and
  * Human class
