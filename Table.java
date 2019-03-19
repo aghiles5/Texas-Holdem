@@ -194,7 +194,7 @@ public class Table {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			Label stack = new Label("Stack: $100 0000");
+			Label stack = new Label("Stack: $100 000");
 			Label action = new Label(" ");
 			
 			name.setId(player.getName() + "Name");
