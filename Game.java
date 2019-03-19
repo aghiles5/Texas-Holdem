@@ -33,6 +33,28 @@ public class Game {
     public ArrayList<Player> getPlayerList() {
     	return players;
     }
+    
+    public ArrayList<Player> loadPlayers(ArrayList<String> name, ArrayList<Integer> stack) {
+    	ArrayList<String> names = new ArrayList<String>(name); 
+    	ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
+    	int position = 0;
+    	for (int i = 0; i < name.size(); i++) {
+    		if (names.get(i).equals("You")) {
+    			position = i;
+    		}
+    	}
+    	for (int n = 0; n < names.size(); n++) {
+            if (n == position)
+                players.add(new Human("You", stacks.get(n)));
+            else
+                players.add(new AI(names.get(n), stacks.get(n)));
+        }
+    	for (int i = 0; i < 2; i++) {
+            for (Player player : players)
+                player.setHole(cardDeck.dealSingle());
+        }
+    	return players;
+    }
 
     /**
      * Generates the players needed to be recorded throughout the game and in gui

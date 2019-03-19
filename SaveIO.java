@@ -75,13 +75,7 @@ public class SaveIO extends Game {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
 		}
-	}
-	
-	public ArrayList<String> getNames() {
-		return name;
-	}
-	
-	public ArrayList<Integer> getStacks() {
-		return stacks;
+		
+		super.loadPlayers(name, stacks);
 	}
 }

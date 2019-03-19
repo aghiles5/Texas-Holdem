@@ -19,6 +19,10 @@ public class AI extends Player {
 	public AI() {
 		setCPUName();
 	}
+	
+	public AI(String name, int stack) {
+		
+	}
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
