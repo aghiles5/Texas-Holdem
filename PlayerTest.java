@@ -57,8 +57,4 @@
         }
     }
 
-    public static void testingPlayer() {
-        
-    }
-
  }
