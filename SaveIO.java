@@ -7,7 +7,9 @@ import java.util.ArrayList;
  * @version March 15, 2019
  */
 public class SaveIO extends Game {
-	
+	private ArrayList<String> name = new ArrayList<String>();
+	private ArrayList<Integer> stacks = new ArrayList<Integer>();
+	ArrayList<Player> players = new ArrayList<Player>();
 	private int saves = 1;
 	
 	/**
@@ -55,9 +57,6 @@ public class SaveIO extends Game {
 	public void loadState() {
 		try {
 			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
-			ArrayList<String> name = new ArrayList<String>();
-			ArrayList<Integer> stacks = new ArrayList<Integer>();
-			ArrayList<Player> players = new ArrayList<Player>();
 			String names;
 			int Money;
 			try {
@@ -76,6 +75,9 @@ public class SaveIO extends Game {
 		} catch (FileNotFoundException e) {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
+		}
+		for (int i = 0; i < name.size(); i++) {
+			players.add(new Player(name.get(i), stacks.get(i)));
 		}
 	}
 }
