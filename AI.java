@@ -117,7 +117,7 @@ public class AI extends Player {
 				return betting;
 			}
 		}
-		return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT
+		return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 }
