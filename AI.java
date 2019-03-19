@@ -20,8 +20,10 @@ public class AI extends Player {
 		setCPUName();
 	}
 	
+	//Constructor that sets the name of the AI and the stack - Kyle
 	public AI(String name, int stack) {
-		
+		super.name = name;
+		super.stack = stack;
 	}
 
 	// This method adds the list of names to the empty array of CPU names
