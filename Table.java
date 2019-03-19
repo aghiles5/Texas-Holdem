@@ -228,6 +228,8 @@ public class Table {
 					
 					ImageView card1Front = new ImageView(card1);
 					ImageView card2Front = new ImageView(card2);
+					card1Front.setScaleX(0);
+					card2Front.setScaleX(0);
 					card1Front.setVisible(false);
 					card2Front.setVisible(false);
 					
@@ -362,6 +364,7 @@ public class Table {
 						for (int index = 0; index < 3; index++) {
 							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
 							ImageView cardView = new ImageView(cardImage);
+							cardView.setScaleX(0);
 							cardView.setId("commFront" + index);
 							cardView.setVisible(false);
 							flop.getChildren().add(cardView);
@@ -373,6 +376,7 @@ public class Table {
 						for (int index = 3; index < 5; index++) {
 							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
 							ImageView cardView = new ImageView(cardImage);
+							cardView.setScaleX(0);
 							cardView.setId("commFront" + index);
 							cardView.setVisible(false);
 							streets.getChildren().add(cardView);

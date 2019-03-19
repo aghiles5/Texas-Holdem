@@ -104,7 +104,8 @@ public class GUI extends Application {
 				 	if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
 				 		showdown(scene, game);
 				 	else {
-				 		cleanup(scene, game);
+				 		userFolded = false;
+				 		returnComm(scene, game, 0);
 				 	}
 				 }
 			}
@@ -167,7 +168,7 @@ public class GUI extends Application {
 			((ImageView) scene.lookup("#commFront" + index)).setImage(new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png"));
 		}
 		
-		dealPlayerHole(scene, game, 0, 1);
+		shuffleDeck(scene, game);
 	}
 	
 	/**
@@ -318,12 +319,13 @@ public class GUI extends Application {
 		
 		if (user.getAction() == "Folded") {
 			userFolded = true;
-			hideCard((ImageView) scene.lookup("#" + user.getName() + "Card1Back"));
-			hideCard((ImageView) scene.lookup("#" + user.getName() + "Card2Back"));
-			((ImageView) scene.lookup("#" + user.getName() + "Card1")).setVisible(false);
-			((ImageView) scene.lookup("#" + user.getName() + "Card2")).setVisible(false);
-			((ImageView) scene.lookup("#" + user.getName() + "Card1Back")).setVisible(false);
-			((ImageView) scene.lookup("#" + user.getName() + "Card2Back")).setVisible(false);
+			ImageView cardA = (ImageView) scene.lookup("#" + user.getName() + "Card1");
+			ImageView cardB = (ImageView) scene.lookup("#" + user.getName() + "Card2");
+			ImageView cardABack = (ImageView) scene.lookup("#" + user.getName() + "Card1Back");
+			ImageView cardBBack = (ImageView) scene.lookup("#" + user.getName() + "Card2Back");
+			
+			flipCard(cardABack, cardA, true);
+			flipCard(cardBBack, cardB, true);
 		}
 		
 		if (game.isBetRoundRunning())
@@ -406,20 +408,65 @@ public class GUI extends Application {
 			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setVisible(false);
 			((ImageView) scene.lookup("#" + player.getName() + "Card1Back")).setVisible(false);
 			((ImageView) scene.lookup("#" + player.getName() + "Card2Back")).setVisible(false);
-			hideCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"));
-			hideCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"));
 		}
 		
 		userFolded = false;
 		
 		for (int index = 0; index < 5; index++) {
-			hideCard((ImageView) scene.lookup("#commBack" + index));
 			((ImageView) scene.lookup("#commBack" + index)).setVisible(false);
 			((ImageView) scene.lookup("#commFront" + index)).setVisible(false);
 		}
 		
 		game.setupRound();
 		runPlayRound(scene, game);
+	}
+	
+	private TranslateTransition shuffleAnimFactory(Scene scene, ImageView image, Boolean mirrored) {
+		TranslateTransition shiftImageHoriz = new TranslateTransition(Duration.millis(250), image);
+		if (mirrored)
+			shiftImageHoriz.setByX(-40);
+		else
+			shiftImageHoriz.setByX(40);
+		
+		TranslateTransition shiftImageVerti = new TranslateTransition(Duration.millis(250), image);
+		if (mirrored)
+			shiftImageVerti.setByY(-56);
+		else
+			shiftImageVerti.setByY(56);
+		
+		TranslateTransition shiftImageHorizRev = new TranslateTransition(Duration.millis(250), image);
+		if (mirrored)
+			shiftImageHorizRev.setByX(40);
+		else
+			shiftImageHorizRev.setByX(-40);
+		
+		TranslateTransition shiftImageVertiRev = new TranslateTransition(Duration.millis(250), image);
+		if (mirrored)
+			shiftImageVertiRev.setByY(56);
+		else
+			shiftImageVertiRev.setByY(-56);
+		
+		shiftImageHoriz.setOnFinished(e -> shiftImageHorizRev.play());
+		shiftImageHorizRev.setOnFinished(e -> shiftImageVerti.play());
+		shiftImageVerti.setOnFinished(e -> shiftImageVertiRev.play());
+		
+		shiftImageHoriz.play();
+		
+		return shiftImageVertiRev;
+	}
+	
+	private void shuffleDeck(Scene scene, Game game) {
+		ImageView deckA = (ImageView) scene.lookup("#deckA");
+		ImageView deckB = (ImageView) scene.lookup("#deckB");
+		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
+		ImageView returnCard = (ImageView) scene.lookup("#returnCard");
+		
+		TranslateTransition vertiShuffle = shuffleAnimFactory(scene, deckA, false);
+		shuffleAnimFactory(scene, deckB, true);
+		shuffleAnimFactory(scene, drawCard, true);
+		shuffleAnimFactory(scene, returnCard, false);
+		
+		vertiShuffle.setOnFinished(e -> dealPlayerHole(scene, game, 0, 1));
 	}
 	
 	/**
@@ -433,11 +480,11 @@ public class GUI extends Application {
 	private void revealAllCards(ArrayList<Player> players, Scene scene) {
 		for (Player player : players) {
 			if (player instanceof AI) {
-				ScaleTransition showFrontA = revealCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"));
+				ScaleTransition showFrontA = flipCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"), false);
 				showFrontA.setOnFinished(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						revealCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"), (ImageView) scene.lookup("#" + player.getName() + "Card2"));
+						flipCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"), (ImageView) scene.lookup("#" + player.getName() + "Card2"), false);
 					}
 				});	
 			}
@@ -464,9 +511,9 @@ public class GUI extends Application {
 						returnDrawCardC.setOnFinished(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
-								revealCard((ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"));
-								revealCard((ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"));
-								revealCard((ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"));
+								flipCard((ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"), false);
+								flipCard((ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"), false);
+								flipCard((ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"), false);
 							}
 						});	
 					}
@@ -487,7 +534,7 @@ public class GUI extends Application {
 		returnDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				revealCard(cardBack, cardFront);
+				flipCard(cardBack, cardFront, false);
 			}
 		});
 	}
@@ -496,7 +543,7 @@ public class GUI extends Application {
 		ImageView commFront = (ImageView) scene.lookup("#commFront" + index);
 		ImageView commBack = (ImageView) scene.lookup("#commBack" + index);
 		
-		ScaleTransition showBack = hideCard(commBack);
+		ScaleTransition showBack = flipCard(commBack, commFront, true);
 		showBack.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
@@ -507,7 +554,7 @@ public class GUI extends Application {
 						if (index < 4)
 							returnComm(scene, game, index + 1);
 						else
-							returnHoleCards(scene, game, 0);
+							returnAllHoles(scene, game, 0);
 					}
 				});
 			}
@@ -525,7 +572,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				if (subPlayer instanceof Human) {
-					revealCard(cardBack, cardFront);
+					flipCard(cardBack, cardFront, false);
 				}
 					
 				if ((index == game.getPlayers().size() - 1) && (cardNum == 2))
@@ -538,7 +585,24 @@ public class GUI extends Application {
 		});
 	}
 	
-	private void returnHoleCards(Scene scene, Game game, int index) {
+	private TranslateTransition returnHole(Scene scene, Player player) {
+		ImageView cardAFront = (ImageView) scene.lookup("#" + player.getName() + "Card1");
+		ImageView cardABack = (ImageView) scene.lookup("#" + player.getName() + "Card1Back");
+		ImageView cardBFront = (ImageView) scene.lookup("#" + player.getName() + "Card2");
+		ImageView cardBBack = (ImageView) scene.lookup("#" + player.getName() + "Card2Back");
+		
+		ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
+		flipCard(cardBBack, cardBFront, true);
+		hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		return null;
+	}
+	
+	private void returnAllHoles(Scene scene, Game game, int index) {
 		Player subPlayer = game.getPlayers().get(index);
 		ImageView cardAFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1");
 		ImageView cardABack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1Back");
@@ -557,7 +621,7 @@ public class GUI extends Application {
 					public void handle(ActionEvent event) {
 						if (game.getRound() == 4) {
 							if (index < game.getPlayers().size() - 1)
-								returnHoleCards(scene, game, index + 1);
+								returnAllHoles(scene, game, index + 1);
 							else {
 								game.setupRound();
 								runPlayRound(scene, game);
@@ -610,10 +674,10 @@ public class GUI extends Application {
 		double targetY = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinY(); 
 		
 		TranslateTransition returnReturnCard = new TranslateTransition(Duration.millis(1), returnCard);
-		returnReturnCard.setFromX(targetX - originX);
-		returnReturnCard.setFromY(targetY - originY);
 		returnReturnCard.setByX(originX - targetX);
-		returnReturnCard.setByX(originY - targetY);
+		returnReturnCard.setByY(originY - targetY);
+		returnReturnCard.setToX(0);
+		returnReturnCard.setToY(0);
 		
 		cardBack.setVisible(false);
 		cardFront.setVisible(false);
@@ -630,56 +694,28 @@ public class GUI extends Application {
 	 * @param cardBack the ImageView of the card's back
 	 * @param cardFront the ImageView of the card's face
 	 */
-	private ScaleTransition revealCard(ImageView cardBack, ImageView cardFront) {
-		ScaleTransition hideFront = new ScaleTransition(); //The face is initially hidden from view
-		hideFront.setByX(-1);
-		hideFront.setDuration(Duration.millis(1));
-		hideFront.setNode(cardFront);
+	private ScaleTransition flipCard(ImageView cardBack, ImageView cardFront, Boolean reversed) {
+		ScaleTransition hide = new ScaleTransition(); //The back is scaled to a line to be invisible
+		hide.setByX(-1);
+		hide.setDuration(Duration.millis(250));
+		if (reversed)
+			hide.setNode(cardFront);
+		else
+			hide.setNode(cardBack);
 		
-		ScaleTransition hideBack = new ScaleTransition(); //The back is scaled to a line to be invisible
-		hideBack.setByX(-1);
-		hideBack.setDuration(Duration.millis(250));
-		hideBack.setNode(cardBack);
+		ScaleTransition show = new ScaleTransition(); //The face is returned from a line to full size
+		show.setByX(1);
+		show.setDuration(Duration.millis(250));
+		if (reversed)
+			show.setNode(cardBack);
+		else
+			show.setNode(cardFront);
 		
-		ScaleTransition showFront = new ScaleTransition(); //The face is returned from a line to full size
-		showFront.setByX(1);
-		showFront.setDuration(Duration.millis(250));
-		showFront.setNode(cardFront);
+		hide.setOnFinished(e -> show.play()); //Once the back is flipped the front is flipped
 		
-		hideFront.setOnFinished(new EventHandler<ActionEvent>() { //Once the face is hidden the back is flipped
-			@Override
-			public void handle(ActionEvent event) {
-				hideBack.play();
-			}
-		});
+		hide.play();
 		
-		hideBack.setOnFinished(new EventHandler<ActionEvent>() { //Once the back is flipped the front is flipped
-			@Override
-			public void handle(ActionEvent event) {
-				showFront.play();
-			}
-		});
-		
-		hideFront.play();
-		
-		return showFront;
-	}
-	
-	/**
-	 * To hide cards for cleanup the back will simply be near instantly
-	 * stretch back to its original width.
-	 * 
-	 * @param cardBack the ImageView of the card's back
-	 */
-	private ScaleTransition hideCard(ImageView cardBack) {
-		ScaleTransition showBack = new ScaleTransition();
-		showBack.setByX(1);
-		showBack.setDuration(Duration.millis(1));
-		showBack.setNode(cardBack);
-		
-		showBack.play();
-		
-		return showBack;
+		return show;
 	}
 	
 	/**
