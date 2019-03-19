@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Saves All names and their stacks in a file.
  * @author Kyle Wen
- * @version March 15, 2019
+ * @version March 19, 2019
  */
 public class SaveIO extends Game {
 	private ArrayList<String> name = new ArrayList<String>();
@@ -53,6 +53,10 @@ public class SaveIO extends Game {
 		}
 	}
 	
+	/**
+	 * pre: A file exists containing the names and stacks of each player
+	 * post: The names and stacks of each existing player have been passed to the loadPlayers method in the super class.
+	 */
 	public void loadState() {
 		try {
 			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
