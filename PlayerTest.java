@@ -16,6 +16,7 @@
     }
 
     public static void testingAI() {
+        AI.addCPUName();
         AI a = new AI();
         AI b = new AI();
         AI c = new AI();
