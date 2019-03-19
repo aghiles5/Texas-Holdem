@@ -5,7 +5,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/18/2019
+ * @version 03/19/2019
  */
 
 public class AI extends Player {
@@ -35,6 +35,8 @@ public class AI extends Player {
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
 	}
 
+	// THIS METHOD IS IN COMPLETE CHAOS!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	// This method pushes the AI decisions to Player class
 	public void getDecision() {
 		// This implements the randomness of the AI
@@ -52,21 +54,25 @@ public class AI extends Player {
 			super.fold("F");
 		}
 
-		// THIS COMMENT IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		/*
-		 * else if (decision == 2) { checkAIBets(decision, super.getStack()); int bet =
-		 * betting.nextInt(super.getStack()); super.BetRaise("B", bet); }
-		 * 
-		 * else if (decision == 3) { checkAIBets(decision, super.getStack()); int bet =
-		 * betting.nextInt(super.getStack()); super.BetRaise("R", bet); }
-		 * 
-		 * // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!! else if
-		 * (decision == 4) { super.call("L"); }
-		 * 
-		 * // THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!! else if
-		 * (decision == 5) { super.allIn("A"); }
-		 */
-
+		// THESE CONDITIONS MAY OR MAY NOT HAVE PROBLEMS!!!!!!!!!!!!!!!!!!!
+		else if (decision == 2) {
+			checkAIBets(decision, super.getStack());
+			int bet = betting.nextInt(super.getStack());
+			super.BetRaise("B", bet);
+		}
+		else if (decision == 3) {
+			checkAIBets(decision, super.getStack());
+			int bet = betting.nextInt(super.getStack());
+			super.BetRaise("R", bet);
+		}
+		// THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		else if (decision == 4) {
+			super.call("L");
+		}
+		// THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		else if (decision == 5) {
+			super.allIn("A");
+		}
 	}
 
 	/**
