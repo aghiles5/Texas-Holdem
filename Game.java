@@ -34,6 +34,13 @@ public class Game {
     	return players;
     }
     
+    /**
+     * Generates the old players loaded from a file in the SaveIO class
+     * @author Kyle Wen
+     * @param name, stack
+     * name and stack contain the arrayList passed from SaveIO to Game
+     * @return arraylist of the generated players
+     */
     public ArrayList<Player> loadPlayers(ArrayList<String> name, ArrayList<Integer> stack) {
     	ArrayList<String> names = new ArrayList<String>(name); 
     	ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
