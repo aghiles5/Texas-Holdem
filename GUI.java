@@ -259,10 +259,7 @@ public class GUI extends Application {
 		((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		
 		if (player.getAction() == "Folded") {
-			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setVisible(false);
-			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setVisible(false);
-			((ImageView) scene.lookup("#" + player.getName() + "Card1Back")).setVisible(false);
-			((ImageView) scene.lookup("#" + player.getName() + "Card2Back")).setVisible(false);
+			returnHole(scene, player);
 		}
 		
 		if (game.isBetRoundRunning())
@@ -319,13 +316,7 @@ public class GUI extends Application {
 		
 		if (user.getAction() == "Folded") {
 			userFolded = true;
-			ImageView cardA = (ImageView) scene.lookup("#" + user.getName() + "Card1");
-			ImageView cardB = (ImageView) scene.lookup("#" + user.getName() + "Card2");
-			ImageView cardABack = (ImageView) scene.lookup("#" + user.getName() + "Card1Back");
-			ImageView cardBBack = (ImageView) scene.lookup("#" + user.getName() + "Card2Back");
-			
-			flipCard(cardABack, cardA, true);
-			flipCard(cardBBack, cardB, true);
+			returnHole(scene, user);
 		}
 		
 		if (game.isBetRoundRunning())
@@ -499,15 +490,15 @@ public class GUI extends Application {
 	 * @param scene the game node tree
 	 */
 	private void dealFlop(Scene scene) {
-		TranslateTransition returnDrawCardA = dealCard(scene, (ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"));
+		TranslateTransition returnDrawCardA = moveCard(scene, (ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"), false);
 		returnDrawCardA.setOnFinished(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				TranslateTransition returnDrawCardB = dealCard(scene, (ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"));
+				TranslateTransition returnDrawCardB = moveCard(scene, (ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"), false);
 				returnDrawCardB.setOnFinished(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						TranslateTransition returnDrawCardC = dealCard(scene, (ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"));
+						TranslateTransition returnDrawCardC = moveCard(scene, (ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"), false);
 						returnDrawCardC.setOnFinished(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
@@ -530,7 +521,7 @@ public class GUI extends Application {
 	 * @param cardFront the front of the subject card
 	 */
 	private void dealStreet(Scene scene, ImageView cardBack, ImageView cardFront) {
-		TranslateTransition returnDrawCard = dealCard(scene, cardBack, cardFront);
+		TranslateTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
 		returnDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
@@ -547,7 +538,7 @@ public class GUI extends Application {
 		showBack.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				TranslateTransition returnReturnCard = returnCard(scene, commBack, commFront);
+				TranslateTransition returnReturnCard = moveCard(scene, commBack, commFront, true);
 				returnReturnCard.setOnFinished(new EventHandler<ActionEvent>() { 
 					@Override
 					public void handle(ActionEvent event) {
@@ -566,7 +557,7 @@ public class GUI extends Application {
 		ImageView cardFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card" + cardNum);
 		ImageView cardBack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card" + cardNum + "Back");
 		
-		TranslateTransition returnDrawCard = dealCard(scene, cardBack, cardFront);
+		TranslateTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
 		
 		returnDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
@@ -585,21 +576,37 @@ public class GUI extends Application {
 		});
 	}
 	
-	private TranslateTransition returnHole(Scene scene, Player player) {
+	private void returnHole(Scene scene, Player player) {
 		ImageView cardAFront = (ImageView) scene.lookup("#" + player.getName() + "Card1");
 		ImageView cardABack = (ImageView) scene.lookup("#" + player.getName() + "Card1Back");
 		ImageView cardBFront = (ImageView) scene.lookup("#" + player.getName() + "Card2");
 		ImageView cardBBack = (ImageView) scene.lookup("#" + player.getName() + "Card2Back");
 		
-		ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
-		flipCard(cardBBack, cardBFront, true);
-		hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
-			@Override
-			public void handle(ActionEvent event) {
-				
-			}
-		});
-		return null;
+		if (player instanceof Human) {
+			ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
+			flipCard(cardBBack, cardBFront, true);
+			hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
+				@Override
+				public void handle(ActionEvent event) {
+					TranslateTransition cardAReturn = moveCard(scene, cardABack, cardAFront, true);
+					cardAReturn.setOnFinished(new EventHandler<ActionEvent>() { 
+						@Override
+						public void handle(ActionEvent event) {
+							moveCard(scene, cardBBack, cardBFront, true);
+						}
+					});
+				}
+			});
+		}
+		else {
+			TranslateTransition cardAReturn = moveCard(scene, cardABack, cardAFront, true);
+			cardAReturn.setOnFinished(new EventHandler<ActionEvent>() { 
+				@Override
+				public void handle(ActionEvent event) {
+					moveCard(scene, cardBBack, cardBFront, true);
+				}
+			});
+		}
 	}
 	
 	private void returnAllHoles(Scene scene, Game game, int index) {
@@ -609,82 +616,88 @@ public class GUI extends Application {
 		ImageView cardBFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2");
 		ImageView cardBBack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2Back");
 		
-		TranslateTransition returnReturnCardA = returnCard(scene, cardABack, cardAFront);
-		
-		returnReturnCardA.setOnFinished(new EventHandler<ActionEvent>() { 
+		ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
+		flipCard(cardBBack, cardBFront, true);
+		hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				TranslateTransition returnReturnCardB = returnCard(scene, cardBBack, cardBFront);
-				
-				returnReturnCardB.setOnFinished(new EventHandler<ActionEvent>() { 
+				TranslateTransition returnReturnCardA = moveCard(scene, cardABack, cardAFront, true);
+				returnReturnCardA.setOnFinished(new EventHandler<ActionEvent>() { 
 					@Override
 					public void handle(ActionEvent event) {
-						if (game.getRound() == 4) {
-							if (index < game.getPlayers().size() - 1)
-								returnAllHoles(scene, game, index + 1);
-							else {
-								game.setupRound();
-								runPlayRound(scene, game);
+						TranslateTransition returnReturnCardB = moveCard(scene, cardBBack, cardBFront, true);
+						
+						returnReturnCardB.setOnFinished(new EventHandler<ActionEvent>() { 
+							@Override
+							public void handle(ActionEvent event) {
+								if (game.getRound() == 4) {
+									if (index < game.getPlayers().size() - 1)
+										returnAllHoles(scene, game, index + 1);
+									else {
+										game.setupRound();
+										runPlayRound(scene, game);
+									}
+								}
 							}
-						}
+						});
 					}
 				});
 			}
 		});
 	}
 	
-	private TranslateTransition dealCard(Scene scene, ImageView cardBack, ImageView cardFront) {
-		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
-		double originX = drawCard.localToScene(drawCard.getBoundsInLocal()).getMinX(); 
-		double originY = drawCard.localToScene(drawCard.getBoundsInLocal()).getMinY(); 
+	private TranslateTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed) {
+		ImageView subCard;
+		if (reversed)
+			subCard = (ImageView) scene.lookup("#returnCard");
+		else
+			subCard = (ImageView) scene.lookup("#drawCard");
+		
+		double originX = subCard.localToScene(subCard.getBoundsInLocal()).getMinX(); 
+		double originY = subCard.localToScene(subCard.getBoundsInLocal()).getMinY(); 
 		double targetX = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinX(); 
 		double targetY = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinY(); 
 		
-		TranslateTransition moveDrawCard = new TranslateTransition(Duration.millis(250), drawCard);
-		moveDrawCard.setFromX(0.0);
-		moveDrawCard.setFromY(0.0);
-		moveDrawCard.setByX(targetX - originX);
-		moveDrawCard.setByY(targetY - originY);
+		TranslateTransition moveCard = new TranslateTransition();
+		moveCard.setNode(subCard);
+		if (reversed)
+			moveCard.setDuration(Duration.millis(1));
+		else
+			moveCard.setDuration(Duration.millis(250));
+		moveCard.setFromX(0.0);
+		moveCard.setFromY(0.0);
+		moveCard.setByX(targetX - originX);
+		moveCard.setByY(targetY - originY);
 		
-		TranslateTransition returnDrawCard = new TranslateTransition(Duration.millis(1), drawCard);
-		returnDrawCard.setByX(originX - targetX);
-		returnDrawCard.setByX(originY - targetY);
-		returnDrawCard.setToX(0.0);
-		returnDrawCard.setToY(0.0);
+		TranslateTransition returnCard = new TranslateTransition();
+		returnCard.setNode(subCard);
+		if (reversed)
+			returnCard.setDuration(Duration.millis(250));
+		else
+			returnCard.setDuration(Duration.millis(1));
+		returnCard.setByX(originX - targetX);
+		returnCard.setByX(originY - targetY);
+		returnCard.setToX(0.0);
+		returnCard.setToY(0.0);
 		
-		moveDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
+		moveCard.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				cardBack.setVisible(true);
-				cardFront.setVisible(true);
-				returnDrawCard.play();
+				if (reversed) {
+					cardBack.setVisible(false);
+					cardFront.setVisible(false);
+				}
+				else {
+					cardBack.setVisible(true);
+					cardFront.setVisible(true);
+				}
+				returnCard.play();
 			}
 		});
 		
-		moveDrawCard.play();
+		moveCard.play();
 		
-		return returnDrawCard;
-	}
-	
-	private TranslateTransition returnCard(Scene scene, ImageView cardBack, ImageView cardFront) {
-		ImageView returnCard = (ImageView) scene.lookup("#returnCard");
-		double originX = returnCard.localToScene(returnCard.getBoundsInLocal()).getMinX(); 
-		double originY = returnCard.localToScene(returnCard.getBoundsInLocal()).getMinY(); 
-		double targetX = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinX(); 
-		double targetY = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinY(); 
-		
-		TranslateTransition returnReturnCard = new TranslateTransition(Duration.millis(1), returnCard);
-		returnReturnCard.setByX(originX - targetX);
-		returnReturnCard.setByY(originY - targetY);
-		returnReturnCard.setToX(0);
-		returnReturnCard.setToY(0);
-		
-		cardBack.setVisible(false);
-		cardFront.setVisible(false);
-		
-		returnReturnCard.play();
-		
-		return returnReturnCard;
+		return returnCard;
 	}
 	
 	/**
