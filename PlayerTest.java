@@ -24,6 +24,9 @@
         AI e = new AI();
         AI f = new AI();
         AI g = new AI();
+        AI h = new AI();
+        AI i = new AI();
+        AI j = new AI();
         System.out.println(a.getName());
         System.out.println(b.getName());
         System.out.println(c.getName());
@@ -31,6 +34,9 @@
         System.out.println(e.getName());
         System.out.println(f.getName());
         System.out.println(g.getName());
+        System.out.println(h.getName());
+        System.out.println(i.getName());
+        System.out.println(j.getName());
         // NAMING ERRORS: REPEATED NAMES OF AI PLAYERS
     }
 
