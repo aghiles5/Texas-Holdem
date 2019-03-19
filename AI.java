@@ -17,7 +17,6 @@ public class AI extends Player {
 
 	// Constructor that initiates the name of AI
 	public AI() {
-		addCPUName();
 		setCPUName();
 	}
 
