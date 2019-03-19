@@ -385,33 +385,6 @@ public class GUI extends Application {
 		notif.setVisible(true);
 	}
 	
-	/**
-	 * To cleanup for the next round of play the backs of all AI and community
-	 * cards are returned and game is called to setup a new round. The GUI
-	 * event loop is returned to runPlayRound and the game continues.
-	 * 
-	 * @param scene the GUI scene
-	 * @param game the Game object
-	 */
-	private void cleanup(Scene scene, Game game) {
-		for (Player player : game.getPlayers()) {
-			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setVisible(false);
-			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setVisible(false);
-			((ImageView) scene.lookup("#" + player.getName() + "Card1Back")).setVisible(false);
-			((ImageView) scene.lookup("#" + player.getName() + "Card2Back")).setVisible(false);
-		}
-		
-		userFolded = false;
-		
-		for (int index = 0; index < 5; index++) {
-			((ImageView) scene.lookup("#commBack" + index)).setVisible(false);
-			((ImageView) scene.lookup("#commFront" + index)).setVisible(false);
-		}
-		
-		game.setupRound();
-		runPlayRound(scene, game);
-	}
-	
 	private TranslateTransition shuffleAnimFactory(Scene scene, ImageView image, Boolean mirrored) {
 		TranslateTransition shiftImageHoriz = new TranslateTransition(Duration.millis(250), image);
 		if (mirrored)
