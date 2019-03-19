@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class SaveIO extends Game {
 	private ArrayList<String> name = new ArrayList<String>();
 	private ArrayList<Integer> stacks = new ArrayList<Integer>();
-	ArrayList<Player> players = new ArrayList<Player>();
 	private int saves = 1;
 	
 	/**
@@ -76,8 +75,13 @@ public class SaveIO extends Game {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
 		}
-		for (int i = 0; i < name.size(); i++) {
-			players.add(new Player(name.get(i), stacks.get(i)));
-		}
+	}
+	
+	public ArrayList<String> getNames() {
+		return name;
+	}
+	
+	public ArrayList<Integer> getStacks() {
+		return stacks;
 	}
 }
