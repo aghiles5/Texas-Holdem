@@ -37,7 +37,28 @@
         System.out.println(h.getName());
         System.out.println(i.getName());
         System.out.println(j.getName());
-        // NAMING ERRORS: REPEATED NAMES OF AI PLAYERS
+    }
+
+    public static void testingHuman(){
+        Human a = new Human("Johnny");
+        Human b = new Human("Sammy", 100);
+
+        if (a.getName() != "Johnny") {
+            System.out.println("Error in player a name. (Test failed in testingHuman())");
+        }
+        if (b.getName() != "Sammy") {
+            System.out.println("Error in player b name. (Test failed in testingHuman())");
+        }
+        if (b.getStack() != 100) {
+            System.out.println("Error in player b stacks. (Test failed in testingHuman())");
+        }
+        else {
+            System.out.println("No errors");
+        }
+    }
+
+    public static void testingPlayer() {
+        
     }
 
  }
