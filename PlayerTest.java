@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * This is a test file for the Player class and its child classes, AI class and
  * Human class
@@ -10,6 +12,8 @@
  */
 
  public class PlayerTest {
+
+    public ArrayList<String> names = new ArrayList<String>();
 
     public static void main(String[] args) {
         testingAI();
