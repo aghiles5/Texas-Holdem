@@ -37,6 +37,8 @@
         System.out.println(h.getName());
         System.out.println(i.getName());
         System.out.println(j.getName());
+
+        System.out.println("No errors in testingAI()");
     }
 
     public static void testingHuman(){
@@ -53,7 +55,7 @@
             System.out.println("Error in player b stacks. (Test failed in testingHuman())");
         }
         else {
-            System.out.println("No errors");
+            System.out.println("No errors in testingHuman()");
         }
     }
 
