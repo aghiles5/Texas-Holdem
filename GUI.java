@@ -232,12 +232,7 @@ public class GUI extends Application {
 			if (userFolded)
 				pause.setDuration(new Duration(1));
 			
-			pause.setOnFinished(new EventHandler<ActionEvent>() { 
-				@Override
-				public void handle(ActionEvent event) {
-					finishAITurn(scene, game);
-				}
-			});
+			pause.setOnFinished(e -> finishAITurn(scene, game));
 			
 			pause.play();
 		}
@@ -444,13 +439,13 @@ public class GUI extends Application {
 	private void revealAllCards(ArrayList<Player> players, Scene scene) {
 		for (Player player : players) {
 			if (player instanceof AI) {
-				ScaleTransition showFrontA = flipCard((ImageView) scene.lookup("#" + player.getName() + "Card1Back"), (ImageView) scene.lookup("#" + player.getName() + "Card1"), false);
-				showFrontA.setOnFinished(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						flipCard((ImageView) scene.lookup("#" + player.getName() + "Card2Back"), (ImageView) scene.lookup("#" + player.getName() + "Card2"), false);
-					}
-				});	
+				ImageView cardAFront = (ImageView) scene.lookup("#" + player.getName() + "Card1");
+				ImageView cardABack = (ImageView) scene.lookup("#" + player.getName() + "Card1Back");
+				ImageView cardBFront = (ImageView) scene.lookup("#" + player.getName() + "Card2");
+				ImageView cardBBack = (ImageView) scene.lookup("#" + player.getName() + "Card2Back");
+				
+				ScaleTransition showFrontA = flipCard(cardABack, cardAFront, false);
+				showFrontA.setOnFinished(e -> flipCard(cardBBack, cardBFront, false));	
 			}
 		}
 	}
@@ -495,12 +490,7 @@ public class GUI extends Application {
 	 */
 	private void dealStreet(Scene scene, ImageView cardBack, ImageView cardFront) {
 		TranslateTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
-		returnDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
-			@Override
-			public void handle(ActionEvent event) {
-				flipCard(cardBack, cardFront, false);
-			}
-		});
+		returnDrawCard.setOnFinished(e -> flipCard(cardBack, cardFront, false));
 	}
 	
 	private void returnComm(Scene scene, Game game, int index) {
@@ -562,23 +552,13 @@ public class GUI extends Application {
 				@Override
 				public void handle(ActionEvent event) {
 					TranslateTransition cardAReturn = moveCard(scene, cardABack, cardAFront, true);
-					cardAReturn.setOnFinished(new EventHandler<ActionEvent>() { 
-						@Override
-						public void handle(ActionEvent event) {
-							moveCard(scene, cardBBack, cardBFront, true);
-						}
-					});
+					cardAReturn.setOnFinished(e -> moveCard(scene, cardBBack, cardBFront, true));
 				}
 			});
 		}
 		else {
 			TranslateTransition cardAReturn = moveCard(scene, cardABack, cardAFront, true);
-			cardAReturn.setOnFinished(new EventHandler<ActionEvent>() { 
-				@Override
-				public void handle(ActionEvent event) {
-					moveCard(scene, cardBBack, cardBFront, true);
-				}
-			});
+			cardAReturn.setOnFinished(e -> moveCard(scene, cardBBack, cardBFront, true));
 		}
 	}
 	
@@ -591,10 +571,12 @@ public class GUI extends Application {
 		
 		ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
 		flipCard(cardBBack, cardBFront, true);
+		
 		hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
 				TranslateTransition returnReturnCardA = moveCard(scene, cardABack, cardAFront, true);
+				
 				returnReturnCardA.setOnFinished(new EventHandler<ActionEvent>() { 
 					@Override
 					public void handle(ActionEvent event) {
