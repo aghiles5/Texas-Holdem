@@ -59,6 +59,7 @@ public class SaveIO extends Game {
 	 */
 	public void loadState() {
 		try {
+			//Opens a BufferedReader stream
 			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
 			String names;
 			int Money;
