@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -380,38 +382,26 @@ public class GUI extends Application {
 		notif.setVisible(true);
 	}
 	
-	private TranslateTransition shuffleAnimFactory(Scene scene, ImageView image, Boolean mirrored) {
+	private SequentialTransition shuffleAnimFactory(Scene scene, ImageView image, Boolean mirrored) {
 		TranslateTransition shiftImageHoriz = new TranslateTransition(Duration.millis(250), image);
 		if (mirrored)
 			shiftImageHoriz.setByX(-40);
 		else
 			shiftImageHoriz.setByX(40);
+		shiftImageHoriz.setAutoReverse(true);
+		shiftImageHoriz.setCycleCount(2);
 		
 		TranslateTransition shiftImageVerti = new TranslateTransition(Duration.millis(250), image);
 		if (mirrored)
 			shiftImageVerti.setByY(-56);
 		else
 			shiftImageVerti.setByY(56);
+		shiftImageVerti.setAutoReverse(true);
+		shiftImageVerti.setCycleCount(2);
 		
-		TranslateTransition shiftImageHorizRev = new TranslateTransition(Duration.millis(250), image);
-		if (mirrored)
-			shiftImageHorizRev.setByX(40);
-		else
-			shiftImageHorizRev.setByX(-40);
+		SequentialTransition shuffleAnim = new SequentialTransition(shiftImageHoriz, shiftImageVerti);
 		
-		TranslateTransition shiftImageVertiRev = new TranslateTransition(Duration.millis(250), image);
-		if (mirrored)
-			shiftImageVertiRev.setByY(56);
-		else
-			shiftImageVertiRev.setByY(-56);
-		
-		shiftImageHoriz.setOnFinished(e -> shiftImageHorizRev.play());
-		shiftImageHorizRev.setOnFinished(e -> shiftImageVerti.play());
-		shiftImageVerti.setOnFinished(e -> shiftImageVertiRev.play());
-		
-		shiftImageHoriz.play();
-		
-		return shiftImageVertiRev;
+		return shuffleAnim;
 	}
 	
 	private void shuffleDeck(Scene scene, Game game) {
@@ -420,12 +410,18 @@ public class GUI extends Application {
 		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
 		ImageView returnCard = (ImageView) scene.lookup("#returnCard");
 		
-		TranslateTransition vertiShuffle = shuffleAnimFactory(scene, deckA, false);
-		shuffleAnimFactory(scene, deckB, true);
-		shuffleAnimFactory(scene, drawCard, true);
-		shuffleAnimFactory(scene, returnCard, false);
+		ParallelTransition shuffleAnim = new ParallelTransition();
 		
-		vertiShuffle.setOnFinished(e -> dealPlayerHole(scene, game, 0, 1));
+		SequentialTransition deckAAnim = shuffleAnimFactory(scene, deckA, false);
+		SequentialTransition deckBAnim = shuffleAnimFactory(scene, deckB, true);
+		SequentialTransition drawCardAnim = shuffleAnimFactory(scene, drawCard, true);
+		SequentialTransition returnCardAnim = shuffleAnimFactory(scene, returnCard, false);
+		
+		shuffleAnim.getChildren().addAll(deckAAnim, deckBAnim, drawCardAnim, returnCardAnim);
+		
+		shuffleAnim.setOnFinished(e -> dealHoles(scene, game));
+		
+		shuffleAnim.play();
 	}
 	
 	/**
@@ -437,15 +433,17 @@ public class GUI extends Application {
 	 * @param scene the game node tree
 	 */
 	private void revealAllCards(ArrayList<Player> players, Scene scene) {
-		for (Player player : players) {
-			if (player instanceof AI) {
-				ImageView cardAFront = (ImageView) scene.lookup("#" + player.getName() + "Card1");
-				ImageView cardABack = (ImageView) scene.lookup("#" + player.getName() + "Card1Back");
-				ImageView cardBFront = (ImageView) scene.lookup("#" + player.getName() + "Card2");
-				ImageView cardBBack = (ImageView) scene.lookup("#" + player.getName() + "Card2Back");
-				
-				ScaleTransition showFrontA = flipCard(cardABack, cardAFront, false);
-				showFrontA.setOnFinished(e -> flipCard(cardBBack, cardBFront, false));	
+		ParallelTransition revealAnim = new ParallelTransition();
+		
+		for (int card = 1; card <= 2; card++) {
+			for (Player player : players) {
+				if (player instanceof AI) {
+					ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
+					ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
+					
+					SequentialTransition revealCard = flipCard(cardBack, cardFront, false);
+					revealAnim.getChildren().add(revealCard);
+				}
 			}
 		}
 	}
@@ -458,27 +456,24 @@ public class GUI extends Application {
 	 * @param scene the game node tree
 	 */
 	private void dealFlop(Scene scene) {
-		TranslateTransition returnDrawCardA = moveCard(scene, (ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"), false);
-		returnDrawCardA.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				TranslateTransition returnDrawCardB = moveCard(scene, (ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"), false);
-				returnDrawCardB.setOnFinished(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						TranslateTransition returnDrawCardC = moveCard(scene, (ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"), false);
-						returnDrawCardC.setOnFinished(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent event) {
-								flipCard((ImageView) scene.lookup("#commBack0"), (ImageView) scene.lookup("#commFront0"), false);
-								flipCard((ImageView) scene.lookup("#commBack1"), (ImageView) scene.lookup("#commFront1"), false);
-								flipCard((ImageView) scene.lookup("#commBack2"), (ImageView) scene.lookup("#commFront2"), false);
-							}
-						});	
-					}
-				});	
-			}
-		});	
+		SequentialTransition dealingAnim = new SequentialTransition();
+		
+		ParallelTransition revealCards = new ParallelTransition();
+		
+		for (int commCard = 0; commCard < 3; commCard++) {
+			ImageView cardBack = (ImageView) scene.lookup("#commBack" + commCard);
+			ImageView cardFront = (ImageView) scene.lookup("#commFront" + commCard);
+			
+			SequentialTransition revealCard = flipCard(cardBack, cardFront, false);
+			revealCards.getChildren().add(revealCard);
+			
+			SequentialTransition dealCardAnim = moveCard(scene, cardBack, cardFront, false);
+			dealingAnim.getChildren().add(dealCardAnim);
+		}
+		
+		dealingAnim.getChildren().add(revealCards);
+		
+		dealingAnim.play();
 	}
 	
 	/**
@@ -489,8 +484,10 @@ public class GUI extends Application {
 	 * @param cardFront the front of the subject card
 	 */
 	private void dealStreet(Scene scene, ImageView cardBack, ImageView cardFront) {
-		TranslateTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
+		SequentialTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
 		returnDrawCard.setOnFinished(e -> flipCard(cardBack, cardFront, false));
+		
+		returnDrawCard.play();
 	}
 	
 	private void returnComm(Scene scene, Game game, int index) {
@@ -515,51 +512,53 @@ public class GUI extends Application {
 		});
 	}
 	
-	private void dealPlayerHole(Scene scene, Game game, int index, int cardNum) {
-		Player subPlayer = game.getPlayers().get(index);
-		ImageView cardFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card" + cardNum);
-		ImageView cardBack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card" + cardNum + "Back");
+	private void dealHoles(Scene scene, Game game) {
+		SequentialTransition dealAllHoles = new SequentialTransition();
 		
-		TranslateTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
+		ParallelTransition showUserCards = new ParallelTransition();
 		
-		returnDrawCard.setOnFinished(new EventHandler<ActionEvent>() { 
-			@Override
-			public void handle(ActionEvent event) {
-				if (subPlayer instanceof Human) {
-					flipCard(cardBack, cardFront, false);
+		for (int card = 1; card <= 2; card++) {
+			for (Player player : game.getPlayers()) {
+				ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
+				ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
+				
+				if (player instanceof Human) {
+					SequentialTransition cardFlip = flipCard(cardBack, cardFront, false);
+					showUserCards.getChildren().add(cardFlip);
 				}
-					
-				if ((index == game.getPlayers().size() - 1) && (cardNum == 2))
-					notifyRound(scene, game);
-				else if (index == game.getPlayers().size() - 1)
-					dealPlayerHole(scene, game, 0, cardNum + 1);
-				else
-					dealPlayerHole(scene, game, index + 1, cardNum);
+				
+				SequentialTransition cardMotion = moveCard(scene, cardBack, cardFront, false);
+				dealAllHoles.getChildren().add(cardMotion);
 			}
-		});
+		}
+		
+		dealAllHoles.setOnFinished(e -> showUserCards.play());
+		
+		showUserCards.setOnFinished(e -> notifyRound(scene, game));
+		
+		dealAllHoles.play();
 	}
 	
 	private void returnHole(Scene scene, Player player) {
-		ImageView cardAFront = (ImageView) scene.lookup("#" + player.getName() + "Card1");
-		ImageView cardABack = (ImageView) scene.lookup("#" + player.getName() + "Card1Back");
-		ImageView cardBFront = (ImageView) scene.lookup("#" + player.getName() + "Card2");
-		ImageView cardBBack = (ImageView) scene.lookup("#" + player.getName() + "Card2Back");
+		ParallelTransition hideCards = new ParallelTransition();
 		
-		if (player instanceof Human) {
-			ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
-			flipCard(cardBBack, cardBFront, true);
-			hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
-				@Override
-				public void handle(ActionEvent event) {
-					TranslateTransition cardAReturn = moveCard(scene, cardABack, cardAFront, true);
-					cardAReturn.setOnFinished(e -> moveCard(scene, cardBBack, cardBFront, true));
-				}
-			});
+		SequentialTransition returnCards = new SequentialTransition();
+		returnCards.getChildren().add(hideCards);
+		
+		for (int card = 1; card <= 2; card++) {
+			ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
+			ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
+			
+			if (player instanceof Human) {
+				SequentialTransition hideCard = flipCard(cardBack, cardFront, true);
+				hideCards.getChildren().add(hideCard);
+			}
+			
+			SequentialTransition returnCard = moveCard(scene, cardBack, cardFront, true);
+			returnCards.getChildren().add(returnCard);
 		}
-		else {
-			TranslateTransition cardAReturn = moveCard(scene, cardABack, cardAFront, true);
-			cardAReturn.setOnFinished(e -> moveCard(scene, cardBBack, cardBFront, true));
-		}
+		
+		returnCards.play();
 	}
 	
 	private void returnAllHoles(Scene scene, Game game, int index) {
@@ -601,7 +600,7 @@ public class GUI extends Application {
 		});
 	}
 	
-	private TranslateTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed) {
+	private SequentialTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed) {
 		ImageView subCard;
 		if (reversed)
 			subCard = (ImageView) scene.lookup("#returnCard");
@@ -612,6 +611,8 @@ public class GUI extends Application {
 		double originY = subCard.localToScene(subCard.getBoundsInLocal()).getMinY(); 
 		double targetX = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinX(); 
 		double targetY = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinY(); 
+		
+		SequentialTransition fullMotion = new SequentialTransition();
 		
 		TranslateTransition moveCard = new TranslateTransition();
 		moveCard.setNode(subCard);
@@ -635,6 +636,8 @@ public class GUI extends Application {
 		returnCard.setToX(0.0);
 		returnCard.setToY(0.0);
 		
+		fullMotion.getChildren().addAll(moveCard, returnCard);
+		
 		moveCard.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
@@ -646,13 +649,10 @@ public class GUI extends Application {
 					cardBack.setVisible(true);
 					cardFront.setVisible(true);
 				}
-				returnCard.play();
 			}
 		});
 		
-		moveCard.play();
-		
-		return returnCard;
+		return fullMotion;
 	}
 	
 	/**
@@ -662,7 +662,9 @@ public class GUI extends Application {
 	 * @param cardBack the ImageView of the card's back
 	 * @param cardFront the ImageView of the card's face
 	 */
-	private ScaleTransition flipCard(ImageView cardBack, ImageView cardFront, Boolean reversed) {
+	private SequentialTransition flipCard(ImageView cardBack, ImageView cardFront, Boolean reversed) {
+		SequentialTransition fullMotion = new SequentialTransition();
+		
 		ScaleTransition hide = new ScaleTransition(); //The back is scaled to a line to be invisible
 		hide.setByX(-1);
 		hide.setDuration(Duration.millis(250));
@@ -679,11 +681,9 @@ public class GUI extends Application {
 		else
 			show.setNode(cardFront);
 		
-		hide.setOnFinished(e -> show.play()); //Once the back is flipped the front is flipped
+		fullMotion.getChildren().addAll(hide, show);
 		
-		hide.play();
-		
-		return show;
+		return fullMotion;
 	}
 	
 	/**
