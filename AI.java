@@ -10,8 +10,8 @@ import java.util.Random;
 
 public class AI extends Player {
 
-	private static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
-	private static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
+	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
+	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
 			"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" }; // This is a list of names for the CPU player
 
