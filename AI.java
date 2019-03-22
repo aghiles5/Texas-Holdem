@@ -5,13 +5,13 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/19/2019
+ * @version 03/21/2019
  */
 
 public class AI extends Player {
 
-	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
-	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
+	private static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
+	private static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
 			"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" }; // This is a list of names for the CPU player
 
@@ -48,7 +48,7 @@ public class AI extends Player {
 		// This implements the randomness of the AI
 		Random choice = new Random();
 		int decision = choice.nextInt(100); // TMPORARY CHANGE!!!!!!!!!!!!!!!!!!!!!!!
-		//Random betting = new Random();
+		Random betting = new Random();
 
 		// AI randomly checks as a decision
 		if (decision <= 94) {
