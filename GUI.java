@@ -96,6 +96,8 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				((HBox) scene.lookup("#notif")).setVisible(false);
+				((Button) scene.lookup("#save")).setDisable(true);
+				((Button) scene.lookup("#help")).setDisable(true);
 				for (Player player : game.getPlayers()) {
 					player.setAction(" ");
 					((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
@@ -192,6 +194,8 @@ public class GUI extends Application {
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		notifLabel.setText(game.getRoundString());
 		
+		((Button) scene.lookup("#help")).setDisable(false);
+		
 		if (userFolded) { //If the user folded, fast track to showdown
 			if (game.getRound() == 4)
 				showdown(scene, game);
@@ -285,6 +289,7 @@ public class GUI extends Application {
 		
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
+		((Button) scene.lookup("#help")).setDisable(false);
 		controls.setDisable(false);
 	}
 	
@@ -305,6 +310,7 @@ public class GUI extends Application {
 		
 		Player user = game.getLastPlayer();
 		controls.setDisable(true);
+		((Button) scene.lookup("#help")).setDisable(true);
 		raiseInput.setVisible(false);
 		raise.setText("Bet");
 		updatePlayerInfo(user, scene);
@@ -378,6 +384,8 @@ public class GUI extends Application {
 			winnerString.append(" Won the Pot");
 		}
 		
+		((Button) scene.lookup("#help")).setDisable(false);
+		((Button) scene.lookup("#save")).setDisable(false);
 		notifLabel.setText(winnerString.toString());
 		notif.setVisible(true);
 	}

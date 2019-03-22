@@ -66,17 +66,17 @@ public class ActionBar {
 		controls.setId("controls");
 		
 			Button fold = new Button("Fold");
-			fold.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
+			fold.setPrefSize(winWidth * (3.0 / 10.0) - 4, winHeight / 10 - 10);
 			fold.getStyleClass().add("button-large");
 			fold.setId("fold");
 
 			Button raise = new Button("Bet");
-			raise.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
+			raise.setPrefSize(winWidth * (3.0 / 10.0) - 3, winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
 			raise.setId("raise");
 			
 			Button call = new Button("Check");
-			call.setPrefSize(winWidth * (3.0 / 10.0), winHeight / 10 - 10);
+			call.setPrefSize(winWidth * (3.0 / 10.0) - 3, winHeight / 10 - 10);
 			call.getStyleClass().add("button-large");
 			call.setId("call");
 		
@@ -138,9 +138,18 @@ public class ActionBar {
 		VBox settingButtons = new VBox();
 		settingButtons.setAlignment(Pos.CENTER);
 		
-		Button escapeClause = new Button("QUIT");
+		Button save = new Button("Save");
+		save.setMinSize(winWidth / 10, winHeight / 30 - 4);
+		save.setId("save");
+		save.setDisable(true);
+		Button help = new Button("Help");
+		help.setMinSize(winWidth / 10, winHeight / 30 - 3);
+		help.setId("help");
+		help.setDisable(true);
+		Button escapeClause = new Button("Quit");
+		escapeClause.setMinSize(winWidth / 10, winHeight / 30 - 3);
 
-		settingButtons.getChildren().addAll(escapeClause);
+		settingButtons.getChildren().addAll(save, help, escapeClause);
 		
 		//=====================================================================
 		//Event Handlers
