@@ -107,7 +107,7 @@ public class GUI extends Application {
 				 		showdown(scene, game);
 				 	else {
 				 		userFolded = false;
-				 		returnComm(scene, game, 0);
+				 		returnComm(scene, game);
 				 	}
 				 }
 			}
@@ -256,7 +256,7 @@ public class GUI extends Application {
 		((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		
 		if (player.getAction() == "Folded") {
-			returnHole(scene, player);
+			returnHole(scene, player, false).play();
 		}
 		
 		if (game.isBetRoundRunning())
@@ -313,7 +313,7 @@ public class GUI extends Application {
 		
 		if (user.getAction() == "Folded") {
 			userFolded = true;
-			returnHole(scene, user);
+			returnHole(scene, user, true).play();
 		}
 		
 		if (game.isBetRoundRunning())
@@ -446,6 +446,8 @@ public class GUI extends Application {
 				}
 			}
 		}
+		
+		revealAnim.play();
 	}
 	
 	/**
@@ -484,32 +486,26 @@ public class GUI extends Application {
 	 * @param cardFront the front of the subject card
 	 */
 	private void dealStreet(Scene scene, ImageView cardBack, ImageView cardFront) {
-		SequentialTransition returnDrawCard = moveCard(scene, cardBack, cardFront, false);
-		returnDrawCard.setOnFinished(e -> flipCard(cardBack, cardFront, false));
+		SequentialTransition cardAnim = moveCard(scene, cardBack, cardFront, false);
+		cardAnim.setOnFinished(e -> flipCard(cardBack, cardFront, false).play());
 		
-		returnDrawCard.play();
+		cardAnim.play();
 	}
 	
-	private void returnComm(Scene scene, Game game, int index) {
-		ImageView commFront = (ImageView) scene.lookup("#commFront" + index);
-		ImageView commBack = (ImageView) scene.lookup("#commBack" + index);
+	private void returnComm(Scene scene, Game game) {
+		SequentialTransition returnCards = new SequentialTransition();
+		ParallelTransition hideCards = new ParallelTransition();
+		returnCards.getChildren().add(hideCards);
 		
-		ScaleTransition showBack = flipCard(commBack, commFront, true);
-		showBack.setOnFinished(new EventHandler<ActionEvent>() { 
-			@Override
-			public void handle(ActionEvent event) {
-				TranslateTransition returnReturnCard = moveCard(scene, commBack, commFront, true);
-				returnReturnCard.setOnFinished(new EventHandler<ActionEvent>() { 
-					@Override
-					public void handle(ActionEvent event) {
-						if (index < 4)
-							returnComm(scene, game, index + 1);
-						else
-							returnAllHoles(scene, game, 0);
-					}
-				});
-			}
-		});
+		for (int commCard = 0; commCard < 5; commCard++) {
+			ImageView commFront = (ImageView) scene.lookup("#commFront" + commCard);
+			ImageView commBack = (ImageView) scene.lookup("#commBack" + commCard);
+			hideCards.getChildren().add(flipCard(commBack, commFront, true));
+			returnCards.getChildren().add(moveCard(scene, commBack, commFront, true));
+		}
+		
+		returnCards.setOnFinished(e -> returnAllHoles(scene, game));
+		returnCards.play();
 	}
 	
 	private void dealHoles(Scene scene, Game game) {
@@ -539,7 +535,7 @@ public class GUI extends Application {
 		dealAllHoles.play();
 	}
 	
-	private void returnHole(Scene scene, Player player) {
+	private SequentialTransition returnHole(Scene scene, Player player, Boolean flip) {
 		ParallelTransition hideCards = new ParallelTransition();
 		
 		SequentialTransition returnCards = new SequentialTransition();
@@ -549,7 +545,7 @@ public class GUI extends Application {
 			ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
 			ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
 			
-			if (player instanceof Human) {
+			if (flip) {
 				SequentialTransition hideCard = flipCard(cardBack, cardFront, true);
 				hideCards.getChildren().add(hideCard);
 			}
@@ -558,46 +554,25 @@ public class GUI extends Application {
 			returnCards.getChildren().add(returnCard);
 		}
 		
-		returnCards.play();
+		return returnCards;
 	}
 	
-	private void returnAllHoles(Scene scene, Game game, int index) {
-		Player subPlayer = game.getPlayers().get(index);
-		ImageView cardAFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1");
-		ImageView cardABack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card1Back");
-		ImageView cardBFront = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2");
-		ImageView cardBBack = (ImageView) scene.lookup("#" + subPlayer.getName() + "Card2Back");
+	private void returnAllHoles(Scene scene, Game game) {
+		SequentialTransition returnCards = new SequentialTransition();
 		
-		ScaleTransition hideCards = flipCard(cardABack, cardAFront, true);
-		flipCard(cardBBack, cardBFront, true);
+		for (Player player : game.getPlayers()) {
+			returnCards.getChildren().add(returnHole(scene, player, true));
+		}
 		
-		hideCards.setOnFinished(new EventHandler<ActionEvent>() { 
+		returnCards.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				TranslateTransition returnReturnCardA = moveCard(scene, cardABack, cardAFront, true);
-				
-				returnReturnCardA.setOnFinished(new EventHandler<ActionEvent>() { 
-					@Override
-					public void handle(ActionEvent event) {
-						TranslateTransition returnReturnCardB = moveCard(scene, cardBBack, cardBFront, true);
-						
-						returnReturnCardB.setOnFinished(new EventHandler<ActionEvent>() { 
-							@Override
-							public void handle(ActionEvent event) {
-								if (game.getRound() == 4) {
-									if (index < game.getPlayers().size() - 1)
-										returnAllHoles(scene, game, index + 1);
-									else {
-										game.setupRound();
-										runPlayRound(scene, game);
-									}
-								}
-							}
-						});
-					}
-				});
+				game.setupRound();
+				runPlayRound(scene, game);
 			}
 		});
+		
+		returnCards.play();
 	}
 	
 	private SequentialTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed) {
@@ -667,7 +642,7 @@ public class GUI extends Application {
 		
 		ScaleTransition hide = new ScaleTransition(); //The back is scaled to a line to be invisible
 		hide.setByX(-1);
-		hide.setDuration(Duration.millis(250));
+		hide.setDuration(Duration.millis(125));
 		if (reversed)
 			hide.setNode(cardFront);
 		else
@@ -675,7 +650,7 @@ public class GUI extends Application {
 		
 		ScaleTransition show = new ScaleTransition(); //The face is returned from a line to full size
 		show.setByX(1);
-		show.setDuration(Duration.millis(250));
+		show.setDuration(Duration.millis(125));
 		if (reversed)
 			show.setNode(cardBack);
 		else

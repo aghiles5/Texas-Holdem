@@ -327,7 +327,7 @@ public class Table {
 		StackPane tableCentre = new StackPane();
 			HBox centreProps = new HBox();
 			centreProps.setAlignment(Pos.CENTER);
-			centreProps.setSpacing(50);
+			centreProps.setSpacing(200);
 			
 				//=============================================================
 				// Deck Image
@@ -431,9 +431,9 @@ public class Table {
 					
 				dealerMoney.getChildren().addAll(pot, wager);
 				
-			centreProps.getChildren().addAll(deck, commFull, dealerMoney);
+			centreProps.getChildren().addAll(commFull, dealerMoney);
 			
-		tableCentre.getChildren().addAll(centreProps);
+		tableCentre.getChildren().addAll(centreProps, deck);
 		
 		return tableCentre;
 	}
