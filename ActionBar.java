@@ -1,3 +1,5 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -86,22 +88,48 @@ public class ActionBar {
 		//Input for raise
 		HBox raiseInput = new HBox();
 		raiseInput.setAlignment(Pos.CENTER);
-		raiseInput.setSpacing(10);
+		raiseInput.setSpacing(20);
 		raiseInput.setId("raiseInput");
 		
 			Label raiseFieldLabel = new Label("Enter your wager:");
 			raiseFieldLabel.getStyleClass().add("bar-label");
 			
-			Slider raiseSlider = new Slider(0, 100000, 50000);
-			raiseSlider.setMinWidth(250);
-			raiseSlider.setShowTickLabels(true);
-			raiseSlider.setShowTickMarks(true);
-			raiseSlider.setMajorTickUnit(10000);
-			raiseSlider.setMinorTickCount(4);
-			raiseSlider.setSnapToTicks(true);
-			raiseSlider.setId("raiseSlider");
+			VBox sliderBox = new VBox();
+			sliderBox.setAlignment(Pos.CENTER);
 			
-			HBox raiseFieldButtons = new HBox();
+				Slider raiseSlider = new Slider(0, 1000, 500);
+				raiseSlider.setMinWidth(250);
+				raiseSlider.setShowTickLabels(true);
+				raiseSlider.setShowTickMarks(true);
+				raiseSlider.setMajorTickUnit(1000);
+				raiseSlider.setMinorTickCount(9);
+				raiseSlider.setSnapToTicks(true);
+				raiseSlider.setId("raiseSlider");
+				
+				Label sliderLabel = new Label("$500");
+				sliderLabel.getStyleClass().add("bar-label");
+				
+				raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		            public void changed(ObservableValue<? extends Number> ov,
+		                Number old_val, Number new_val) {
+		            		String betAmount = "";
+		            		int intAmount = new_val.intValue(), digitCounter = 0;
+		            		while (intAmount != 0) {
+		            			digitCounter++;
+		            			if (digitCounter % 3 == 0)
+		            				betAmount = " " + intAmount % 10 + betAmount;
+		            			else
+		            				betAmount = intAmount % 10 + betAmount;
+		            			intAmount /= 10;
+		            		}
+		            		betAmount = "$" + betAmount;
+		                    sliderLabel.setText(betAmount);
+		            }
+		        });
+				
+			sliderBox.getChildren().addAll(raiseSlider, sliderLabel);
+			
+			VBox raiseFieldButtons = new VBox();
 			raiseFieldButtons.setAlignment(Pos.CENTER);
 			raiseFieldButtons.setSpacing(5);
 			
@@ -111,7 +139,7 @@ public class ActionBar {
 			
 			raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);
 		
-		raiseInput.getChildren().addAll(raiseFieldLabel, raiseSlider, raiseFieldButtons);
+		raiseInput.getChildren().addAll(raiseFieldLabel, sliderBox, raiseFieldButtons);
 		raiseInput.setVisible(false);
 		
 		//Notification window
@@ -147,7 +175,9 @@ public class ActionBar {
 		help.setId("help");
 		help.setDisable(true);
 		Button escapeClause = new Button("Quit");
+		escapeClause.setId("quit");
 		escapeClause.setMinSize(winWidth / 10, winHeight / 30 - 3);
+		escapeClause.setDisable(true);
 
 		settingButtons.getChildren().addAll(save, help, escapeClause);
 		

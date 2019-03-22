@@ -98,6 +98,7 @@ public class GUI extends Application {
 				((HBox) scene.lookup("#notif")).setVisible(false);
 				((Button) scene.lookup("#save")).setDisable(true);
 				((Button) scene.lookup("#help")).setDisable(true);
+				((Button) scene.lookup("#quit")).setDisable(true);
 				for (Player player : game.getPlayers()) {
 					player.setAction(" ");
 					((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
@@ -195,6 +196,7 @@ public class GUI extends Application {
 		notifLabel.setText(game.getRoundString());
 		
 		((Button) scene.lookup("#help")).setDisable(false);
+		((Button) scene.lookup("#quit")).setDisable(false);
 		
 		if (userFolded) { //If the user folded, fast track to showdown
 			if (game.getRound() == 4)
@@ -290,6 +292,7 @@ public class GUI extends Application {
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
 		((Button) scene.lookup("#help")).setDisable(false);
+		((Button) scene.lookup("#quit")).setDisable(false);
 		controls.setDisable(false);
 	}
 	
@@ -311,6 +314,7 @@ public class GUI extends Application {
 		Player user = game.getLastPlayer();
 		controls.setDisable(true);
 		((Button) scene.lookup("#help")).setDisable(true);
+		((Button) scene.lookup("#quit")).setDisable(true);
 		raiseInput.setVisible(false);
 		raise.setText("Bet");
 		updatePlayerInfo(user, scene);
@@ -386,6 +390,7 @@ public class GUI extends Application {
 		
 		((Button) scene.lookup("#help")).setDisable(false);
 		((Button) scene.lookup("#save")).setDisable(false);
+		((Button) scene.lookup("#quit")).setDisable(false);
 		notifLabel.setText(winnerString.toString());
 		notif.setVisible(true);
 	}
@@ -599,7 +604,7 @@ public class GUI extends Application {
 		
 		TranslateTransition moveCard = new TranslateTransition();
 		moveCard.setNode(subCard);
-		if (reversed)
+		if (reversed || userFolded)
 			moveCard.setDuration(Duration.millis(1));
 		else
 			moveCard.setDuration(Duration.millis(250));
@@ -610,7 +615,7 @@ public class GUI extends Application {
 		
 		TranslateTransition returnCard = new TranslateTransition();
 		returnCard.setNode(subCard);
-		if (reversed)
+		if (reversed && !userFolded)
 			returnCard.setDuration(Duration.millis(250));
 		else
 			returnCard.setDuration(Duration.millis(1));
@@ -651,6 +656,8 @@ public class GUI extends Application {
 		ScaleTransition hide = new ScaleTransition(); //The back is scaled to a line to be invisible
 		hide.setByX(-1);
 		hide.setDuration(Duration.millis(200));
+		if (userFolded)
+			hide.setDuration(Duration.millis(1));
 		if (reversed)
 			hide.setNode(cardFront);
 		else
@@ -659,6 +666,8 @@ public class GUI extends Application {
 		ScaleTransition show = new ScaleTransition(); //The face is returned from a line to full size
 		show.setByX(1);
 		show.setDuration(Duration.millis(200));
+		if (userFolded)
+			show.setDuration(Duration.millis(1));
 		if (reversed)
 			show.setNode(cardBack);
 		else
