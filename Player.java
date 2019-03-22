@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * will also utilize these methods.
  * 
  * @author Kyle Wen, Adam Hiles, John Lowie
- * @version 03/15/2019
+ * @version 03/21/2019
  *
  */
 public abstract class Player {
