@@ -8,18 +8,22 @@ import java.util.*;
  * importing JUnit test packages
  * 
  * @author John Lowie
- * @version 03/19/19
+ * @version 03/21/19
  */
 
  public class PlayerTest {
 
-    public ArrayList<String> names = new ArrayList<String>();
+    public static ArrayList<String> names = new ArrayList<String>();
 
     public static void main(String[] args) {
-        testingAI();
+        testingAINames();
+        testAIConstructor();
+        testingHuman();
     }
 
-    public static void testingAI() {
+    // Tests all methods in AI names for duplicates
+    public static void testingAINames() {
+        // Creating random AI names
         AI.addCPUName();
         AI a = new AI();
         AI b = new AI();
@@ -31,19 +35,68 @@ import java.util.*;
         AI h = new AI();
         AI i = new AI();
         AI j = new AI();
-        System.out.println(a.getName());
-        System.out.println(b.getName());
-        System.out.println(c.getName());
-        System.out.println(d.getName());
-        System.out.println(e.getName());
-        System.out.println(f.getName());
-        System.out.println(g.getName());
-        System.out.println(h.getName());
-        System.out.println(i.getName());
-        System.out.println(j.getName());
 
-        System.out.println("No errors in testingAI()");
+        // Adding AI names to a list for further testing
+        names.add(a.getName());
+        names.add(b.getName());
+        names.add(c.getName());
+        names.add(d.getName());
+        names.add(e.getName());
+        names.add(f.getName());
+        names.add(g.getName());
+        names.add(h.getName());
+        names.add(i.getName());
+        names.add(j.getName());
+
+        /**
+         * This loop will run and compare all the AI names to each other to make sure
+         * that there are no duplicate names
+         * 
+         * This nested loop was referenced from:
+         * https://stackoverflow.com/questions/23460367/comparing-elements-of-the-same-array-in-java
+         */
+        Boolean nameTest = true;
+        for (int x = 0; x < names.size(); x++) {
+            for (int k = x + 1; k < names.size(); k++) {
+                if (names.get(x) == names.get(k)) {
+                    System.out.println("Element " + x + 1 + " and element " + k + 2 + " have the same name.");
+                    nameTest = false;
+                }
+            }
+        }
+        if (nameTest == true) {
+            System.out.println("No errors in name test");
+        }
     }
+
+    // Test AI constructor
+    public static void testAIConstructor() {
+        Boolean testConstructor = true;
+        AI a = new AI("Johnny", 100);
+        AI b = new AI("Sammy", 300);
+        
+        if (a.getName() != "Johnny") {
+            testConstructor = false;
+            System.out.println("AI a name error");
+        }
+        if (a.getStack() != 100) {
+            testConstructor = false;
+            System.out.println("AI a stack error");
+        }
+        if (b.getName() != "Sammy") {
+            testConstructor = false;
+            System.out.println("AI b name error");
+        }
+        if (a.getStack() != 300) {
+            testConstructor = false;
+            System.out.println("AI b stack error");
+        }
+        if (testConstructor == false) {
+            System.out.println("AI constructor error");
+        }
+    }
+
+
 
     public static void testingHuman(){
         Human a = new Human("Johnny");
