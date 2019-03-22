@@ -270,21 +270,21 @@ public abstract class Player {
 	 * @param choice
 	 * @param newBet
 	 */
-	 public void BetRaise(String choice, int newBet) { 
-		 if (choice.equalsIgnoreCase("B")) { // checks to see if the bet is less than the
-			 // money in the player's balance if (newBet <= stack) { stack -= newBet;
-			 //decreases the player's money value. totBet += newBet; // adds the bet to the player's total bet.
-			 PotControl.POT += newBet; // check logic
-			 System.out.println("Player bet $" + newBet + "."); 
-		 } else if (choice.equalsIgnoreCase("R")) { // Raise action 
-		 // must be 2x the amount to call
-			 int toCall = highBet - totBet; // highBet must be tracked 
-			 if (newBet >= 2 * toCall && newBet <= stack) { 
-				 stack -= newBet;
-				 System.out.println("Player raised $" + newBet + "."); 
+	public void BetRaise(String choice, int newBet) { 
+		if (choice.equalsIgnoreCase("B")) { // checks to see if the bet is less than the
+			// money in the player's balance if (newBet <= stack) { stack -= newBet;
+			//decreases the player's money value. totBet += newBet; // adds the bet to the player's total bet.
+			PotControl.POT += newBet; // check logic
+			System.out.println("Player bet $" + newBet + "."); 
+		 }else if (choice.equalsIgnoreCase("R")) { // Raise action 
+		 	// must be 2x the amount to call
+			int toCall = highBet - totBet; // highBet must be tracked 
+			if (newBet >= 2 * toCall && newBet <= stack) { 
+				stack -= newBet;
+				System.out.println("Player raised $" + newBet + "."); 
 			 	PotControl.POT += newBet; // check logic
-			 }
-		 }
+			}
+		}
 	}
 	 
 
@@ -295,16 +295,16 @@ public abstract class Player {
 	 * @param choice
 	 * @param currentBet
 	 */
-	 public void call(String choice) { 
-	 int toCall = highBet - totBet; // highBet must be tracked 
-	 //need to determine how to compare each player's current Bet to generate a toCall 
+	public void call(String choice) { 
+	 	int toCall = highBet - totBet; // highBet must be tracked 
+	 	//need to determine how to compare each player's current Bet to generate a toCall 
 	 	if (choice.equalsIgnoreCase("L")) { 
 	 		stack -= toCall;
 	 		totBet += toCall; 
 	 		PotControl.POT += toCall; 
 			System.out.println("Player called."); 
 		} 
-	 }
+	}
 
 	/**
 	 * pre: A player decision has been made. 
@@ -312,12 +312,12 @@ public abstract class Player {
 	 * has gone "All-In."
 	 * @param choice
 	 */
-	 public void allIn(String choice) { 
+	public void allIn(String choice) { 
 	 	if (choice.equalsIgnoreCase("A")) { 
 	 		totBet += stack; stack = 0; PotControl.POT += totBet;
 			System.out.println("Playey went all-in!");
 		} 
-	 }
+	}
 	 
 
 	public void getDecision() {
