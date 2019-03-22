@@ -18,6 +18,7 @@ import java.util.*;
     public static void main(String[] args) {
         testingAINames();
         testAIConstructor();
+        testAIActions();
         testingHuman();
     }
 
@@ -94,6 +95,10 @@ import java.util.*;
         if (testConstructor == false) {
             System.out.println("AI constructor error");
         }
+    }
+
+    public static void testAIActions() {
+        
     }
 
 
