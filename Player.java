@@ -287,16 +287,16 @@ public abstract class Player {
 			// money in the player's balance if (newBet <= stack) { stack -= newBet;
 			// decreases the player's money value. totBet += newBet; // adds the bet to the
 			// player's total bet.
-			PotControl.POT += newBet; // check logic
+			totBet += newBet; // check logic
 			action = "Bet";
 			System.out.println("Player bet $" + newBet + ".");
 		} else if (choice.equalsIgnoreCase("R")) { // Raise action
 			// must be 2x the amount to call
-			int toCall = highBet - totBet; // highBet must be tracked
+			int toCall = Game.getHighestBest() - totBet; // highBet must be tracked
 			if (newBet >= 2 * toCall && newBet <= stack) {
 				stack -= newBet;
 				System.out.println("Player raised $" + newBet + ".");
-				PotControl.POT += newBet; // check logic
+				totBet += newBet; // check logic
 			}
 			action = "Raised";
 		}
@@ -310,13 +310,12 @@ public abstract class Player {
 	 * @param currentBet
 	 */
 	public void call(String choice) {
-		int toCall = highBet - totBet; // highBet must be tracked
+		int toCall = Game.getHighestBet() - totBet; // highBet must be tracked
 		// need to determine how to compare each player's current Bet to generate a
 		// toCall
 		if (choice.equalsIgnoreCase("L")) {
 			stack -= toCall;
 			totBet += toCall;
-			PotControl.POT += toCall;
 			action = "Called";
 			System.out.println("Player called.");
 		}
@@ -332,7 +331,6 @@ public abstract class Player {
 		if (choice.equalsIgnoreCase("A")) {
 			totBet += stack;
 			stack = 0;
-			PotControl.POT += totBet;
 			System.out.println("Playey went all-in!");
 			action = "All In";
 		}
