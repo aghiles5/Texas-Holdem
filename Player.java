@@ -231,7 +231,15 @@ public abstract class Player {
 	public int getBet() {
 		return totBet;
 	}
-
+	
+	/**
+	 * pre: A bet value is entered.
+	 * post: The player's total bet has been set.
+	 */
+	public void setBet(int nBet) {
+		totBet = nBet;
+	}
+	
 	/**
 	 * pre: A player decision has been made. post: The player has "checked" and
 	 * chosen to do nothing.
