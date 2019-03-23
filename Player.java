@@ -14,12 +14,14 @@ public abstract class Player {
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
+	protected int minBet = Game.smallBlind();
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
 	private double wins;
 	private double lost;
 	private double folds;
 	private double winPercent;
+	
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
