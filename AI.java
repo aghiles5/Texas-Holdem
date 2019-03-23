@@ -5,7 +5,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/21/2019
+ * @version 03/23/2019
  */
 
 public class AI extends Player {
@@ -15,6 +15,8 @@ public class AI extends Player {
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
 			"ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" }; // This is a list of names for the CPU player
 
+	// CONSTRUCTORS-------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	// Constructor that initiates the name of AI
 	public AI() {
 		setCPUName();
@@ -25,6 +27,8 @@ public class AI extends Player {
 		super.name = name;
 		super.stack = stack;
 	}
+
+	// NAME SET UP METHODS------------------------------------------------------------------------------------------------------------------------------------------
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
@@ -41,42 +45,72 @@ public class AI extends Player {
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
 	}
 
-	// THIS METHOD IS IN COMPLETE CHAOS!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
 
-	// This method pushes the AI decisions to Player class
+	/**
+	 * THIS METHOD IS IMPLEMENTED IF AND ONLY IF THE PREVIOUS PLAYER/ PLAYERS HAVE BET, RAISED, OR CALLED TO PREVIOUS RAISES
+	 * 
+	 * Implement this method if previous player raise
+	 * Implement this method if previous player calls
+	 * Implement this method if previous player calls all-in
+	 * Implement this method if highest bet is NOT 0
+	 */
 	public void getDecision() {
 		// This implements the randomness of the AI
 		Random choice = new Random();
-		int decision = choice.nextInt(100); // TMPORARY CHANGE!!!!!!!!!!!!!!!!!!!!!!!
+		int decision = choice.nextInt(100);
 		Random betting = new Random();
 
-		// AI randomly checks as a decision
-		if (decision <= 94) {
-			super.check("C");
-		}
-
-		// AI randomly folds as a decision
-		else if (decision >= 95) {
+		// AI fold action
+		if (decision < 10) {
 			super.fold("F");
 		}
 
-		// THESE CONDITIONS MAY OR MAY NOT HAVE PROBLEMS!!!!!!!!!!!!!!!!!!!
-		else if (decision == 2) {
-			checkAIBets(decision, super.getStack());
-			int bet = betting.nextInt(super.getStack());
-			super.BetRaise("B", bet);
+		// AI all in action
+		else if (decision >= 10 && decision < 15) {
+			super.allIn("A");
 		}
-		else if (decision == 3) {
+		
+		// AI call action
+		else if (decision >= 15 && decision < 75) {
+			super.call("L");
+		}
+		
+		// AI raise action
+		else if (decision >= 75) {
 			checkAIBets(decision, super.getStack());
 			int bet = betting.nextInt(super.getStack());
 			super.BetRaise("R", bet);
 		}
-		// THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		else if (decision == 4) {
-			super.call("L");
+	}
+
+	/**
+	 * THIS METHOD IS IMPLEMENTED IF AND ONLY IF THE HIGHEST BET IS 0!!
+	 * 
+	 * Implement this method if previous player/ players checks
+	 */
+	public void getDecision2() {
+		// This implements the randomness of the AI
+		Random choice = new Random();
+		int decision = choice.nextInt(100);
+		Random betting = new Random();
+
+		// AI check action
+		if (decision < 60) {
+			super.check("C");
 		}
-		// THIS LINE WILL NOT RUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		else if (decision == 5) {
+		// AI bet action
+		else if (decision >= 60 && decision < 85) {
+			checkAIBets(decision, super.getStack());
+			int bet = betting.nextInt(super.getStack());
+			super.BetRaise("B", bet);
+		}
+		// AI fold action
+		else if (decision >= 85 && decision < 95) {
+			super.fold("F");
+		}
+		// AI all in action
+		else if (decision >= 95) {
 			super.allIn("A");
 		}
 	}
