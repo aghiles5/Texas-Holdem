@@ -11,6 +11,7 @@ import java.util.Random;
 public class AI extends Player {
 
 	private int betInterval;
+	private int minBet = Game.smallBlind;
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -63,10 +64,9 @@ public class AI extends Player {
 	 * Implement this method if highest bet is NOT 0
 	 */
 	public void getDecision() {
-		// This implements the randomness of the AI
+		// Next 2 lines of code sets up probability of AI choices
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
-		Random betting = new Random();
 
 		// AI fold action
 		if (decision < 10) {
@@ -85,8 +85,7 @@ public class AI extends Player {
 		
 		// AI raise action
 		else if (decision >= 75) {
-			checkAIBets("R", super.getStack());
-			int bet = betting.nextInt(super.getStack());
+			int bet = checkAIBets("R");
 			super.BetRaise("R", bet);
 		}
 	}
@@ -97,10 +96,9 @@ public class AI extends Player {
 	 * Implement this method if previous player/ players checks
 	 */
 	public void getDecision2() {
-		// This implements the randomness of the AI
+		// Next 2 lines of code sets up probability of AI choices
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
-		Random betting = new Random();
 
 		// AI check action
 		if (decision < 60) {
@@ -108,8 +106,7 @@ public class AI extends Player {
 		}
 		// AI bet action
 		else if (decision >= 60 && decision < 85) {
-			checkAIBets("B", super.getStack());
-			int bet = betting.nextInt(super.getStack());
+			int bet = checkAIBets("B");
 			super.BetRaise("B", bet);
 		}
 		// AI fold action
@@ -127,42 +124,17 @@ public class AI extends Player {
 	 * raise, and call
 	 * 
 	 * @param playDecision AI's decision during round
-	 * @param money AI's current amount of stacks
 	 */
-	public int checkAIBets(String playDecision, int money) {
+	public int checkAIBets(String playDecision) {
 		Random bet = new Random();
-		// int betting = bet.nextInt(money + 1);
+		int betting = bet.nextInt(super.getStack());
 
-		/**
-		 * This handle the AI's betting decisions If the bets are 0 or it is the same as
-		 * its stack, the method will run again until the bet is not 0 and lower than
-		 * it's stack
-		 */
 		if (playDecision == "B") {
-			int betting = bet.nextInt(money + 1);
-			if (betting == 0) {
-				checkAIBets(playDecision, money);
-			} else if (betting == money) {
-				checkAIBets(playDecision, money);
-			} else {
-				return betting;
-			}
+			
 		}
 
-		/**
-		 * This handles the AI's raising decisions If the bets are 0 or it is the same
-		 * as its stack, the method will run again until the bet is not 0 and lower than
-		 * it's stack
-		 */
 		else if (playDecision == "R") {
-			int betting = bet.nextInt(money + 1);
-			if (betting == 0) {
-				checkAIBets(playDecision, money);
-			} else if (betting == money) {
-				checkAIBets(playDecision, money);
-			} else {
-				return betting;
-			}
+			
 		}
 		return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT!!!!!!!!!!!!!!!!!!!!!!!
 	}
