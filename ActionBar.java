@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
  * and end game messages and controls are also displayed here.
  * 
  * @author Adam Hiles
- * @version 03/10/19
+ * @version 03/23/19
  */
 public class ActionBar {
 	BorderPane barPane;
@@ -28,8 +28,8 @@ public class ActionBar {
 	 * @param winWidth the width of the window
 	 * @param winHeight the heigh of the window
 	 */
-	public ActionBar(double winWidth, double winHeight) {
-		barPane = setActionBar(winWidth, winHeight); 
+	public ActionBar(double winWidth, double winHeight, int stackSize) {
+		barPane = setActionBar(winWidth, winHeight, stackSize); 
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class ActionBar {
 	 * @param winHeight the heigh of the window
 	 * @return the root action bar node
 	 */
-	private BorderPane setActionBar(double winWidth, double winHeight) {
+	private BorderPane setActionBar(double winWidth, double winHeight, int stackSize) {
 		BorderPane actionBar = new BorderPane();
 		actionBar.setPrefSize(winWidth, winHeight / 10.0);
 		actionBar.setStyle("-fx-border-style: solid inside;"
@@ -67,17 +67,17 @@ public class ActionBar {
 		HBox controls = new HBox();
 		controls.setId("controls");
 		
-			Button fold = new Button("Fold");
+			Button fold = new Button("Fold"); //Fold button
 			fold.setPrefSize(winWidth * (3.0 / 10.0) - 4, winHeight / 10 - 10);
 			fold.getStyleClass().add("button-large");
 			fold.setId("fold");
 
-			Button raise = new Button("Bet");
+			Button raise = new Button("Raise"); //Raise/Bet button
 			raise.setPrefSize(winWidth * (3.0 / 10.0) - 3, winHeight / 10 - 10);
 			raise.getStyleClass().add("button-large");
 			raise.setId("raise");
 			
-			Button call = new Button("Check");
+			Button call = new Button("Call"); //Call/Check Button
 			call.setPrefSize(winWidth * (3.0 / 10.0) - 3, winHeight / 10 - 10);
 			call.getStyleClass().add("button-large");
 			call.setId("call");
@@ -94,47 +94,29 @@ public class ActionBar {
 			Label raiseFieldLabel = new Label("Enter your wager:");
 			raiseFieldLabel.getStyleClass().add("bar-label");
 			
-			VBox sliderBox = new VBox();
+			VBox sliderBox = new VBox(); //The raise slider and its amount label
 			sliderBox.setAlignment(Pos.CENTER);
 			
-				Slider raiseSlider = new Slider(0, 100000, 50000);
+				Slider raiseSlider = new Slider(stackSize * 0.025, stackSize, stackSize / 2);
 				raiseSlider.setMinWidth(250);
 				raiseSlider.setShowTickLabels(true);
-				raiseSlider.setMajorTickUnit(100000);
-				raiseSlider.setMinorTickCount(999);
+				raiseSlider.setMajorTickUnit(stackSize);
+				raiseSlider.setMinorTickCount((int) ((stackSize * 0.001) - 1));
 				raiseSlider.setSnapToTicks(true);
 				raiseSlider.setId("raiseSlider");
 				
 				Label sliderLabel = new Label("$50 000");
 				sliderLabel.getStyleClass().add("bar-label");
 				
-				raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
-		            public void changed(ObservableValue<? extends Number> ov,
-		                Number old_val, Number new_val) {
-		            		String betAmount = "";
-		            		int intAmount = ((new_val.intValue() + 50) / 100) * 100, digitCounter = 0;
-		            		while (intAmount != 0) {
-		            			if (digitCounter % 3 == 0 && digitCounter != 0)
-		            				betAmount = intAmount % 10 + " " + betAmount;
-		            			else
-		            				betAmount = intAmount % 10 + betAmount;
-		            			intAmount /= 10;
-		            			digitCounter++;
-		            		}
-		            		betAmount = "$" + betAmount;
-		                    sliderLabel.setText(betAmount);
-		            }
-		        });
-				
 			sliderBox.getChildren().addAll(raiseSlider, sliderLabel);
 			
-			VBox raiseFieldButtons = new VBox();
+			VBox raiseFieldButtons = new VBox(); //The enter or cancel buttons for raise/bet
 			raiseFieldButtons.setAlignment(Pos.CENTER);
 			raiseFieldButtons.setSpacing(5);
 			
-			Button raiseFieldConfirm = new Button("Enter");
-			raiseFieldConfirm.setId("raiseConfirm");
-			Button raiseFieldCancel = new Button("Cancel");
+				Button raiseFieldConfirm = new Button("Enter");
+				raiseFieldConfirm.setId("raiseConfirm");
+				Button raiseFieldCancel = new Button("Cancel");
 			
 			raiseFieldButtons.getChildren().addAll(raiseFieldConfirm, raiseFieldCancel);
 		
@@ -143,17 +125,20 @@ public class ActionBar {
 		
 		//Notification window
 		HBox notif = new HBox();
-		notif.getStyleClass().add("popup");
+		notif.getStyleClass().add("custom-popup");
 		notif.setAlignment(Pos.CENTER);
 		notif.setSpacing(50);
 		notif.setId("notif");
-		Label notifLabel = new Label("Blind Round");
-		notifLabel.getStyleClass().add("bar-label");
-		notifLabel.setStyle("-fx-font-size: 32;");
-		notifLabel.setId("notifLabel");
-		Button notifCont = new Button("Continue");
-		notifCont.getStyleClass().add("button-large");
-		notifCont.setId("notifCont");
+		
+			Label notifLabel = new Label("Blind Round");
+			notifLabel.getStyleClass().add("bar-label");
+			notifLabel.setStyle("-fx-font-size: 32;");
+			notifLabel.setId("notifLabel");
+			
+			Button notifCont = new Button("Continue");
+			notifCont.getStyleClass().add("button-large");
+			notifCont.setId("notifCont");
+			
 		notif.getChildren().addAll(notifLabel, notifCont);
 		notif.setVisible(false);
 		
@@ -165,23 +150,25 @@ public class ActionBar {
 		VBox settingButtons = new VBox();
 		settingButtons.setAlignment(Pos.CENTER);
 		
-		Button save = new Button("Save");
-		save.setMinSize(winWidth / 10, winHeight / 30 - 4);
-		save.setId("save");
-		save.setDisable(true);
-		Button help = new Button("Help");
-		help.setMinSize(winWidth / 10, winHeight / 30 - 3);
-		help.setId("help");
-		help.setDisable(true);
-		Button escapeClause = new Button("Quit");
-		escapeClause.setId("quit");
-		escapeClause.setMinSize(winWidth / 10, winHeight / 30 - 3);
-		escapeClause.setDisable(true);
+			Button save = new Button("Save");
+			save.setMinSize(winWidth / 10, winHeight / 30 - 4);
+			save.setId("save");
+			save.setDisable(true);
+			
+			Button help = new Button("Help");
+			help.setMinSize(winWidth / 10, winHeight / 30 - 3);
+			help.setId("help");
+			help.setDisable(true);
+			
+			Button escapeClause = new Button("Quit");
+			escapeClause.setId("quit");
+			escapeClause.setMinSize(winWidth / 10, winHeight / 30 - 3);
+			escapeClause.setDisable(true);
 
 		settingButtons.getChildren().addAll(save, help, escapeClause);
 		
 		//=====================================================================
-		//Event Handlers
+		//Event Handlers/Listeners
 		
 		raise.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -205,6 +192,24 @@ public class ActionBar {
 				System.exit(0);
 			}
 		});
+		
+		raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> observables,
+                Number oldValue, Number newValue) {
+            		String betAmount = "";
+            		int intAmount = ((newValue.intValue() + (int) (stackSize * 0.0005)) / (int) (stackSize * 0.001)) * (int) (stackSize * 0.001), digitCounter = 0;
+            		while (intAmount != 0) {
+            			if (digitCounter % 3 == 0 && digitCounter != 0)
+            				betAmount = intAmount % 10 + " " + betAmount;
+            			else
+            				betAmount = intAmount % 10 + betAmount;
+            			intAmount /= 10;
+            			digitCounter++;
+            		}
+            		betAmount = "$" + betAmount;
+                    sliderLabel.setText(betAmount);
+            }
+        });
 		
 		//=====================================================================
 		//Setting to BorderPane to return
