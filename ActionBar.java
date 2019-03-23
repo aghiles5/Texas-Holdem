@@ -97,30 +97,29 @@ public class ActionBar {
 			VBox sliderBox = new VBox();
 			sliderBox.setAlignment(Pos.CENTER);
 			
-				Slider raiseSlider = new Slider(0, 1000, 500);
+				Slider raiseSlider = new Slider(0, 100000, 50000);
 				raiseSlider.setMinWidth(250);
 				raiseSlider.setShowTickLabels(true);
-				raiseSlider.setShowTickMarks(true);
-				raiseSlider.setMajorTickUnit(1000);
-				raiseSlider.setMinorTickCount(9);
+				raiseSlider.setMajorTickUnit(100000);
+				raiseSlider.setMinorTickCount(999);
 				raiseSlider.setSnapToTicks(true);
 				raiseSlider.setId("raiseSlider");
 				
-				Label sliderLabel = new Label("$500");
+				Label sliderLabel = new Label("$50 000");
 				sliderLabel.getStyleClass().add("bar-label");
 				
 				raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
 		            public void changed(ObservableValue<? extends Number> ov,
 		                Number old_val, Number new_val) {
 		            		String betAmount = "";
-		            		int intAmount = new_val.intValue(), digitCounter = 0;
+		            		int intAmount = ((new_val.intValue() + 50) / 100) * 100, digitCounter = 0;
 		            		while (intAmount != 0) {
-		            			digitCounter++;
-		            			if (digitCounter % 3 == 0)
-		            				betAmount = " " + intAmount % 10 + betAmount;
+		            			if (digitCounter % 3 == 0 && digitCounter != 0)
+		            				betAmount = intAmount % 10 + " " + betAmount;
 		            			else
 		            				betAmount = intAmount % 10 + betAmount;
 		            			intAmount /= 10;
+		            			digitCounter++;
 		            		}
 		            		betAmount = "$" + betAmount;
 		                    sliderLabel.setText(betAmount);
