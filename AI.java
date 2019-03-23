@@ -22,6 +22,7 @@ public class AI extends Player {
 	// Constructor that initiates the name of AI
 	public AI() {
 		setCPUName();
+		setBetIntervals();
 	}
 	
 	//Constructor that sets the name of the AI and the stack - Kyle
@@ -48,7 +49,7 @@ public class AI extends Player {
 	}
 
 	public void setBetIntervals() {
-		
+		this.betInterval = (int) (0.01 * super.getStack());
 	}
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
@@ -130,7 +131,7 @@ public class AI extends Player {
 	 */
 	public int checkAIBets(String playDecision, int money) {
 		Random bet = new Random();
-		// int betting = bet.nextInt(money + 1); TEMPORARY!!!!!!!!!!!!!!
+		// int betting = bet.nextInt(money + 1);
 
 		/**
 		 * This handle the AI's betting decisions If the bets are 0 or it is the same as
