@@ -26,6 +26,10 @@
 	-fx-opacity: 0.5;
 }
 
+.choice-box{
+	-fx-base: brown;
+}
+
 .slider{
 	-fx-base: brown;
 }
@@ -40,7 +44,7 @@
 	-fx-text-fill: goldenrod;
 }
 
-.popup{
+.custom-popup{
 	-fx-background-color: maroon;
 	-fx-border-color: goldenrod;
 	-fx-border-radius: 5;

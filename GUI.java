@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.shape.Ellipse;
@@ -29,7 +30,7 @@ import javafx.scene.shape.Ellipse;
  * displayed, new Games are created, and the main game loop is run from here.
  * 
  * @author Adam Hiles
- * @version 03/19/18
+ * @version 03/23/18
  */
 public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
@@ -80,13 +81,13 @@ public class GUI extends Application {
 	private void generatePlayArea(Scene scene) {
 		Game game = new Game();
 		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-		ArrayList<Player> players = game.generatePlayers(playerNum);
+		int stackSize = Integer.parseInt(((String) ((ChoiceBox) scene.lookup("#StackChoice")).getValue()).substring(1).replaceAll("s//+", ""));
+		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
 		game.setupRound();
 		ArrayList<Card> comm = game.getComm();
 		
-		
 		BorderPane playArea = new BorderPane();
-		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT);
+		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT, stackSize);
 		Table table = new Table(players, comm);
 		playArea.setBottom(actionBar.getBarPane());
 		playArea.setCenter(table.getTablePane());
@@ -127,13 +128,15 @@ public class GUI extends Application {
 		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+			game.bet();
+			finishUserTurn(scene, game);
 			}
 		});
 		
 		((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				game.tempCheck();
+				game.call();
 				finishUserTurn(scene, game);
 			}
 		});
@@ -197,6 +200,20 @@ public class GUI extends Application {
 		
 		((Button) scene.lookup("#help")).setDisable(false);
 		((Button) scene.lookup("#quit")).setDisable(false);
+		
+		int pot = game.getPot(), int digitCounter = 0;  
+		String potLabel = "";
+		while (pot != 0) {
+			if (digitCounter % 3 == 0 && digitCounter != 0)
+				potLabel = pot % 10 + " " + potLabel;
+			else
+				potLabel = pot % 10 + potLabel;
+			pot /= 10;
+			digitCounter++;
+		}
+		potLabel = "Pot: $" + potLabel;
+		((Label) scene.lookup("#pot")).setText(potLabel);
+		((Label) scene.lookup("#wager")).setText("Highest Wager: $0");
 		
 		if (userFolded) { //If the user folded, fast track to showdown
 			if (game.getRound() == 4)
@@ -289,6 +306,18 @@ public class GUI extends Application {
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
+		if (user.getBet() == game.getHighestBet())
+			call.setText("Check");
+		else if (game.getHighestBet() == 0)
+			raise.setText("Bet");
+		
+		if (user.getStack() < (game.getHighestBet() - user.getBet())) {
+			raise.setDisable(true);
+			call.setText("All-In");
+		}
+		raiseSlider.setMax(user.getStack());
+		raiseSlider.setMajorTickUnit(user.getStack());
+		
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
 		((Button) scene.lookup("#help")).setDisable(false);
@@ -308,17 +337,22 @@ public class GUI extends Application {
 	private void finishUserTurn(Scene scene, Game game) {
 		HBox controls = (HBox) scene.lookup("#controls");
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
-		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		Button raise = (Button) scene.lookup("#raise");
+		Button help = (Button) scene.lookup("#help");
+		Button quit = (Button) scene.lookup("#quit");
+		Button call = (Button) scene.lookup("#call");
 		
 		Player user = game.getLastPlayer();
-		controls.setDisable(true);
-		((Button) scene.lookup("#help")).setDisable(true);
-		((Button) scene.lookup("#quit")).setDisable(true);
-		raiseInput.setVisible(false);
-		raise.setText("Bet");
-		updatePlayerInfo(user, scene);
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: black;");
+		controls.setDisable(true);
+		help.setDisable(true);
+		quit.setDisable(true);
+		raiseInput.setVisible(false);
+		
+		raise.setText("Raise");
+		call.setText("Call");
+		
+		updatePlayerInfo(user, scene, game);
 		game.incrementPlayer();
 		
 		if (user.getAction() == "Folded") {
@@ -341,10 +375,28 @@ public class GUI extends Application {
 	 * @param player the player whose information needs to be updated
 	 * @param scene the GUI scene
 	 */
-	private void updatePlayerInfo(Player player, Scene scene) {
-		//((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
+	private void updatePlayerInfo(Player player, Scene scene, Game game) {
+		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
-		//((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
+		
+		int bet = player.getBet();
+		String wager = "";
+		int digitCounter = 0;
+		
+		while (bet != 0) {
+			if (digitCounter % 3 == 0 && digitCounter != 0)
+				wager = bet % 10 + " " + wager;
+			else
+				wager = bet % 10 + wager;
+			bet /= 10;
+			digitCounter++;
+		}
+		wager = "Highest Wager: $" + wager;
+		
+		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
+		if (player.getBet() > game.getHighestBet())
+			((Label) scene.lookup("#wager")).setText(wager);
+		
 		if (player.getAction() == "Folded")
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
 	}
@@ -364,9 +416,27 @@ public class GUI extends Application {
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Hand: " + player.getHand().toString());
 		
 		ArrayList<Player> winners = game.showdown();
-		HBox notif = (HBox) scene.lookup("#notif");
-		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		
+		((Label) scene.lookup("#pot")).setText("Pot: $0"); //The pot is reset and the winners' stacks are updated
+		for (Player player : winners) {
+			int stack = player.getStack();
+			String stackLabel = "";
+			int digitCounter = 0;
+			
+			while (stack != 0) {
+				if (digitCounter % 3 == 0 && digitCounter != 0)
+					stackLabel = stack % 10 + " " + stackLabel;
+				else
+					stackLabel = stack % 10 + stackLabel;
+				stack /= 10;
+				digitCounter++;
+			}
+			stackLabel = "Stack: $" + stackLabel;
+			((Label) scene.lookup("#" + player.getName() + "Stack")).setText(stackLabel);
+		}
+		
+		HBox notif = (HBox) scene.lookup("#notif"); //A notification message displaying the winner(s) is constructed
+		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		StringBuilder winnerString = new StringBuilder();
 		if ((winners.size() == game.getPlayers().size()) &&(game.getPlayers().size() != 1))
 			winnerString.append("The Pot Will Be Divided Evenly");
@@ -395,29 +465,49 @@ public class GUI extends Application {
 		notif.setVisible(true);
 	}
 	
+	/**
+	 * To show the shuffling of the cards each image that makes up the deck's
+	 * GUI representation has to be moved in a specific way as defined in the
+	 * below function, which creates an animation for an image based on the
+	 * specific instructions
+	 * 
+	 * @param scene the master node tree
+	 * @param image the image to be moved
+	 * @param mirrored whether the animation is a mirrored version or not
+	 * @return a full motion animation
+	 */
 	private SequentialTransition shuffleAnimFactory(Scene scene, ImageView image, Boolean mirrored) {
-		TranslateTransition shiftImageHoriz = new TranslateTransition(Duration.millis(250), image);
-		if (mirrored)
+		TranslateTransition shiftImageHoriz = new TranslateTransition(Duration.millis(250), image); //The image is shifted horizontally 40 pixels
+		if (mirrored) //Mirrored images are shifted in the other direction
 			shiftImageHoriz.setByX(-40);
 		else
 			shiftImageHoriz.setByX(40);
 		shiftImageHoriz.setAutoReverse(true);
 		shiftImageHoriz.setCycleCount(2);
 		
-		TranslateTransition shiftImageVerti = new TranslateTransition(Duration.millis(250), image);
-		if (mirrored)
+		TranslateTransition shiftImageVerti = new TranslateTransition(Duration.millis(250), image); //The image is shifted vertically 56 pixels
+		if (mirrored) //Mirrored images are shifted in the other direction
 			shiftImageVerti.setByY(-56);
 		else
 			shiftImageVerti.setByY(56);
 		shiftImageVerti.setAutoReverse(true);
 		shiftImageVerti.setCycleCount(2);
 		
-		SequentialTransition shuffleAnim = new SequentialTransition(shiftImageHoriz, shiftImageVerti);
+		SequentialTransition shuffleAnim = new SequentialTransition(shiftImageHoriz, shiftImageVerti); //The image is shifted horizontally then vertically
 		
 		return shuffleAnim;
 	}
 	
+	/**
+	 * At the start of each round of play the deck's GUI representation has 
+	 * its components shifted to simulate a shuffle as controlled by the below
+	 * method. 
+	 * 
+	 * @param scene the node tree
+	 * @param game the current game object
+	 */
 	private void shuffleDeck(Scene scene, Game game) {
+		//The deck components are listed
 		ImageView deckA = (ImageView) scene.lookup("#deckA");
 		ImageView deckB = (ImageView) scene.lookup("#deckB");
 		ImageView drawCard = (ImageView) scene.lookup("#drawCard");
@@ -430,9 +520,9 @@ public class GUI extends Application {
 		SequentialTransition drawCardAnim = shuffleAnimFactory(scene, drawCard, true);
 		SequentialTransition returnCardAnim = shuffleAnimFactory(scene, returnCard, false);
 		
-		shuffleAnim.getChildren().addAll(deckAAnim, deckBAnim, drawCardAnim, returnCardAnim);
+		shuffleAnim.getChildren().addAll(deckAAnim, deckBAnim, drawCardAnim, returnCardAnim); //All components animations are played in unison
 		
-		shuffleAnim.setOnFinished(e -> dealHoles(scene, game));
+		shuffleAnim.setOnFinished(e -> dealHoles(scene, game)); //At the end of the animation the hole dealing animation is played
 		
 		shuffleAnim.play();
 	}
@@ -450,7 +540,7 @@ public class GUI extends Application {
 		
 		for (int card = 1; card <= 2; card++) {
 			for (Player player : players) {
-				if (player instanceof AI) {
+				if (player instanceof AI) { 
 					ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
 					ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
 					
@@ -486,7 +576,7 @@ public class GUI extends Application {
 			dealingAnim.getChildren().add(dealCardAnim);
 		}
 		
-		dealingAnim.getChildren().add(revealCards);
+		dealingAnim.getChildren().add(revealCards); //After all cards are dealt they are simultaneously revealed
 		
 		dealingAnim.play();
 	}
@@ -505,33 +595,48 @@ public class GUI extends Application {
 		cardAnim.play();
 	}
 	
+	/**
+	 * All of the community cards are simultaneously flipped then returned to
+	 * the deck one by one.
+	 * 
+	 * @param scene the game node tree
+	 * @param game the current Game object
+	 */
 	private void returnComm(Scene scene, Game game) {
 		SequentialTransition returnCards = new SequentialTransition();
 		ParallelTransition hideCards = new ParallelTransition();
-		returnCards.getChildren().add(hideCards);
+		returnCards.getChildren().add(hideCards); //The parallel hide animation is played before any returns to the deck
 		
-		for (int commCard = 0; commCard < 5; commCard++) {
+		for (int commCard = 0; commCard < 5; commCard++) { //Each of the five community cards is iterated through
 			ImageView commFront = (ImageView) scene.lookup("#commFront" + commCard);
 			ImageView commBack = (ImageView) scene.lookup("#commBack" + commCard);
 			hideCards.getChildren().add(flipCard(commBack, commFront, true));
 			returnCards.getChildren().add(moveCard(scene, commBack, commFront, true));
 		}
 		
-		returnCards.setOnFinished(e -> returnAllHoles(scene, game));
+		returnCards.setOnFinished(e -> returnAllHoles(scene, game)); //At the end of animation the return animation for the hole cards is played
 		returnCards.play();
 	}
 	
+	/**
+	 * At the beginning of each round of play after the deck is shuffled by its
+	 * animation each player is dealt their hole cards, beginning with the
+	 * first card clockwise then the second clockwise.
+	 * 
+	 * @param scene the game node tree
+	 * @param game the current Game object
+	 */
 	private void dealHoles(Scene scene, Game game) {
 		SequentialTransition dealAllHoles = new SequentialTransition();
 		
 		ParallelTransition showUserCards = new ParallelTransition();
 		
-		for (int card = 1; card <= 2; card++) {
-			for (Player player : game.getPlayers()) {
+		for (int card = 1; card <= 2; card++) { //Each of a player's two cards is iterated through
+			for (Player player : game.getPlayers()) { //Each player is iterated through
 				ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
 				ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
 				
-				if (player instanceof Human) {
+				if (player instanceof Human) { //If the player is the user their cards are set to reveal
 					SequentialTransition cardFlip = flipCard(cardBack, cardFront, false);
 					showUserCards.getChildren().add(cardFlip);
 				}
@@ -541,24 +646,34 @@ public class GUI extends Application {
 			}
 		}
 		
-		dealAllHoles.setOnFinished(e -> showUserCards.play());
+		dealAllHoles.setOnFinished(e -> showUserCards.play()); //The user's cards are revealed to them once all are dealt
 		
-		showUserCards.setOnFinished(e -> notifyRound(scene, game));
+		showUserCards.setOnFinished(e -> notifyRound(scene, game)); //The net animation of this method is followed by the first round notification
 		
 		dealAllHoles.play();
 	}
 	
+	/**
+	 * To return a player's cards to the deck image they are first
+	 * simultaneously flipped (if applicable) then returned to the deck one at
+	 * a time.
+	 * 
+	 * @param scene the game node tree
+	 * @param player the player whose hole cards need to be returned
+	 * @param flip if the player's cards also need to be flipped, for a folding player and end round returns
+	 * @return the return hole animation
+	 */
 	private SequentialTransition returnHole(Scene scene, Player player, Boolean flip) {
 		ParallelTransition hideCards = new ParallelTransition();
 		
 		SequentialTransition returnCards = new SequentialTransition();
-		returnCards.getChildren().add(hideCards);
+		returnCards.getChildren().add(hideCards); //The cards are flipped before returning (if applicable)
 		
-		for (int card = 1; card <= 2; card++) {
+		for (int card = 1; card <= 2; card++) { //Each card is iterated to be returned
 			ImageView cardBack = (ImageView) scene.lookup("#" + player.getName() + "Card" + card + "Back");
 			ImageView cardFront = (ImageView) scene.lookup("#" + player.getName() + "Card" + card);
 			
-			if (flip) {
+			if (flip) { //If the card is needed to be flipped it is set to do so
 				SequentialTransition hideCard = flipCard(cardBack, cardFront, true);
 				hideCards.getChildren().add(hideCard);
 			}
@@ -570,16 +685,26 @@ public class GUI extends Application {
 		return returnCards;
 	}
 	
+	/**
+	 * To return all of the players' hole cards at the end of a round of play
+	 * each player is passed to the returnHole method to produce a returning
+	 * animation which is added to the whole method's animation. On the end of
+	 * the animation the Game object is reset for the next round of play and
+	 * a new round of play is started.
+	 * 
+	 * @param scene the game node tree
+	 * @param game the current Game object
+	 */
 	private void returnAllHoles(Scene scene, Game game) {
 		SequentialTransition returnCards = new SequentialTransition();
 		
-		for (Player player : game.getPlayers()) {
+		for (Player player : game.getPlayers()) { //Each player is iterated
 			returnCards.getChildren().add(returnHole(scene, player, true));
 		}
 		
 		returnCards.setOnFinished(new EventHandler<ActionEvent>() { 
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(ActionEvent event) { //On the animation finish a new round of play is started
 				game.setupRound();
 				runPlayRound(scene, game);
 			}
@@ -588,6 +713,15 @@ public class GUI extends Application {
 		returnCards.play();
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param scene the game node
+	 * @param cardBack
+	 * @param cardFront
+	 * @param reversed
+	 * @return
+	 */
 	private SequentialTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed) {
 		ImageView subCard;
 		if (reversed)

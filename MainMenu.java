@@ -1,7 +1,11 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -15,7 +19,7 @@ import javafx.scene.layout.VBox;
  * can also be quit to desktop.
  * 
  * @author Adam Hiles
- * @version 03/10/19
+ * @version 03/23/19
  */
 public class MainMenu {
 	private StackPane menu;
@@ -50,7 +54,7 @@ public class MainMenu {
 			//Encapsulating Box
 			VBox menuBox = new VBox();
 			menuBox.setAlignment(Pos.CENTER);
-			menuBox.getStyleClass().add("popup");
+			menuBox.getStyleClass().add("custom-popup");
 			menuBox.setSpacing(10);
 			menuBox.setMaxSize(480, 600);
 			
@@ -60,10 +64,23 @@ public class MainMenu {
 				title.getStyleClass().add("bar-label");
 				
 				//Game Info and Settings
-				Label stacks = new Label("Stack Amount: $100 000");
-				stacks.getStyleClass().add("bar-label");
-				Label blinds = new Label("Blinds: $250/$500");
-				blinds.getStyleClass().add("bar-label");
+				HBox stackBox = new HBox();
+				stackBox.setSpacing(10);
+				stackBox.setAlignment(Pos.CENTER);
+				
+					Label stackLabel = new Label("Stack Amount:");
+					stackLabel.getStyleClass().add("bar-label");
+					
+					ChoiceBox<String> stackChoice = new ChoiceBox<String>();
+					stackChoice.setItems(FXCollections.observableArrayList(
+							"$1 000", "$10 000", "$100 000", "$1 000 000"));
+					stackChoice.getSelectionModel().selectFirst();
+					stackChoice.setId("stackChoice");
+					
+				stackBox.getChildren().addAll(stackLabel, stackChoice);
+					
+				Label blindLabel= new Label("Blinds: $25/$50");
+				blindLabel.getStyleClass().add("bar-label");
 				Label sliderLabel = new Label("Choose number of coms:");
 				sliderLabel.getStyleClass().add("bar-label");
 				
@@ -90,13 +107,49 @@ public class MainMenu {
 				
 				buttonBox.getChildren().addAll(start, exit);
 				
-			menuBox.getChildren().addAll(title, stacks, blinds, sliderLabel, comSlider, buttonBox);
+			menuBox.getChildren().addAll(title, stackBox, blindLabel, sliderLabel, comSlider, buttonBox);
 			
 			//EventHandler for the basic exit button
 			exit.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					System.exit(0);
+				}
+			});
+			
+			stackChoice.valueProperty().addListener(new ChangeListener<String>() {
+				public void changed(ObservableValue<? extends String> observable, 
+						String oldValue, String newValue) {
+					String blinds = "";
+					double stack = Double.parseDouble(newValue.substring(1).replaceAll("\\s+", ""));
+					
+					int smallBlind = (int) (stack * 0.025);
+					int bigBlind = (int) (stack * 0.05);
+					int digitCounter = 0;
+					
+					while (smallBlind != 0) {
+            			if (digitCounter % 3 == 0 && digitCounter != 0)
+            				blinds = smallBlind % 10 + " " + blinds;
+            			else
+            				blinds = smallBlind % 10 + blinds;
+            			smallBlind /= 10;
+            			digitCounter++;
+            		}
+					
+					digitCounter = 0;
+					blinds = "/$" + blinds;
+					
+					while (bigBlind != 0) {
+            			if (digitCounter % 3 == 0 && digitCounter != 0)
+            				blinds = bigBlind % 10 + " " + blinds;
+            			else
+            				blinds = bigBlind % 10 + blinds;
+            			bigBlind /= 10;
+            			digitCounter++;
+            		}
+					
+					blinds = "Blinds: $" + blinds;
+					blindLabel.setText(blinds);
 				}
 			});
 			
