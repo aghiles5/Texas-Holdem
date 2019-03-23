@@ -10,6 +10,8 @@ import java.util.Random;
 
 public class AI extends Player {
 
+	private int betInterval;
+
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
@@ -28,7 +30,7 @@ public class AI extends Player {
 		super.stack = stack;
 	}
 
-	// NAME SET UP METHODS------------------------------------------------------------------------------------------------------------------------------------------
+	// SET UP METHODS-----------------------------------------------------------------------------------------------------------------------------------------------
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
@@ -43,6 +45,10 @@ public class AI extends Player {
 		int rName = name.nextInt(cpuName.size()); // rName chooses a random integer based on cpuName ArrayList size
 		super.name = cpuName.get(rName); // From rName, this will set the CPU player's name
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
+	}
+
+	public void setBetIntervals() {
+		
 	}
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
@@ -78,7 +84,7 @@ public class AI extends Player {
 		
 		// AI raise action
 		else if (decision >= 75) {
-			checkAIBets(decision, super.getStack());
+			checkAIBets("R", super.getStack());
 			int bet = betting.nextInt(super.getStack());
 			super.BetRaise("R", bet);
 		}
@@ -101,7 +107,7 @@ public class AI extends Player {
 		}
 		// AI bet action
 		else if (decision >= 60 && decision < 85) {
-			checkAIBets(decision, super.getStack());
+			checkAIBets("B", super.getStack());
 			int bet = betting.nextInt(super.getStack());
 			super.BetRaise("B", bet);
 		}
@@ -122,7 +128,7 @@ public class AI extends Player {
 	 * @param playDecision AI's decision during round
 	 * @param money AI's current amount of stacks
 	 */
-	public int checkAIBets(int playDecision, int money) {
+	public int checkAIBets(String playDecision, int money) {
 		Random bet = new Random();
 		// int betting = bet.nextInt(money + 1); TEMPORARY!!!!!!!!!!!!!!
 
@@ -131,7 +137,7 @@ public class AI extends Player {
 		 * its stack, the method will run again until the bet is not 0 and lower than
 		 * it's stack
 		 */
-		if (playDecision == 2) {
+		if (playDecision == "B") {
 			int betting = bet.nextInt(money + 1);
 			if (betting == 0) {
 				checkAIBets(playDecision, money);
@@ -147,7 +153,7 @@ public class AI extends Player {
 		 * as its stack, the method will run again until the bet is not 0 and lower than
 		 * it's stack
 		 */
-		else if (playDecision == 3) {
+		else if (playDecision == "R") {
 			int betting = bet.nextInt(money + 1);
 			if (betting == 0) {
 				checkAIBets(playDecision, money);
