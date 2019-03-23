@@ -11,7 +11,7 @@ import java.util.Random;
 public class AI extends Player {
 
 	private int betInterval;
-	private int minBet = Game.smallBlind;
+	private int minBet = Game.getSmallBlind();
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
