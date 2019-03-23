@@ -13,13 +13,16 @@ import java.util.Random;
 public class Game {
 
     private ArrayList<Player> players = new ArrayList<Player>();
-    private ArrayList<Player> roundPlayers = new ArrayList<Player>();
+    protected ArrayList<Player> roundPlayers = new ArrayList<Player>();
     private ArrayList<Card> middleCards = new ArrayList<Card>();
     private Deck cardDeck = new Deck();
     private Player lastPlayer;
     private int roundNum;
     private int playerCount;
     private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Turnover", "Showdown" };
+    private int highestBet;
+    private int smallBlind;
+    private int pot;
 
     /*
      * Constructor to ensure that roundNum and playerCount are reset to 0 when a
@@ -29,38 +32,41 @@ public class Game {
         roundNum = 0;
         playerCount = 0;
     }
-    
+
     public ArrayList<Player> getPlayerList() {
-    	return players;
+        return players;
     }
-    
+
     /**
      * Generates the old players loaded from a file in the SaveIO class
+     * 
      * @author Kyle Wen
-     * @param name, stack
-     * name and stack contain the arrayList passed from SaveIO to Game
+     * @param name, stack name and stack contain the arrayList passed from SaveIO to
+     *              Game
      * @return arraylist of the generated players
      */
     public ArrayList<Player> loadPlayers(ArrayList<String> name, ArrayList<Integer> stack) {
-    	ArrayList<String> names = new ArrayList<String>(name); 
-    	ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
-    	int position = 0;
-    	for (int i = 0; i < name.size(); i++) {
-    		if (names.get(i).equals("You")) {
-    			position = i;
-    		}
-    	}
-    	for (int n = 0; n < names.size(); n++) {
+        ArrayList<String> names = new ArrayList<String>(name);
+        ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
+        int position = 0;
+        for (int i = 0; i < name.size(); i++) {
+            if (names.get(i).equals("You")) {
+                position = i;
+            }
+        }
+        for (int n = 0; n < names.size(); n++) {
             if (n == position)
                 players.add(new Human("You", stacks.get(n)));
             else
                 players.add(new AI(names.get(n), stacks.get(n)));
         }
-    	for (int i = 0; i < 2; i++) {
+
+        for (int i = 0; i < 2; i++) {
             for (Player player : players)
                 player.setHole(cardDeck.dealSingle());
         }
-    	return players;
+
+        return players;
     }
 
     /**
@@ -85,6 +91,10 @@ public class Game {
                 player.setHole(cardDeck.dealSingle());
         }
 
+        for (Player player : players) {
+            player.stack = 100000;
+        }
+
         return players;
     }
 
@@ -105,8 +115,13 @@ public class Game {
                 player.setHole(cardDeck.dealSingle());
         }
         for (Player player : players) {
-            roundPlayers.add(player);
+            if (player.getStack() > 0) {
+                roundPlayers.add(player);
+            }
         }
+
+        blindPosition();
+
         middleCards.clear();
         for (int i = 0; i < 3; i++) {
             middleCards = cardDeck.dealCard(middleCards);
@@ -132,7 +147,7 @@ public class Game {
     public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
-        // checkAction();
+
         for (Card roundCard : middleCards) {
             roundComm.add(roundCard);
         }
@@ -288,5 +303,19 @@ public class Game {
     public void tempCheck() {
         roundPlayers.get(playerCount).check("C");
         setLastPlayer(roundPlayers.get(playerCount));
+    }
+
+    public void blindPosition() {
+        ArrayList<Player> tempPList = new ArrayList<Player>();
+        for (Player player : roundPlayers) {
+            if (player != roundPlayers.get(0)) {
+                tempPList.add(player);
+            }
+        }
+
+        tempPList.add(roundPlayers.get(0));
+
+        roundPlayers.clear();
+        roundPlayers.addAll(tempPList);
     }
 }
