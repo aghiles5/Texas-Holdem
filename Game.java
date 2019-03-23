@@ -21,7 +21,7 @@ public class Game {
     private int playerCount;
     private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Turnover", "Showdown" };
     private int highestBet;
-    private int smallBlind;
+    private double smallBlind;
     private int pot;
 
     /*
@@ -31,6 +31,9 @@ public class Game {
     public Game() {
         roundNum = 0;
         playerCount = 0;
+        pot = 0;
+        highestBet = 0;
+        smallBlind = (int) (100000 * 0.025);
     }
 
     public ArrayList<Player> getPlayerList() {
@@ -104,6 +107,7 @@ public class Game {
     public void setupRound() {
         roundPlayers.clear();
         roundNum = 0;
+        playerCount = 0;
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -121,6 +125,9 @@ public class Game {
         }
 
         blindPosition();
+
+        roundPlayers.get(playerCount).stack -= smallBlind;
+        roundPlayers.get(playerCount + 1).stack -= (smallBlind * 2);
 
         middleCards.clear();
         for (int i = 0; i < 3; i++) {
@@ -236,9 +243,9 @@ public class Game {
     public boolean isBetRoundRunning() {
         int actionCounter = 0;
         for (Player player : roundPlayers) {
-            if (player.getAction() == "Checked") {
-                actionCounter += 1;
-            } else if (player.getAction() == "Folded") {
+            if (player.getAction() == "Checked" || player.getAction() == "Folded" || player.getAction() == "Called"
+                    || player.getAction() == "All In" || player.getAction() == "Raised"
+                    || player.getAction() == "Bet") {
                 actionCounter += 1;
             }
         }
@@ -300,8 +307,13 @@ public class Game {
      * A temporary method used for DEMO 2, calls the player's action when the player
      * chooses to check
      */
-    public void tempCheck() {
-        roundPlayers.get(playerCount).check("C");
+    public void call() {
+        if (roundPlayers.get(playerCount).getBet() == highestBet) {
+            roundPlayers.get(playerCount).check("C");
+        } else {
+            roundPlayers.get(playerCount).call("L");
+        }
+
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
