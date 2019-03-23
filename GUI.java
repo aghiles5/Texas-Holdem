@@ -155,7 +155,9 @@ public class GUI extends Application {
 	 */
 	private void runPlayRound(Scene scene, Game game) {
 		ArrayList<Player> players = game.getPlayers();
-		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE);
+		for (Player player: players)
+			((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
+		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE); //The blind/dealer chips are displayed as appropriate
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
 		((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setFill(Color.YELLOW);
 		((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setVisible(true);
@@ -164,7 +166,7 @@ public class GUI extends Application {
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
 		}
 		
-		for (Player player : players) {
+		for (Player player : players) { //Each player's cards, actions, and bets are updated
 			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
 			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
 			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
@@ -201,7 +203,7 @@ public class GUI extends Application {
 		((Button) scene.lookup("#help")).setDisable(false);
 		((Button) scene.lookup("#quit")).setDisable(false);
 		
-		int pot = game.getPot(), int digitCounter = 0;  
+		int pot = game.getPot(), digitCounter = 0;  
 		String potLabel = "";
 		while (pot != 0) {
 			if (digitCounter % 3 == 0 && digitCounter != 0)
@@ -214,6 +216,8 @@ public class GUI extends Application {
 		potLabel = "Pot: $" + potLabel;
 		((Label) scene.lookup("#pot")).setText(potLabel);
 		((Label) scene.lookup("#wager")).setText("Highest Wager: $0");
+		for (Player player : game.getPlayers())
+			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
 		
 		if (userFolded) { //If the user folded, fast track to showdown
 			if (game.getRound() == 4)
@@ -779,10 +783,13 @@ public class GUI extends Application {
 	
 	/**
 	 * The set of ImageViews passed into this method will be swapped by an
-	 * appropriate flipping animation.
+	 * appropriate flipping animation. The positions of the card back and 
+	 * front imageviews are swapped if a hiding animation is required over a
+	 * revealing animation.
 	 * 
 	 * @param cardBack the ImageView of the card's back
 	 * @param cardFront the ImageView of the card's face
+	 * 
 	 */
 	private SequentialTransition flipCard(ImageView cardBack, ImageView cardFront, Boolean reversed) {
 		SequentialTransition fullMotion = new SequentialTransition();
