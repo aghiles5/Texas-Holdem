@@ -4,7 +4,7 @@ import java.util.ArrayList;
 //AI and Player objects need a base money value on start up.
 //needs: a way to check the current highest bet, blinds
 //sml bLind = 250, 500
-public class PotControl {
+public class PotControl extends Game {
 	public static int POT;
 	public static int[] blinds = new int[2]; //can be done in main?
 	//track the current money value
@@ -21,10 +21,12 @@ public class PotControl {
 		System.out.println("Small Blind: " + blinds[0] + "\nBig Blind: " + blinds[1]);
 	}
 	
-	//not necessary
+	//fresh calculation each time.
 	public int CalcPot() {
-		for (int i = 0; i < Main.players.size(); i++) {
-			POT += players.getIndex(i).getBet();
+			POT = 0;
+			//Change Game getter to getRoundPlayers
+		for (int i = 0; i < super.getPlayerList().size(); i++) {
+			POT += roundPlayers.getIndex(i).getBet();
 		}
 		
 		return POT; //might not need to return POT
