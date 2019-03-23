@@ -8,7 +8,7 @@ import java.util.*;
  * importing JUnit test packages
  * 
  * @author John Lowie
- * @version 03/21/19
+ * @version 03/23/19
  */
 
  public class PlayerTest {
@@ -95,9 +95,16 @@ import java.util.*;
         if (testConstructor == false) {
             System.out.println("AI constructor error");
         }
+        if (testConstructor == true) {
+            System.out.println("No errors in AI constructor test");
+        }
     }
 
     public static void testAIActions() {
+        Boolean testActions = true;
+        AI a = new AI("foo", 1000);
+        AI b = new AI("bar", 1000);
+
         
     }
 
