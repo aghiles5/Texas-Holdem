@@ -23,10 +23,10 @@ public class PotControl extends Game {
 	
 	//fresh calculation each time.
 	public int CalcPot() {
-			POT = 0;
 			//Change Game getter to getRoundPlayers
 		for (int i = 0; i < super.getPlayerList().size(); i++) {
 			POT += roundPlayers.getIndex(i).getBet();
+			roundPlayers.getIndex(i).setBet(0);
 		}
 		
 		return POT; //might not need to return POT
