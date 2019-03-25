@@ -64,7 +64,9 @@ public class GUI extends Application {
 		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
 			@Override
 			public void handle(ActionEvent event) {
-				generatePlayArea(scene);
+				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
+				int stackSize = Integer.parseInt((((ChoiceBox<String>) scene.lookup("#stackChoice")).getValue()).substring(1).replaceAll(" ", "").replace("$", ""));
+				generatePlayArea(scene, playerNum, stackSize);
 			}
 		});
 	}
@@ -78,10 +80,8 @@ public class GUI extends Application {
 	 * 
 	 * @param scene the GUI scene
 	 */
-	private void generatePlayArea(Scene scene) {
+	private void generatePlayArea(Scene scene, int playerNum, int stackSize) {
 		Game game = new Game();
-		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-		int stackSize = Integer.parseInt((((ChoiceBox<String>) scene.lookup("#StackChoice")).getValue()).substring(1).replaceAll("s//+", ""));
 		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
 		game.setupRound();
 		ArrayList<Card> comm = game.getComm();
@@ -110,10 +110,20 @@ public class GUI extends Application {
 				 	if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
 				 		showdown(scene, game);
 				 	else {
-				 		userFolded = false;
-				 		returnComm(scene, game);
+				 		if (game.isGameOver())
+				 			gameOver(scene, game);
+				 		else
+				 			returnComm(scene, game);
 				 	}
 				 }
+			}
+		});
+		
+		((Button) scene.lookup("#playAgain")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				((HBox) scene.lookup("#endGameNotif")).setVisible(false);
+				generatePlayArea(scene, playerNum, stackSize);
 			}
 		});
 		
@@ -128,8 +138,8 @@ public class GUI extends Application {
 		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-			game.bet(((Slider) scene.lookup("#raiseSlider")).getValue());
-			finishUserTurn(scene, game);
+				game.bet((int) ((Slider) scene.lookup("#raiseSlider")).getValue());
+				finishUserTurn(scene, game);
 			}
 		});
 		
@@ -141,7 +151,7 @@ public class GUI extends Application {
 			}
 		});
 		
-		runPlayRound(scene, game);
+		startPlayRound(scene, game);
 	}
 	
 	/**
@@ -153,7 +163,7 @@ public class GUI extends Application {
 	 * @param scene the GUI scene
 	 * @param game the Game object
 	 */
-	private void runPlayRound(Scene scene, Game game) {
+	private void startPlayRound(Scene scene, Game game) {
 		ArrayList<Player> players = game.getPlayers();
 		for (Player player: players)
 			((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
@@ -166,10 +176,9 @@ public class GUI extends Application {
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
 		}
 		
-		for (Player player : players) { //Each player's cards, actions, and bets are updated
+		for (Player player : players) { //Each player's cards are updated and bets are returned to 0
 			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
 			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
-			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
 		}
 		
@@ -204,6 +213,8 @@ public class GUI extends Application {
 		
 		int pot = game.getPot(), digitCounter = 0;  
 		String potLabel = "";
+		if (pot == 0)
+			potLabel = "0";
 		while (pot != 0) {
 			if (digitCounter % 3 == 0 && digitCounter != 0)
 				potLabel = pot % 10 + " " + potLabel;
@@ -218,7 +229,7 @@ public class GUI extends Application {
 		for (Player player : game.getPlayers())
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
 		
-		if (userFolded) { //If the user folded, fast track to showdown
+		if (game.isUserFolded()) { //If the user folded, fast track to showdown
 			if (game.getRound() == 4)
 				showdown(scene, game);
 			else
@@ -253,7 +264,15 @@ public class GUI extends Application {
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
 		if (player instanceof Human) {
-			setupUserTurn(player, scene, game);
+			if (game.getRound() == 0)
+				if (game.getPlayerCount() == 0 && game.getHighestBet() == 0) {
+					game.bet(game.getSmallBlind());
+					finishUserTurn(scene, game);
+				}
+				else if (game.getPlayerCount() == 1 && game.getHighestBet() == game.getSmallBlind())
+					game.bet(game.getSmallBlind() * 2);
+			else
+				setupUserTurn(player, scene, game);
 		}
 		else {
 			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
@@ -261,7 +280,7 @@ public class GUI extends Application {
 			
 			PauseTransition pause = new PauseTransition(new Duration(1000));
 			
-			if (userFolded)
+			if (game.isUserFolded())
 				pause.setDuration(new Duration(1));
 			
 			pause.setOnFinished(e -> finishAITurn(scene, game));
@@ -363,7 +382,6 @@ public class GUI extends Application {
 		game.incrementPlayer();
 		
 		if (user.getAction() == "Folded") {
-			userFolded = true;
 			returnHole(scene, user, true).play();
 		}
 		
@@ -383,12 +401,26 @@ public class GUI extends Application {
 	 * @param scene the GUI scene
 	 */
 	private void updatePlayerInfo(Player player, Scene scene, Game game) {
-		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + player.getStack());
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
+		
+		int stack = player.getStack();
+		String stackLabel = "";
+		int digitCounter = 0;
+		
+		while (stack != 0) {
+			if (digitCounter % 3 == 0 && digitCounter != 0)
+				stackLabel = stack % 10 + " " + stackLabel;
+			else
+				stackLabel = stack % 10 + stackLabel;
+			stack /= 10;
+			digitCounter++;
+		}
+		stackLabel = "Stack: $" + stackLabel;
+		((Label) scene.lookup("#" + player.getName() + "Stack")).setText(stackLabel);
 		
 		int bet = player.getBet();
 		String wager = "";
-		int digitCounter = 0;
+		digitCounter = 0;
 		
 		while (bet != 0) {
 			if (digitCounter % 3 == 0 && digitCounter != 0)
@@ -419,10 +451,16 @@ public class GUI extends Application {
 	 */
 	private void showdown(Scene scene, Game game) {
 		revealAllCards(game.getPlayers(), scene);
-		for (Player player : game.getPlayers())
-			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Hand: " + player.getHand().toString());
 		
 		ArrayList<Player> winners = game.showdown();
+		
+		for (Player player : game.getPlayers()) {
+			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Hand: " + player.getHand().toString());
+			if (player.getStack() == 0)
+				((Label) scene.lookup("#" + player.getName() + "Action")).setText("BUSTED OUT");
+			else
+				((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+		}
 		
 		((Label) scene.lookup("#pot")).setText("Pot: $0"); //The pot is reset and the winners' stacks are updated
 		for (Player player : winners) {
@@ -470,6 +508,12 @@ public class GUI extends Application {
 		((Button) scene.lookup("#quit")).setDisable(false);
 		notifLabel.setText(winnerString.toString());
 		notif.setVisible(true);
+	}
+	
+	private void gameOver(Scene scene, Game game) {
+		HBox endGameNotif = (HBox) scene.lookup("#endGameNotif");
+		Label endGameMsg = (Label) scene.lookup("#endGameMsg");
+		endGameNotif.setVisible(true);
 	}
 	
 	/**
@@ -713,7 +757,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) { //On the animation finish a new round of play is started
 				game.setupRound();
-				runPlayRound(scene, game);
+				startPlayRound(scene, game);
 			}
 		});
 		
