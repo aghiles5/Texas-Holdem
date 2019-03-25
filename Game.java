@@ -114,7 +114,7 @@ public class Game {
         roundNum = 0;
         playerCount = 0;
         pot = 0;
-        highestBet = 0;
+        highestBet = (int) (smallBlind * 2);
         Player.setMinBet((int) (smallBlind));
         for (Player player : players) {
             player.emptyHand();
@@ -131,8 +131,6 @@ public class Game {
                 roundPlayers.add(player);
             }
         }
-
-        blindPosition();
 
         if (roundPlayers.get(playerCount).stack < smallBlind) {
             allIn();
@@ -381,6 +379,7 @@ public class Game {
         }
 
         userFolded = false;
+        blindPosition();
 
         return winners;
     }
@@ -430,10 +429,10 @@ public class Game {
 
         else {
             roundPlayers.get(playerCount).setBet(betAmt);
-            if (betAmt > highestBet * 2) {
-                roundPlayers.get(playerCount).BetRaise("R", betAmt);
-            } else {
+            if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
                 roundPlayers.get(playerCount).BetRaise("B", betAmt);
+            } else {
+                roundPlayers.get(playerCount).BetRaise("R", betAmt);
             }
             highestBet = betAmt;
         }
