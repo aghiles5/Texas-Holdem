@@ -5,13 +5,13 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/23/2019
+ * @version 03/25/2019
  */
 
 public class AI extends Player {
 
-	private int betInterval;
-	private int minBet = Game.getSmallBlind();
+	private int betInterval; // FIX THIS!!!!!!!!!!!!!!!!!!
+	private int minBet;
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -30,6 +30,7 @@ public class AI extends Player {
 	public AI(String name, int stack) {
 		super.name = name;
 		super.stack = stack;
+		this.minBet = (int) (super.getStack() * 0.025); // CHANGE THIS!!!!!!!!!!!!!!!!!!
 	}
 
 	// SET UP METHODS-----------------------------------------------------------------------------------------------------------------------------------------------
