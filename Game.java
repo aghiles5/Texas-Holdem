@@ -167,7 +167,7 @@ public class Game {
      * Increases the round by one in order to reset all of the players actions and
      * continue the game
      */
-    private void incrementRound() {
+    public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
         highestBet = 0;
