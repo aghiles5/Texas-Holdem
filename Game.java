@@ -10,8 +10,6 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.sun.org.apache.bcel.internal.classfile.StackMapType;
-
 public class Game {
 
     private ArrayList<Player> players = new ArrayList<Player>();
