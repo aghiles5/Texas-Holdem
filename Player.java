@@ -307,7 +307,6 @@ public class Player {
 			}
 		} else if (choice.equalsIgnoreCase("R")) { // Raise action
 			// must be 2x the amount to call
-			int toCall = highBet - totBet; // highBet must be tracked
 			if (newBet >= 0) {
 				stack -= newBet;
 				System.out.println("Player raised $" + newBet + ".");
