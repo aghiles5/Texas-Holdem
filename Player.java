@@ -334,7 +334,7 @@ public abstract class Player {
 		if (choice.equalsIgnoreCase("A")) {
 			totBet += stack;
 			stack = 0;
-			System.out.println("Playey went all-in!");
+			System.out.println("Player went all-in!");
 			action = "All In";
 		}
 	}
