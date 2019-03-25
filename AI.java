@@ -24,13 +24,13 @@ public class AI extends Player {
 	public AI() {
 		setCPUName();
 		setBetIntervals();
+		this.minBet = (int) (super.getStack() * 0.025);
 	}
 	
 	//Constructor that sets the name of the AI and the stack - Kyle
 	public AI(String name, int stack) {
 		super.name = name;
 		super.stack = stack;
-		this.minBet = (int) (super.getStack() * 0.025); // CHANGE THIS!!!!!!!!!!!!!!!!!!
 	}
 
 	// SET UP METHODS-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -120,6 +120,9 @@ public class AI extends Player {
 		}
 	}
 
+	// THIS METHOD WILL NOT REUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!
+	// WHAT IF AI STACK < MINBET????????????????????????????????
+
 	/**
 	 * This method will check if AI has sufficient money in it's stack for the desired game actions bet,
 	 * raise, and call
@@ -128,16 +131,17 @@ public class AI extends Player {
 	 */
 	public int checkAIBets(String playDecision) {
 		Random bet = new Random();
-		int betting = bet.nextInt(super.getStack());
+		int betting = bet.nextInt(super.getStack() + 1);
+		int returnBet = 0;
 
 		// BOTH BET AND RAISE HAVE THE SAME CHECK FUNCTION
 
 		if (playDecision == "B") {
-			if (betting == super.getStack() || betting == 0) {
+			if (betting == super.getStack() || betting < minBet) {
 				checkAIBets("B");
 			}
 			else {
-				return 100; // FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				returnBet = betting;
 			}
 		}
 		/**
@@ -145,13 +149,14 @@ public class AI extends Player {
 		 * it will be redundant to have an else if condition for "R"
 		 */
 		else {
-			if (betting == super.getStack() || betting == 0) {
+			if (betting == super.getStack() || betting < minBet) {
 				checkAIBets("R");
 			}
 			else {
-				return 100; // FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				returnBet = betting;
 			}
 		}
+		return returnBet;
 	}
 
 }
