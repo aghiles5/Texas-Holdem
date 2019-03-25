@@ -115,7 +115,7 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
-        Player.setMinBet(smallBlind);
+        Player.setMinBet((int) (smallBlind));
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
