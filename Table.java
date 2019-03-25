@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -194,7 +195,22 @@ public class Table {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			Label stack = new Label("Stack: $100 000");
+			
+			int aStack = player.getStack();
+			String stackLabel = "";
+			int digitCounter = 0;
+			
+			while (aStack != 0) {
+				if (digitCounter % 3 == 0 && digitCounter != 0)
+					stackLabel = aStack % 10 + " " + stackLabel;
+				else
+					stackLabel = aStack % 10 + stackLabel;
+				aStack /= 10;
+				digitCounter++;
+			}
+			stackLabel = "Stack: $" + stackLabel;
+			Label stack = new Label(stackLabel);
+			
 			Label action = new Label(" ");
 			
 			name.setId(player.getName() + "Name");
@@ -431,9 +447,27 @@ public class Table {
 					
 				dealerMoney.getChildren().addAll(pot, wager);
 				
+				//=============================================================
+				// Game Over Notification
+				
+				HBox endGameNotif = new HBox();
+				endGameNotif.setSpacing(10);
+				endGameNotif.setAlignment(Pos.CENTER);
+				endGameNotif.setVisible(false);
+				endGameNotif.getStyleClass().add("custom-popup");
+				
+					Label endGameMsg = new Label("Game Over");
+					endGameMsg.setStyle("-fx-font-size: 36;");
+					endGameMsg.setId("endGameMsg");
+					
+					Button playAgain = new Button("Play Again");
+					playAgain.setId("playAgain");
+					
+				endGameNotif.getChildren().addAll(endGameMsg, playAgain);
+					
 			centreProps.getChildren().addAll(commFull, dealerMoney);
 			
-		tableCentre.getChildren().addAll(centreProps, deck);
+		tableCentre.getChildren().addAll(centreProps, deck, endGameNotif);
 		
 		return tableCentre;
 	}
