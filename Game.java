@@ -232,7 +232,12 @@ public class Game {
 
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
-        roundPlayers.get(playerCount).getDecision();
+        if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet" || lastPlayer.getAction() == "All In"
+                || lastPlayer.getAction() == "Called") {
+            roundPlayers.get(playerCount).getDecision();
+        } else if (lastPlayer.getAction() == "Checked" && highestBet == 0) {
+            roundPlayers.get(playerCount).getDecision2();
+        }
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
