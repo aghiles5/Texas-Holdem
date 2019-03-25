@@ -221,7 +221,7 @@ public class Game {
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
 
-        if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
+        if (roundNum == 0 && playerCount == 0) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
                 allIn();
             } else {
