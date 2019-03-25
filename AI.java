@@ -20,7 +20,7 @@ public class AI extends Player {
 
 	// CONSTRUCTORS-------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	// Constructor that initiates the name of AI
+	// Constructor that initiates the name of AI, betting interval, and minimum betting amount
 	public AI() {
 		setCPUName();
 		setBetIntervals();
@@ -59,9 +59,9 @@ public class AI extends Player {
 	 * pre:
 	 * post: returns the intervals for betting
 	 */
-	public int getBetInterval() {
+	/*public int getBetInterval() {
 		return betInterval;
-	}
+	}*/
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ public class AI extends Player {
 	 * Implement this method if highest bet is NOT 0
 	 */
 	public void getDecision() {
-		// Next 2 lines of code sets up probability of AI choices
+		// Next 2 lines of code sets up probability of AI decisions
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
@@ -116,9 +116,10 @@ public class AI extends Player {
 	 * THIS METHOD IS IMPLEMENTED IF AND ONLY IF THE HIGHEST BET IS 0!!
 	 * 
 	 * Implement this method if previous player/ players checks
+	 * Implement this method if current player is AI and is first player after flop
 	 */
 	public void getDecision2() {
-		// Next 2 lines of code sets up probability of AI choices
+		// Next 2 lines of code sets up probability of AI decisions
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
@@ -158,31 +159,31 @@ public class AI extends Player {
 	 * raise, and call
 	 * 
 	 * @param playDecision AI's decision during round
+	 * @return returnBet
 	 */
 	public int checkAIBets(String playDecision) {
 		Random bet = new Random();
-		int betting = bet.nextInt(super.getStack() + 1);
 		int returnBet = 0;
-
 		Boolean canBet = false;
 
 		// BOTH BET AND RAISE HAVE THE SAME CHECK FUNCTION
 
+		// When the desired betting amount is not satisfied the loop will run until it is satisfied
 		while (canBet == false) {
+			int betting = bet.nextInt(super.getStack() + 1); // Creating a random number for betting
+
+			// Checking bet action
 			if (playDecision == "B") {
 				if (betting != super.getStack() && betting >= minBet) {
-					returnBet = checkBetInterval(betting);
-					canBet = true;
+					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
+					canBet = true; // Condition satisfied and betting amount modified to break loop
 				}
 			}
-			/**
-			 * Since "B" and "R" will be the only strings passed into checkAIBets method
-			 * it will be redundant to have an else if condition for "R"
-			 */
+			// Checking raise action
 			else if (playDecision == "R") {
 				if (betting != super.getStack() && betting >= minBet) {
-					returnBet = checkBetInterval(betting);
-					canBet = true;
+					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
+					canBet = true; // Condition satisfied and betting amount modified to break loop
 				}
 			}
 		}
@@ -191,12 +192,15 @@ public class AI extends Player {
 	}
 
 	/**
-	 * This method will check if the bet or raise action from AI is divisible by bet interval
+	 * This method will check if betting amount is an interval of betting
+	 * 
+	 * @param toBet random bet amount from AI
+	 * @return returnBet
 	 */
 	public int checkBetInterval(int toBet) {
 		int returnBet = toBet;
-		int checkBet = returnBet % getBetInterval();
-		double halfWayP = getBetInterval() / 2;
+		int checkBet = returnBet % betInterval; // Checks if bet amount from AI is a betting interval
+		double halfWayP = betInterval / 2; // Mid point of betting interval
 
 		if (checkBet == 0) {
 			return returnBet;
@@ -206,7 +210,7 @@ public class AI extends Player {
 				returnBet -= checkBet;
 			}
 			else {
-				returnBet = returnBet + (getBetInterval() - (int) checkBet);
+				returnBet = returnBet + (betInterval - (int) checkBet);
 			}
 		}
 		return returnBet;
