@@ -10,6 +10,8 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.sun.org.apache.bcel.internal.classfile.StackMapType;
+
 public class Game {
 
     private ArrayList<Player> players = new ArrayList<Player>();
@@ -78,7 +80,7 @@ public class Game {
      * @param number of players decided by gui
      * @return arraylist of the generated players
      */
-    public ArrayList<Player> generatePlayers(int numOfPlayers) {
+    public ArrayList<Player> generatePlayers(int numOfPlayers, int stackAmt) {
         Random playerPos = new Random();
         int position = playerPos.nextInt(numOfPlayers);
         AI.addCPUName();
@@ -95,7 +97,7 @@ public class Game {
         }
 
         for (Player player : players) {
-            player.stack = 100000;
+            player.stack = stackAmt;
         }
 
         return players;
@@ -108,6 +110,8 @@ public class Game {
         roundPlayers.clear();
         roundNum = 0;
         playerCount = 0;
+        pot = 0;
+        highestBet = (int) (smallBlind * 2);
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -310,11 +314,36 @@ public class Game {
     public void call() {
         if (roundPlayers.get(playerCount).getBet() == highestBet) {
             roundPlayers.get(playerCount).check("C");
-        } else {
+        }
+
+        else if (roundPlayers.get(playerCount).stack < (highestBet - roundPlayers.get(playerCount).getBet())) {
+            allIn();
+        }
+
+        else {
             roundPlayers.get(playerCount).call("L");
         }
 
         setLastPlayer(roundPlayers.get(playerCount));
+    }
+
+    private void allIn() {
+        roundPlayers.get(playerCount).allIn("A");
+    }
+
+    public void bet(int betAmt) {
+        if (roundPlayers.get(playerCount).stack == betAmt) {
+            allIn();
+        }
+
+        else {
+            roundPlayers.get(playerCount).setBet(betAmt);
+
+        }
+    }
+
+    public int getSmallBlind() {
+        return (int) (smallBlind);
     }
 
     public void blindPosition() {
@@ -329,5 +358,13 @@ public class Game {
 
         roundPlayers.clear();
         roundPlayers.addAll(tempPList);
+    }
+
+    public int getHighestBet() {
+        return highestBet;
+    }
+
+    public int getPot() {
+        return pot;
     }
 }
