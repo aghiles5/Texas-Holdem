@@ -14,7 +14,8 @@ public abstract class Player {
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
-	protected int minBet = Game.getSmallBlind();
+	protected static int minBet = Game.getSmallBlind();
+	protected static int highBet = Game.getHighestBet();
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
 	private double wins;
@@ -306,7 +307,7 @@ public abstract class Player {
 			}
 		} else if (choice.equalsIgnoreCase("R")) { // Raise action
 			// must be 2x the amount to call
-			int toCall = Game.getHighestBest() - totBet; // highBet must be tracked
+			int toCall = highBet - totBet; // highBet must be tracked
 			if (newBet >= 2 * toCall && newBet <= stack && newBet >= 0) {
 				stack -= newBet;
 				System.out.println("Player raised $" + newBet + ".");
@@ -324,7 +325,7 @@ public abstract class Player {
 	 * @param currentBet
 	 */
 	public void call(String choice) {
-		int toCall = Game.getHighestBet() - totBet; // highBet must be tracked
+		int toCall = highBet - totBet; // highBet must be tracked
 		// need to determine how to compare each player's current Bet to generate a
 		// toCall
 		if (choice.equalsIgnoreCase("L")) {
