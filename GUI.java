@@ -81,7 +81,7 @@ public class GUI extends Application {
 	private void generatePlayArea(Scene scene) {
 		Game game = new Game();
 		int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
-		int stackSize = Integer.parseInt(((String) ((ChoiceBox) scene.lookup("#StackChoice")).getValue()).substring(1).replaceAll("s//+", ""));
+		int stackSize = Integer.parseInt((((ChoiceBox<String>) scene.lookup("#StackChoice")).getValue()).substring(1).replaceAll("s//+", ""));
 		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
 		game.setupRound();
 		ArrayList<Card> comm = game.getComm();
@@ -128,7 +128,7 @@ public class GUI extends Application {
 		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-			game.bet();
+			game.bet(((Slider) scene.lookup("#raiseSlider")).getValue());
 			finishUserTurn(scene, game);
 			}
 		});
@@ -183,22 +183,21 @@ public class GUI extends Application {
 	
 	/**
 	 * In between rounds a notification window will appear, prompting the user
-	 * to continue. The community cards will also be revealed as appropriate.
+	 * to continue. Labels will also be updated as each player's wager is added
+	 * to the pot. From here, the game will be fast-tracked to the showdown if
+	 * either the user has folded or only one player remains. The community 
+	 * cards will also be revealed as appropriate.
 	 * 
 	 * @param scene the GUI scene
 	 * @param game the Game object
 	 */
-	private void notifyRound(Scene scene, Game game) {
+	private void interRound(Scene scene, Game game) {
 		if (game.getRound() == 1)
 			dealFlop(scene);
 		else if (game.getRound() == 2)
 			dealStreet(scene, (ImageView) scene.lookup("#commBack3"), (ImageView) scene.lookup("#commFront3"));
 		else if (game.getRound() == 3)
 			dealStreet(scene, (ImageView) scene.lookup("#commBack4"), (ImageView) scene.lookup("#commFront4"));
-		
-		HBox notif = (HBox) scene.lookup("#notif");
-		Label notifLabel = (Label) scene.lookup("#notifLabel");
-		notifLabel.setText(game.getRoundString());
 		
 		((Button) scene.lookup("#help")).setDisable(false);
 		((Button) scene.lookup("#quit")).setDisable(false);
@@ -229,10 +228,14 @@ public class GUI extends Application {
 		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
 			while (game.getRound() != 4) {
 				game.incrementRound();
-				notifyRound(scene, game);
+				interRound(scene, game);
 			}
 			showdown(scene, game);
 		}
+		
+		HBox notif = (HBox) scene.lookup("#notif");
+		Label notifLabel = (Label) scene.lookup("#notifLabel");
+		notifLabel.setText(game.getRoundString());
 		
 		notif.setVisible(true);
 	}
@@ -278,7 +281,7 @@ public class GUI extends Application {
 	 */
 	private void finishAITurn(Scene scene, Game game) {
 		Player player = game.getLastPlayer();
-		updatePlayerInfo(player, scene);
+		updatePlayerInfo(player, scene, game);
 		game.incrementPlayer();
 		((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		
@@ -289,7 +292,7 @@ public class GUI extends Application {
 		if (game.isBetRoundRunning())
 			runTurn(scene, game);
 		else
-			notifyRound(scene, game);
+			interRound(scene, game);
 	}
 	
 	/**
@@ -367,7 +370,7 @@ public class GUI extends Application {
 		if (game.isBetRoundRunning())
 			runTurn(scene, game);
 		else
-			notifyRound(scene, game);
+			interRound(scene, game);
 	}
 	
 	/**
@@ -652,7 +655,7 @@ public class GUI extends Application {
 		
 		dealAllHoles.setOnFinished(e -> showUserCards.play()); //The user's cards are revealed to them once all are dealt
 		
-		showUserCards.setOnFinished(e -> notifyRound(scene, game)); //The net animation of this method is followed by the first round notification
+		showUserCards.setOnFinished(e -> interRound(scene, game)); //The net animation of this method is followed by the first round notification
 		
 		dealAllHoles.play();
 	}
