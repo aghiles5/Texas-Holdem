@@ -21,7 +21,7 @@ public abstract class Player {
 	private double lost;
 	private double folds;
 	private double winPercent;
-	
+
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
@@ -32,16 +32,17 @@ public abstract class Player {
 		stack = oStack;
 		name = oName;
 	}
-	
+
 	/**
-	 * pre: A new stack value has been entered.
-	 * post: The stack has been set to the new value.
+	 * pre: A new stack value has been entered. post: The stack has been set to the
+	 * new value.
+	 * 
 	 * @param nStack
 	 */
 	public void setStack(int nStack) {
 		stack = nStack;
 	}
-	
+
 	/**
 	 * pre: none post: calculates the percentage of winning for the player and
 	 * returns a double
@@ -242,15 +243,14 @@ public abstract class Player {
 	public int getBet() {
 		return totBet;
 	}
-	
+
 	/**
-	 * pre: A bet value is entered.
-	 * post: The player's total bet has been set.
+	 * pre: A bet value is entered. post: The player's total bet has been set.
 	 */
 	public void setBet(int nBet) {
 		totBet = nBet;
 	}
-	
+
 	/**
 	 * pre: A player decision has been made. post: The player has "checked" and
 	 * chosen to do nothing.
