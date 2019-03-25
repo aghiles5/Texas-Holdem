@@ -23,6 +23,7 @@ public class Game {
     private int highestBet;
     private double smallBlind;
     private int pot;
+    private boolean gameOver;
 
     /*
      * Constructor to ensure that roundNum and playerCount are reset to 0 when a
@@ -34,6 +35,7 @@ public class Game {
         pot = 0;
         highestBet = 0;
         smallBlind = 0;
+        gameOver = false;
     }
 
     public ArrayList<Player> getPlayerList() {
@@ -135,7 +137,7 @@ public class Game {
         } else {
             roundPlayers.get(playerCount).stack -= smallBlind;
         }
-        if (roundPlayers.get(playerCount + 1).stack < smallBlind * 2) {
+        if (roundPlayers.get(playerCount + 1).stack < (smallBlind * 2)) {
             roundPlayers.get(playerCount + 1).allIn("A");
         } else {
             roundPlayers.get(playerCount + 1).stack -= (smallBlind * 2);
@@ -180,6 +182,7 @@ public class Game {
 
         for (Player player : roundPlayers) {
             pot += player.getBet();
+            player.setBet(0);
             player.setAction(" ");
             player.setHand(roundComm);
         }
@@ -292,6 +295,10 @@ public class Game {
             }
         }
 
+        else if (roundPlayers.size() > 1) {
+
+        }
+
         else {
             int betCounter = 0;
             for (Player player : players) {
@@ -331,6 +338,34 @@ public class Game {
         for (Player player : encapPlayers) {
             if (player.getHand().compareHand(highestPlayer.getHand()) == 0)
                 winners.add(player);
+        }
+
+        for (Player player : winners) {
+            player.stack += (int) (pot / winners.size());
+            pot -= (int) (pot / winners.size());
+            if (pot % 2 == 1) {
+                if (player == winners.get(0)) {
+                    player.stack++;
+                }
+            }
+        }
+
+        ArrayList<Player> gameOverList = new ArrayList<Player>();
+        gameOverList.addAll(players);
+
+        for (Player player : players) {
+            if (player instanceof Human && player.stack == 0) {
+                gameOver = true;
+                break;
+            }
+
+            if (player.stack <= 0) {
+                gameOverList.remove(player);
+            }
+        }
+
+        if (gameOverList.size() == 1) {
+            gameOver = true;
         }
 
         return winners;
@@ -410,5 +445,9 @@ public class Game {
 
     public int getPlayerCount() {
         return playerCount;
+    }
+
+    public boolean getGameOver() {
+        return gameOver;
     }
 }
