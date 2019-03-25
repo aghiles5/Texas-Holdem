@@ -55,14 +55,6 @@ public class AI extends Player {
 		this.betInterval = (int) (0.01 * super.getStack());
 	}
 
-	/**
-	 * pre:
-	 * post: returns the intervals for betting
-	 */
-	/*public int getBetInterval() {
-		return betInterval;
-	}*/
-
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
 
 	/**
@@ -202,14 +194,14 @@ public class AI extends Player {
 		int checkBet = returnBet % betInterval; // Checks if bet amount from AI is a betting interval
 		double halfWayP = betInterval / 2; // Mid point of betting interval
 
-		if (checkBet == 0) {
+		if (checkBet == 0) { // AI bet is an interval
 			return returnBet;
 		}
-		else {
-			if ((double) checkBet < halfWayP) {
+		else { // AI bet is not an interval
+			if ((double) checkBet < halfWayP) { // AI bet rounds down when bet is closer to the floor interval
 				returnBet -= checkBet;
 			}
-			else {
+			else { // AI bet rounds up when bet is closer to ceiling interval
 				returnBet = returnBet + (betInterval - (int) checkBet);
 			}
 		}
