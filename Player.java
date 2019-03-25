@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @version 03/21/2019
  *
  */
-public abstract class Player {
+public class Player {
 	protected int stack; // Tracks each player's stack of money
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
