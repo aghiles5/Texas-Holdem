@@ -88,7 +88,7 @@ import java.util.*;
             testConstructor = false;
             System.out.println("AI b name error");
         }
-        if (a.getStack() != 300) {
+        if (b.getStack() != 300) {
             testConstructor = false;
             System.out.println("AI b stack error");
         }
