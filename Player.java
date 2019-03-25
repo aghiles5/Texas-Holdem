@@ -32,7 +32,16 @@ public abstract class Player {
 		stack = oStack;
 		name = oName;
 	}
-
+	
+	/**
+	 * pre: A new stack value has been entered.
+	 * post: The stack has been set to the new value.
+	 * @param nStack
+	 */
+	public void setStack(int nStack) {
+		stack = nStack;
+	}
+	
 	/**
 	 * pre: none post: calculates the percentage of winning for the player and
 	 * returns a double
