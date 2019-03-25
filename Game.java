@@ -219,7 +219,24 @@ public class Game {
 
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
-        if (playerCount == 0) {
+
+        if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
+            if (roundPlayers.get(playerCount).stack < smallBlind) {
+                allIn();
+            } else {
+                bet((int) (smallBlind));
+            }
+        }
+
+        else if (roundNum == 0 && playerCount == 1) {
+            if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
+                roundPlayers.get(playerCount).allIn("A");
+            } else {
+                bet((int) (smallBlind * 2));
+            }
+        }
+
+        if (playerCount == 0 && roundNum != 0) {
             roundPlayers.get(playerCount).getDecision2();
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
                 || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
@@ -233,26 +250,6 @@ public class Game {
             curPlayer = roundPlayers.get(playerCount);
             roundPlayers.remove(playerCount);
             playerCount -= 1;
-        }
-
-        else if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
-            if (roundPlayers.get(playerCount).stack < smallBlind) {
-                allIn();
-                pot += roundPlayers.get(playerCount).stack;
-            } else {
-                bet((int) (smallBlind));
-                pot += (int) (smallBlind);
-            }
-        }
-
-        else if (roundNum == 0 && playerCount == 1) {
-            if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
-                roundPlayers.get(playerCount).allIn("A");
-                pot += roundPlayers.get(playerCount).stack;
-            } else {
-                bet((int) (smallBlind * 2));
-                pot += (int) (smallBlind * 2);
-            }
         }
 
         Player.setHighBet(highestBet);
