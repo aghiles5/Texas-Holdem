@@ -210,9 +210,7 @@ public class Game {
      * getting input from
      */
     public void setLastPlayer(Player theLastPlayer) {
-        if (playerCount != 0) {
-            lastPlayer = theLastPlayer;
-        }
+        lastPlayer = theLastPlayer;
     }
 
     public Player getLastPlayer() {
@@ -229,6 +227,7 @@ public class Game {
         } else if (lastPlayer.getAction() == "Checked" && highestBet == 0) {
             roundPlayers.get(playerCount).getDecision2();
         }
+
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
