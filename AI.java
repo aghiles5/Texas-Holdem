@@ -69,25 +69,36 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
-		// AI fold action
-		if (decision < 10) {
-			super.fold("F");
+		if (super.getStack() < minBet) {
+			if (decision < 10) {
+				super.allIn("A");
+			}
+			else {
+				super.fold("F");
+			}
 		}
 
-		// AI all in action
-		else if (decision >= 10 && decision < 15) {
-			super.allIn("A");
-		}
+		else {
+			// AI fold action
+			if (decision < 10) {
+				super.fold("F");
+			}
+
+			// AI all in action
+			else if (decision >= 10 && decision < 15) {
+				super.allIn("A");
+			}
 		
-		// AI call action
-		else if (decision >= 15 && decision < 75) {
-			super.call("L");
-		}
+			// AI call action
+			else if (decision >= 15 && decision < 75) {
+				super.call("L");
+			}
 		
-		// AI raise action
-		else if (decision >= 75) {
-			int bet = checkAIBets("R");
-			super.BetRaise("R", bet);
+			// AI raise action
+			else if (decision >= 75) {
+				int bet = checkAIBets("R");
+				super.BetRaise("R", bet);
+			}
 		}
 	}
 
@@ -101,28 +112,40 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
-		// AI check action
-		if (decision < 60) {
-			super.check("C");
+		if (super.getStack() < minBet) {
+			if (decision < 10) {
+				super.allIn("A");
+			}
+			else {
+				super.fold("F");
+			}
 		}
-		// AI bet action
-		else if (decision >= 60 && decision < 85) {
-			int bet = checkAIBets("B");
-			super.BetRaise("B", bet);
-		}
-		// AI fold action
-		else if (decision >= 85 && decision < 95) {
-			super.fold("F");
-		}
-		// AI all in action
-		else if (decision >= 95) {
-			super.allIn("A");
+
+		else {
+			// AI check action
+			if (decision < 60) {
+				super.check("C");
+			}
+			// AI bet action
+			else if (decision >= 60 && decision < 85) {
+				int bet = checkAIBets("B");
+				super.BetRaise("B", bet);
+			}
+			// AI fold action
+			else if (decision >= 85 && decision < 95) {
+				super.fold("F");
+			}
+			// AI all in action
+			else if (decision >= 95) {
+				super.allIn("A");
+			}
 		}
 	}
 
 	// THIS METHOD WILL NOT REUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!
 	// WHAT IF AI STACK < MINBET????????????????????????????????
 
+	// CHANGE THIS METHOD BECAUSE BET AND RAISE ACTIONS ARE THE SAME
 	/**
 	 * This method will check if AI has sufficient money in it's stack for the desired game actions bet,
 	 * raise, and call
