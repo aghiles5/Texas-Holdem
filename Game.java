@@ -115,6 +115,7 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
+        Player.setMinBet((int) (smallBlind));
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -166,7 +167,7 @@ public class Game {
      * Increases the round by one in order to reset all of the players actions and
      * continue the game
      */
-    private void incrementRound() {
+    public void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
         highestBet = 0;
@@ -231,7 +232,14 @@ public class Game {
 
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
-        roundPlayers.get(playerCount).getDecision();
+        if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet" || lastPlayer.getAction() == "All In"
+                || lastPlayer.getAction() == "Called") {
+            roundPlayers.get(playerCount).getDecision();
+        } else if (lastPlayer.getAction() == "Checked" && highestBet == 0) {
+            roundPlayers.get(playerCount).getDecision2();
+        } else if (playerCount == 0) {
+            roundPlayers.get(playerCount).getDecision2();
+        }
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
@@ -246,6 +254,8 @@ public class Game {
         else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
             bet((int) (smallBlind * 2));
         }
+
+        Player.setHighBet(highestBet);
 
         return curPlayer;
     }
@@ -392,6 +402,7 @@ public class Game {
      * chooses to check
      */
     public void call() {
+        Player.setHighBet(highestBet);
         if (roundPlayers.get(playerCount).getBet() == highestBet) {
             roundPlayers.get(playerCount).check("C");
         }
@@ -412,14 +423,21 @@ public class Game {
     }
 
     public void bet(int betAmt) {
+        Player.setHighBet(highestBet);
         if (roundPlayers.get(playerCount).stack <= betAmt) {
             allIn();
         }
 
         else {
             roundPlayers.get(playerCount).setBet(betAmt);
-
+            if (betAmt > highestBet * 2) {
+                roundPlayers.get(playerCount).BetRaise("R", betAmt);
+            } else {
+                roundPlayers.get(playerCount).BetRaise("B", betAmt);
+            }
+            highestBet = betAmt;
         }
+        Player.setHighBet(highestBet);
     }
 
     public int getSmallBlind() {
@@ -452,7 +470,7 @@ public class Game {
         return playerCount;
     }
 
-    public boolean getGameOver() {
+    public boolean isGameOver() {
         return gameOver;
     }
 

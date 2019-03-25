@@ -9,19 +9,20 @@ import java.util.ArrayList;
  * @version 03/21/2019
  *
  */
-public abstract class Player {
+public class Player {
 	protected int stack; // Tracks each player's stack of money
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
-	protected int minBet = Game.getSmallBlind();
+	protected static int minBet = 0;
+	protected static int highBet = 0;
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
 	private double wins;
 	private double lost;
 	private double folds;
 	private double winPercent;
-	
+
 	// method in main that sets the blinds
 	// make the current player bet into a list?
 
@@ -32,16 +33,17 @@ public abstract class Player {
 		stack = oStack;
 		name = oName;
 	}
-	
+
 	/**
-	 * pre: A new stack value has been entered.
-	 * post: The stack has been set to the new value.
+	 * pre: A new stack value has been entered. post: The stack has been set to the
+	 * new value.
+	 * 
 	 * @param nStack
 	 */
 	public void setStack(int nStack) {
 		stack = nStack;
 	}
-	
+
 	/**
 	 * pre: none post: calculates the percentage of winning for the player and
 	 * returns a double
@@ -242,15 +244,14 @@ public abstract class Player {
 	public int getBet() {
 		return totBet;
 	}
-	
+
 	/**
-	 * pre: A bet value is entered.
-	 * post: The player's total bet has been set.
+	 * pre: A bet value is entered. post: The player's total bet has been set.
 	 */
 	public void setBet(int nBet) {
 		totBet = nBet;
 	}
-	
+
 	/**
 	 * pre: A player decision has been made. post: The player has "checked" and
 	 * chosen to do nothing.
@@ -261,6 +262,7 @@ public abstract class Player {
 		// If the input is c, play moves to the next player
 		if (choice.equalsIgnoreCase("C")) {
 			action = "Checked";
+			System.out.println("Player checked.");
 			// Nothing
 		}
 	}
@@ -277,6 +279,7 @@ public abstract class Player {
 			emptyHand(); // Clears hand
 			emptyHole(); // Clears hole
 			action = "Folded";
+			System.out.println("Player Folded.");
 			folds += 1;
 			// Nothing
 
@@ -304,7 +307,7 @@ public abstract class Player {
 			}
 		} else if (choice.equalsIgnoreCase("R")) { // Raise action
 			// must be 2x the amount to call
-			int toCall = Game.getHighestBest() - totBet; // highBet must be tracked
+			int toCall = highBet - totBet; // highBet must be tracked
 			if (newBet >= 2 * toCall && newBet <= stack && newBet >= 0) {
 				stack -= newBet;
 				System.out.println("Player raised $" + newBet + ".");
@@ -322,7 +325,7 @@ public abstract class Player {
 	 * @param currentBet
 	 */
 	public void call(String choice) {
-		int toCall = Game.getHighestBet() - totBet; // highBet must be tracked
+		int toCall = highBet - totBet; // highBet must be tracked
 		// need to determine how to compare each player's current Bet to generate a
 		// toCall
 		if (choice.equalsIgnoreCase("L")) {
@@ -350,6 +353,10 @@ public abstract class Player {
 
 	public void getDecision() {
 		// Goes to getDecision in AI;
+	}
+
+	public void getDecision2() {
+		// Goes to getDecision2 in AI;
 	}
 
 	/**
@@ -407,6 +414,14 @@ public abstract class Player {
 			}
 		}
 		return combs;
+	}
+
+	public static void setHighBet(int betAmt) {
+		highBet = betAmt;
+	}
+
+	public static void setMinBet(int betAmt) {
+		minBet = betAmt;
 	}
 
 }
