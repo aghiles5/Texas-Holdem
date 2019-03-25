@@ -8,6 +8,9 @@ import java.util.Random;
  * @version 03/25/2019
  */
 
+// PROBABILITY HIGH RAISE = 10% PROBAILITY LOW RAISE = 90% 
+
+
 public class AI extends Player {
 
 	private static int betInterval;
