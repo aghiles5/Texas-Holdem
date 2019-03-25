@@ -149,6 +149,8 @@ public class Game {
         } else {
             playerCount += 1;
         }
+
+        Player.setHighBet(highestBet);
     }
 
     /**
@@ -252,8 +254,6 @@ public class Game {
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
-
-        Player.setHighBet(highestBet);
 
         return curPlayer;
     }
@@ -397,7 +397,6 @@ public class Game {
      * chooses to check
      */
     public void call() {
-        Player.setHighBet(highestBet);
         if (roundPlayers.get(playerCount).getBet() == highestBet) {
             roundPlayers.get(playerCount).check("C");
         }
@@ -420,7 +419,6 @@ public class Game {
     }
 
     public void bet(int betAmt) {
-        Player.setHighBet(highestBet);
         if (roundPlayers.get(playerCount).stack <= betAmt) {
             allIn();
         }
@@ -434,7 +432,6 @@ public class Game {
             }
             highestBet = betAmt;
         }
-        Player.setHighBet(highestBet);
         setLastPlayer(roundPlayers.get(playerCount));
     }
 

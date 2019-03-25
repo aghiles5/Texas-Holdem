@@ -430,11 +430,10 @@ public class GUI extends Application {
 			bet /= 10;
 			digitCounter++;
 		}
-		wager = "Highest Wager: $" + wager;
 		
-		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + player.getBet());
+		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $" + wager);
 		if (player.getBet() > game.getHighestBet())
-			((Label) scene.lookup("#wager")).setText(wager);
+			((Label) scene.lookup("#wager")).setText("Highest Wager: $" + wager);
 		
 		if (player.getAction() == "Folded")
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
