@@ -129,14 +129,28 @@ public class AI extends Player {
 		Random bet = new Random();
 		int betting = bet.nextInt(super.getStack());
 
-		if (playDecision == "B") {
-			
-		}
+		// BOTH BET AND RAISE HAVE THE SAME CHECK FUNCTION
 
-		else if (playDecision == "R") {
-			
+		if (playDecision == "B") {
+			if (betting == super.getStack() || betting == 0) {
+				checkAIBets("B");
+			}
+			else {
+				return 100; // FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			}
 		}
-		return 0; // THIS WILL ONLY BE USED TO DETERMINE IF THIS METHOD IS WORKING OR NOT!!!!!!!!!!!!!!!!!!!!!!!
+		/**
+		 * Since "B" and "R" will be the only strings passed into checkAIBets method
+		 * it will be redundant to have an else if condition for "R"
+		 */
+		else {
+			if (betting == super.getStack() || betting == 0) {
+				checkAIBets("R");
+			}
+			else {
+				return 100; // FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			}
+		}
 	}
 
 }
