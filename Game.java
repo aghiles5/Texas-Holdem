@@ -85,6 +85,7 @@ public class Game {
         Random playerPos = new Random();
         int position = playerPos.nextInt(numOfPlayers);
         AI.addCPUName();
+        AI.setBetIntervals(stackAmt);
         for (int n = 0; n < numOfPlayers; n++) {
             if (n == position)
                 players.add(new Human("You"));
