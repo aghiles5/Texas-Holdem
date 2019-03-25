@@ -50,11 +50,15 @@ public class AI extends Player {
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
 	}
 
-	// MOVE NEXT 2 METHODS TO PLAYER??????????
+	// This method sets up the intervals for betting
 	public void setBetIntervals() {
 		this.betInterval = (int) (0.01 * super.getStack());
 	}
 
+	/**
+	 * pre:
+	 * post: returns the intervals for betting
+	 */
 	public int getBetInterval() {
 		return betInterval;
 	}
