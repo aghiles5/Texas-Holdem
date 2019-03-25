@@ -221,7 +221,7 @@ public class Game {
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
 
-        if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
+        if (roundNum == 0 && playerCount == 0) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
                 allIn();
             } else {
@@ -237,7 +237,7 @@ public class Game {
             }
         }
 
-        if (playerCount == 0 && roundNum != 0) {
+        else if (playerCount == 0 && roundNum != 0) {
             roundPlayers.get(playerCount).getDecision2();
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
                 || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
@@ -416,6 +416,7 @@ public class Game {
     private void allIn() {
         highestBet = roundPlayers.get(playerCount).stack;
         roundPlayers.get(playerCount).allIn("A");
+        setLastPlayer(roundPlayers.get(playerCount));
     }
 
     public void bet(int betAmt) {
@@ -434,6 +435,7 @@ public class Game {
             highestBet = betAmt;
         }
         Player.setHighBet(highestBet);
+        setLastPlayer(roundPlayers.get(playerCount));
     }
 
     public int getSmallBlind() {
