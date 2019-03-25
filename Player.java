@@ -355,6 +355,10 @@ public abstract class Player {
 		// Goes to getDecision in AI;
 	}
 
+	public void getDecision2() {
+		// Goes to getDecision2 in AI;
+	}
+
 	/**
 	 * All six unique combinations of five card hands from a six card set are found
 	 * by the below algorithm. One blank space is cycled through all the indices of
