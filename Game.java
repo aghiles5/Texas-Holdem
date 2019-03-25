@@ -210,7 +210,9 @@ public class Game {
      * getting input from
      */
     public void setLastPlayer(Player theLastPlayer) {
-        lastPlayer = theLastPlayer;
+        if (playerCount != 0) {
+            lastPlayer = theLastPlayer;
+        }
     }
 
     public Player getLastPlayer() {
@@ -415,6 +417,7 @@ public class Game {
     }
 
     private void allIn() {
+        highestBet = roundPlayers.get(playerCount).stack;
         roundPlayers.get(playerCount).allIn("A");
     }
 
