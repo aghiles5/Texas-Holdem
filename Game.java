@@ -423,15 +423,19 @@ public class Game {
     }
 
     public void bet(int betAmt) {
+        Player.setHighBet(highestBet);
         if (roundPlayers.get(playerCount).stack <= betAmt) {
             allIn();
         }
 
         else {
             roundPlayers.get(playerCount).setBet(betAmt);
-            if (betAmt > highestBet) {
-                highestBet = betAmt;
+            if (betAmt > highestBet * 2) {
+                roundPlayers.get(playerCount).BetRaise("R", betAmt);
+            } else {
+                roundPlayers.get(playerCount).BetRaise("B", betAmt);
             }
+            highestBet = betAmt;
         }
         Player.setHighBet(highestBet);
     }
