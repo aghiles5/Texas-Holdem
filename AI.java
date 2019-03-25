@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class AI extends Player {
 
-	private int betInterval; // FIX THIS!!!!!!!!!!!!!!!!!!
+	private int betInterval;
 	private int minBet;
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
@@ -33,7 +33,7 @@ public class AI extends Player {
 		super.stack = stack;
 	}
 
-	// SET UP METHODS-----------------------------------------------------------------------------------------------------------------------------------------------
+	// SETTERS AND GETTERS------------------------------------------------------------------------------------------------------------------------------------------
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
@@ -50,8 +50,13 @@ public class AI extends Player {
 		cpuName.remove(rName); // Removes name from cpuName so there are no duplicate player names on poker table
 	}
 
+	// MOVE NEXT 2 METHODS TO PLAYER??????????
 	public void setBetIntervals() {
 		this.betInterval = (int) (0.01 * super.getStack());
+	}
+
+	public int getBetInterval() {
+		return betInterval;
 	}
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
@@ -69,6 +74,7 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
+		// If AI has a stack less than minBet then they only have 2 actions to play
 		if (super.getStack() < minBet) {
 			if (decision < 10) {
 				super.allIn("A");
@@ -112,6 +118,7 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
+		// If AI has a stack less than minBet then they only have 2 actions to play
 		if (super.getStack() < minBet) {
 			if (decision < 10) {
 				super.allIn("A");
@@ -141,9 +148,6 @@ public class AI extends Player {
 			}
 		}
 	}
-
-	// THIS METHOD WILL NOT REUN PROPERLY!!!!!!!!!!!!!!!!!!!!!!!
-	// WHAT IF AI STACK < MINBET????????????????????????????????
 
 	// CHANGE THIS METHOD BECAUSE BET AND RAISE ACTIONS ARE THE SAME
 	/**
