@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class AI extends Player {
 
-	private int betInterval;
+	private static int betInterval;
 	private int minBet;
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
@@ -23,7 +23,6 @@ public class AI extends Player {
 	// Constructor that initiates the name of AI, betting interval, and minimum betting amount
 	public AI() {
 		setCPUName();
-		setBetIntervals();
 		this.minBet = (int) (super.getStack() * 0.025);
 	}
 	
@@ -51,8 +50,8 @@ public class AI extends Player {
 	}
 
 	// This method sets up the intervals for betting
-	public void setBetIntervals() {
-		this.betInterval = (int) (0.01 * super.getStack());
+	public static void setBetIntervals(int stack) {
+		betInterval = (int) (0.01 * stack);
 	}
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
