@@ -14,8 +14,8 @@ public abstract class Player {
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
-	protected static int minBet = Game.getSmallBlind();
-	protected static int highBet = Game.getHighestBet();
+	protected static int minBet = 0;
+	protected static int highBet = 0;
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
 	private double wins;
@@ -410,6 +410,14 @@ public abstract class Player {
 			}
 		}
 		return combs;
+	}
+
+	public static void setHighBet(int betAmt) {
+		highBet = betAmt;
+	}
+
+	public static void setMinBet(int betAmt) {
+		minBet = betAmt;
 	}
 
 }
