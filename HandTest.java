@@ -7,6 +7,9 @@ import org.junit.Test;
 /**
  * As one of the most logically intensive components of the program, the Hand
  * class undergoes rigorous testing through this JUnit powered test class.
+ * Since millions of combinations of hands can be made from a 52 card deck,
+ * most test consist of general cases for random hands where the logic would
+ * not change for different hands of a comparable type.
  * 
  * @author Adam Hiles
  * @version 03/25/19
