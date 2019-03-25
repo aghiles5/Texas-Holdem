@@ -114,7 +114,7 @@ public class Game {
         roundNum = 0;
         playerCount = 0;
         pot = 0;
-        highestBet = 0;
+        highestBet = (int) (smallBlind * 2);
         Player.setMinBet((int) (smallBlind));
         for (Player player : players) {
             player.emptyHand();
@@ -130,19 +130,6 @@ public class Game {
             if (player.getStack() > 0) {
                 roundPlayers.add(player);
             }
-        }
-
-        blindPosition();
-
-        if (roundPlayers.get(playerCount).stack < smallBlind) {
-            allIn();
-        } else {
-            roundPlayers.get(playerCount).stack -= smallBlind;
-        }
-        if (roundPlayers.get(playerCount + 1).stack < (smallBlind * 2)) {
-            roundPlayers.get(playerCount + 1).allIn("A");
-        } else {
-            roundPlayers.get(playerCount + 1).stack -= (smallBlind * 2);
         }
 
         middleCards.clear();
@@ -223,7 +210,9 @@ public class Game {
      * getting input from
      */
     public void setLastPlayer(Player theLastPlayer) {
-        lastPlayer = theLastPlayer;
+        if (playerCount != 0) {
+            lastPlayer = theLastPlayer;
+        }
     }
 
     public Player getLastPlayer() {
@@ -232,12 +221,12 @@ public class Game {
 
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
-        if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet" || lastPlayer.getAction() == "All In"
-                || lastPlayer.getAction() == "Called") {
+        if (playerCount == 0) {
+            roundPlayers.get(playerCount).getDecision2();
+        } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
+                || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
             roundPlayers.get(playerCount).getDecision();
         } else if (lastPlayer.getAction() == "Checked" && highestBet == 0) {
-            roundPlayers.get(playerCount).getDecision2();
-        } else if (playerCount == 0) {
             roundPlayers.get(playerCount).getDecision2();
         }
         setLastPlayer(roundPlayers.get(playerCount));
@@ -248,11 +237,23 @@ public class Game {
         }
 
         else if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
-            bet((int) (smallBlind));
+            if (roundPlayers.get(playerCount).stack < smallBlind) {
+                allIn();
+                pot += roundPlayers.get(playerCount).stack;
+            } else {
+                bet((int) (smallBlind));
+                pot += (int) (smallBlind);
+            }
         }
 
-        else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
-            bet((int) (smallBlind * 2));
+        else if (roundNum == 0 && playerCount == 1) {
+            if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
+                roundPlayers.get(playerCount).allIn("A");
+                pot += roundPlayers.get(playerCount).stack;
+            } else {
+                bet((int) (smallBlind * 2));
+                pot += (int) (smallBlind * 2);
+            }
         }
 
         Player.setHighBet(highestBet);
@@ -305,10 +306,6 @@ public class Game {
                 incrementRound();
                 return false;
             }
-        }
-
-        else if (roundPlayers.size() > 1) {
-
         }
 
         else {
@@ -381,6 +378,7 @@ public class Game {
         }
 
         userFolded = false;
+        blindPosition();
 
         return winners;
     }
@@ -419,6 +417,7 @@ public class Game {
     }
 
     private void allIn() {
+        highestBet = roundPlayers.get(playerCount).stack;
         roundPlayers.get(playerCount).allIn("A");
     }
 
@@ -430,10 +429,10 @@ public class Game {
 
         else {
             roundPlayers.get(playerCount).setBet(betAmt);
-            if (betAmt > highestBet * 2) {
-                roundPlayers.get(playerCount).BetRaise("R", betAmt);
-            } else {
+            if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
                 roundPlayers.get(playerCount).BetRaise("B", betAmt);
+            } else {
+                roundPlayers.get(playerCount).BetRaise("R", betAmt);
             }
             highestBet = betAmt;
         }

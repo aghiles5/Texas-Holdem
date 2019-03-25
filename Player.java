@@ -299,7 +299,7 @@ public class Player {
 			// money in the player's balance if (newBet <= stack) { stack -= newBet;
 			// decreases the player's money value. totBet += newBet; // adds the bet to the
 			// player's total bet.
-			if (newBet <= stack && newBet >= 0) {
+			if (newBet >= 0) {
 				stack -= newBet;
 				totBet += newBet;
 				action = "Bet";
@@ -307,8 +307,7 @@ public class Player {
 			}
 		} else if (choice.equalsIgnoreCase("R")) { // Raise action
 			// must be 2x the amount to call
-			int toCall = highBet - totBet; // highBet must be tracked
-			if (newBet >= 2 * toCall && newBet <= stack && newBet >= 0) {
+			if (newBet >= 0) {
 				stack -= newBet;
 				System.out.println("Player raised $" + newBet + ".");
 				totBet += newBet; // check logic
