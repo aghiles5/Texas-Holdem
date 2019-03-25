@@ -464,7 +464,7 @@ public class Game {
         return playerCount;
     }
 
-    public boolean getGameOver() {
+    public boolean isGameOver() {
         return gameOver;
     }
 
