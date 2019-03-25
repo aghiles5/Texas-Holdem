@@ -33,7 +33,7 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
-        smallBlind = (int) (100000 * 0.025);
+        smallBlind = 0;
     }
 
     public ArrayList<Player> getPlayerList() {
@@ -98,6 +98,8 @@ public class Game {
             player.stack = stackAmt;
         }
 
+        smallBlind = (int) (stackAmt * 0.025);
+
         return players;
     }
 
@@ -128,8 +130,16 @@ public class Game {
 
         blindPosition();
 
-        roundPlayers.get(playerCount).stack -= smallBlind;
-        roundPlayers.get(playerCount + 1).stack -= (smallBlind * 2);
+        if (roundPlayers.get(playerCount).stack < smallBlind) {
+            allIn();
+        } else {
+            roundPlayers.get(playerCount).stack -= smallBlind;
+        }
+        if (roundPlayers.get(playerCount + 1).stack < smallBlind * 2) {
+            roundPlayers.get(playerCount + 1).allIn("A");
+        } else {
+            roundPlayers.get(playerCount + 1).stack -= (smallBlind * 2);
+        }
 
         middleCards.clear();
         for (int i = 0; i < 3; i++) {
@@ -169,6 +179,8 @@ public class Game {
         }
 
         for (Player player : roundPlayers) {
+            pot += player.getBet();
+            player.setAction(" ");
             player.setHand(roundComm);
         }
     }
@@ -221,6 +233,15 @@ public class Game {
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
+
+        else if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
+            bet((int) (smallBlind));
+        }
+
+        else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
+            bet((int) (smallBlind * 2));
+        }
+
         return curPlayer;
     }
 
@@ -243,28 +264,49 @@ public class Game {
     }
 
     public boolean isBetRoundRunning() {
-        int actionCounter = 0;
-        for (Player player : roundPlayers) {
-            if (player.getAction() == "Checked" || player.getAction() == "Folded" || player.getAction() == "Called"
-                    || player.getAction() == "All In" || player.getAction() == "Raised"
-                    || player.getAction() == "Bet") {
-                actionCounter += 1;
+        if (playerCount == 2 && roundNum == 0) {
+            int BBCounter = 0;
+            for (Player player : players) {
+                if (player.getBet() == smallBlind * 2) {
+                    BBCounter++;
+                }
+            }
+
+            if (BBCounter == roundPlayers.size()) {
+                incrementRound();
+                return false;
             }
         }
 
-        if (actionCounter == roundPlayers.size()) {
-            incrementRound();
-            return false;
-        }
+        else if (roundNum != 0 && highestBet == 0) {
+            int checkCount = 0;
+            for (Player player : players) {
+                if (player.getAction() == "Checked") {
+                    checkCount++;
+                }
+            }
 
-        else if (roundPlayers.size() > 1) {
-            return true;
+            if (checkCount == roundPlayers.size()) {
+                incrementRound();
+                return false;
+            }
         }
 
         else {
-            incrementRound();
-            return false;
+            int betCounter = 0;
+            for (Player player : players) {
+                if (player.getBet() == highestBet) {
+                    betCounter++;
+                }
+            }
+
+            if (betCounter == roundPlayers.size()) {
+                incrementRound();
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**
@@ -330,7 +372,7 @@ public class Game {
     }
 
     public void bet(int betAmt) {
-        if (roundPlayers.get(playerCount).stack == betAmt) {
+        if (roundPlayers.get(playerCount).stack <= betAmt) {
             allIn();
         }
 
@@ -364,5 +406,9 @@ public class Game {
 
     public int getPot() {
         return pot;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
     }
 }
