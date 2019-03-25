@@ -261,6 +261,7 @@ public abstract class Player {
 		// If the input is c, play moves to the next player
 		if (choice.equalsIgnoreCase("C")) {
 			action = "Checked";
+			System.out.println("Player checked.");
 			// Nothing
 		}
 	}
@@ -277,6 +278,7 @@ public abstract class Player {
 			emptyHand(); // Clears hand
 			emptyHole(); // Clears hole
 			action = "Folded";
+			System.out.println("Player Folded.");
 			folds += 1;
 			// Nothing
 
