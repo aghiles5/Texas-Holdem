@@ -237,6 +237,8 @@ public class Game {
             roundPlayers.get(playerCount).getDecision();
         } else if (lastPlayer.getAction() == "Checked" && highestBet == 0) {
             roundPlayers.get(playerCount).getDecision2();
+        } else if (playerCount == 0) {
+            roundPlayers.get(playerCount).getDecision2();
         }
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
