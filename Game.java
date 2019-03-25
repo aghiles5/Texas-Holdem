@@ -24,6 +24,7 @@ public class Game {
     private double smallBlind;
     private int pot;
     private boolean gameOver;
+    private boolean userFolded;
 
     /*
      * Constructor to ensure that roundNum and playerCount are reset to 0 when a
@@ -113,7 +114,7 @@ public class Game {
         roundNum = 0;
         playerCount = 0;
         pot = 0;
-        highestBet = (int) (smallBlind * 2);
+        highestBet = 0;
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -165,9 +166,10 @@ public class Game {
      * Increases the round by one in order to reset all of the players actions and
      * continue the game
      */
-    public void incrementRound() {
+    private void incrementRound() {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
+        highestBet = 0;
 
         for (Card roundCard : middleCards) {
             roundComm.add(roundCard);
@@ -368,6 +370,8 @@ public class Game {
             gameOver = true;
         }
 
+        userFolded = false;
+
         return winners;
     }
 
@@ -380,6 +384,7 @@ public class Game {
         setLastPlayer(roundPlayers.get(playerCount));
         roundPlayers.remove(playerCount);
         playerCount -= 1;
+        userFolded = true;
     }
 
     /**
@@ -421,7 +426,7 @@ public class Game {
         return (int) (smallBlind);
     }
 
-    public void blindPosition() {
+    private void blindPosition() {
         ArrayList<Player> tempPList = new ArrayList<Player>();
         for (Player player : roundPlayers) {
             if (player != roundPlayers.get(0)) {
@@ -449,5 +454,9 @@ public class Game {
 
     public boolean getGameOver() {
         return gameOver;
+    }
+
+    public boolean isUserFolded() {
+        return userFolded;
     }
 }
