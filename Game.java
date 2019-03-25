@@ -426,7 +426,6 @@ public class Game {
         }
 
         else {
-            roundPlayers.get(playerCount).setBet(betAmt);
             if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
                 roundPlayers.get(playerCount).BetRaise("B", betAmt);
             } else {
