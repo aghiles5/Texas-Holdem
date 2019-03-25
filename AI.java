@@ -153,7 +153,6 @@ public class AI extends Player {
 		}
 	}
 
-	// CHANGE THIS METHOD BECAUSE BET AND RAISE ACTIONS ARE THE SAME
 	/**
 	 * This method will check if AI has sufficient money in it's stack for the desired game actions bet,
 	 * raise, and call
@@ -165,26 +164,49 @@ public class AI extends Player {
 		int betting = bet.nextInt(super.getStack() + 1);
 		int returnBet = 0;
 
+		Boolean canBet = false;
+
 		// BOTH BET AND RAISE HAVE THE SAME CHECK FUNCTION
 
-		if (playDecision == "B") {
-			if (betting == super.getStack() || betting < minBet) {
-				checkAIBets("B");
+		while (canBet == false) {
+			if (playDecision == "B") {
+				if (betting != super.getStack() && betting >= minBet) {
+					returnBet = checkBetInterval(betting);
+					canBet = true;
+				}
 			}
-			else {
-				returnBet = betting;
+			/**
+			 * Since "B" and "R" will be the only strings passed into checkAIBets method
+			 * it will be redundant to have an else if condition for "R"
+			 */
+			else if (playDecision == "R") {
+				if (betting != super.getStack() && betting >= minBet) {
+					returnBet = checkBetInterval(betting);
+					canBet = true;
+				}
 			}
 		}
-		/**
-		 * Since "B" and "R" will be the only strings passed into checkAIBets method
-		 * it will be redundant to have an else if condition for "R"
-		 */
+
+		return returnBet;
+	}
+
+	/**
+	 * This method will check if the bet or raise action from AI is divisible by bet interval
+	 */
+	public int checkBetInterval(int toBet) {
+		int returnBet = toBet;
+		int checkBet = returnBet % getBetInterval();
+		double halfWayP = getBetInterval() / 2;
+
+		if (checkBet == 0) {
+			return returnBet;
+		}
 		else {
-			if (betting == super.getStack() || betting < minBet) {
-				checkAIBets("R");
+			if ((double) checkBet < halfWayP) {
+				returnBet -= checkBet;
 			}
 			else {
-				returnBet = betting;
+				returnBet = returnBet + (getBetInterval() - (int) checkBet);
 			}
 		}
 		return returnBet;
