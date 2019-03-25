@@ -115,6 +115,7 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
+        Player.setMinBet(smallBlind);
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -246,6 +247,8 @@ public class Game {
         else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
             bet((int) (smallBlind * 2));
         }
+
+        Player.setHighBet(highestBet);
 
         return curPlayer;
     }
@@ -392,6 +395,7 @@ public class Game {
      * chooses to check
      */
     public void call() {
+        Player.setHighBet(highestBet);
         if (roundPlayers.get(playerCount).getBet() == highestBet) {
             roundPlayers.get(playerCount).check("C");
         }
@@ -418,8 +422,11 @@ public class Game {
 
         else {
             roundPlayers.get(playerCount).setBet(betAmt);
-
+            if (betAmt > highestBet) {
+                highestBet = betAmt;
+            }
         }
+        Player.setHighBet(highestBet);
     }
 
     public int getSmallBlind() {
