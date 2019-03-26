@@ -252,8 +252,10 @@ public class Game {
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
                 || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
             roundPlayers.get(playerCount).getDecision();
-        } else if (lastPlayer.getAction() == "Checked" && highestBet == 0) {
+        } else if ((lastPlayer.getAction() == "Checked" || lastPlayer.getAction() == "Folded") && highestBet == 0) {
             roundPlayers.get(playerCount).getDecision2();
+        } else if (lastPlayer.getAction() == "Folded" && highestBet != 0) {
+            roundPlayers.get(playerCount).getDecision();
         }
 
         highBetHolder = roundPlayers.get(playerCount).getBet();
