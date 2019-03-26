@@ -15,6 +15,7 @@ public class AI extends Player {
 
 	private static int betInterval;
 	private int minBet;
+	AI newAI;
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -33,6 +34,10 @@ public class AI extends Player {
 	public AI(String name, int stack) {
 		super.name = name;
 		super.stack = stack;
+	}
+
+	public AI(AI toCopy) {
+		this.newAI = toCopy;
 	}
 
 	// SETTERS AND GETTERS------------------------------------------------------------------------------------------------------------------------------------------
