@@ -120,36 +120,10 @@ public class MainMenu {
 			stackChoice.valueProperty().addListener(new ChangeListener<String>() {
 				public void changed(ObservableValue<? extends String> observable, 
 						String oldValue, String newValue) {
-					String blinds = "";
 					double stack = Double.parseDouble(newValue.substring(1).replaceAll("\\s+", ""));
-					
-					int smallBlind = (int) (stack * 0.025);
-					int bigBlind = (int) (stack * 0.05);
-					int digitCounter = 0;
-					
-					while (smallBlind != 0) {
-            			if (digitCounter % 3 == 0 && digitCounter != 0)
-            				blinds = smallBlind % 10 + " " + blinds;
-            			else
-            				blinds = smallBlind % 10 + blinds;
-            			smallBlind /= 10;
-            			digitCounter++;
-            		}
-					
-					digitCounter = 0;
-					blinds = "/$" + blinds;
-					
-					while (bigBlind != 0) {
-            			if (digitCounter % 3 == 0 && digitCounter != 0)
-            				blinds = bigBlind % 10 + " " + blinds;
-            			else
-            				blinds = bigBlind % 10 + blinds;
-            			bigBlind /= 10;
-            			digitCounter++;
-            		}
-					
-					blinds = "Blinds: $" + blinds;
-					blindLabel.setText(blinds);
+					MoneyFormatter smallBlind = new MoneyFormatter((int) (stack * 0.025));
+					MoneyFormatter bigBlind = new MoneyFormatter((int) (stack * 0.05));
+					blindLabel.setText("Blinds: " + smallBlind.toString() + "/" + bigBlind.toString());
 				}
 			});
 			

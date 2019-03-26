@@ -89,12 +89,12 @@ public class AI extends Player {
 			}
 
 			// AI all in action
-			else if (decision >= 10 && decision < 15) {
+			else if (decision >= 10 && decision < 12) {
 				super.allIn("A");
 			}
 		
 			// AI call action
-			else if (decision >= 15 && decision < 75) {
+			else if (decision >= 12 && decision < 75) {
 				super.call("L");
 			}
 		
@@ -129,20 +129,20 @@ public class AI extends Player {
 
 		else {
 			// AI check action
-			if (decision < 60) {
+			if (decision < 63) {
 				super.check("C");
 			}
 			// AI bet action
-			else if (decision >= 60 && decision < 85) {
+			else if (decision >= 63 && decision < 88) {
 				int bet = checkAIBets();
 				super.BetRaise("B", bet);
 			}
 			// AI fold action
-			else if (decision >= 85 && decision < 95) {
+			else if (decision >= 88 && decision < 98) {
 				super.fold("F");
 			}
 			// AI all in action
-			else if (decision >= 95) {
+			else if (decision >= 98) {
 				super.allIn("A");
 			}
 		}
