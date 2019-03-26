@@ -310,7 +310,7 @@ public class Player {
 			if (newBet >= 0) {
 				stack -= newBet;
 				System.out.println("Player raised $" + newBet + ".");
-				totBet += newBet; // check logic
+				totBet += newBet + highBet; // check logic
 			}
 			action = "Raised";
 		}
@@ -418,7 +418,7 @@ public class Player {
 	public void setHighBet(int betAmt) {
 		highBet = betAmt;
 	}
-	
+
 	public int getHighBet() {
 		return highBet;
 	}
