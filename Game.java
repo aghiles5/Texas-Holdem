@@ -239,12 +239,14 @@ public class Game {
             } else {
                 bet((int) (smallBlind));
             }
+            highBetHolder = roundPlayers.get(playerCount).getBet();
         } else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
             } else {
                 bet((int) (smallBlind * 2));
             }
+            highBetHolder = roundPlayers.get(playerCount).getBet();
         } else if (playerCount == 0 && roundNum != 0) {
             roundPlayers.get(playerCount).getDecision2();
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
@@ -254,14 +256,13 @@ public class Game {
             roundPlayers.get(playerCount).getDecision2();
         }
 
+        highBetHolder = roundPlayers.get(playerCount).getBet();
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
-
-        highBetHolder = roundPlayers.get(playerCount).getBet();
 
         return curPlayer;
     }
