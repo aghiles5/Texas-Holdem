@@ -8,7 +8,7 @@ import java.util.*;
  * importing JUnit test packages
  * 
  * @author John Lowie
- * @version 03/25/19
+ * @version 03/26/19
  */
 
  public class PlayerTest {
@@ -100,6 +100,7 @@ import java.util.*;
         }
     }
 
+    // Test AI actions
     public static void testAIActions() {
         Boolean testActions = true;
         AI a = new AI("foo", 1000);
