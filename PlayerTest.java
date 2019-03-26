@@ -103,6 +103,12 @@ import java.util.*;
     // Test AI actions
     public static void testAIActions() {
         Boolean testActions = true;
+        int stackAmount = 1000000;
+        AI.addCPUName();
+        AI.setBetIntervals(stackAmount);
+
+        AI a = new AI();
+        AI b = new AI(a.getName(), stackAmount);
 
         if (testActions == true) {
             System.out.println("No errors in testAIActions");
