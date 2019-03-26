@@ -167,7 +167,7 @@ public class AI extends Player {
 			int betting = bet.nextInt(super.getStack() + 1); // Creating a random number for betting
 
 			// Probability of betting or raising alot is 10%
-			if (betProb < 10) {
+			/*if (betProb < 10) {
 				// Must bet or raise more than half of AI's stack as rule
 				if (betting != super.getStack() && betting >= (super.getStack() / 2)) {
 					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
@@ -183,6 +183,11 @@ public class AI extends Player {
 					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
 					canBet = true; // Condition satisfied and betting amount modified to break loop
 				}
+			}*/
+
+			if (betting != super.getStack() && betting >= minBet) {
+				returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
+				canBet = true; // Condition satisfied and betting amount modified to break loop
 			}
 		}
 
