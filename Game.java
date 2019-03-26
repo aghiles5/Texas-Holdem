@@ -116,7 +116,6 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = (int) (smallBlind * 2);
-        Player.setMinBet((int) (smallBlind));
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -131,6 +130,11 @@ public class Game {
             if (player.getStack() > 0) {
                 roundPlayers.add(player);
             }
+        }
+
+        for (Player player : roundPlayers) {
+            player.setMinBet((int) (smallBlind));
+            player.setHighBet(highestBet);
         }
 
         middleCards.clear();
@@ -150,7 +154,9 @@ public class Game {
             playerCount += 1;
         }
 
-        Player.setHighBet(highestBet);
+        for (Player player : roundPlayers) {
+            player.setHighBet(highestBet);
+        }
     }
 
     /**
@@ -432,6 +438,7 @@ public class Game {
             }
             highestBet = betAmt;
         }
+
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
