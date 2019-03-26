@@ -117,7 +117,7 @@ public class Game {
         roundNum = 0;
         playerCount = 0;
         pot = 0;
-        highestBet = (int) (smallBlind * 2);
+        highestBet = 0;
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -233,13 +233,13 @@ public class Game {
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
 
-        if (roundNum == 0 && playerCount == 0) {
+        if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
                 allIn();
             } else {
                 bet((int) (smallBlind));
             }
-        } else if (roundNum == 0 && playerCount == 1) {
+        } else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
             } else {
@@ -260,6 +260,8 @@ public class Game {
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
+
+        highBetHolder = roundPlayers.get(playerCount).getBet();
 
         return curPlayer;
     }
