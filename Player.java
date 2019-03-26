@@ -418,6 +418,10 @@ public class Player {
 	public void setHighBet(int betAmt) {
 		highBet = betAmt;
 	}
+	
+	public int getHighBet() {
+		return highBet;
+	}
 
 	public void setMinBet(int betAmt) {
 		minBet = betAmt;
