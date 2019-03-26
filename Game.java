@@ -122,6 +122,8 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
+        sBlindDone = false;
+        bBlindDone = false;
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
