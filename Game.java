@@ -26,6 +26,8 @@ public class Game {
     private int pot;
     private boolean gameOver;
     private boolean userFolded;
+    private boolean sBlindDone;
+    private boolean bBlindDone;
 
     /*
      * Constructor to ensure that roundNum and playerCount are reset to 0 when a
@@ -39,6 +41,8 @@ public class Game {
         highBetHolder = 0;
         smallBlind = 0;
         gameOver = false;
+        sBlindDone = false;
+        bBlindDone = false;
     }
 
     public ArrayList<Player> getPlayerList() {
@@ -118,6 +122,8 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
+        sBlindDone = false;
+        bBlindDone = false;
         for (Player player : players) {
             player.emptyHand();
             player.emptyHole();
@@ -171,6 +177,7 @@ public class Game {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
         highestBet = 0;
+        highBetHolder = 0;
 
         for (Card roundCard : middleCards) {
             roundComm.add(roundCard);
@@ -233,32 +240,39 @@ public class Game {
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
 
-        if (roundNum == 0 && playerCount == 0) {
+        if (roundNum == 0 && playerCount == 0 && sBlindDone == false) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
                 allIn();
             } else {
                 bet((int) (smallBlind));
             }
             highBetHolder = roundPlayers.get(playerCount).getBet();
-        } else if (roundNum == 0 && playerCount == 1) {
+            sBlindDone = true;
+        } else if (roundNum == 0 && playerCount == 1 && bBlindDone == false) {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
             } else {
-                bet((int) (smallBlind * 2));
+                bet((int) (smallBlind));
             }
             highBetHolder = roundPlayers.get(playerCount).getBet();
+            bBlindDone = true;
         } else if (playerCount == 0 && roundNum != 0) {
             roundPlayers.get(playerCount).getDecision2();
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
                 || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
             roundPlayers.get(playerCount).getDecision();
-        } else if ((lastPlayer.getAction() == "Checked" || lastPlayer.getAction() == "Folded") && highestBet == 0) {
-            roundPlayers.get(playerCount).getDecision2();
+        } else if (highestBet == 0) {
+            if (lastPlayer.getAction() == "Checked" || lastPlayer.getAction() == "Folded") {
+                roundPlayers.get(playerCount).getDecision2();
+            }
         } else if (lastPlayer.getAction() == "Folded" && highestBet != 0) {
             roundPlayers.get(playerCount).getDecision();
         }
 
-        highBetHolder = roundPlayers.get(playerCount).getBet();
+        if (roundPlayers.get(playerCount).getBet() != 0) {
+            highBetHolder = roundPlayers.get(playerCount).getBet();
+        }
+
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
@@ -431,7 +445,6 @@ public class Game {
         }
 
         else {
-            roundPlayers.get(playerCount).setBet(betAmt);
             if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
                 roundPlayers.get(playerCount).BetRaise("B", betAmt);
             } else {
@@ -439,7 +452,7 @@ public class Game {
             }
         }
 
-        highBetHolder = betAmt;
+        highBetHolder += betAmt;
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
