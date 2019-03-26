@@ -251,7 +251,7 @@ public class Game {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
             } else {
-                bet((int) (smallBlind * 2));
+                bet((int) (smallBlind));
             }
             highBetHolder = roundPlayers.get(playerCount).getBet();
             bBlindDone = true;
