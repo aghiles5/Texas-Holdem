@@ -22,6 +22,7 @@ public class Game {
     private static final String[] ROUNDKEY = { "Blind Round", "Flop", "Turnover", "Turnover", "Showdown" };
     private int highestBet;
     private double smallBlind;
+    private int highBetHolder;
     private int pot;
     private boolean gameOver;
     private boolean userFolded;
@@ -35,6 +36,7 @@ public class Game {
         playerCount = 0;
         pot = 0;
         highestBet = 0;
+        highBetHolder = 0;
         smallBlind = 0;
         gameOver = false;
     }
@@ -157,6 +159,8 @@ public class Game {
         for (Player player : roundPlayers) {
             player.setHighBet(highestBet);
         }
+
+        highestBet = highBetHolder;
     }
 
     /**
@@ -235,17 +239,13 @@ public class Game {
             } else {
                 bet((int) (smallBlind));
             }
-        }
-
-        else if (roundNum == 0 && playerCount == 1) {
+        } else if (roundNum == 0 && playerCount == 1) {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
             } else {
                 bet((int) (smallBlind * 2));
             }
-        }
-
-        else if (playerCount == 0 && roundNum != 0) {
+        } else if (playerCount == 0 && roundNum != 0) {
             roundPlayers.get(playerCount).getDecision2();
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
                 || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
@@ -295,9 +295,7 @@ public class Game {
                 incrementRound();
                 return false;
             }
-        }
-
-        else if (roundNum != 0 && highestBet == 0) {
+        } else if (roundNum != 0 && highestBet == 0) {
             int checkCount = 0;
             for (Player player : players) {
                 if (player.getAction() == "Checked") {
@@ -309,9 +307,7 @@ public class Game {
                 incrementRound();
                 return false;
             }
-        }
-
-        else {
+        } else {
             int betCounter = 0;
             for (Player player : players) {
                 if (player.getBet() == highestBet) {
@@ -419,7 +415,6 @@ public class Game {
     }
 
     private void allIn() {
-        highestBet = roundPlayers.get(playerCount).stack;
         roundPlayers.get(playerCount).allIn("A");
         setLastPlayer(roundPlayers.get(playerCount));
     }
@@ -439,7 +434,7 @@ public class Game {
             }
         }
 
-        highestBet = betAmt;
+        highBetHolder = betAmt;
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
