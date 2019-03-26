@@ -427,6 +427,7 @@ public class Game {
     public void bet(int betAmt) {
         if (roundPlayers.get(playerCount).stack <= betAmt) {
             allIn();
+            betAmt = roundPlayers.get(playerCount).stack;
         }
 
         else {
@@ -436,9 +437,9 @@ public class Game {
             } else {
                 roundPlayers.get(playerCount).BetRaise("R", betAmt);
             }
-            highestBet = betAmt;
         }
 
+        highestBet = betAmt;
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
