@@ -103,8 +103,6 @@ import java.util.*;
     // Test AI actions
     public static void testAIActions() {
         Boolean testActions = true;
-        AI a = new AI("foo", 1000);
-        AI b = new AI("bar", 2000);
 
         if (testActions == true) {
             System.out.println("No errors in testAIActions");
