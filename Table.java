@@ -195,22 +195,7 @@ public class Table {
 			
 			//Seat
 			Label name = new Label(player.getName());
-			
-			int aStack = player.getStack();
-			String stackLabel = "";
-			int digitCounter = 0;
-			
-			while (aStack != 0) {
-				if (digitCounter % 3 == 0 && digitCounter != 0)
-					stackLabel = aStack % 10 + " " + stackLabel;
-				else
-					stackLabel = aStack % 10 + stackLabel;
-				aStack /= 10;
-				digitCounter++;
-			}
-			stackLabel = "Stack: $" + stackLabel;
-			Label stack = new Label(stackLabel);
-			
+			Label stack = new Label("Stack: " + (new MoneyFormatter(player.getStack())).toString());
 			Label action = new Label(" ");
 			
 			name.setId(player.getName() + "Name");
