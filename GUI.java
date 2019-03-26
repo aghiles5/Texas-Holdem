@@ -251,13 +251,18 @@ public class GUI extends Application {
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
 		if (player instanceof Human) {
-			if (game.getRound() == 0)
+			if (game.getRound() == 0) {
 				if (game.getPlayerCount() == 0 && game.getHighestBet() == 0) {
 					game.bet(game.getSmallBlind());
 					finishUserTurn(scene, game);
 				}
-				else if (game.getPlayerCount() == 1 && game.getHighestBet() == game.getSmallBlind())
-					game.bet(game.getSmallBlind() * 2);
+				else if (game.getPlayerCount() == 1 && game.getHighestBet() == game.getSmallBlind()) {
+					game.bet(game.getSmallBlind());
+					finishUserTurn(scene, game);
+				}
+				else
+					setupUserTurn(player, scene, game);
+			}
 			else
 				setupUserTurn(player, scene, game);
 		}
@@ -265,7 +270,7 @@ public class GUI extends Application {
 			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
 			player = game.processTurn();
 			
-			PauseTransition pause = new PauseTransition(new Duration(1000));
+			PauseTransition pause = new PauseTransition(new Duration(2000));
 			
 			if (game.isUserFolded())
 				pause.setDuration(new Duration(1));
@@ -316,7 +321,6 @@ public class GUI extends Application {
 		Button call = (Button) scene.lookup("#call");
 		Button raise = (Button) scene.lookup("#raise");
 		HBox controls = (HBox) scene.lookup("#controls");
-		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
 		if (user.getBet() == game.getHighestBet())
