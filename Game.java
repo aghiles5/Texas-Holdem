@@ -268,7 +268,10 @@ public class Game {
             roundPlayers.get(playerCount).getDecision();
         }
 
-        highBetHolder = roundPlayers.get(playerCount).getBet();
+        if (roundPlayers.get(playerCount).getBet() != 0) {
+            highBetHolder = roundPlayers.get(playerCount).getBet();
+        }
+
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
@@ -441,7 +444,6 @@ public class Game {
         }
 
         else {
-            // roundPlayers.get(playerCount).setBet(betAmt);
             if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
                 roundPlayers.get(playerCount).BetRaise("B", betAmt);
             } else {
