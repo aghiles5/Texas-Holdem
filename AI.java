@@ -152,7 +152,6 @@ public class AI extends Player {
 	 * This method will check if AI has sufficient money in it's stack for the desired game actions bet,
 	 * raise, and call
 	 * 
-	 * @param playDecision AI's decision during round
 	 * @return returnBet
 	 */
 	public int checkAIBets() {
@@ -211,8 +210,14 @@ public class AI extends Player {
 				return returnBet;
 			}
 			else {
-				returnBet += (betInterval - (int) checkBet);
-				return returnBet;
+				if (returnBet + betInterval - (int) checkBet == super.getStack()) {
+					returnBet -= checkBet;
+					return returnBet;
+				}
+				else {
+					returnBet += (betInterval - (int) checkBet);
+					return returnBet;
+				}
 			}
 		}
 		else {
