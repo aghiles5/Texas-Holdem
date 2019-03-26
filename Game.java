@@ -156,11 +156,11 @@ public class Game {
             playerCount += 1;
         }
 
+        highestBet = highBetHolder;
+
         for (Player player : roundPlayers) {
             player.setHighBet(highestBet);
         }
-
-        highestBet = highBetHolder;
     }
 
     /**
