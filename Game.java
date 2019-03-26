@@ -452,7 +452,7 @@ public class Game {
             }
         }
 
-        highBetHolder = betAmt;
+        highBetHolder += betAmt;
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
