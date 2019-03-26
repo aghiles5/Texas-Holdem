@@ -233,14 +233,14 @@ public class Game {
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
 
-        if (roundNum == 0 && playerCount == 0 && highestBet == 0) {
+        if (roundNum == 0 && playerCount == 0) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
                 allIn();
             } else {
                 bet((int) (smallBlind));
             }
             highBetHolder = roundPlayers.get(playerCount).getBet();
-        } else if (roundNum == 0 && playerCount == 1 && highestBet == smallBlind) {
+        } else if (roundNum == 0 && playerCount == 1) {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
             } else {
