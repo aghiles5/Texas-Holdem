@@ -8,10 +8,13 @@ import java.util.Random;
  * @version 03/25/2019
  */
 
+// PROBABILITY HIGH RAISE = 10% PROBAILITY LOW RAISE = 90% 
+
+
 public class AI extends Player {
 
-	private static int betInterval;
-	private int minBet;
+	private static int betInterval; // Interval for bets
+	private int minBet; // Minimum bet amount
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -97,7 +100,7 @@ public class AI extends Player {
 		
 			// AI raise action
 			else if (decision >= 75) {
-				int bet = checkAIBets("R");
+				int bet = checkAIBets();
 				super.BetRaise("R", bet);
 			}
 		}
@@ -131,7 +134,7 @@ public class AI extends Player {
 			}
 			// AI bet action
 			else if (decision >= 60 && decision < 85) {
-				int bet = checkAIBets("B");
+				int bet = checkAIBets();
 				super.BetRaise("B", bet);
 			}
 			// AI fold action
@@ -152,27 +155,31 @@ public class AI extends Player {
 	 * @param playDecision AI's decision during round
 	 * @return returnBet
 	 */
-	public int checkAIBets(String playDecision) {
-		Random bet = new Random();
+	public int checkAIBets() {
+		Random bet = new Random(); // Random betting amount
+		Random betMount = new Random(); // Probability of betting/raising alot or little
+		int betProb = betMount.nextInt(100);
 		int returnBet = 0;
 		Boolean canBet = false;
-
-		// BOTH BET AND RAISE HAVE THE SAME CHECK FUNCTION
 
 		// When the desired betting amount is not satisfied the loop will run until it is satisfied
 		while (canBet == false) {
 			int betting = bet.nextInt(super.getStack() + 1); // Creating a random number for betting
 
-			// Checking bet action
-			if (playDecision == "B") {
-				if (betting != super.getStack() && betting >= minBet) {
+			// Probability of betting or raising alot is 10%
+			if (betProb < 10) {
+				// Must bet or raise more than half of AI's stack as rule
+				if (betting != super.getStack() && betting >= (super.getStack() / 2)) {
 					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
 					canBet = true; // Condition satisfied and betting amount modified to break loop
 				}
 			}
-			// Checking raise action
-			else if (playDecision == "R") {
-				if (betting != super.getStack() && betting >= minBet) {
+
+			// WHAT IF AI HAS VERY LITTLE AMOUNT OF MONEY LEFT?????????????????????????????????????????????????????????????????????????????????
+			// Probability of betting or raising low is 90%
+			else if (betProb >= 10) {
+				// Must bet or raise less than half of AI's stack
+				if (betting < (super.getStack() / 2) && betting >= minBet) {
 					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
 					canBet = true; // Condition satisfied and betting amount modified to break loop
 				}
@@ -193,18 +200,19 @@ public class AI extends Player {
 		int checkBet = returnBet % betInterval; // Checks if bet amount from AI is a betting interval
 		double halfWayP = betInterval / 2; // Mid point of betting interval
 
-		if (checkBet == 0) { // AI bet is an interval
+		if (checkBet != 0) {
+			if ((double) checkBet < halfWayP) {
+				returnBet -= checkBet;
+				return returnBet;
+			}
+			else {
+				returnBet += (betInterval - (int) checkBet);
+				return returnBet;
+			}
+		}
+		else {
 			return returnBet;
 		}
-		else { // AI bet is not an interval
-			if ((double) checkBet < halfWayP) { // AI bet rounds down when bet is closer to the floor interval
-				returnBet -= checkBet;
-			}
-			else { // AI bet rounds up when bet is closer to ceiling interval
-				returnBet = returnBet + (betInterval - (int) checkBet);
-			}
-		}
-		return returnBet;
 	}
 
 }

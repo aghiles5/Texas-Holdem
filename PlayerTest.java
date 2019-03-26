@@ -8,7 +8,7 @@ import java.util.*;
  * importing JUnit test packages
  * 
  * @author John Lowie
- * @version 03/25/19
+ * @version 03/26/19
  */
 
  public class PlayerTest {
@@ -100,10 +100,15 @@ import java.util.*;
         }
     }
 
+    // Test AI actions
     public static void testAIActions() {
         Boolean testActions = true;
-        AI a = new AI("foo", 1000);
-        AI b = new AI("bar", 2000);
+        int stackAmount = 1000000;
+        AI.addCPUName();
+        AI.setBetIntervals(stackAmount);
+
+        AI a = new AI();
+        AI b = new AI(a.getName(), stackAmount);
 
         if (testActions == true) {
             System.out.println("No errors in testAIActions");
