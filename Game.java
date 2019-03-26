@@ -177,6 +177,7 @@ public class Game {
         ArrayList<Card> roundComm = new ArrayList<Card>();
         playerCount = 0;
         highestBet = 0;
+        highBetHolder = 0;
 
         for (Card roundCard : middleCards) {
             roundComm.add(roundCard);
