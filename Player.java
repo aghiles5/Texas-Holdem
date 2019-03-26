@@ -14,8 +14,8 @@ public class Player {
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
-	protected static int minBet = 0;
-	protected static int highBet = 0;
+	protected int minBet = 0;
+	protected int highBet = 0;
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
 	private double wins;
@@ -415,11 +415,11 @@ public class Player {
 		return combs;
 	}
 
-	public static void setHighBet(int betAmt) {
+	public void setHighBet(int betAmt) {
 		highBet = betAmt;
 	}
 
-	public static void setMinBet(int betAmt) {
+	public void setMinBet(int betAmt) {
 		minBet = betAmt;
 	}
 
