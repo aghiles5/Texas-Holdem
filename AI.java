@@ -5,10 +5,8 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/25/2019
+ * @version 03/26/2019
  */
-
-// PROBABILITY HIGH RAISE = 10% PROBAILITY LOW RAISE = 90% 
 
 
 public class AI extends Player {
@@ -165,24 +163,30 @@ public class AI extends Player {
 		while (canBet == false) {
 			int betting = bet.nextInt(super.getStack() + 1); // Creating a random number for betting
 
-			// Probability of betting or raising alot is 10%
-			/*if (betProb < 10) {
-				// Must bet or raise more than half of AI's stack as rule
-				if (betting != super.getStack() && betting >= (super.getStack() / 2)) {
-					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
-					canBet = true; // Condition satisfied and betting amount modified to break loop
-				}
+			/*if (super.getStack() / 2 <= minBet) {
+				returnBet = minBet;
 			}
+			else {
+				// Probability of betting or raising alot is 10%
+				if (betProb < 10) {
+					// Must bet or raise more than half of AI's stack as rule
+					if (betting != super.getStack() && betting >= (super.getStack() / 2)) {
+						returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
+						canBet = true; // Condition satisfied and betting amount modified to break loop
+					}
+				}
 
-			// WHAT IF AI HAS VERY LITTLE AMOUNT OF MONEY LEFT?????????????????????????????????????????????????????????????????????????????????
-			// Probability of betting or raising low is 90%
-			else if (betProb >= 10) {
-				// Must bet or raise less than half of AI's stack
-				if (betting < (super.getStack() / 2) && betting >= minBet) {
-					returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
-					canBet = true; // Condition satisfied and betting amount modified to break loop
+				// WHAT IF AI HAS VERY LITTLE AMOUNT OF MONEY LEFT?????????????????????????????????????????????????????????????????????????????????
+				// Probability of betting or raising low is 90%
+				else if (betProb >= 10) {
+					// Must bet or raise less than half of AI's stack
+					if (betting < (super.getStack() / 2) && betting >= minBet) {
+						returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
+						canBet = true; // Condition satisfied and betting amount modified to break loop
+					}
 				}
 			}*/
+			
 
 			if (betting != super.getStack() && betting >= minBet) {
 				returnBet = checkBetInterval(betting); // Checks if the betting amount is an interval of betting
