@@ -211,20 +211,7 @@ public class GUI extends Application {
 		((Button) scene.lookup("#help")).setDisable(false);
 		((Button) scene.lookup("#quit")).setDisable(false);
 		
-		int pot = game.getPot(), digitCounter = 0;  
-		String potLabel = "";
-		if (pot == 0)
-			potLabel = "0";
-		while (pot != 0) {
-			if (digitCounter % 3 == 0 && digitCounter != 0)
-				potLabel = pot % 10 + " " + potLabel;
-			else
-				potLabel = pot % 10 + potLabel;
-			pot /= 10;
-			digitCounter++;
-		}
-		potLabel = "Pot: $" + potLabel;
-		((Label) scene.lookup("#pot")).setText(potLabel);
+		((Label) scene.lookup("#pot")).setText("Pot: " + (new MoneyFormatter(game.getPot()).toString()));
 		((Label) scene.lookup("#wager")).setText("Highest Wager: $0");
 		for (Player player : game.getPlayers())
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
@@ -402,38 +389,13 @@ public class GUI extends Application {
 	 */
 	private void updatePlayerInfo(Player player, Scene scene, Game game) {
 		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
+		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + (new MoneyFormatter(player.getStack())).toString());
 		
-		int stack = player.getStack();
-		String stackLabel = "";
-		int digitCounter = 0;
-		
-		while (stack != 0) {
-			if (digitCounter % 3 == 0 && digitCounter != 0)
-				stackLabel = stack % 10 + " " + stackLabel;
-			else
-				stackLabel = stack % 10 + stackLabel;
-			stack /= 10;
-			digitCounter++;
-		}
-		stackLabel = "Stack: $" + stackLabel;
-		((Label) scene.lookup("#" + player.getName() + "Stack")).setText(stackLabel);
-		
-		int bet = player.getBet();
-		String wager = "";
-		digitCounter = 0;
-		
-		while (bet != 0) {
-			if (digitCounter % 3 == 0 && digitCounter != 0)
-				wager = bet % 10 + " " + wager;
-			else
-				wager = bet % 10 + wager;
-			bet /= 10;
-			digitCounter++;
-		}
-		
-		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $" + wager);
+		MoneyFormatter wagerFormat = new MoneyFormatter(player.getBet());
+		String wager = wagerFormat.toString();
+		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + wager);
 		if (player.getBet() > game.getHighestBet())
-			((Label) scene.lookup("#wager")).setText("Highest Wager: $" + wager);
+			((Label) scene.lookup("#wager")).setText("Highest Wager: " + wager);
 		
 		if (player.getAction() == "Folded")
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
@@ -463,20 +425,7 @@ public class GUI extends Application {
 		
 		((Label) scene.lookup("#pot")).setText("Pot: $0"); //The pot is reset and the winners' stacks are updated
 		for (Player player : winners) {
-			int stack = player.getStack();
-			String stackLabel = "";
-			int digitCounter = 0;
-			
-			while (stack != 0) {
-				if (digitCounter % 3 == 0 && digitCounter != 0)
-					stackLabel = stack % 10 + " " + stackLabel;
-				else
-					stackLabel = stack % 10 + stackLabel;
-				stack /= 10;
-				digitCounter++;
-			}
-			stackLabel = "Stack: $" + stackLabel;
-			((Label) scene.lookup("#" + player.getName() + "Stack")).setText(stackLabel);
+			((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + (new MoneyFormatter(player.getStack())).toString());
 		}
 		
 		HBox notif = (HBox) scene.lookup("#notif"); //A notification message displaying the winner(s) is constructed
