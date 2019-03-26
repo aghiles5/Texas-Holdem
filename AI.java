@@ -15,7 +15,7 @@ public class AI extends Player {
 
 	private static int betInterval;
 	private int minBet;
-	AI newAI;
+	AI newAI; // IDK WHAT THIS DO YET
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -36,6 +36,7 @@ public class AI extends Player {
 		super.stack = stack;
 	}
 
+	// TEMPORARY
 	public AI(AI toCopy) {
 		this.newAI = toCopy;
 	}
