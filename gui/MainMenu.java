@@ -110,7 +110,9 @@ public class MainMenu {
 				
 			menuBox.getChildren().addAll(title, stackBox, blindLabel, sliderLabel, comSlider, buttonBox);
 			
-			//EventHandler for the basic exit button
+			//=================================================================
+			// Event Handlers/Listeners
+			
 			exit.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -118,7 +120,7 @@ public class MainMenu {
 				}
 			});
 			
-			stackChoice.valueProperty().addListener(new ChangeListener<String>() {
+			stackChoice.valueProperty().addListener(new ChangeListener<String>() { //On a change of stack the blinds label is automatically updated
 				public void changed(ObservableValue<? extends String> observable, 
 						String oldValue, String newValue) {
 					double stack = Double.parseDouble(newValue.substring(1).replaceAll("\\s+", ""));

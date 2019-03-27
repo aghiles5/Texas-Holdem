@@ -467,6 +467,14 @@ public class GUI extends Application {
 		notif.setVisible(true);
 	}
 	
+	/**
+	 * Once a game is finished the end game notification is set to display.
+	 * TODO: Make label update with specific end game messages (i.e. You
+	 * Busted Out, You Won)
+	 * 
+	 * @param scene the game node tree
+	 * @param game the current Game instance
+	 */
 	private void gameOver(Scene scene, Game game) {
 		HBox endGameNotif = (HBox) scene.lookup("#endGameNotif");
 		Label endGameMsg = (Label) scene.lookup("#endGameMsg");
