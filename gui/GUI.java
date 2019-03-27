@@ -230,7 +230,7 @@ public class GUI extends Application {
 		}
 		
 		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
-			if (game.getRound() != 4) {
+			if (game.getRound() < 4) {
 				game.incrementRound();
 				interRound(scene, game);
 			}
