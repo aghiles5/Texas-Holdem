@@ -228,7 +228,7 @@ public class AI extends Player {
 					// Probability of raising alot is 10%
 					if (betProb < 10) {
 						if (super.getStack() - betInterval <= betting) {
-							returnBet = super.getHighBet() + betInterval;
+							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
 						else {
@@ -239,7 +239,7 @@ public class AI extends Player {
 					// Probability of raising low is 90%
 					else if (betProb >= 10) {
 						if (super.getStack() - betInterval <= betting) {
-							returnBet = super.getHighBet() + betInterval;
+							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
 						else {
