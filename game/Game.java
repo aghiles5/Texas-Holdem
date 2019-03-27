@@ -309,19 +309,36 @@ public class Game {
     }
 
     public boolean isBetRoundRunning() {
-        if (playerCount == 2 && roundNum == 0 && highestBet == smallBlind * 2) {
-            int BBCounter = 0;
-            for (Player player : players) {
-                if (player.getBet() == smallBlind * 2) {
-                    BBCounter++;
+        if (roundNum == 0) {
+        	if (highestBet == smallBlind * 2) {
+        		if (playerCount == 2) {
+		            int BBCounter = 0;
+		            for (Player player : players) {
+		                if (player.getBet() == smallBlind * 2) {
+		                    BBCounter++;
+		                }
+		            }
+		
+		            if (BBCounter == roundPlayers.size()) {
+		                incrementRound();
+		                return false;
+		            }
+        		}
+        	}
+        	else {
+        		int betCounter = 0;
+                for (Player player : players) {
+                    if (player.getBet() == highestBet) {
+                        betCounter++;
+                    }
                 }
-            }
 
-            if (BBCounter == roundPlayers.size()) {
-                incrementRound();
-                return false;
-            }
-        } else if (roundNum != 0 && highestBet == 0) {
+                if (betCounter == roundPlayers.size()) {
+                    incrementRound();
+                    return false;
+                }
+        	}
+        } else if (highestBet == 0) {
             int checkCount = 0;
             for (Player player : players) {
                 if (player.getAction() == "Checked") {
@@ -332,8 +349,8 @@ public class Game {
             if (checkCount == roundPlayers.size()) {
                 incrementRound();
                 return false;
-            }
-        } else if (highestBet != 0) {
+            }  
+        } else {
             int betCounter = 0;
             for (Player player : players) {
                 if (player.getBet() == highestBet) {
