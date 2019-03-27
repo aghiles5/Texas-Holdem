@@ -249,7 +249,7 @@ public class Game {
 
         if (roundNum == 0 && playerCount == 0 && sBlindDone == false) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
-                allIn();
+                roundPlayers.get(playerCount).allIn("A");
             } else {
                 bet((int) (smallBlind));
             }
@@ -429,7 +429,7 @@ public class Game {
         }
 
         else if (roundPlayers.get(playerCount).stack < (highestBet - roundPlayers.get(playerCount).getBet())) {
-            allIn();
+            roundPlayers.get(playerCount).allIn("A");
         }
 
         else {
@@ -439,14 +439,14 @@ public class Game {
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
-    private void allIn() {
-        roundPlayers.get(playerCount).allIn("A");
-        setLastPlayer(roundPlayers.get(playerCount));
-    }
+    /*
+     * private void allIn() { roundPlayers.get(playerCount).allIn("A");
+     * setLastPlayer(roundPlayers.get(playerCount)); }
+     */
 
     public void bet(int betAmt) {
         if (roundPlayers.get(playerCount).stack <= betAmt) {
-            allIn();
+            roundPlayers.get(playerCount).allIn("A");
             betAmt = roundPlayers.get(playerCount).stack;
         }
 
