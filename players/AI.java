@@ -113,10 +113,32 @@ public class AI extends Player {
 		
 			// AI raise action
 			else if (decision >= 75) {
-				int bet = checkAIBets("R");
+				int bet = checkAIRaise("R");
 				super.BetRaise("R", bet);
 			}
 		}
+	}
+
+	public int checkAIRaise(String action) {
+		Random bet = new Random();
+		// Random typeBet = new Random(); THIS IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// int prbTBet = typeBet.nextInt(100); THIS IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		int newRaise = 0;
+
+		Boolean canBet = false;
+
+		while (canBet == false) {
+			int raising = bet.nextInt(super.getStack() + 1);
+
+			if (raising > super.getHighBet() && raising < super.getStack()) {
+				newRaise = checkBetInterval("R", raising);
+				canBet = true;
+			}
+
+		}
+
+		return newRaise;// TEMPORRY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 	/**
@@ -223,7 +245,7 @@ public class AI extends Player {
 			// POSSIBLE RUNTIME ERRORS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 			// Checks raise decision
-			else if (decision == "R") {
+			/*else if (decision == "R") {
 				if (betting > super.getHighBet() && betting < super.getStack()) {
 					// Probability of raising alot is 10%
 					if (betProb < 10) {
@@ -248,7 +270,7 @@ public class AI extends Player {
 						}
 					}
 				}
-			}
+			}*/
 		}
 
 		return returnBet;
