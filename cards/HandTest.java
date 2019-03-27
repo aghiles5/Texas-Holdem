@@ -17,6 +17,9 @@ import org.junit.Test;
  */
 public class HandTest {
 	@Test
+	/**
+	 * The below full house hand should return the appropriate string.
+	 */
 	public void test_toString() {
 		Hand testHand = new Hand();
 		testHand.addCard(new Card(1, 6));
@@ -32,6 +35,10 @@ public class HandTest {
 	
 	
 	@Test
+	/**
+	 * To test the clear method a random five card hand is made, cleared, and
+	 * checked that its size is equal to zero.
+	 */
 	public void test_clear() {
 		Hand testHand = new Hand();
 		testHand.addCard(new Card(2, 12));
@@ -46,6 +53,11 @@ public class HandTest {
 	}
 	
 	@Test
+	/**
+	 * To test the addCard method a random five card hand is generated, then 
+	 * each card is checked to see if its suit and rank match those of the
+	 * given.
+	 */
 	public void test_getCards_addCard() {
 		Hand testHand = new Hand();
 		testHand.addCard(new Card(0, 9));
