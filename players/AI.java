@@ -72,9 +72,21 @@ public class AI extends Player {
 		int decision = choice.nextInt(100);
 
 		// If AI has a stack less than minBet then they only have 2 actions to play
-		if (super.getStack() <= minBet || super.getStack() < super.getHighBet()) {
+		if (super.getStack() <= minBet || super.getStack() <= super.getHighBet()) {
 			if (decision < 10) {
 				super.allIn("A");
+			}
+			else {
+				super.fold("F");
+			}
+		}
+
+		else if (super.getStack() > minBet && super.getStack() - betInterval <= super.getHighBet()) {
+			if (decision < 10) {
+				super.allIn("A");
+			}
+			else if (decision >= 10 && decision < 55) {
+				super.call("L");
 			}
 			else {
 				super.fold("F");
@@ -117,12 +129,24 @@ public class AI extends Player {
 		int decision = choice.nextInt(100);
 
 		// If AI has a stack less than minBet then they only have 2 actions to play
-		if (super.getStack() <= minBet || super.getStack() <= super.getHighBet()) {
+		if (super.getStack() <= minBet) {
 			if (decision < 10) {
 				super.allIn("A");
 			}
 			else {
 				super.fold("F");
+			}
+		}
+
+		else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
+			if (decision < 20) {
+				super.allIn("A");
+			}
+			else if (decision >= 20 && decision < 60) {
+				super.fold("F");
+			}
+			else {
+				super.BetRaise("B", betInterval);
 			}
 		}
 
@@ -164,40 +188,55 @@ public class AI extends Player {
 		while (canBet == false) {
 			int betting = bet.nextInt(super.getStack() + 1); // Creating a random number for betting
 
+			// Checks bet decision
 			if (decision == "B") {
-				if (super.getStack() / 2 <= minBet || super.getStack() < minBet) {
-					returnBet = minBet;
-					canBet = true;
-				}
-
-				else {
-					// Probability of betting or raising alot is 10%
-					if (betProb < 10) {
-						// Must bet or raise more than half of AI's stack as rule
-						if (betting < super.getStack() && betting >= (super.getStack() / 2)) {
+				// Probability of betting alot is 10%
+				if (betProb < 10) {
+					// Must bet more than half of AI's stack as rule
+					if (betting < super.getStack() && betting >= (super.getStack() / 2)) {
+						if (betting <= 2 * betInterval) {
+							returnBet = 2 * betInterval;
+							canBet = true;
+						}
+						else {
 							returnBet = checkBetInterval("B", betting); // Checks if the betting amount is an interval of betting
 							canBet = true; // Condition satisfied and betting amount modified to break loop
 						}
 					}
+				}
 
-					// Probability of betting or raising low is 90%
-					else if (betProb >= 10) {
-						// Must bet or raise less than half of AI's stack
-						if (betting < (super.getStack() / 2) && betting >= minBet) {
-							returnBet = checkBetInterval("B", betting); // Checks if the betting amount is an interval of betting
-							canBet = true; // Condition satisfied and betting amount modified to break loop
-						}
+				// Probability of betting low is 90%
+				else if (betProb >= 10) {
+					// Must bet less than half of AI's stack
+					if (betting < (super.getStack() / 2) && betting >= minBet) {
+						returnBet = checkBetInterval("B", betting); // Checks if the betting amount is an interval of betting
+						canBet = true; // Condition satisfied and betting amount modified to break loop
 					}
 				}
 			}
 
+			// RAISE IS NOT WORKING PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+			// Checks raise decision
 			else if (decision == "R") {
 				if (betting > super.getHighBet() && betting < super.getStack()) {
-					if (betProb < 10 && betting >= (super.getStack() / 2)) {
-						returnBet = checkBetInterval("R", betting);
-						canBet = true;
+					// Probability of raising alot is 10%
+					if (betProb < 10) {
+						if (super.getStack() - betInterval <= betting) {
+							returnBet = super.getHighBet() + betInterval;
+							canBet = true;
+						}
+						else {
+							returnBet = checkBetInterval("R", betting);
+							canBet = true;
+						}
 					}
-					else if (betProb >= 10 && betting < (super.getStack() / 2)) {
+					// Probability of raising low is 90%
+					else if (betProb >= 10) {
+						if (super.getStack() - betInterval <= betting) {
+							returnBet = super.getHighBet() + betInterval;
+							canBet = true;
+						}
 						returnBet = checkBetInterval("R", betting);
 						canBet = true;
 					}
@@ -209,6 +248,8 @@ public class AI extends Player {
 		return returnBet;
 	}
 
+	// ONLY RETURN ONCE!!!!!!!!!!!!!!!!!!!!!!!
+	// FIX THIS METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	/**
 	 * This method will check if betting amount is an interval of betting
 	 * 
@@ -220,25 +261,47 @@ public class AI extends Player {
 		int checkBet = returnBet % betInterval; // Checks if bet amount from AI is a betting interval
 		double halfWayP = betInterval / 2; // Mid point of betting interval
 
-		if (checkBet != 0) {
-			if ((double) checkBet < halfWayP) {
-				returnBet -= checkBet;
-				return returnBet;
+		if (decision == "B") {
+			// Rounds the bet amount to the closest bet interval
+			if (checkBet != 0) {
+				if ((double) checkBet < halfWayP) { // Rounds down the bet amount
+					returnBet -= checkBet;
+				}
+				else { // Rounds up the bet amount
+					// Rounds down bet amount if it is too close to AI stack
+					if (returnBet + betInterval - checkBet == super.getStack()) {
+						returnBet -= checkBet;
+					}
+					else {
+						returnBet += (betInterval - checkBet);
+					}
+				}
 			}
-			else {
-				if (returnBet + betInterval - (int) checkBet == super.getStack()) {
+		}
+
+		else if (decision == "R") {
+			if (checkBet != 0) {
+				if ((double) checkBet < halfWayP) {
 					returnBet -= checkBet;
 					return returnBet;
 				}
 				else {
-					returnBet += (betInterval - (int) checkBet);
-					return returnBet;
+					if (returnBet + betInterval - (int) checkBet == super.getStack()) {
+						returnBet -= checkBet;
+						return returnBet;
+					}
+					else {
+						returnBet += (betInterval - (int) checkBet);
+						return returnBet;
+					}
 				}
 			}
+			else {
+				return returnBet;
+			}
 		}
-		else {
-			return returnBet;
-		}
+
+		return returnBet;
 	}
 
 }
