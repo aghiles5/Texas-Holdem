@@ -357,7 +357,6 @@ public class GUI extends Application {
 			raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
 			raiseSlider.setMax(user.getStack());
 			raiseSlider.setMajorTickUnit(user.getStack() - (game.getSmallBlind() + game.getHighestBet()));
-			System.out.println((((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1));
 			raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
 		}
 		
@@ -850,9 +849,10 @@ public class GUI extends Application {
 		
 		ScaleTransition hide = new ScaleTransition(); //The back is scaled to a line to be invisible
 		hide.setByX(-1);
-		hide.setDuration(Duration.millis(200));
 		if (fast)
 			hide.setDuration(Duration.millis(1));
+		else
+			hide.setDuration(Duration.millis(200));
 		if (reversed)
 			hide.setNode(cardFront);
 		else
@@ -860,9 +860,10 @@ public class GUI extends Application {
 		
 		ScaleTransition show = new ScaleTransition(); //The face is returned from a line to full size
 		show.setByX(1);
-		show.setDuration(Duration.millis(200));
 		if (fast)
 			show.setDuration(Duration.millis(1));
+		else
+			show.setDuration(Duration.millis(200));
 		if (reversed)
 			show.setNode(cardBack);
 		else
