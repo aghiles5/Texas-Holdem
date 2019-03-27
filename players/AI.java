@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/26/2019
+ * @version 03/27/2019
  */
 
 
@@ -231,7 +231,7 @@ public class AI extends Player {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
-						else {
+						else if (betting < super.getStack()) {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
@@ -242,7 +242,7 @@ public class AI extends Player {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
-						else {
+						else if (betting < super.getStack()) {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
