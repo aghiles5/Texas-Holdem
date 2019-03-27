@@ -351,14 +351,14 @@ public class GUI extends Application {
 			raise.setDisable(true);
 			call.setText("All-In");
 		}
-		else
+		else {
 			raise.setDisable(false);
-		
-		raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
-		raiseSlider.setMax(user.getStack());
-		raiseSlider.setMajorTickUnit(user.getStack() - (game.getSmallBlind() + game.getHighestBet()));
-		System.out.println((((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1));
-		raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
+			raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
+			raiseSlider.setMax(user.getStack());
+			raiseSlider.setMajorTickUnit(user.getStack() - (game.getSmallBlind() + game.getHighestBet()));
+			System.out.println((((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1));
+			raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
+		}
 		
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
