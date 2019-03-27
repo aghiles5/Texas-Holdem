@@ -335,13 +335,17 @@ public class GUI extends Application {
 		
 		if (user.getBet() == game.getHighestBet())
 			call.setText("Check");
-		else if (game.getHighestBet() == 0)
+		if (game.getHighestBet() == 0)
 			raise.setText("Bet");
-		
 		if (user.getStack() < (game.getHighestBet() - user.getBet())) {
 			raise.setDisable(true);
 			call.setText("All-In");
 		}
+		
+		if (game.getHighestBet() == 0)
+			raiseSlider.setMin(game.getSmallBlind());
+		else
+			raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
 		raiseSlider.setMax(user.getStack());
 		raiseSlider.setMajorTickUnit(user.getStack() - game.getSmallBlind());
 		raiseSlider.setMinorTickCount(((user.getStack() - game.getSmallBlind()) / (game.getSmallBlind() / 25)) - 1);
