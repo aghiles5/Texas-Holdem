@@ -81,6 +81,7 @@ public class AI extends Player {
 			}
 		}
 
+		// if AI has sufficient stack but has insufficient stack to raise to the next interval, then AI only has 3 actions to play
 		else if (super.getStack() > minBet && super.getStack() - betInterval <= super.getHighBet()) {
 			if (decision < 10) {
 				super.allIn("A");
@@ -93,6 +94,7 @@ public class AI extends Player {
 			}
 		}
 
+		// AI has sufficient stack to raise more than one bet interval
 		else {
 			// AI fold action
 			if (decision < 10) {
@@ -138,6 +140,7 @@ public class AI extends Player {
 			}
 		}
 
+		// When AI has suffifient stack but can only bet to the bet interval
 		else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
 			if (decision < 20) {
 				super.allIn("A");
@@ -150,6 +153,7 @@ public class AI extends Player {
 			}
 		}
 
+		// AI has sufficient stack to bet more than the minimum bet amount
 		else {
 			// AI check action
 			if (decision < 63) {
@@ -183,7 +187,7 @@ public class AI extends Player {
 		Random betMount = new Random(); // Probability of betting/raising alot or little
 		int betProb = betMount.nextInt(100);
 		int returnBet = 0;
-		int minRaise = super.getStack() + betInterval;
+		// int minRaise = super.getStack() + betInterval;
 		Boolean canBet = false;
 
 		while (canBet == false) {
