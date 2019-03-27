@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/26/2019
+ * @version 03/27/2019
  */
 
 
@@ -231,7 +231,7 @@ public class AI extends Player {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
-						else {
+						else if (betting < super.getStack()) {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
@@ -242,7 +242,7 @@ public class AI extends Player {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
-						else {
+						else if (betting < super.getStack()) {
 							returnBet = checkBetInterval("R", betting);
 							canBet = true;
 						}
@@ -286,10 +286,15 @@ public class AI extends Player {
 		}
 
 		else if (decision == "R") {
-			if (checkBet != 0) {
-				if ((double) checkBet < halfWayP) {
-					if (returnBet - checkBet == super.getHighBet()) {
-						returnBet += checkBet;
+			if (checkBet != 0) { // This will round the raise amount if it is not an interval for raising
+				if ((double) checkBet < halfWayP) { // This will round the raise amount down
+					if (returnBet - checkBet <= super.getHighBet()) {
+						if (returnBet + checkBet >= super.getStack()) {
+							returnBet -= checkBet;
+						}
+						else {
+							returnBet += checkBet;
+						}
 					}
 					else {
 						returnBet -= checkBet;
