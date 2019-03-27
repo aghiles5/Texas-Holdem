@@ -286,10 +286,15 @@ public class AI extends Player {
 		}
 
 		else if (decision == "R") {
-			if (checkBet != 0) {
-				if ((double) checkBet < halfWayP) {
-					if (returnBet - checkBet == super.getHighBet()) {
-						returnBet += checkBet;
+			if (checkBet != 0) { // This will round the raise amount if it is not an interval for raising
+				if ((double) checkBet < halfWayP) { // This will round the raise amount down
+					if (returnBet - checkBet <= super.getHighBet()) {
+						if (returnBet + checkBet >= super.getStack()) {
+							returnBet -= checkBet;
+						}
+						else {
+							returnBet += checkBet;
+						}
 					}
 					else {
 						returnBet -= checkBet;
