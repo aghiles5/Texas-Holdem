@@ -296,7 +296,7 @@ public class AI extends Player {
 					}
 				}
 				else {
-					if (returnBet + betInterval - (int) checkBet == super.getStack()) {
+					if (returnBet + betInterval - (int) checkBet >= super.getStack()) {
 						returnBet -= checkBet;
 					}
 					else {
