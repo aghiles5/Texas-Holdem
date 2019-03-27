@@ -311,7 +311,7 @@ public class Game {
     public boolean isBetRoundRunning() {
         if (roundNum == 0) {
         	if (highestBet == smallBlind * 2) {
-        		if (playerCount == 2) {
+        		if ((playerCount == 2) || (players.size() == 2 && playerCount == 0)) {
 		            int BBCounter = 0;
 		            for (Player player : players) {
 		                if (player.getBet() == smallBlind * 2) {
