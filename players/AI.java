@@ -142,10 +142,10 @@ public class AI extends Player {
 
 		// When AI has suffifient stack but can only bet to the bet interval
 		else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
-			if (decision < 20) {
+			if (decision < 10) {
 				super.allIn("A");
 			}
-			else if (decision >= 20 && decision < 60) {
+			else if (decision >= 10 && decision < 60) {
 				super.fold("F");
 			}
 			else {
