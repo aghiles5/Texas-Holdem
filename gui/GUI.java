@@ -230,11 +230,12 @@ public class GUI extends Application {
 		}
 		
 		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
-			while (game.getRound() != 4) {
+			if (game.getRound() != 4) {
 				game.incrementRound();
 				interRound(scene, game);
 			}
-			showdown(scene, game);
+			else
+				showdown(scene, game);
 		}
 		
 		HBox notif = (HBox) scene.lookup("#notif");
@@ -256,7 +257,10 @@ public class GUI extends Application {
 	 */
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
-		if (player instanceof Human) {
+		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
+			interRound(scene, game);
+		}
+		else if (player instanceof Human) {
 			if (game.getRound() == 0) {
 				if (game.getPlayerCount() == 0 && game.getHighestBet() == 0) {
 					game.bet(game.getSmallBlind());
@@ -353,6 +357,7 @@ public class GUI extends Application {
 		raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
 		raiseSlider.setMax(user.getStack());
 		raiseSlider.setMajorTickUnit(user.getStack() - (game.getSmallBlind() + game.getHighestBet()));
+		System.out.println((((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1));
 		raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
 		
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
