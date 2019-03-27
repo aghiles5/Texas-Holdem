@@ -197,9 +197,8 @@ public class ActionBar {
 		raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observables,
                 Number oldValue, Number newValue) {
-            		//int intAmount = (((newValue.intValue() + (int) (stackSize * 0.0005)) / (int) (stackSize * 0.001))) * (int) (stackSize * 0.001);
-                    //sliderLabel.setText((new MoneyFormatter(intAmount)).toString());
-            		sliderLabel.setText("" + newValue);
+            		int intAmount = (((newValue.intValue() + (int) (stackSize * 0.0005)) / (int) (stackSize * 0.001))) * (int) (stackSize * 0.001);
+                    sliderLabel.setText((new MoneyFormatter(intAmount)).toString());
             }
         });
 		

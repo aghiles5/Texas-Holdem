@@ -140,7 +140,7 @@ public class GUI extends Application {
 		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				game.bet((int) ((Slider) scene.lookup("#raiseSlider")).getValue());
+				game.bet(((int) ((Slider) scene.lookup("#raiseSlider")).getValue()) - game.getHighestBet());
 				finishUserTurn(scene, game);
 			}
 		});
@@ -204,7 +204,7 @@ public class GUI extends Application {
 	 */
 	private void interRound(Scene scene, Game game) {
 		Boolean fast = false;
-		if (game.isBetRoundRunning())
+		if (game.isUserFolded())
 			fast = true;
 		
 		if (game.getRound() == 1)
@@ -335,16 +335,19 @@ public class GUI extends Application {
 		
 		if (user.getBet() == game.getHighestBet())
 			call.setText("Check");
-		else if (game.getHighestBet() == 0)
+		if (game.getHighestBet() == 0)
 			raise.setText("Bet");
-		
+		else
+			raise.setText("Raise");
 		if (user.getStack() < (game.getHighestBet() - user.getBet())) {
 			raise.setDisable(true);
 			call.setText("All-In");
 		}
+		
+		raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
 		raiseSlider.setMax(user.getStack());
-		raiseSlider.setMajorTickUnit(user.getStack() - game.getSmallBlind());
-		raiseSlider.setMinorTickCount(((user.getStack() - game.getSmallBlind()) / (game.getSmallBlind() / 25)) - 1);
+		raiseSlider.setMajorTickUnit(user.getStack() - (game.getSmallBlind() + game.getHighestBet()));
+		raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
 		
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
