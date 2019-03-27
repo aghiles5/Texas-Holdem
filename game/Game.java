@@ -309,8 +309,7 @@ public class Game {
     }
 
     public boolean isBetRoundRunning() {
-        if (playerCount == 1 && roundNum == 0 && highestBet == smallBlind * 2) {
-        	System.out.println("1");
+        if (playerCount == 2 && roundNum == 0 && highestBet == smallBlind * 2) {
             int BBCounter = 0;
             for (Player player : players) {
                 if (player.getBet() == smallBlind * 2) {
@@ -323,7 +322,6 @@ public class Game {
                 return false;
             }
         } else if (roundNum != 0 && highestBet == 0) {
-        	System.out.println("2");
             int checkCount = 0;
             for (Player player : players) {
                 if (player.getAction() == "Checked") {
@@ -336,7 +334,6 @@ public class Game {
                 return false;
             }
         } else if (highestBet != 0) {
-        	System.out.println("3");
             int betCounter = 0;
             for (Player player : players) {
                 if (player.getBet() == highestBet) {
