@@ -330,6 +330,10 @@ public class AI extends Player {
 						returnBet += (betInterval - (int) checkBet);
 					}
 				}
+
+				if (returnBet >= super.getStack()) {
+					returnBet -= betInterval;
+				}
 			}
 		}
 		return returnBet;
