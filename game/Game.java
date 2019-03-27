@@ -276,7 +276,7 @@ public class Game {
             roundPlayers.get(playerCount).getDecision();
         }
 
-        if (roundPlayers.get(playerCount).getBet() != 0) {
+        if (roundPlayers.get(playerCount).getBet() > highBetHolder) {
             highBetHolder = roundPlayers.get(playerCount).getBet();
         }
 
