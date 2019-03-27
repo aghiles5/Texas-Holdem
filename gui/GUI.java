@@ -258,6 +258,7 @@ public class GUI extends Application {
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
 		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
+			game.incrementRound();
 			interRound(scene, game);
 		}
 		else if (player instanceof Human) {
