@@ -204,7 +204,7 @@ public class GUI extends Application {
 	 */
 	private void interRound(Scene scene, Game game) {
 		Boolean fast = false;
-		if (game.isBetRoundRunning())
+		if (game.isUserFolded())
 			fast = true;
 		
 		if (game.getRound() == 1)
