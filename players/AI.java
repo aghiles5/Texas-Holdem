@@ -86,7 +86,7 @@ public class AI extends Player {
 			if (decision < 10) {
 				super.allIn("A");
 			}
-			else if (decision >= 10 && decision < 55) {
+			else if (decision >= 10 && decision < 40) {
 				super.call("L");
 			}
 			else {
