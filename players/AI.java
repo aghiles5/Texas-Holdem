@@ -183,6 +183,7 @@ public class AI extends Player {
 		Random betMount = new Random(); // Probability of betting/raising alot or little
 		int betProb = betMount.nextInt(100);
 		int returnBet = 0;
+		int minRaise = super.getStack() + betInterval;
 		Boolean canBet = false;
 
 		while (canBet == false) {
@@ -215,7 +216,7 @@ public class AI extends Player {
 				}
 			}
 
-			// RAISE IS NOT WORKING PROPERLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// POSSIBLE RUNTIME ERRORS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 			// Checks raise decision
 			else if (decision == "R") {
@@ -237,19 +238,20 @@ public class AI extends Player {
 							returnBet = super.getHighBet() + betInterval;
 							canBet = true;
 						}
-						returnBet = checkBetInterval("R", betting);
-						canBet = true;
+						else {
+							returnBet = checkBetInterval("R", betting);
+							canBet = true;
+						}
 					}
 				}
 			}
-
 		}
 
 		return returnBet;
 	}
 
-	// ONLY RETURN ONCE!!!!!!!!!!!!!!!!!!!!!!!
-	// FIX THIS METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// POSSIBEL RUNTIME ERRORS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	/**
 	 * This method will check if betting amount is an interval of betting
 	 * 
@@ -282,25 +284,23 @@ public class AI extends Player {
 		else if (decision == "R") {
 			if (checkBet != 0) {
 				if ((double) checkBet < halfWayP) {
-					returnBet -= checkBet;
-					return returnBet;
+					if (returnBet - checkBet == super.getHighBet()) {
+						returnBet += checkBet;
+					}
+					else {
+						returnBet -= checkBet;
+					}
 				}
 				else {
 					if (returnBet + betInterval - (int) checkBet == super.getStack()) {
 						returnBet -= checkBet;
-						return returnBet;
 					}
 					else {
 						returnBet += (betInterval - (int) checkBet);
-						return returnBet;
 					}
 				}
 			}
-			else {
-				return returnBet;
-			}
 		}
-
 		return returnBet;
 	}
 
