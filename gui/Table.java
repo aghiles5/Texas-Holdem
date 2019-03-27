@@ -1,6 +1,8 @@
+package gui;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import cards.Card;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -17,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
+import players.Player;
 
 /**
  * All aspects relating to the poker table image in the GUI are created here.

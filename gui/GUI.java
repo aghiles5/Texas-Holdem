@@ -1,6 +1,8 @@
+package gui;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
+import cards.Card;
+import game.Game;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
@@ -9,10 +11,12 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import players.AI;
+import players.Human;
+import players.Player;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

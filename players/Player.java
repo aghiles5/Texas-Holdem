@@ -1,4 +1,8 @@
+package players;
 import java.util.ArrayList;
+
+import cards.Card;
+import cards.Hand;
 
 /**
  * An abstract class that; Manages each players' amount of money, their two card
@@ -10,7 +14,7 @@ import java.util.ArrayList;
  *
  */
 public class Player {
-	protected int stack; // Tracks each player's stack of money
+	public int stack; // Tracks each player's stack of money
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
 	protected Hand hand; // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player

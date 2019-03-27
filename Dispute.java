@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import cards.Card;
+
 /**
  * In the cases that two hands have the same rank the ranks of the cards 
  * that make up those hands will have to be compared to determine which

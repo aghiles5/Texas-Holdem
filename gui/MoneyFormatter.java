@@ -1,3 +1,4 @@
+package gui;
 public class MoneyFormatter {
 	private String label = "";
 	

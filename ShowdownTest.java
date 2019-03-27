@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+import cards.Card;
+import cards.Deck;
+import players.Human;
+import players.Player;
+
 
 /**
  * This class provides an environment for testing methods from the Showdown

@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+import cards.Card;
+import cards.Deck;
+import players.Human;
+import players.Player;
+
 public class GUITest {
 	public static Deck testDeck = new Deck();
 	

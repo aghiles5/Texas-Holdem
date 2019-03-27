@@ -8,6 +8,12 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import cards.Card;
+import cards.Deck;
+import players.Human;
+import players.Player;
+
 import java.io.IOException;
 
 public class Main {

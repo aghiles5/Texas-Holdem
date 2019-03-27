@@ -1,3 +1,4 @@
+package cards;
 /** 
  * The Card class stores and handles information for a virtual playing card. 
  * The suit of the card is stored as an byte corresponding to the index of 

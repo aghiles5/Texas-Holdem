@@ -1,3 +1,4 @@
+package game;
 
 /**
  * Main class for the game as the game is controlled here
@@ -9,6 +10,12 @@
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import cards.Card;
+import cards.Deck;
+import players.AI;
+import players.Human;
+import players.Player;
 
 public class Game {
 

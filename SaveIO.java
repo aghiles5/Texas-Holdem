@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.ArrayList;
 
+import game.Game;
+import players.Player;
+
 /**
  * Saves All names and their stacks in a file.
  * @author Kyle Wen
