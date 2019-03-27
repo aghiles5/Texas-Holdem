@@ -101,12 +101,12 @@ public class ActionBar {
 				Slider raiseSlider = new Slider(stackSize * 0.025, stackSize, stackSize / 2);
 				raiseSlider.setMinWidth(250);
 				raiseSlider.setShowTickLabels(true);
-				raiseSlider.setMajorTickUnit(stackSize);
-				raiseSlider.setMinorTickCount((int) ((stackSize * 0.001) - 1));
+				raiseSlider.setMajorTickUnit(stackSize - stackSize * 0.025);
+				raiseSlider.setMinorTickCount(974);
 				raiseSlider.setSnapToTicks(true);
 				raiseSlider.setId("raiseSlider");
 				
-				Label sliderLabel = new Label("$50 000");
+				Label sliderLabel = new Label((new MoneyFormatter(stackSize / 2)).toString());
 				sliderLabel.getStyleClass().add("bar-label");
 				
 			sliderBox.getChildren().addAll(raiseSlider, sliderLabel);
@@ -197,18 +197,9 @@ public class ActionBar {
 		raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observables,
                 Number oldValue, Number newValue) {
-            		String betAmount = "";
-            		int intAmount = ((newValue.intValue() + (int) (stackSize * 0.0005)) / (int) (stackSize * 0.001)) * (int) (stackSize * 0.001), digitCounter = 0;
-            		while (intAmount != 0) {
-            			if (digitCounter % 3 == 0 && digitCounter != 0)
-            				betAmount = intAmount % 10 + " " + betAmount;
-            			else
-            				betAmount = intAmount % 10 + betAmount;
-            			intAmount /= 10;
-            			digitCounter++;
-            		}
-            		betAmount = "$" + betAmount;
-                    sliderLabel.setText(betAmount);
+            		//int intAmount = (((newValue.intValue() + (int) (stackSize * 0.0005)) / (int) (stackSize * 0.001))) * (int) (stackSize * 0.001);
+                    //sliderLabel.setText((new MoneyFormatter(intAmount)).toString());
+            		sliderLabel.setText("" + newValue);
             }
         });
 		
