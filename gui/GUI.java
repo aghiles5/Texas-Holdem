@@ -274,7 +274,7 @@ public class GUI extends Application {
 			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
 			player = game.processTurn();
 			
-			PauseTransition pause = new PauseTransition(new Duration(2000));
+			PauseTransition pause = new PauseTransition(new Duration(1000));
 			
 			if (game.isUserFolded())
 				pause.setDuration(new Duration(1));
@@ -337,7 +337,8 @@ public class GUI extends Application {
 			call.setText("All-In");
 		}
 		raiseSlider.setMax(user.getStack());
-		raiseSlider.setMajorTickUnit(user.getStack());
+		raiseSlider.setMajorTickUnit(user.getStack() - game.getSmallBlind());
+		raiseSlider.setMinorTickCount(((user.getStack() - game.getSmallBlind()) / (game.getSmallBlind() / 25)) - 1);
 		
 		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
