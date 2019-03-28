@@ -57,7 +57,7 @@ public class GUI extends Application {
 		MainMenu menu = new MainMenu();
 		
 		Scene scene = new Scene(menu.getMenu(), WIN_WIDTH, WIN_HEIGHT);
-		scene.getStylesheets().add("tableStyle.css");
+		scene.getStylesheets().add("/gui/tableStyle.css");
 		scene.setFill(Color.BLACK);
 
 		primaryStage.setScene(scene);
