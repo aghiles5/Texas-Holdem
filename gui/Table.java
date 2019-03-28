@@ -439,12 +439,15 @@ public class Table {
 				// Game Over Notification
 				
 				HBox endGameNotif = new HBox();
-				endGameNotif.setSpacing(10);
+				endGameNotif.setMaxSize(WIN_WIDTH / 4, WIN_HEIGHT / 4);
+				endGameNotif.setSpacing(50);
 				endGameNotif.setAlignment(Pos.CENTER);
 				endGameNotif.setVisible(false);
+				endGameNotif.setId("endGameNotif");
 				endGameNotif.getStyleClass().add("custom-popup");
 				
 					Label endGameMsg = new Label("Game Over");
+					endGameMsg.getStyleClass().add("bar-label");
 					endGameMsg.setStyle("-fx-font-size: 36;");
 					endGameMsg.setId("endGameMsg");
 					
