@@ -106,18 +106,19 @@ public class GUI extends Application {
 					player.setAction(" ");
 					((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
 				}
-				 if (game.getRound() < 4)
-				 	runTurn(scene, game);
-				 else if (game.getRound() == 4) {
-				 	if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
-				 		showdown(scene, game);
-				 	else {
-				 		if (game.isGameOver())
-				 			gameOver(scene, game);
-				 		else
-				 			returnComm(scene, game);
-				 	}
-				 }
+				if (game.getRound() < 4) {
+					runTurn(scene, game);
+				}
+				else if (game.getRound() == 4) {
+					if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
+						showdown(scene, game);
+					else {
+						if (game.isGameOver())
+							gameOver(scene, game);
+						else
+							returnComm(scene, game);
+					}
+				}
 			}
 		});
 		
@@ -224,22 +225,6 @@ public class GUI extends Application {
 		((Label) scene.lookup("#wager")).setText("Highest Wager: $0");
 		for (Player player : game.getPlayers())
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
-		
-		if (game.isUserFolded()) { //If the user folded, fast track to showdown
-			if (game.getRound() == 4)
-				showdown(scene, game);
-			else
-				runTurn(scene, game);
-		}
-		
-		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
-			if (game.getRound() < 4) {
-				game.incrementRound();
-				interRound(scene, game);
-			}
-			else
-				showdown(scene, game);
-		}
 		
 		HBox notif = (HBox) scene.lookup("#notif");
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
