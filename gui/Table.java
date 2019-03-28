@@ -425,6 +425,7 @@ public class Table {
 				VBox dealerMoney = new VBox();
 				dealerMoney.setAlignment(Pos.CENTER);
 				dealerMoney.setSpacing(5);
+				dealerMoney.setMinWidth(250);
 				
 					Label pot = new Label("Pot: $0");
 					pot.setId("pot");

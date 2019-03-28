@@ -867,7 +867,7 @@ public class GUI extends Application {
 	 * @param cardBack the ImageView of the card's back
 	 * @param cardFront the ImageView of the card's face
 	 * @param reversed whether or not the animation should be reversed
-	 * @param fast whether or not the animation whould be fast
+	 * @param fast whether or not the animation should be fast
 	 */
 	private SequentialTransition flipCard(ImageView cardBack, ImageView cardFront, Boolean reversed, Boolean fast) {
 		SequentialTransition fullMotion = new SequentialTransition();
