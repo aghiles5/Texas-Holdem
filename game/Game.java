@@ -283,6 +283,8 @@ public class Game {
         setLastPlayer(roundPlayers.get(playerCount));
         if (roundPlayers.get(playerCount).getAction() == "Folded") {
             curPlayer = roundPlayers.get(playerCount);
+            pot += curPlayer.getBet();
+            curPlayer.setBet(0);
             roundPlayers.remove(playerCount);
             playerCount -= 1;
         }
@@ -431,6 +433,8 @@ public class Game {
     public void fold() {
         roundPlayers.get(playerCount).fold("F");
         setLastPlayer(roundPlayers.get(playerCount));
+        pot += roundPlayers.get(playerCount).getBet();
+        roundPlayers.get(playerCount).setBet(0);
         roundPlayers.remove(playerCount);
         playerCount -= 1;
         userFolded = true;
@@ -445,7 +449,7 @@ public class Game {
             roundPlayers.get(playerCount).check("C");
         }
 
-        else if (roundPlayers.get(playerCount).stack < (highestBet - roundPlayers.get(playerCount).getBet())) {
+        else if (roundPlayers.get(playerCount).stack <= (highestBet - roundPlayers.get(playerCount).getBet())) {
             roundPlayers.get(playerCount).allIn("A");
         }
 
