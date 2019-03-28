@@ -40,8 +40,6 @@ public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
-	private boolean allInTrack = false;
-	
 	/**
 	 * On the start of the GUI the main menu will be displayed and an
 	 * EventHandler for its start button will be created that starts
@@ -172,7 +170,7 @@ public class GUI extends Application {
 	 */
 	private void startPlayRound(Scene scene, Game game) {
 		ArrayList<Player> players = game.getPlayers();
-		for (Player player: players)
+		for (Player player : players)
 			((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE); //The blind/dealer chips are displayed as appropriate
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
@@ -234,7 +232,7 @@ public class GUI extends Application {
 				runTurn(scene, game);
 		}
 		
-		if (game.getPlayers().size() == 1 || allInTrack) { //If one player remains, they get the pot
+		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
 			if (game.getRound() < 4) {
 				game.incrementRound();
 				interRound(scene, game);
@@ -261,20 +259,21 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void runTurn(Scene scene, Game game) {
-		Boolean allInTrack = false;
-		int zeroStackCount = 0;
+		int allInCounter = 0;
 		for (Player player : game.getPlayers()) {
-			if (player.getAction() == "All In")
-				zeroStackCount++;
+			if (player.getStack() == 0)
+				allInCounter++;
 		}
-		if (zeroStackCount >= game.getPlayers().size() - 1)
-			allInTrack = true;
 		
 		Player player = game.getCurrentPlayer();
 		
-		if (game.getPlayers().size() == 1 || allInTrack) { //If one player remains or all but one player is all-in, fast track to showdown
+		if ((game.getPlayers().size() == 1) || (allInCounter == game.getPlayers().size())) { //If one player remains or all players are all-in, fast track to showdown
 			game.incrementRound();
 			interRound(scene, game);
+		}
+		else if (player.getStack() == 0) {
+			game.incrementPlayer();
+			runTurn(scene, game);
 		}
 		else if (player instanceof Human) {
 			if (game.getRound() == 0) {
@@ -450,7 +449,7 @@ public class GUI extends Application {
 		
 		if (player.getAction() == "Folded") {
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
-			((Label) scene.lookup("#pot")).setText((new MoneyFormatter(game.getPot())).toString());
+			((Label) scene.lookup("#pot")).setText("Pot: " + (new MoneyFormatter(game.getPot())).toString());
 		}
 	}
 	
