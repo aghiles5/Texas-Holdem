@@ -462,8 +462,7 @@ public class Game {
     }
 
     /**
-     * A temporary method used for DEMO 2, calls the player's action when the player
-     * chooses to check
+     * Calls the player's action when the player chooses to Call or Check
      */
     public void call() {
         if (roundPlayers.get(playerCount).getBet() == highestBet) {
@@ -481,11 +480,10 @@ public class Game {
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
-    /*
-     * private void allIn() { roundPlayers.get(playerCount).allIn("A");
-     * setLastPlayer(roundPlayers.get(playerCount)); }
+    /**
+     * Calls the player's action when the player chooses to Bet some amount of their
+     * stack
      */
-
     public void bet(int betAmt) {
         if (roundPlayers.get(playerCount).stack <= (betAmt + highestBet)) {
             roundPlayers.get(playerCount).allIn("A");
