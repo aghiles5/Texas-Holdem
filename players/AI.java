@@ -114,7 +114,7 @@ public class AI extends Player {
 			// AI raise action
 			else if (decision >= 75) {
 				int bet = checkAIRaise("R");
-				super.BetRaise("R", bet);
+				super.BetRaise("R", bet - super.getHighBet());
 			}
 		}
 	}
