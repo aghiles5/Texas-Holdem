@@ -42,6 +42,11 @@ public class AI extends Player {
 			cpuName.add(newNames[i]); // Adds each individual strings in newNames into cpuName
 		}
 	}
+	
+	// This method clears the list of CPU names
+	public static void clearCPUName() {
+		cpuName.clear();
+	}
 
 	// This method sets the name of AI and removes the name from the list to avoid duplicates
 	public void setCPUName() {

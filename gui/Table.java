@@ -25,7 +25,7 @@ import players.Player;
  * All aspects relating to the poker table image in the GUI are created here.
  * 
  * @author Adam Hiles
- * @version 03/23/19
+ * @version 03/28/19
  */
 public class Table {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();

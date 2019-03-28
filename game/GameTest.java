@@ -16,11 +16,11 @@ public class GameTest {
 	public void test_GameConstructor() {
 		Game game = new Game();
 
-		assertEquals(new Integer(0), game.getRound());
-		assertEquals(new Integer(0), game.getPlayerCount());
-		assertEquals(new Integer(0), game.getPot());
-		assertEquals(new Integer(0), game.getHighestBet());
-		assertEquals(new Integer(0), game.getSmallBlind());
+		assertEquals(0, game.getRound());
+		assertEquals(0, game.getPlayerCount());
+		assertEquals(0, game.getPot());
+		assertEquals(0, game.getHighestBet());
+		assertEquals(0, game.getSmallBlind());
 		assertEquals(new Boolean(false), game.isGameOver());
 	}
 
@@ -31,12 +31,12 @@ public class GameTest {
 		ArrayList<Player> players = new ArrayList<Player>();
 		players = game.generatePlayers(3, 1000);
 
-		assertEquals(new Integer(3), game.getPlayerList());
+		assertEquals(3, game.getPlayerList().size());
 		for (Player player : players) {
-			assertEquals(new Integer(2), player.getHole().size());
-			assertEquals(new Integer(1000), player.getStack());
+			assertEquals(2, player.getHole().size());
+			assertEquals(1000, player.getStack());
 		}
-		assertEquals(new Integer(25), game.getSmallBlind());
+		assertEquals(25, game.getSmallBlind());
 	}
 
 	// testing setupRound
@@ -47,17 +47,17 @@ public class GameTest {
 		players = game.generatePlayers(3, 1000);
 		game.setupRound();
 
-		assertEquals(new Integer(3), game.getPlayerList());
+		assertEquals(3, game.getPlayerList().size());
 		for (Player player : players) {
-			assertEquals(new Integer(2), player.getHole().size());
-			assertEquals(new Integer(1000), player.getStack());
+			assertEquals(2, player.getHole().size());
+			assertEquals(1000, player.getStack());
 		}
-		assertEquals(new Integer(25), game.getSmallBlind());
-		assertEquals(new Integer(0), game.getRound());
-		assertEquals(new Integer(0), game.getPlayerCount());
-		assertEquals(new Integer(0), game.getPot());
-		assertEquals(new Integer(0), game.getHighestBet());
-		assertEquals(new Integer(5), game.getComm().size());
+		assertEquals(25, game.getSmallBlind());
+		assertEquals(0, game.getRound());
+		assertEquals(0, game.getPlayerCount());
+		assertEquals(0, game.getPot());
+		assertEquals(0, game.getHighestBet());
+		assertEquals(5, game.getComm().size());
 	}
 
 	// testing incrementPlayer
@@ -69,7 +69,7 @@ public class GameTest {
 		game.setupRound();
 		game.incrementPlayer();
 
-		assertEquals(new Integer(0), game.getHighestBet());
-		assertEquals(new Integer(1), game.getPlayerCount());
+		assertEquals(0, game.getHighestBet());
+		assertEquals(1, game.getPlayerCount());
 	}
 }

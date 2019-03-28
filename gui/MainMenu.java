@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
  * can also be quit to desktop.
  * 
  * @author Adam Hiles
- * @version 03/23/19
+ * @version 03/28/19
  */
 public class MainMenu {
 	private StackPane menu;

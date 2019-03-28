@@ -34,7 +34,7 @@ import javafx.scene.shape.Ellipse;
  * displayed, new Games are created, and the main game loop is run from here.
  * 
  * @author Adam Hiles
- * @version 03/23/18
+ * @version 03/28/18
  */
 public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
@@ -83,56 +83,63 @@ public class GUI extends Application {
 	 * @param scene the GUI scene
 	 */
 	private void generatePlayArea(Scene scene, int playerNum, int stackSize) {
-		Game game = new Game();
+		Game game = new Game(); //The new game is created and its parameters are generated
 		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
 		game.setupRound();
 		ArrayList<Card> comm = game.getComm();
 		
-		BorderPane playArea = new BorderPane();
+		BorderPane playArea = new BorderPane(); //The GUI play area scene is created
 		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT, stackSize);
 		Table table = new Table(players, comm);
 		playArea.setBottom(actionBar.getBarPane());
 		playArea.setCenter(table.getTablePane());
 		scene.setRoot(playArea);
 		
-		((Button) scene.lookup("#notifCont")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#notifCont")).setOnAction(new EventHandler<ActionEvent>() { //Handler for notification acceptance button
 			@Override
 			public void handle(ActionEvent event) {
-				((HBox) scene.lookup("#notif")).setVisible(false);
+				((HBox) scene.lookup("#notif")).setVisible(false); //Certain nodes are made invisible and disabled
 				((Button) scene.lookup("#save")).setDisable(true);
 				((Button) scene.lookup("#help")).setDisable(true);
 				((Button) scene.lookup("#quit")).setDisable(true);
-				for (Player player : game.getPlayers()) {
-					if ((!(game.getRound() == 4 && player.getStack() == 0)) || (!(player.getAction() == "All In"))) {
+				
+				for (Player player : game.getPlayers()) { //Each player not all-in has their action reset
+					if (!(player.getStack() == 0)) {
 						player.setAction(" ");
 						((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
 					}
 				}
-				if (game.getRound() < 4) {
+				
+				if (game.getRound() < 4) { //The sequence of player turns is started for betting rounds
 					runTurn(scene, game);
 				}
-				else if (game.getRound() == 4) {
-					if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown")
+				else if (game.getRound() == 4) { //Special behavior is applied for the showdown
+					if (((Label) scene.lookup("#notifLabel")).getText() == "Showdown") //The showdown method is called
 						showdown(scene, game);
-					else {
-						if (game.isGameOver())
+					else { //The winner display carries out these actions on dismissal
+						if (game.isGameOver()) //The game over screen is displayed
 							gameOver(scene, game);
-						else
+						else { //Otherwise the bet (hand) labels are reset and cards are returned to the deck
+							for (Player player : game.getPlayers()) {
+								((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
 							returnComm(scene, game);
+							}
+						}
 					}
 				}
 			}
 		});
 		
-		((Button) scene.lookup("#playAgain")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#playAgain")).setOnAction(new EventHandler<ActionEvent>() { //Handler for the end game play again button
 			@Override
 			public void handle(ActionEvent event) {
 				((HBox) scene.lookup("#endGameNotif")).setVisible(false);
+				((Button) scene.lookup("#quit")).setDisable(true);
 				generatePlayArea(scene, playerNum, stackSize);
 			}
 		});
 		
-		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#fold")).setOnAction(new EventHandler<ActionEvent>() { //Handler for the user's fold button
 			@Override
 			public void handle(ActionEvent event) {
 				game.fold();
@@ -140,7 +147,7 @@ public class GUI extends Application {
 			}
 		});
 		
-		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() { //Handler for the confirm button of the user's raise slider
 			@Override
 			public void handle(ActionEvent event) {
 				if (scene.lookup("#raiseConfirm").isDisabled() == true)
@@ -151,7 +158,7 @@ public class GUI extends Application {
 			}
 		});
 		
-		((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#call")).setOnAction(new EventHandler<ActionEvent>() { //Handler for the user's call button
 			@Override
 			public void handle(ActionEvent event) {
 				game.call();
@@ -159,7 +166,7 @@ public class GUI extends Application {
 			}
 		});
 		
-		startPlayRound(scene, game);
+		startPlayRound(scene, game); //The first round of play is begun
 	}
 	
 	/**
@@ -173,6 +180,7 @@ public class GUI extends Application {
 	 */
 	private void startPlayRound(Scene scene, Game game) {
 		ArrayList<Player> players = game.getPlayers();
+		
 		for (Player player : players)
 			((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE); //The blind/dealer chips are displayed as appropriate
@@ -184,18 +192,19 @@ public class GUI extends Application {
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
 		}
 		
-		for (Player player : players) { //Each player's cards are updated and bets are returned to 0
+		for (Player player : players) { //Each player's cards are updated and bets are returned to 0, their action is also reset
 			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
 			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
+			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
 		}
 		
-		for(int index = 0; index < 5; index++) {
+		for(int index = 0; index < 5; index++) { //The community cards are updated
 			ArrayList<Card> comm = game.getComm();
 			((ImageView) scene.lookup("#commFront" + index)).setImage(new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png"));
 		}
 		
-		shuffleDeck(scene, game);
+		shuffleDeck(scene, game); //The deck shuffle animation is played
 	}
 	
 	/**
@@ -213,22 +222,22 @@ public class GUI extends Application {
 		if (game.isUserFolded())
 			fast = true;
 		
-		if (game.getRound() == 1)
+		if (game.getRound() == 1) //Community cards are dealt and shown as appropriate
 			dealFlop(scene, game);
 		else if (game.getRound() == 2)
 			dealStreet(scene, (ImageView) scene.lookup("#commBack3"), (ImageView) scene.lookup("#commFront3"), fast);
 		else if (game.getRound() == 3)
 			dealStreet(scene, (ImageView) scene.lookup("#commBack4"), (ImageView) scene.lookup("#commFront4"), fast);
 		
-		((Button) scene.lookup("#help")).setDisable(false);
+		((Button) scene.lookup("#help")).setDisable(false); //Settings buttons are disabled
 		((Button) scene.lookup("#quit")).setDisable(false);
 		
-		((Label) scene.lookup("#pot")).setText("Pot: " + (new MoneyFormatter(game.getPot()).toString()));
+		((Label) scene.lookup("#pot")).setText("Pot: " + (new MoneyFormatter(game.getPot()).toString())); //The pot is updated and the highest wager is reset
 		((Label) scene.lookup("#wager")).setText("Highest Wager: $0");
-		for (Player player : game.getPlayers())
+		for (Player player : game.getPlayers()) //The players' bet is reset
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
 		
-		HBox notif = (HBox) scene.lookup("#notif");
+		HBox notif = (HBox) scene.lookup("#notif"); //The notification is set and displayed
 		Label notifLabel = (Label) scene.lookup("#notifLabel");
 		notifLabel.setText(game.getRoundString());
 		
@@ -258,44 +267,34 @@ public class GUI extends Application {
 			game.incrementRound();
 			interRound(scene, game);
 		}
-		else if (player.getStack() == 0) {
+		else if (player.getStack() == 0) { //If a player has gone all-in they cannot do an action
 			game.incrementPlayer();
 			runTurn(scene, game);
 		}
-		else if (player instanceof Human) {
+		else if (player instanceof Human) { //The user is directed to an appropriate method
 			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
-			if (game.getRound() == 0) {
-				if (game.getPlayerCount() == 0 && game.getHighestBet() == 0) {
+			if (game.getRound() == 0) { //For the blind round
+				if (game.getPlayerCount() == 0 && game.getHighestBet() == 0) { //If the user is the small blind
 					game.bet(game.getSmallBlind());
 					
-					PauseTransition pause = new PauseTransition(new Duration(1000));
-					
-					if (game.isUserFolded())
-						pause.setDuration(new Duration(1));
-					
+					PauseTransition pause = new PauseTransition(new Duration(1000)); //A pause is added for effect
 					pause.setOnFinished(e -> finishUserTurn(scene, game));
-					
 					pause.play();
 				}
-				else if (game.getPlayerCount() == 1 && game.getHighestBet() == game.getSmallBlind()) {
+				else if (game.getPlayerCount() == 1 && game.getHighestBet() == game.getSmallBlind()) { //If the user is the big blind
 					game.bet(game.getSmallBlind());
 					
 					PauseTransition pause = new PauseTransition(new Duration(1000));
-					
-					if (game.isUserFolded())
-						pause.setDuration(new Duration(1));
-					
 					pause.setOnFinished(e -> finishUserTurn(scene, game));
-					
 					pause.play();
 				}
 				else
-					setupUserTurn(player, scene, game);
+					setupUserTurn(player, scene, game); //Else the action bar is setup for the user's turn in the blind round
 			}
 			else
-				setupUserTurn(player, scene, game);
+				setupUserTurn(player, scene, game); //Else the action bar is setup for the user's turn
 		}
-		else {
+		else { //AI players complete their action with a short pause
 			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
 			player = game.processTurn();
 			
@@ -320,12 +319,12 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void finishAITurn(Scene scene, Game game) {
-		Player player = game.getLastPlayer();
+		Player player = game.getLastPlayer(); //The player's information is updated and the player count is incremented
 		updatePlayerInfo(player, scene, game);
 		game.incrementPlayer();
 		((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		
-		if (player.getAction() == "Folded") {
+		if (player.getAction() == "Folded") { //If the AI folds their cards are returned to the deck
 			Boolean fast = false;
 			if (game.isUserFolded())
 				fast = true;
@@ -333,9 +332,9 @@ public class GUI extends Application {
 			returnHole(scene, player, false, fast).play();
 		}
 		
-		if (game.isBetRoundRunning())
+		if (game.isBetRoundRunning()) //Continuing the round calls for the next player's turn
 			runTurn(scene, game);
-		else
+		else //The end of the round calls for the interim round message
 			interRound(scene, game);
 	}
 	
@@ -351,41 +350,41 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void setupUserTurn(Player user, Scene scene, Game game) {
-		Button call = (Button) scene.lookup("#call");
+		Button call = (Button) scene.lookup("#call"); //Needed nodes are found
 		Button raise = (Button) scene.lookup("#raise");
 		Button raiseConfirm = (Button) scene.lookup("#raiseConfirm");
 		HBox controls = (HBox) scene.lookup("#controls");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
-		if (user.getBet() == game.getHighestBet())
+		if (user.getBet() == game.getHighestBet()) //The check/call button is set as appropriate
 			call.setText("Check");
 		else
 			call.setText("Call");
 		
-		if (game.getHighestBet() == 0)
+		if (game.getHighestBet() == 0) //The bet/raise button is set as appropriate
 			raise.setText("Bet");
 		else
 			raise.setText("Raise");
 		
-		if (user.getStack() <= (game.getHighestBet() - user.getBet())) {
+		if (user.getStack() <= (game.getHighestBet() - user.getBet())) { //If the user has less money total than the highest bet they can only fold or go all-in
 			raise.setDisable(true);
-			call.setText("All-In");
+			call.setText("All In");
 		}
 		else if (((user.getStack() + user.getBet()) > game.getHighestBet()) && ((user.getBet() + user.getStack()) < (game.getHighestBet() + game.getSmallBlind()))) {
-			raiseSlider.setDisable(true);
+			raiseSlider.setDisable(true); //If the user can match the highest bet but not the minimum raise they can fold, call, or go all-in
 			raiseConfirm.setText("All In");
 		}
-		else {
+		else { //The user can complete the standard actions
 			raise.setDisable(false);
 			raiseConfirm.setText("Enter");
-			raiseSlider.setDisable(false);
+			raiseSlider.setDisable(false); //The raise slider is setup
 			raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
 			raiseSlider.setMax(user.getStack() + user.getBet());
 			raiseSlider.setMajorTickUnit((user.getStack() + user.getBet()) - (game.getSmallBlind() + game.getHighestBet()));
 			raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
 		}
 		
-		((Button) scene.lookup("#help")).setDisable(false);
+		((Button) scene.lookup("#help")).setDisable(false); //Settings buttons are enabled
 		((Button) scene.lookup("#quit")).setDisable(false);
 		controls.setDisable(false);
 	}
@@ -400,33 +399,32 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void finishUserTurn(Scene scene, Game game) {
-		HBox controls = (HBox) scene.lookup("#controls");
+		HBox controls = (HBox) scene.lookup("#controls"); //Needed nodes are found
 		HBox raiseInput = (HBox) scene.lookup("#raiseInput");
 		Button raise = (Button) scene.lookup("#raise");
 		Button help = (Button) scene.lookup("#help");
 		Button quit = (Button) scene.lookup("#quit");
 		Button call = (Button) scene.lookup("#call");
 		
-		Player user = game.getLastPlayer();
-		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: black;");
-		controls.setDisable(true);
+		controls.setDisable(true); //Nodes are disabled and labels are reset to default
 		help.setDisable(true);
 		quit.setDisable(true);
 		raiseInput.setVisible(false);
-		
 		raise.setText("Raise");
 		call.setText("Call");
 		
+		Player user = game.getLastPlayer(); //The player's information is updated and the player count is incremented
+		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: black;");
 		updatePlayerInfo(user, scene, game);
 		game.incrementPlayer();
 		
-		if (user.getAction() == "Folded") {
+		if (user.getAction() == "Folded") { //If the user folds their cards are returned to the deck
 			returnHole(scene, user, true, true).play();
 		}
 		
-		if (game.isBetRoundRunning())
+		if (game.isBetRoundRunning()) //Continuing the round calls for the next player's turn
 			runTurn(scene, game);
-		else
+		else //The end of the round calls for the interim round message
 			interRound(scene, game);
 	}
 	
@@ -440,16 +438,16 @@ public class GUI extends Application {
 	 * @param scene the GUI scene
 	 */
 	private void updatePlayerInfo(Player player, Scene scene, Game game) {
-		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction());
+		((Label) scene.lookup("#" + player.getName() + "Action")).setText("Action: " + player.getAction()); //The player's stack and action labels are updated
 		((Label) scene.lookup("#" + player.getName() + "Stack")).setText("Stack: " + (new MoneyFormatter(player.getStack())).toString());
 		
-		MoneyFormatter wagerFormat = new MoneyFormatter(player.getBet());
+		MoneyFormatter wagerFormat = new MoneyFormatter(player.getBet()); //The player's bet is formatted
 		String wager = wagerFormat.toString();
-		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + wager);
-		if (player.getBet() > game.getHighestBet())
+		((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: " + wager); //The player's bet label is updated
+		if (player.getBet() > game.getHighestBet()) //If the player has the highest bet their wager becomes the highest in the centre
 			((Label) scene.lookup("#wager")).setText("Highest Wager: " + wager);
 		
-		if (player.getAction() == "Folded") {
+		if (player.getAction() == "Folded") { //If the player folded their bet label is cleared and the centre pot is updated
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
 			((Label) scene.lookup("#pot")).setText("Pot: " + (new MoneyFormatter(game.getPot())).toString());
 		}
@@ -469,13 +467,13 @@ public class GUI extends Application {
 		if (game.isUserFolded())
 			fast = true;
 		
-		revealAllCards(game.getPlayers(), scene, fast);
+		revealAllCards(game.getPlayers(), scene, fast); //All AI hole cards are revealed
 		
-		ArrayList<Player> winners = game.showdown();
+		ArrayList<Player> winners = game.showdown(); //The game's showdown logic is run
 		
-		for (Player player : game.getPlayers()) {
+		for (Player player : game.getPlayers()) { //Each player has their bet label changed to reflect their highest hand rank
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Hand: " + player.getHand().toString());
-			if (player.getStack() == 0)
+			if (player.getStack() == 0) //Actions are either cleared or set to "BUSTED OUT" if the player lost all their stack
 				((Label) scene.lookup("#" + player.getName() + "Action")).setText("BUSTED OUT");
 			else
 				((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
@@ -509,7 +507,7 @@ public class GUI extends Application {
 			winnerString.append(" Won the Pot");
 		}
 		
-		((Button) scene.lookup("#help")).setDisable(false);
+		((Button) scene.lookup("#help")).setDisable(false); //All settings buttons are enabled and the notification is shown
 		((Button) scene.lookup("#save")).setDisable(false);
 		((Button) scene.lookup("#quit")).setDisable(false);
 		notifLabel.setText(winnerString.toString());
@@ -527,6 +525,7 @@ public class GUI extends Application {
 	private void gameOver(Scene scene, Game game) {
 		HBox endGameNotif = (HBox) scene.lookup("#endGameNotif");
 		Label endGameMsg = (Label) scene.lookup("#endGameMsg");
+		((Button) scene.lookup("#quit")).setDisable(false);
 		endGameNotif.setVisible(true);
 	}
 	
@@ -797,30 +796,30 @@ public class GUI extends Application {
 	 * The following method controls the animation of a card either being drawn
 	 * from or returned to the deck. 
 	 * 
-	 * @param scene the game node
-	 * @param cardBack
-	 * @param cardFront
-	 * @param reversed
-	 * @param fast
+	 * @param scene the game node tree
+	 * @param cardBack the image of the back of the card
+	 * @param cardFront the image of the front of the card
+	 * @param reversed whether or not the animation should be reversed
+	 * @param fast whether or not the animation should move fast
 	 * @return
 	 */
 	private SequentialTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed, Boolean fast) {
-		ImageView subCard;
+		ImageView subCard; //Depending on if the card needs to be drawn or returned the appropriate dummy image is found
 		if (reversed)
 			subCard = (ImageView) scene.lookup("#returnCard");
 		else
 			subCard = (ImageView) scene.lookup("#drawCard");
 		
-		double originX = subCard.localToScene(subCard.getBoundsInLocal()).getMinX(); 
+		double originX = subCard.localToScene(subCard.getBoundsInLocal()).getMinX(); //The to and from coordinates are calculated
 		double originY = subCard.localToScene(subCard.getBoundsInLocal()).getMinY(); 
 		double targetX = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinX(); 
 		double targetY = cardBack.localToScene(cardBack.getBoundsInLocal()).getMinY(); 
 		
 		SequentialTransition fullMotion = new SequentialTransition();
 		
-		TranslateTransition moveCard = new TranslateTransition();
+		TranslateTransition moveCard = new TranslateTransition(); //The deck-to-card motion is set
 		moveCard.setNode(subCard);
-		if (reversed || fast)
+		if (reversed || fast) //In return motion this animation will be nearly instantaneous, also for fast
 			moveCard.setDuration(Duration.millis(1));
 		else
 			moveCard.setDuration(Duration.millis(250));
@@ -829,9 +828,9 @@ public class GUI extends Application {
 		moveCard.setByX(targetX - originX);
 		moveCard.setByY(targetY - originY);
 		
-		TranslateTransition returnCard = new TranslateTransition();
+		TranslateTransition returnCard = new TranslateTransition(); //The card-to-deck motion is set
 		returnCard.setNode(subCard);
-		if (reversed && !fast)
+		if (reversed && !fast) //In dealing animation and fast this animation will be nearly instantaneous
 			returnCard.setDuration(Duration.millis(250));
 		else
 			returnCard.setDuration(Duration.millis(1));
@@ -842,7 +841,7 @@ public class GUI extends Application {
 		
 		fullMotion.getChildren().addAll(moveCard, returnCard);
 		
-		moveCard.setOnFinished(new EventHandler<ActionEvent>() { 
+		moveCard.setOnFinished(new EventHandler<ActionEvent>() { //On the end of the deck-to-card motion the target card will either be visible or invisible
 			@Override
 			public void handle(ActionEvent event) {
 				if (reversed) {
@@ -856,7 +855,7 @@ public class GUI extends Application {
 			}
 		});
 		
-		return fullMotion;
+		return fullMotion; //The full motion is returned for further setOnFinished actions
 	}
 	
 	/**
@@ -867,7 +866,8 @@ public class GUI extends Application {
 	 * 
 	 * @param cardBack the ImageView of the card's back
 	 * @param cardFront the ImageView of the card's face
-	 * 
+	 * @param reversed whether or not the animation should be reversed
+	 * @param fast whether or not the animation whould be fast
 	 */
 	private SequentialTransition flipCard(ImageView cardBack, ImageView cardFront, Boolean reversed, Boolean fast) {
 		SequentialTransition fullMotion = new SequentialTransition();

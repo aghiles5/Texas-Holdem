@@ -102,6 +102,7 @@ public class Game {
     public ArrayList<Player> generatePlayers(int numOfPlayers, int stackAmt) {
         Random playerPos = new Random();
         int position = playerPos.nextInt(numOfPlayers);
+        AI.clearCPUName();
         AI.addCPUName();
         AI.setBetIntervals(stackAmt);
         for (int n = 0; n < numOfPlayers; n++) {
@@ -364,7 +365,7 @@ public class Game {
         } else if (highestBet == 0) {
             int checkCount = 0;
             for (Player player : players) {
-                if ((player.getAction() == "Checked") || (player.getAction() == "All In")) {
+                if ((player.getAction() == "Checked") || (player.getStack() == 0)) {
                     checkCount++;
                 }
             }
@@ -487,7 +488,7 @@ public class Game {
     public void bet(int betAmt) {
         if (roundPlayers.get(playerCount).stack <= (betAmt + highestBet)) {
             roundPlayers.get(playerCount).allIn("A");
-            betAmt = roundPlayers.get(playerCount).stack;
+            betAmt = roundPlayers.get(playerCount).getBet();
         }
 
         else {

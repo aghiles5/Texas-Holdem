@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
  * and end game messages and controls are also displayed here.
  * 
  * @author Adam Hiles
- * @version 03/23/19
+ * @version 03/28/19
  */
 public class ActionBar {
 	BorderPane barPane;
