@@ -40,6 +40,8 @@ public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	
+	private boolean allInTrack = false;
+	
 	/**
 	 * On the start of the GUI the main menu will be displayed and an
 	 * EventHandler for its start button will be created that starts
@@ -232,16 +234,7 @@ public class GUI extends Application {
 				runTurn(scene, game);
 		}
 		
-		Boolean allAllIn = false;
-		int allInCount = 0;
-		for (Player player : game.getPlayers()) {
-			if (player.getAction() == "All In")
-				allInCount++;
-		}
-		if (allInCount == game.getPlayers().size())
-			allAllIn = true;
-		
-		if (game.getPlayers().size() == 1 || allAllIn) { //If one player remains, they get the pot
+		if (game.getPlayers().size() == 1 || allInTrack) { //If one player remains, they get the pot
 			if (game.getRound() < 4) {
 				game.incrementRound();
 				interRound(scene, game);
@@ -268,9 +261,18 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void runTurn(Scene scene, Game game) {
+		Boolean allInTrack = false;
+		int zeroStackCount = 0;
+		for (Player player : game.getPlayers()) {
+			if (player.getAction() == "All In")
+				zeroStackCount++;
+		}
+		if (zeroStackCount >= game.getPlayers().size() - 1)
+			allInTrack = true;
+		
 		Player player = game.getCurrentPlayer();
-		System.out.println(player.getAction());
-		if (game.getPlayers().size() == 1 || player.getAction() == "All In") { //If one player remains, they get the pot
+		
+		if (game.getPlayers().size() == 1 || allInTrack) { //If one player remains or all but one player is all-in, fast track to showdown
 			game.incrementRound();
 			interRound(scene, game);
 		}
