@@ -336,9 +336,9 @@ public class Game {
     public boolean isBetRoundRunning() {
         if (roundNum == 0) {
             if (highestBet == smallBlind * 2) {
-                if ((playerCount == 2) || (players.size() == 2 && playerCount == 0)) {
+                if ((playerCount == 2) || (roundPlayers.size() == 2 && playerCount == 0)) {
                     int BBCounter = 0;
-                    for (Player player : players) {
+                    for (Player player : roundPlayers) {
                         if (player.getBet() == smallBlind * 2) {
                             BBCounter++;
                         }
@@ -351,7 +351,7 @@ public class Game {
                 }
             } else {
                 int betCounter = 0;
-                for (Player player : players) {
+                for (Player player : roundPlayers) {
                     if ((player.getBet() == highestBet) || (player.getStack() == 0)) {
                         betCounter++;
                     }
@@ -364,7 +364,7 @@ public class Game {
             }
         } else if (highestBet == 0) {
             int checkCount = 0;
-            for (Player player : players) {
+            for (Player player : roundPlayers) {
                 if ((player.getAction() == "Checked") || (player.getStack() == 0)) {
                     checkCount++;
                 }
@@ -376,7 +376,7 @@ public class Game {
             }
         } else {
             int betCounter = 0;
-            for (Player player : players) {
+            for (Player player : roundPlayers) {
                 if ((player.getBet() == highestBet) || (player.getStack() == 0)) {
                     betCounter++;
                 }
@@ -414,14 +414,16 @@ public class Game {
                 winners.add(player);
         }
 
+        int divisor = winners.size();
         for (Player player : winners) {
-            player.stack += (int) (pot / winners.size());
-            pot -= (int) (pot / winners.size());
+            player.stack += (int) (pot / divisor);
+            pot -= (int) (pot / divisor);
             if (pot % 2 == 1) {
                 if (player == winners.get(0)) {
                     player.stack++;
                 }
             }
+            divisor--;
         }
 
         ArrayList<Player> gameOverList = new ArrayList<Player>();

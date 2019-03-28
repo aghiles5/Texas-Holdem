@@ -123,6 +123,8 @@ public class GUI extends Application {
 							returnComm(scene, game);
 							for (Player player : game.getPlayers()) {
 								((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
+								if (player.getStack() == 0)
+									((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
 							}
 						}
 					}
