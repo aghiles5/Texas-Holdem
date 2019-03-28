@@ -263,7 +263,7 @@ public class Game {
             }
             highBetHolder = roundPlayers.get(playerCount).getBet();
             bBlindDone = true;
-        } else if (playerCount == 0 && roundNum != 0) {
+        } else if (playerCount == 0 && roundNum != 0 && highestBet == 0) {
             roundPlayers.get(playerCount).getDecision2();
         } else if (lastPlayer.getAction() == "Raised" || lastPlayer.getAction() == "Bet"
                 || lastPlayer.getAction() == "All In" || lastPlayer.getAction() == "Called") {
