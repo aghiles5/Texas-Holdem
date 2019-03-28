@@ -343,7 +343,7 @@ public class Game {
         } else if (highestBet == 0) {
             int checkCount = 0;
             for (Player player : players) {
-                if (player.getAction() == "Checked") {
+                if ((player.getAction() == "Checked") || (player.getAction() == "All In")) {
                     checkCount++;
                 }
             }
