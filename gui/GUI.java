@@ -140,7 +140,10 @@ public class GUI extends Application {
 		((Button) scene.lookup("#raiseConfirm")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				game.bet(((int) ((Slider) scene.lookup("#raiseSlider")).getValue()) - game.getHighestBet());
+				if (scene.lookup("#raiseConfirm").isDisabled() == true)
+					game.bet((game.getCurrentPlayer().getBet() + game.getCurrentPlayer().getStack()) - game.getHighestBet());
+				else
+					game.bet(((int) ((Slider) scene.lookup("#raiseSlider")).getValue()) - game.getHighestBet());
 				finishUserTurn(scene, game);
 			}
 		});
@@ -266,6 +269,7 @@ public class GUI extends Application {
 	 */
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
+		System.out.println(player.getAction());
 		if (game.getPlayers().size() == 1 || player.getAction() == "All In") { //If one player remains, they get the pot
 			game.incrementRound();
 			interRound(scene, game);
@@ -344,6 +348,7 @@ public class GUI extends Application {
 	private void setupUserTurn(Player user, Scene scene, Game game) {
 		Button call = (Button) scene.lookup("#call");
 		Button raise = (Button) scene.lookup("#raise");
+		Button raiseConfirm = (Button) scene.lookup("#raiseConfirm");
 		HBox controls = (HBox) scene.lookup("#controls");
 		Slider raiseSlider = (Slider) scene.lookup("#raiseSlider");
 		
@@ -361,8 +366,14 @@ public class GUI extends Application {
 			raise.setDisable(true);
 			call.setText("All-In");
 		}
+		else if (((user.getStack() + user.getBet()) > game.getHighestBet()) && ((user.getBet() + user.getStack()) < (game.getHighestBet() + game.getSmallBlind()))) {
+			raiseSlider.setDisable(true);
+			raiseConfirm.setText("All In");
+		}
 		else {
 			raise.setDisable(false);
+			raiseConfirm.setText("Enter");
+			raiseSlider.setDisable(false);
 			raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
 			raiseSlider.setMax(user.getStack() + user.getBet());
 			raiseSlider.setMajorTickUnit((user.getStack() + user.getBet()) - (game.getSmallBlind() + game.getHighestBet()));

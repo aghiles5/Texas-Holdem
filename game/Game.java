@@ -466,7 +466,7 @@ public class Game {
      */
 
     public void bet(int betAmt) {
-        if (roundPlayers.get(playerCount).stack <= betAmt) {
+        if (roundPlayers.get(playerCount).stack <= (betAmt + highestBet)) {
             roundPlayers.get(playerCount).allIn("A");
             betAmt = roundPlayers.get(playerCount).stack;
         }
