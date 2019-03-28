@@ -120,9 +120,9 @@ public class GUI extends Application {
 						if (game.isGameOver()) //The game over screen is displayed
 							gameOver(scene, game);
 						else { //Otherwise the bet (hand) labels are reset and cards are returned to the deck
+							returnComm(scene, game);
 							for (Player player : game.getPlayers()) {
 								((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
-							returnComm(scene, game);
 							}
 						}
 					}
