@@ -229,7 +229,16 @@ public class GUI extends Application {
 				runTurn(scene, game);
 		}
 		
-		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
+		Boolean allAllIn = false;
+		int allInCount = 0;
+		for (Player player : game.getPlayers()) {
+			if (player.getAction() == "All In")
+				allInCount++;
+		}
+		if (allInCount == game.getPlayers().size())
+			allAllIn = true;
+		
+		if (game.getPlayers().size() == 1 || allAllIn) { //If one player remains, they get the pot
 			if (game.getRound() < 4) {
 				game.incrementRound();
 				interRound(scene, game);
@@ -257,7 +266,7 @@ public class GUI extends Application {
 	 */
 	private void runTurn(Scene scene, Game game) {
 		Player player = game.getCurrentPlayer();
-		if (game.getPlayers().size() == 1) { //If one player remains, they get the pot
+		if (game.getPlayers().size() == 1 || player.getAction() == "All In") { //If one player remains, they get the pot
 			game.incrementRound();
 			interRound(scene, game);
 		}
