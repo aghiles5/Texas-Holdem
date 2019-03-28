@@ -15,7 +15,7 @@ players
 ```
 To run the GUI version of the game run GUI in the gui folder. For the text-based version, run TBGame in the game folder.
 
-To run the JUnit test cases, GameTest and HandTest, download the latest junit and hamcrest jar files form the JUnit 4 repository (https://github.com/junit-team/junit4) and place a copy of each in the respective folders of the test files. Each case must first be compiled in the command line with:
+To compile and run the JUnit test cases, GameTest and HandTest, download the latest junit and hamcrest jar files form the JUnit 4 repository (https://github.com/junit-team/junit4) and place a copy of each in the respective folders of the test files. Each case must first be compiled in the command line with:
 ```
 javac -cp .:junit-<version>.jar:hamcrest-core-<hamcrest>.jar *.java
 ```
