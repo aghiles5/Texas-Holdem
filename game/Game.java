@@ -52,6 +52,11 @@ public class Game {
         bBlindDone = false;
     }
 
+    /**
+     * Gets the master list of the created players
+     * 
+     * @Return ArrayList of type Player
+     */
     public ArrayList<Player> getPlayerList() {
         return players;
     }
@@ -59,7 +64,6 @@ public class Game {
     /**
      * Generates the old players loaded from a file in the SaveIO class
      * 
-     * @author Kyle Wen
      * @param name, stack name and stack contain the arrayList passed from SaveIO to
      *              Game
      * @return arraylist of the generated players
@@ -89,9 +93,10 @@ public class Game {
     }
 
     /**
-     * Generates the players needed to be recorded throughout the game and in gui
+     * Generates the players needed to be recorded throughout the game, in gui and
+     * TBGame
      * 
-     * @param number of players decided by gui
+     * @param number of players and stackamt decided by GUI or TBGame
      * @return arraylist of the generated players
      */
     public ArrayList<Player> generatePlayers(int numOfPlayers, int stackAmt) {
@@ -121,7 +126,8 @@ public class Game {
     }
 
     /**
-     * Sets up the next round for the game, used for GUI calling and game setup
+     * Sets up the next round for the game, used for GUI and TBGame calling and game
+     * setup
      */
     public void setupRound() {
         roundPlayers.clear();
@@ -240,10 +246,21 @@ public class Game {
         lastPlayer = theLastPlayer;
     }
 
+    /**
+     * Gets the player that made the most recent decision which is currently for GUI
+     * and TBGame
+     * 
+     * @return a Player object corresponding to the evaluated relation
+     */
     public Player getLastPlayer() {
         return lastPlayer;
     }
 
+    /**
+     * Processes the AI's turn/decision
+     * 
+     * @return a Player object corresponding to the evaluated relation
+     */
     public Player processTurn() {
         Player curPlayer = roundPlayers.get(playerCount);
 
@@ -310,25 +327,29 @@ public class Game {
         return middleCards;
     }
 
+    /**
+     * Checks to see if the bet round is still running, used for GUI and TBGame
+     * 
+     * @return a boolean condition corresponding to the evaluated relation
+     */
     public boolean isBetRoundRunning() {
         if (roundNum == 0) {
-        	if (highestBet == smallBlind * 2) {
-        		if ((playerCount == 2) || (players.size() == 2 && playerCount == 0)) {
-		            int BBCounter = 0;
-		            for (Player player : players) {
-		                if (player.getBet() == smallBlind * 2) {
-		                    BBCounter++;
-		                }
-		            }
-		
-		            if (BBCounter == roundPlayers.size()) {
-		                incrementRound();
-		                return false;
-		            }
-        		}
-        	}
-        	else {
-        		int betCounter = 0;
+            if (highestBet == smallBlind * 2) {
+                if ((playerCount == 2) || (players.size() == 2 && playerCount == 0)) {
+                    int BBCounter = 0;
+                    for (Player player : players) {
+                        if (player.getBet() == smallBlind * 2) {
+                            BBCounter++;
+                        }
+                    }
+
+                    if (BBCounter == roundPlayers.size()) {
+                        incrementRound();
+                        return false;
+                    }
+                }
+            } else {
+                int betCounter = 0;
                 for (Player player : players) {
                     if ((player.getBet() == highestBet) || (player.getStack() == 0)) {
                         betCounter++;
@@ -339,7 +360,7 @@ public class Game {
                     incrementRound();
                     return false;
                 }
-        	}
+            }
         } else if (highestBet == 0) {
             int checkCount = 0;
             for (Player player : players) {
@@ -351,7 +372,7 @@ public class Game {
             if (checkCount == roundPlayers.size()) {
                 incrementRound();
                 return false;
-            }  
+            }
         } else {
             int betCounter = 0;
             for (Player player : players) {
@@ -483,10 +504,19 @@ public class Game {
         setLastPlayer(roundPlayers.get(playerCount));
     }
 
+    /**
+     * Gets the smallblind for GUI and TBGame
+     * 
+     * @return a integer corresponding to the evaluated relation
+     */
     public int getSmallBlind() {
         return (int) (smallBlind);
     }
 
+    /**
+     * Rotates the blinds for the players so that the person doing the blinds is
+     * different
+     */
     private void blindPosition() {
         ArrayList<Player> tempPList = new ArrayList<Player>();
         for (Player player : players) {
@@ -501,22 +531,47 @@ public class Game {
         players.addAll(tempPList);
     }
 
+    /**
+     * Gets the most recent highest bet for GUI and TBGame
+     * 
+     * @return a int corresponding to the evaluated relation
+     */
     public int getHighestBet() {
         return highestBet;
     }
 
+    /**
+     * Gets the round's pot for GUI and TBGame
+     * 
+     * @return a int corresponding to the evaluated relation
+     */
     public int getPot() {
         return pot;
     }
 
+    /**
+     * Gets the current count of player in the player list for GUI and TBGame
+     * 
+     * @return a int corresponding to the evaluated relation
+     */
     public int getPlayerCount() {
         return playerCount;
     }
 
+    /**
+     * Gets the check to see if the game is over or not, used for GUI and TBGame
+     * 
+     * @return a boolean condition corresponding to the evaluated relation
+     */
     public boolean isGameOver() {
         return gameOver;
     }
 
+    /**
+     * Gets the check to see if the user has folded or not, used for GUI and TBGame
+     * 
+     * @return a boolean condition corresponding to the evaluated relation
+     */
     public boolean isUserFolded() {
         return userFolded;
     }
