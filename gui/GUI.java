@@ -103,8 +103,10 @@ public class GUI extends Application {
 				((Button) scene.lookup("#help")).setDisable(true);
 				((Button) scene.lookup("#quit")).setDisable(true);
 				for (Player player : game.getPlayers()) {
-					player.setAction(" ");
-					((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+					if ((!(game.getRound() == 4 && player.getStack() == 0)) || (!(player.getAction() == "All In"))) {
+						player.setAction(" ");
+						((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+					}
 				}
 				if (game.getRound() < 4) {
 					runTurn(scene, game);
@@ -261,14 +263,31 @@ public class GUI extends Application {
 			runTurn(scene, game);
 		}
 		else if (player instanceof Human) {
+			((Label) scene.lookup("#" + player.getName() + "Name")).setStyle("-fx-text-fill: red;");
 			if (game.getRound() == 0) {
 				if (game.getPlayerCount() == 0 && game.getHighestBet() == 0) {
 					game.bet(game.getSmallBlind());
-					finishUserTurn(scene, game);
+					
+					PauseTransition pause = new PauseTransition(new Duration(1000));
+					
+					if (game.isUserFolded())
+						pause.setDuration(new Duration(1));
+					
+					pause.setOnFinished(e -> finishUserTurn(scene, game));
+					
+					pause.play();
 				}
 				else if (game.getPlayerCount() == 1 && game.getHighestBet() == game.getSmallBlind()) {
 					game.bet(game.getSmallBlind());
-					finishUserTurn(scene, game);
+					
+					PauseTransition pause = new PauseTransition(new Duration(1000));
+					
+					if (game.isUserFolded())
+						pause.setDuration(new Duration(1));
+					
+					pause.setOnFinished(e -> finishUserTurn(scene, game));
+					
+					pause.play();
 				}
 				else
 					setupUserTurn(player, scene, game);
@@ -365,8 +384,6 @@ public class GUI extends Application {
 			raiseSlider.setMajorTickUnit((user.getStack() + user.getBet()) - (game.getSmallBlind() + game.getHighestBet()));
 			raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
 		}
-		
-		((Label) scene.lookup("#" + user.getName() + "Name")).setStyle("-fx-text-fill: red;");
 		
 		((Button) scene.lookup("#help")).setDisable(false);
 		((Button) scene.lookup("#quit")).setDisable(false);
