@@ -425,13 +425,15 @@ public class Table {
 				VBox dealerMoney = new VBox();
 				dealerMoney.setAlignment(Pos.CENTER);
 				dealerMoney.setSpacing(5);
-				dealerMoney.setMinWidth(250);
+				dealerMoney.setMinWidth(300);
 				
 					Label pot = new Label("Pot: $0");
 					pot.setId("pot");
+					pot.setMaxWidth(300);
 					pot.setAlignment(Pos.CENTER);
 					Label wager = new Label("Highest Wager: $0");
 					wager.setId("wager");
+					wager.setMaxWidth(300);
 					wager.setAlignment(Pos.CENTER);
 					
 				dealerMoney.getChildren().addAll(pot, wager);
