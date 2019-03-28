@@ -330,7 +330,7 @@ public class Game {
         	else {
         		int betCounter = 0;
                 for (Player player : players) {
-                    if (player.getBet() == highestBet) {
+                    if ((player.getBet() == highestBet) || (player.getStack() == 0)) {
                         betCounter++;
                     }
                 }
@@ -355,7 +355,7 @@ public class Game {
         } else {
             int betCounter = 0;
             for (Player player : players) {
-                if (player.getBet() == highestBet) {
+                if ((player.getBet() == highestBet) || (player.getStack() == 0)) {
                     betCounter++;
                 }
             }
@@ -489,16 +489,16 @@ public class Game {
 
     private void blindPosition() {
         ArrayList<Player> tempPList = new ArrayList<Player>();
-        for (Player player : roundPlayers) {
-            if (player != roundPlayers.get(0)) {
+        for (Player player : players) {
+            if (player != players.get(0)) {
                 tempPList.add(player);
             }
         }
 
-        tempPList.add(roundPlayers.get(0));
+        tempPList.add(players.get(0));
 
-        roundPlayers.clear();
-        roundPlayers.addAll(tempPList);
+        players.clear();
+        players.addAll(tempPList);
     }
 
     public int getHighestBet() {
