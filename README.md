@@ -13,16 +13,25 @@ gui
 images
 players
 ```
-To run the GUI version of the game run GUI in the gui folder. For the text-based version, run TBGame in the game folder.
+To compile all java files in a package run the following command from the base directory:
+```
+javac [].*.java
+```
+where the each package name replaces the brackets.
+To run the game execute the following command from the base directory:
+```
+java [].[]
+```
+where the brackets are the package and class respectively. The GUI version of the game is run through the GUI class in the gui package while the text-based is run through the TBGame class in the game package.
 
 To compile and run the JUnit test cases, GameTest and HandTest, download the latest junit and hamcrest jar files form the JUnit 4 repository (https://github.com/junit-team/junit4) and place a copy of each in the respective folders of the test files. Each case must first be compiled in the command line with:
 ```
-javac -cp .:junit-<version>.jar:hamcrest-core-<hamcrest>.jar *.java
+javac -cp .:junit-[].jar:hamcrest-core-[].jar *.java
 ```
-where the version of each file replaces the <> brackets. Once compiled, the tests are run with:
+where the version of each file replaces the brackets. Once compiled, the tests are run with:
 ```
-java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore <class name>
+java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore []
 ```
-where the name of the class replaces the <> brackets.
+where the name of the class replaces the brackets.
 
 The PlayerTest can be compiled and run normally without JUnit.
