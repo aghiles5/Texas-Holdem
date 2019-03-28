@@ -348,15 +348,15 @@ public class GUI extends Application {
 		else
 			raise.setText("Raise");
 		
-		if (user.getStack() < (game.getHighestBet() - user.getBet())) {
+		if (user.getStack() <= (game.getHighestBet() - user.getBet())) {
 			raise.setDisable(true);
 			call.setText("All-In");
 		}
 		else {
 			raise.setDisable(false);
 			raiseSlider.setMin(game.getHighestBet() + game.getSmallBlind());
-			raiseSlider.setMax(user.getStack());
-			raiseSlider.setMajorTickUnit(user.getStack() - (game.getSmallBlind() + game.getHighestBet()));
+			raiseSlider.setMax(user.getStack() + user.getBet());
+			raiseSlider.setMajorTickUnit((user.getStack() + user.getBet()) - (game.getSmallBlind() + game.getHighestBet()));
 			raiseSlider.setMinorTickCount(((user.getStack() - (game.getSmallBlind() + game.getHighestBet())) / (game.getSmallBlind() / 25)) - 1);
 		}
 		
@@ -426,8 +426,10 @@ public class GUI extends Application {
 		if (player.getBet() > game.getHighestBet())
 			((Label) scene.lookup("#wager")).setText("Highest Wager: " + wager);
 		
-		if (player.getAction() == "Folded")
+		if (player.getAction() == "Folded") {
 			((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
+			((Label) scene.lookup("#pot")).setText((new MoneyFormatter(game.getPot())).toString());
+		}
 	}
 	
 	/**
