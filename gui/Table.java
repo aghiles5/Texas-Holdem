@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ClosePath;
@@ -89,7 +90,8 @@ public class Table {
 	private StackPane setTable() {
 		
 		//The table's wooden rim geometry
-		ImagePattern woodImage = new ImagePattern(new Image("Images/wood.png"));
+		ImagePattern woodTexture = new ImagePattern(new Image("Images/wood.png"),
+				0, 0, 128, 128, false);
 		Path rim = new Path(new MoveTo(0, 0),
 				new HLineTo(TABLE_WIDTH),
 				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM,
@@ -104,10 +106,11 @@ public class Table {
 						false, true),
 				new ClosePath()
 				);
-		rim.setFill(woodImage);
+		rim.setFill(woodTexture);
 		
 		//The table's green felt geometry
-		ImagePattern feltImage = new ImagePattern(new Image("Images/felt.png"));
+		ImagePattern feltTexture = new ImagePattern(new Image("Images/felt.png"),
+				0, 0, 128, 128, false);
 		Path felt = new Path(new MoveTo(0, 0),
 				new HLineTo(TABLE_WIDTH),
 				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2),
@@ -122,7 +125,7 @@ public class Table {
 						false, true),
 				new ClosePath()
 				);
-		felt.setFill(feltImage);
+		felt.setFill(feltTexture);
 		
 		//The background for the table to be placed on
 		StackPane table = new StackPane();

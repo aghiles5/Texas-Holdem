@@ -50,7 +50,7 @@ public class MainMenu {
 	private StackPane setMenu() {
 		//Menu Background/Base
 		StackPane menu = new StackPane();
-		menu.setStyle("-fx-background-color: black;");
+		menu.setStyle("-fx-background-image: url(\"Images/vegas.jpg\");");
 		
 			//Encapsulating Box
 			VBox menuBox = new VBox();
