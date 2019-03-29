@@ -15,9 +15,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.HLineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Screen;
 import players.Player;
 
@@ -82,41 +88,48 @@ public class Table {
 	 */
 	private StackPane setTable() {
 		
-		//The table's black rubber rim geometry
-		Rectangle tableRectRim = new Rectangle(TABLE_WIDTH, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) + (TABLE_RIM * 2));
-		tableRectRim.setFill(Color.BLACK);
-		
-		Ellipse tableLeftRim = new Ellipse(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM);
-		tableLeftRim.setFill(Color.BLACK);
-		
-		Ellipse tableRightRim = new Ellipse(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, ((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM);
-		tableRightRim.setFill(Color.BLACK);
-		
-		HBox lobesRims = new HBox();
-		lobesRims.setAlignment(Pos.CENTER);
-		lobesRims.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (TABLE_RIM * 2));
-		lobesRims.getChildren().addAll(tableLeftRim, tableRightRim);
+		//The table's wooden rim geometry
+		ImagePattern woodImage = new ImagePattern(new Image("Images/wood.png"));
+		Path rim = new Path(new MoveTo(0, 0),
+				new HLineTo(TABLE_WIDTH),
+				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM,
+						((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, 0,
+						TABLE_WIDTH,
+						(TABLE_WIDTH / TABLE_HEIGHT_RATIO) + (2 * TABLE_RIM),
+						false, true),
+				new HLineTo(0),
+				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM,
+						((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) + TABLE_RIM, 
+						0, 0, 0,
+						false, true),
+				new ClosePath()
+				);
+		rim.setFill(woodImage);
 		
 		//The table's green felt geometry
-		Rectangle tableRect = new Rectangle(TABLE_WIDTH, TABLE_WIDTH / TABLE_HEIGHT_RATIO);
-		tableRect.setFill(Color.FORESTGREEN);
-		
-		Ellipse tableLeft = new Ellipse((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2);
-		tableLeft.setFill(Color.FORESTGREEN);
-		
-		Ellipse tableRight = new Ellipse((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2, (TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2);
-		tableRight.setFill(Color.FORESTGREEN);
-		
-		HBox lobes = new HBox();
-		lobes.setAlignment(Pos.CENTER);
-		lobes.setSpacing(TABLE_WIDTH - (TABLE_WIDTH / TABLE_HEIGHT_RATIO));
-		lobes.getChildren().addAll(tableLeft, tableRight);
+		ImagePattern feltImage = new ImagePattern(new Image("Images/felt.png"));
+		Path felt = new Path(new MoveTo(0, 0),
+				new HLineTo(TABLE_WIDTH),
+				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2),
+						((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2), 0,
+						TABLE_WIDTH,
+						(TABLE_WIDTH / TABLE_HEIGHT_RATIO),
+						false, true),
+				new HLineTo(0),
+				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2),
+						((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2), 
+						0, 0, 0,
+						false, true),
+				new ClosePath()
+				);
+		felt.setFill(feltImage);
 		
 		//The background for the table to be placed on
 		StackPane table = new StackPane();
 		table.setAlignment(Pos.CENTER);
 		table.setStyle("-fx-background-color: lightblue;");
-		table.getChildren().addAll(tableRectRim, lobesRims, tableRect, lobes);
+		//table.getChildren().addAll(lobesRims, tableRectRim, tableRect, lobes);
+		table.getChildren().addAll(rim, felt);
 		
 		return table;
 	}
