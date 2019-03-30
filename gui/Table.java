@@ -89,8 +89,8 @@ public class Table {
 	 */
 	private StackPane setTable() {
 		
-		//The table's wooden rim geometry
-		ImagePattern woodTexture = new ImagePattern(new Image("gui/textures/wood.png"),
+		//The table's black rubber rim geometry
+		ImagePattern rubberTexture = new ImagePattern(new Image("gui/textures/rubber.png"),
 				0, 0, 128, 128, false);
 		Path rim = new Path(new MoveTo(0, 0),
 				new HLineTo(TABLE_WIDTH),
@@ -106,12 +106,12 @@ public class Table {
 						false, true),
 				new ClosePath()
 				);
-		rim.setFill(woodTexture);
+		rim.setFill(rubberTexture);
 		
-		//The table's green felt geometry
-		ImagePattern feltTexture = new ImagePattern(new Image("gui/textures/felt.png"),
+		//The table's wooden panel
+		ImagePattern woodTexture = new ImagePattern(new Image("gui/textures/wood.png"),
 				0, 0, 128, 128, false);
-		Path felt = new Path(new MoveTo(0, 0),
+		Path wood = new Path(new MoveTo(0, 0),
 				new HLineTo(TABLE_WIDTH),
 				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2),
 						((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2), 0,
@@ -125,14 +125,33 @@ public class Table {
 						false, true),
 				new ClosePath()
 				);
+		wood.setFill(woodTexture);
+		
+		//The table's green felt geometry
+		ImagePattern feltTexture = new ImagePattern(new Image("gui/textures/felt.png"),
+				0, 0, 128, 128, false);
+		Path felt = new Path(new MoveTo(0, 0),
+				new HLineTo(TABLE_WIDTH - (2 * (PLACE_HEIGHT))),
+				new ArcTo(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) - 3 * PLACE_HEIGHT,
+						((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) - 3 * PLACE_HEIGHT, 0,
+						TABLE_WIDTH - (2 * (PLACE_HEIGHT)),
+						(TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (3 * PLACE_HEIGHT),
+						false, true),
+				new HLineTo(0),
+				new ArcTo((((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) - 3 * PLACE_HEIGHT),
+						(((TABLE_WIDTH / TABLE_HEIGHT_RATIO) / 2) - 3 * PLACE_HEIGHT), 
+						0, 0, 0,
+						false, true),
+				new ClosePath()
+				);
 		felt.setFill(feltTexture);
 		
 		//The background for the table to be placed on
 		StackPane table = new StackPane();
 		table.setAlignment(Pos.CENTER);
-		table.setStyle("-fx-background-color: lightblue;");
+		table.getStyleClass().add("flooring");
 		//table.getChildren().addAll(lobesRims, tableRectRim, tableRect, lobes);
-		table.getChildren().addAll(rim, felt);
+		table.getChildren().addAll(rim, wood, felt);
 		
 		return table;
 	}
