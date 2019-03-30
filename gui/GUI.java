@@ -28,10 +28,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.shape.Ellipse;
+//imports used to play background music
+import java.net.URL;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * This method is the entry point for a new, GUI-based game. The menu is 
  * displayed, new Games are created, and the main game loop is run from here.
+ * Code for playing a media file is from http://www.java2s.com/Code/Java/JavaFX/Playmp3file.htm
  * 
  * @author Adam Hiles
  * @version 03/28/18
@@ -39,6 +44,10 @@ import javafx.scene.shape.Ellipse;
 public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
+    //resources used for playing music
+	//private final URL resource = getClass().getResource("LOUDER.mp3");
+    //private final Media media = new Media(resource.toString());
+    //private final MediaPlayer mediaPlayer = new MediaPlayer(media);
 	
 	/**
 	 * On the start of the GUI the main menu will be displayed and an
@@ -59,7 +68,9 @@ public class GUI extends Application {
 		Scene scene = new Scene(menu.getMenu(), WIN_WIDTH, WIN_HEIGHT);
 		scene.getStylesheets().add("/gui/tableStyle.css");
 		scene.setFill(Color.BLACK);
-
+		//plays a media file indefinitely
+		//mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+	    //mediaPlayer.play();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
