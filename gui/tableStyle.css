@@ -8,7 +8,7 @@
 }
 
 .button{
-	-fx-background-color: maroon;
+	-fx-background-image: url("textures/velvet.png");
 	-fx-text-fill: goldenrod;
 	-fx-border-color: goldenrod;
 	-fx-border-radius: 0;
@@ -16,11 +16,11 @@
 }
 
 .button:hover{
-	-fx-background-color: darkred;
+	-fx-background-image: url("textures/velvetHover.png");
 }
 
 .button:armed{
-	-fx-background-color: brown;
+	-fx-background-image: url("textures/velvetArmed.png");
 }
 
 .button:disabled{
@@ -46,9 +46,9 @@
 }
 
 .custom-popup{
-	-fx-background-color: maroon;
+	-fx-background-image: url("textures/velvet.png");
 	-fx-border-color: goldenrod;
-	-fx-border-width: 5;
+	-fx-border-width: 10;
 	-fx-border-radious: 0;
 	-fx-border-insets: 10;
 }

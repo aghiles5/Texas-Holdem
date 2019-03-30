@@ -90,7 +90,7 @@ public class Table {
 	private StackPane setTable() {
 		
 		//The table's wooden rim geometry
-		ImagePattern woodTexture = new ImagePattern(new Image("Images/wood.png"),
+		ImagePattern woodTexture = new ImagePattern(new Image("gui/textures/wood.png"),
 				0, 0, 128, 128, false);
 		Path rim = new Path(new MoveTo(0, 0),
 				new HLineTo(TABLE_WIDTH),
@@ -109,7 +109,7 @@ public class Table {
 		rim.setFill(woodTexture);
 		
 		//The table's green felt geometry
-		ImagePattern feltTexture = new ImagePattern(new Image("Images/felt.png"),
+		ImagePattern feltTexture = new ImagePattern(new Image("gui/textures/felt.png"),
 				0, 0, 128, 128, false);
 		Path felt = new Path(new MoveTo(0, 0),
 				new HLineTo(TABLE_WIDTH),
