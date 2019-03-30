@@ -7,12 +7,27 @@ import players.Player;
 /**
  * Saves All names and their stacks in a file.
  * @author Kyle Wen
- * @version March 19, 2019
+ * @version March 30, 2019
  */
+//JUNIT TESTING!!!
 public class SaveIO extends Game {
 	private ArrayList<String> name = new ArrayList<String>();
 	private ArrayList<Integer> stacks = new ArrayList<Integer>();
-	private int saves = 1;
+	
+	public void clear() {
+		File dat = new File("Save.txt");
+		FileWriter out;
+		BufferedWriter stuff;
+		try {
+			out = new FileWriter(dat);
+			stuff = new BufferedWriter(out);
+			stuff.write("");
+			stuff.close();
+		} catch (IOException e) {
+			System.out.println("File not cleared.");
+			System.out.println("IOException: " + e.getMessage());
+		}
+	}	
 	
 	/**
 	 * pre: none
@@ -25,8 +40,7 @@ public class SaveIO extends Game {
 		ArrayList<String> name = new ArrayList<String>();
 		ArrayList<Integer> stacks = new ArrayList<Integer>();
 		//writes to a new file each save
-		File dataFile = new File("Save" + saves + ".txt");
-		//how to load?
+		File dataFile = new File("Save.txt");
 		FileWriter out;
 		BufferedWriter writeScore;
 		
@@ -49,7 +63,6 @@ public class SaveIO extends Game {
 			writeScore.close();
 			out.close();
 			System.out.println("Game Saved.");
-			saves++; //test logic
 		} catch (IOException e) {
 			System.out.println("Game not saved.");
 			System.err.println("IOException: " + e.getMessage());
@@ -63,16 +76,20 @@ public class SaveIO extends Game {
 	public void loadState() {
 		try {
 			//Opens a BufferedReader stream
-			BufferedReader saveState = new BufferedReader(new FileReader("Save" + saves + ".txt"));
-			String names;
+			BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
+			String names = "";
 			int Money;
 			try {
-				names = saveState.readLine();
+				//two file approach if doesn't work
 				while (names != null) {
 					names = saveState.readLine();
-					Money = Integer.parseInt(saveState.readLine());
-					name.add(names);
-					stacks.add(Money);
+					if(names != null) {
+						name.add(names);
+					}
+					if(names != null) {
+						Money = Integer.parseInt(saveState.readLine());
+						stacks.add(Money);
+					}
 				}
 				saveState.close();
 			} catch (IOException e) {
@@ -83,7 +100,7 @@ public class SaveIO extends Game {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
 		}
-		
+		clear();
 		super.loadPlayers(name, stacks);
 	}
 }
