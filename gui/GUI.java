@@ -45,7 +45,7 @@ public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
     //resources used for playing music
-	//private final URL resource = getClass().getResource("LOUDER.mp3");
+	//private final URL resource = getClass().getResource("/Resources/LOUDER.mp3");
     //private final Media media = new Media(resource.toString());
     //private final MediaPlayer mediaPlayer = new MediaPlayer(media);
 	
