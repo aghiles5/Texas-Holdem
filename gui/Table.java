@@ -42,7 +42,7 @@ public class Table {
 	private final double TABLE_HEIGHT_RATIO = 1.25;
 	private final double TABLE_OUTER_RIM_RATIO = 1.0 / 36.0;
 	private final double TABLE_OUTSET_RATIO = 1.0 / 10.0;
-	private final double TABLE_INSET_RATIO = 1.0 / 8.0;
+	private final double TABLE_INSET_RATIO = 1.0 / 10.0;
 	
 	private final double TABLE_WIDTH = WIN_WIDTH / TABLE_TO_SCREEN_RATIO; //Referring to the length of the straightaway
 	private final double TABLE_RIM = TABLE_WIDTH * TABLE_OUTER_RIM_RATIO;
@@ -219,7 +219,7 @@ public class Table {
 		
 		VBox sWayPlaces = new VBox();
 		sWayPlaces.setAlignment(Pos.CENTER);
-		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (2.5 * PLAYER_INSET));
+		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (2 * PLAYER_INSET) - PLACE_HEIGHT);
 		sWayPlaces.getChildren().addAll(topPlaces, bottomPlaces);
 
 		Pane lobePlaces = new Pane();
