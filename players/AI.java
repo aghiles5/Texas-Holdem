@@ -15,6 +15,12 @@ public class AI extends Player {
 	private static int betInterval; // Interval for bets
 	private int minBet; // Minimum bet amount
 
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	private ArrayList<Integer> smartAIDec = new ArrayList<Integer>();
+	private static final int CHOICES2 = 2;
+	private static final int CHOICES3 = 3;
+	private static final int CHOICES4 = 4;
+
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
 			"DickheadDallas", "EasyEarle", "FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio",
@@ -325,12 +331,12 @@ public class AI extends Player {
 		return returnBet;
 	}
 	
-	public int smartAIDecision() {
+	public ArrayList<Integer> smartAIDecision(int numChoice) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		hand = super.getHand();
 		if (hand == null) {
-			
+			return smartAIDec;
 		}
-		return 0;
+		return smartAIDec;
 	}
 
 }
