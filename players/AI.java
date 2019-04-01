@@ -324,5 +324,13 @@ public class AI extends Player {
 		}
 		return returnBet;
 	}
+	
+	public int smartAIDecision() {
+		hand = super.getHand();
+		if (hand == null) {
+			
+		}
+		return 0;
+	}
 
 }
