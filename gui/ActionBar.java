@@ -175,7 +175,7 @@ public class ActionBar {
 			@Override
 			public void handle(ActionEvent event) {
 				raiseInput.setVisible(true);
-				raise.setText("");
+				raise.setVisible(false);
 			}
 		});
 		
@@ -183,7 +183,7 @@ public class ActionBar {
 			@Override
 			public void handle(ActionEvent event) {
 				raiseInput.setVisible(false);
-				raise.setText("Bet");
+				raise.setVisible(true);;
 			}
 		});
 		
