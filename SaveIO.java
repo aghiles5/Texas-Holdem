@@ -103,4 +103,12 @@ public class SaveIO extends Game {
 		clear();
 		super.loadPlayers(name, stacks);
 	}
+	
+	public ArrayList<String> getName() {
+		return name;
+	}
+	
+	public ArrayList<Integer> getStacks() {
+		return stacks;
+	}
 }
