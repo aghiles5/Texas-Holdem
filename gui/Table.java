@@ -205,7 +205,7 @@ public class Table {
 		
 		VBox sWaySeats = new VBox();
 		sWaySeats.setAlignment(Pos.CENTER);
-		sWaySeats.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) + PLAYER_OUTSET + (2 * TABLE_RIM));
+		sWaySeats.setSpacing(2 * outsetEllipseRadiusY - SEAT_HEIGHT);
 		sWaySeats.getChildren().addAll(topSeats, bottomSeats);
 
 		Pane lobeSeats = new Pane();
@@ -219,7 +219,7 @@ public class Table {
 		
 		VBox sWayPlaces = new VBox();
 		sWayPlaces.setAlignment(Pos.CENTER);
-		sWayPlaces.setSpacing((TABLE_WIDTH / TABLE_HEIGHT_RATIO) - (2 * PLAYER_INSET) - PLACE_HEIGHT);
+		sWayPlaces.setSpacing(2 * insetEllipseRadiusY - PLACE_HEIGHT);
 		sWayPlaces.getChildren().addAll(topPlaces, bottomPlaces);
 
 		Pane lobePlaces = new Pane();
