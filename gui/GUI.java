@@ -1,4 +1,5 @@
 package gui;
+import java.io.*;
 import java.util.ArrayList;
 
 import cards.Card;
@@ -75,6 +76,13 @@ public class GUI extends Application {
 	    //mediaPlayer.play();
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		try { //If a local save file is not available the continue option is greyed out
+			(new FileReader("Save.txt")).close();
+		}
+		catch(FileNotFoundException e) {
+			((Button) scene.lookup("#continue")).setDisable(true);
+		}
 		
 		((Button) scene.lookup("#continue")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
