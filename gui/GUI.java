@@ -423,7 +423,7 @@ public class GUI extends Application {
 		help.setDisable(true);
 		quit.setDisable(true);
 		raiseInput.setVisible(false);
-		raise.setText("Raise");
+		raise.setVisible(true);
 		call.setText("Call");
 		
 		Player user = game.getLastPlayer(); //The player's information is updated and the player count is incremented
