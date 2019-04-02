@@ -50,20 +50,46 @@ public class MainMenu {
 	private StackPane setMenu() {
 		//Menu Background/Base
 		StackPane menu = new StackPane();
-		menu.setStyle("-fx-background-image: url(\"Images/vegas.jpg\");");
+		menu.setStyle("-fx-background-image: url(\"gui/textures/felt.png\");");
 		
-			//Encapsulating Box
-			VBox menuBox = new VBox();
-			menuBox.setAlignment(Pos.CENTER);
-			menuBox.getStyleClass().add("custom-popup");
-			menuBox.setSpacing(10);
-			menuBox.setMaxSize(480, 600);
+			//Box for initial menu and associated options
+			VBox mainBox = new VBox();
+			mainBox.setAlignment(Pos.CENTER);
+			mainBox.setSpacing(25);
 			
 				//Main Title
 				Label title = new Label("Texas Hold'em");
-				title.setStyle("-fx-font-size: 36;");
-				title.getStyleClass().add("bar-label");
+				title.setStyle("-fx-font-size: 48;");
+			
+				VBox mainButtonBox = new VBox();
+				mainButtonBox.setSpacing(10);
+				mainButtonBox.setAlignment(Pos.CENTER);
 				
+					Button resume = new Button("Continue");
+					resume.getStyleClass().add("button-large");
+					Button newGame = new Button("New Game");
+					newGame.getStyleClass().add("button-large");
+					Button tutorial = new Button("How to Play");
+					tutorial.getStyleClass().add("button-large");
+					Button quit = new Button("Quit to Desktop");
+					quit.getStyleClass().add("button-large");
+		
+				mainButtonBox.getChildren().addAll(resume, newGame, tutorial, quit);
+				
+			mainBox.getChildren().addAll(title, mainButtonBox);
+				
+			//Box for the new game setup
+			VBox newGameBox = new VBox();
+			newGameBox.setAlignment(Pos.CENTER);
+			newGameBox.getStyleClass().add("custom-popup");
+			newGameBox.setSpacing(10);
+			newGameBox.setMaxSize(480, 600);
+			newGameBox.setVisible(false);
+				
+				Label newGameTitle = new Label("Select Your Options");
+				newGameTitle.setStyle("-fx-font-size: 36;");
+				newGameTitle.getStyleClass().add("bar-label");
+			
 				//Game Info and Settings
 				HBox stackBox = new HBox();
 				stackBox.setSpacing(10);
@@ -96,24 +122,40 @@ public class MainMenu {
 				comSlider.setId("comSlider");
 			
 				//Enter/Exit Buttons
-				HBox buttonBox = new HBox();
-				buttonBox.setAlignment(Pos.CENTER);
-				buttonBox.setSpacing(10);
+				HBox newGameButtonBox = new HBox();
+				newGameButtonBox.setAlignment(Pos.CENTER);
+				newGameButtonBox.setSpacing(10);
 				
 					Button start = new Button("Start Game");
 					start.getStyleClass().add("button-large");
 					start.setId("startButton");
-					Button exit = new Button("Exit");
-					exit.getStyleClass().add("button-large");
+					Button back = new Button("Back");
+					back.getStyleClass().add("button-large");
 				
-				buttonBox.getChildren().addAll(start, exit);
+				newGameButtonBox.getChildren().addAll(start, back);
 				
-			menuBox.getChildren().addAll(title, stackBox, blindLabel, sliderLabel, comSlider, buttonBox);
+			newGameBox.getChildren().addAll(newGameTitle, stackBox, blindLabel, sliderLabel, comSlider, newGameButtonBox);
 			
 			//=================================================================
 			// Event Handlers/Listeners
 			
-			exit.setOnAction(new EventHandler<ActionEvent>() {
+			back.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					newGameBox.setVisible(false);
+					mainBox.setVisible(true);
+				}
+			});
+			
+			newGame.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					newGameBox.setVisible(true);
+					mainBox.setVisible(false);
+				}
+			});
+			
+			quit.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					System.exit(0);
@@ -130,7 +172,7 @@ public class MainMenu {
 				}
 			});
 			
-		menu.getChildren().add(menuBox);
+		menu.getChildren().addAll(mainBox, newGameBox);
 		
 		return menu;
 	}
