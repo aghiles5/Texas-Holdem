@@ -68,7 +68,27 @@ public class Game {
      *              Game
      * @return arraylist of the generated players
      */
-    public Game(ArrayList<String> name, ArrayList<Integer> stack) {
+    public Game(ArrayList<String> name, ArrayList<Integer> stack, int smlBlind) {
+        roundNum = 0;
+        playerCount = 0;
+        pot = 0;
+        highestBet = 0;
+        highBetHolder = 0;
+        smallBlind = smlBlind;
+        gameOver = false;
+        sBlindDone = false;
+        bBlindDone = false;
+        loadPlayers(name, stack);
+    }
+    
+    /**
+     * Generates the old players loaded from a file in the SaveIO class
+     * 
+     * @param name, stack name and stack contain the arrayList passed from SaveIO to
+     *              Game
+     * @return arraylist of the generated players
+     */
+    public void loadPlayers(ArrayList<String> name, ArrayList<Integer> stack) {
         ArrayList<String> names = new ArrayList<String>(name);
         ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
         int position = 0;
@@ -89,9 +109,9 @@ public class Game {
                 player.setHole(cardDeck.dealSingle());
         }
 
-        return players;
+        
     }
-
+    
     /**
      * Generates the players needed to be recorded throughout the game, in gui and
      * TBGame
