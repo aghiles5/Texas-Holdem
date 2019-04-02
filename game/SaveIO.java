@@ -13,6 +13,7 @@ import players.Player;
 public class SaveIO {
 	private ArrayList<String> name = new ArrayList<String>();
 	private ArrayList<Integer> stacks = new ArrayList<Integer>();
+	private int smallBlind;
 	
 	public void clear() {
 		File dat = new File("Save.txt");
@@ -76,7 +77,6 @@ public class SaveIO {
 	 * post: The names and stacks of each existing player have been passed to the loadPlayers method in the super class.
 	 */
 	public Game loadState() {
-		int smlBlind = 0;
 		try {
 			//Opens a BufferedReader stream
 			BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
@@ -94,7 +94,7 @@ public class SaveIO {
 						stacks.add(Money);
 					}
 				}
-				smlBlind = Integer.parseInt(name.get(name.size() - 1));
+				smallBlind = Integer.parseInt(name.get(name.size() - 1));
 				saveState.close();
 			} catch (IOException e) {
 				System.out.println("File could not be read.");
@@ -104,8 +104,8 @@ public class SaveIO {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
 		}
+		Game nGame = new Game(name, stacks, smallBlind);
 		clear();
-		Game nGame = new Game(name, stacks, smlBlind);
 		return nGame;
 	}
 	
@@ -115,5 +115,9 @@ public class SaveIO {
 	
 	public ArrayList<Integer> getStacks() {
 		return stacks;
+	}
+	
+	public int getSmallBlind() {
+		return smallBlind;
 	}
 }
