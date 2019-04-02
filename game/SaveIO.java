@@ -33,7 +33,7 @@ public class SaveIO {
 	 * pre: none
 	 * post: The players' names and their stack values are saved to a .txt file.
 	 */
-	public void saveState(ArrayList<Player> players){
+	public void saveState(ArrayList<Player> players, int smlBlind){
 		/*Copies the player list to a new ArrayList*/
 		ArrayList<Player> copy = new ArrayList<Player>(players);
 		/*Two separate lists contain the name and stack of each player*/
@@ -43,7 +43,7 @@ public class SaveIO {
 		File dataFile = new File("Save.txt");
 		FileWriter out;
 		BufferedWriter writeScore;
-		int smallBlind = Game.getSmallBlind();
+		int smallBlind = smlBlind;
 		
 		//adds the name and stack of each player to a separate list
 		for (int k = 0; k < copy.size(); k++) {
