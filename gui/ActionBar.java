@@ -187,13 +187,6 @@ public class ActionBar {
 			}
 		});
 		
-		escapeClause.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				System.exit(0);
-			}
-		});
-		
 		raiseSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observables,
                 Number oldValue, Number newValue) {

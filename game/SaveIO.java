@@ -13,6 +13,7 @@ import players.Player;
 public class SaveIO {
 	private ArrayList<String> name = new ArrayList<String>();
 	private ArrayList<Integer> stacks = new ArrayList<Integer>();
+	private int smallBlind;
 	
 	public void clear() {
 		File dat = new File("Save.txt");
@@ -33,7 +34,7 @@ public class SaveIO {
 	 * pre: none
 	 * post: The players' names and their stack values are saved to a .txt file.
 	 */
-	public void saveState(ArrayList<Player> players){
+	public void saveState(ArrayList<Player> players, int smlBlind){
 		/*Copies the player list to a new ArrayList*/
 		ArrayList<Player> copy = new ArrayList<Player>(players);
 		/*Two separate lists contain the name and stack of each player*/
@@ -43,6 +44,7 @@ public class SaveIO {
 		File dataFile = new File("Save.txt");
 		FileWriter out;
 		BufferedWriter writeScore;
+		int smallBlind = smlBlind;
 		
 		//adds the name and stack of each player to a separate list
 		for (int k = 0; k < copy.size(); k++) {
@@ -57,9 +59,10 @@ public class SaveIO {
 			for (int i = 0; i < copy.size(); i++) {
 				writeScore.write(name.get(i));
 				writeScore.newLine();
-				writeScore.write(stacks.get(i));
+				writeScore.write(Integer.toString(stacks.get(i)));
 				writeScore.newLine();
 			}
+			writeScore.write(Integer.toString(smallBlind));
 			writeScore.close();
 			out.close();
 			System.out.println("Game Saved.");
@@ -82,15 +85,18 @@ public class SaveIO {
 			try {
 				//two file approach if doesn't work
 				while (names != null) {
-					names = saveState.readLine();
-					if(names != null) {
+					if(saveState.readLine() != null) {
+						names = saveState.readLine();
 						name.add(names);
 					}
-					if(names != null) {
+					if(saveState.readLine() != null) {
 						Money = Integer.parseInt(saveState.readLine());
 						stacks.add(Money);
 					}
 				}
+				
+				
+				smallBlind = Integer.parseInt(saveState.lines());
 				saveState.close();
 			} catch (IOException e) {
 				System.out.println("File could not be read.");
@@ -100,8 +106,8 @@ public class SaveIO {
 			System.out.println("Game could not be loaded.");
 			System.err.println("IOException: " + e.getMessage());
 		}
+		Game nGame = new Game(name, stacks, smallBlind);
 		clear();
-		Game nGame = new Game(name, stacks);
 		return nGame;
 	}
 	
@@ -111,5 +117,9 @@ public class SaveIO {
 	
 	public ArrayList<Integer> getStacks() {
 		return stacks;
+	}
+	
+	public int getSmallBlind() {
+		return smallBlind;
 	}
 }
