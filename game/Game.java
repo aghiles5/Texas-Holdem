@@ -68,7 +68,7 @@ public class Game {
      *              Game
      * @return arraylist of the generated players
      */
-    public ArrayList<Player> loadPlayers(ArrayList<String> name, ArrayList<Integer> stack) {
+    public Game(ArrayList<String> name, ArrayList<Integer> stack) {
         ArrayList<String> names = new ArrayList<String>(name);
         ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
         int position = 0;

@@ -10,7 +10,7 @@ import players.Player;
  * @version March 30, 2019
  */
 //JUNIT TESTING!!!
-public class SaveIO extends Game {
+public class SaveIO {
 	private ArrayList<String> name = new ArrayList<String>();
 	private ArrayList<Integer> stacks = new ArrayList<Integer>();
 	
@@ -33,9 +33,9 @@ public class SaveIO extends Game {
 	 * pre: none
 	 * post: The players' names and their stack values are saved to a .txt file.
 	 */
-	public void saveState(){
+	public void saveState(ArrayList<Player> players){
 		/*Copies the player list to a new ArrayList*/
-		ArrayList<Player> copy = new ArrayList<Player>(super.getPlayerList());
+		ArrayList<Player> copy = new ArrayList<Player>(players);
 		/*Two separate lists contain the name and stack of each player*/
 		ArrayList<String> name = new ArrayList<String>();
 		ArrayList<Integer> stacks = new ArrayList<Integer>();
@@ -54,7 +54,7 @@ public class SaveIO extends Game {
 		try {
 			out = new FileWriter(dataFile); //output stream
 			writeScore = new BufferedWriter(out);
-			for (int i = 0; i < super.getPlayerList().size(); i++) {
+			for (int i = 0; i < copy.size(); i++) {
 				writeScore.write(name.get(i));
 				writeScore.newLine();
 				writeScore.write(stacks.get(i));
@@ -73,7 +73,7 @@ public class SaveIO extends Game {
 	 * pre: A file exists containing the names and stacks of each player
 	 * post: The names and stacks of each existing player have been passed to the loadPlayers method in the super class.
 	 */
-	public void loadState() {
+	public Game loadState() {
 		try {
 			//Opens a BufferedReader stream
 			BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
@@ -101,7 +101,8 @@ public class SaveIO extends Game {
 			System.err.println("IOException: " + e.getMessage());
 		}
 		clear();
-		super.loadPlayers(name, stacks);
+		Game nGame = new Game(name, stacks);
+		return nGame;
 	}
 	
 	public ArrayList<String> getName() {
