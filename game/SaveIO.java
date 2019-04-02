@@ -59,7 +59,7 @@ public class SaveIO {
 			for (int i = 0; i < copy.size(); i++) {
 				writeScore.write(name.get(i));
 				writeScore.newLine();
-				writeScore.write(stacks.get(i));
+				writeScore.write(Integer.toString(stacks.get(i)));
 				writeScore.newLine();
 			}
 			writeScore.write(Integer.toString(smallBlind));
