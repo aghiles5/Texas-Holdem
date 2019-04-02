@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -66,9 +67,7 @@ public class GUI extends Application {
 		primaryStage.setResizable(false);
 		primaryStage.setFullScreenExitHint("");
 		
-		MainMenu menu = new MainMenu();
-		
-		Scene scene = new Scene(menu.getMenu(), WIN_WIDTH, WIN_HEIGHT);
+		Scene scene = new Scene(new Pane(), WIN_WIDTH, WIN_HEIGHT);
 		scene.getStylesheets().add("/gui/tableStyle.css");
 		scene.setFill(Color.BLACK);
 		//plays a media file indefinitely
@@ -77,12 +76,18 @@ public class GUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
+		generateMenu(scene);
+	}
+	
+	private void generateMenu(Scene scene) {
+		scene.setRoot((new MainMenu()).getMenu());
+		
 		try { //If a local save file is not available the continue option is greyed out
 			(new FileReader("Save.txt")).close();
 		}
 		catch(FileNotFoundException e) {
 			((Button) scene.lookup("#continue")).setDisable(true);
-		}
+		} catch (IOException e) {}
 		
 		((Button) scene.lookup("#continue")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -210,9 +215,16 @@ public class GUI extends Application {
 			}
 		});
 		
+		((Button) scene.lookup("#quit")).setOnAction(new EventHandler<ActionEvent>() { //Handler for saving the game
+			@Override
+			public void handle(ActionEvent event) {
+				generateMenu(scene);
+			}
+		});
+		
 		startPlayRound(scene, game); //The first round of play is begun
 	}
-	
+
 	/**
 	 * Before starting a round of play the small blind, big blind, and dealer
 	 * chips are set in their appropriate spot, players' hole cards are
