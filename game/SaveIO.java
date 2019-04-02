@@ -85,16 +85,18 @@ public class SaveIO {
 			try {
 				//two file approach if doesn't work
 				while (names != null) {
-					names = saveState.readLine();
-					if(names != null) {
+					if(saveState.readLine() != null) {
+						names = saveState.readLine();
 						name.add(names);
 					}
-					if(names != null) {
+					if(saveState.readLine() != null) {
 						Money = Integer.parseInt(saveState.readLine());
 						stacks.add(Money);
 					}
 				}
-				smallBlind = Integer.parseInt(name.get(name.size() - 1));
+				
+				
+				smallBlind = Integer.parseInt(saveState.lines());
 				saveState.close();
 			} catch (IOException e) {
 				System.out.println("File could not be read.");
