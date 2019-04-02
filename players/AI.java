@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 03/27/2019
+ * @version 04/02/2019
  */
 
 
@@ -14,12 +14,20 @@ public class AI extends Player {
 
 	private static int betInterval; // Interval for bets
 	private int minBet; // Minimum bet amount
+	
+	// Next few lines are variable from Hand class
+	private static final int HIGH_CARD = 0;
+	private static final int ONE_PAIR = 1;
+	private static final int TWO_PAIRS = 2;
+	private static final int THREE_OF_A_KIND = 3;
+	private static final int STRAIGHT = 4;
+	private static final int FLUSH = 5;
+	private static final int FULL_HOUSE = 6;
+	private static final int FOUR_OF_A_KIND = 7;
+	private static final int STRAIGHT_FLUSH = 8;
+	private static final int ROYAL_FLUSH = 9;
 
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private ArrayList<Integer> smartAIDec = new ArrayList<Integer>();
-	private static final int CHOICES2 = 2;
-	private static final int CHOICES3 = 3;
-	private static final int CHOICES4 = 4;
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -69,8 +77,6 @@ public class AI extends Player {
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
 	
-	// YOU WILL HAVE TO MAKE AI MUCH SMARTER THAN RANDOMLY MAKING IT'S OWN CHOICES OUT OF 100!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 	/**
 	 * THIS METHOD IS IMPLEMENTED IF AND ONLY IF THE PREVIOUS PLAYER/ PLAYERS HAVE BET, RAISED, OR CALLED TO PREVIOUS RAISES
 	 * 
@@ -84,10 +90,14 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100); // Generates a random choice out of 100
 
+		ArrayList<Integer> percent; // Empty list of percentages that will be updated
+
 		// If AI has a stack less than minBet or less than the highest bet, then they only have 2 actions to play 
 		if (super.getStack() <= minBet || super.getStack() <= super.getHighBet()) {
+			percent = smartAIDecision(2);
+
 			// All in action
-			if (decision < 10) {
+			if (decision < percent.get(0)) {
 				super.allIn("A");
 			}
 			// Fold action
@@ -98,12 +108,14 @@ public class AI extends Player {
 
 		// if AI has sufficient stack but has insufficient stack to raise to the next interval, then AI only has 3 actions to play
 		else if (super.getStack() > minBet && super.getStack() - betInterval <= super.getHighBet()) {
+			percent = smartAIDecision(3);
+
 			// All in action
-			if (decision < 10) {
+			if (decision < percent.get(0)) {
 				super.allIn("A");
 			}
 			// Call action
-			else if (decision >= 10 && decision < 40) {
+			else if (decision >= percent.get(0) && decision < percent.get(1)) {
 				super.call("L");
 			}
 			// Fold action
@@ -114,27 +126,30 @@ public class AI extends Player {
 
 		// AI has sufficient stack to raise more than one bet interval
 		else {
-			// AI fold action
-			if (decision < 10) {
-				super.fold("F");
-			}
+			percent = smartAIDecision(3);
 
 			// AI all in action
-			else if (decision >= 10 && decision < 12) {
+			if (decision < percent.get(0)) {
 				super.allIn("A");
 			}
-		
-			// AI call action
-			else if (decision >= 12 && decision < 75) {
-				super.call("L");
-			}
-		
 			// AI raise action
-			else if (decision >= 75) {
+			else if (decision >= percent.get(0) && decision > percent.get(1)) {
 				int bet = checkAIRaise(); // Generates a random number within the bounds of stack for raising
 				super.BetRaise("R", bet - super.getHighBet());
 			}
+			// AI call action
+			else if (decision >= percent.get(1) && decision < percent.get(2)) {
+				super.call("L");
+			}
+			// AI fold action
+			else {
+				super.fold("F");
+			}
+		
+			
 		}
+
+		smartAIDec.clear(); // Clears the list of percentage for next round
 	}
 	/**
 	 * This method generates a random raise amount that is greater than the highest bet for AI
@@ -143,8 +158,6 @@ public class AI extends Player {
 	 */
 	public int checkAIRaise() {
 		Random bet = new Random();
-		// Random typeBet = new Random(); THIS IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// int prbTBet = typeBet.nextInt(100); THIS IS TEMPORARY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 		int newRaise = 0;
 
@@ -173,10 +186,14 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
 
+		ArrayList<Integer> percent; // Empty list of percentages that will be updated
+
 		// If AI has a stack less than minBet then they only have 2 actions to play
 		if (super.getStack() <= minBet) {
+			percent = smartAIDecision(2);
+
 			// All in action
-			if (decision < 10) {
+			if (decision < percent.get(0)) {
 				super.allIn("A");
 			}
 			// Fold action
@@ -187,40 +204,47 @@ public class AI extends Player {
 
 		// When AI has suffifient stack but can only bet to the bet interval
 		else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
+			percent = smartAIDecision(3);
+
 			// All in action
-			if (decision < 10) {
+			if (decision < percent.get(0)) {
 				super.allIn("A");
 			}
-			// Fold action
-			else if (decision >= 10 && decision < 60) {
-				super.fold("F");
-			}
 			// Bet action
-			else {
+			else if (decision >= percent.get(0) && decision < percent.get(1)) {
 				super.BetRaise("B", betInterval);
+			}
+			// Fold action
+			else {
+				super.fold("F");
 			}
 		}
 
 		// AI has sufficient stack to bet more than the minimum bet amount
 		else {
-			// AI check action
-			if (decision < 63) {
-				super.check("C");
+			percent = smartAIDecision(4);
+
+			// AI all in action
+			if (decision < percent.get(0)) {
+				super.allIn("A");
 			}
 			// AI bet action
-			else if (decision >= 63 && decision < 88) {
+			else if (decision >= percent.get(0) && decision < percent.get(1)) {
 				int bet = checkAIBets(); // Generates a random number within the bounds of minimum bet and stack for betting
 				super.BetRaise("B", bet);
 			}
+			// AI check action
+			else if (decision >= percent.get(1) && decision < percent.get(2)) {
+				super.check("C");
+			}
 			// AI fold action
-			else if (decision >= 88 && decision < 98) {
+			else {
 				super.fold("F");
 			}
-			// AI all in action
-			else if (decision >= 98) {
-				super.allIn("A");
-			}
+			
 		}
+
+		smartAIDec.clear(); // Clears the list of percentage for next round
 	}
 
 	/**
@@ -330,12 +354,163 @@ public class AI extends Player {
 		}
 		return returnBet;
 	}
-	
-	public ArrayList<Integer> smartAIDecision(int numChoice) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	/**
+	 * This method will decide the probability of percentage of which action the AI will implement
+	 * based on the card ranking it has
+	 * 
+	 * @param numChoice
+	 * @return 
+	 */
+	public ArrayList<Integer> smartAIDecision(int numChoice) {
 		hand = super.getHand();
 		if (hand == null) {
-			return smartAIDec;
+			if (numChoice == 2) {
+				smartAIDec.add(5);
+			}
+			else if (numChoice == 3) {
+				smartAIDec.add(5);
+				smartAIDec.add(35);
+			}
+			else if (numChoice == 4) {
+				smartAIDec.add(5);
+				smartAIDec.add(15);
+				smartAIDec.add(40);
+			}
 		}
+		else {
+			if (hand.getRank() == HIGH_CARD) {
+				if (numChoice == 2) {
+					smartAIDec.add(1);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+					smartAIDec.add(17);
+				}
+			}
+			else if (hand.getRank() == ONE_PAIR) {
+				if (numChoice == 2) {
+					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				}
+				else if (numChoice == 3) {
+	
+				}
+				else if (numChoice == 4) {
+	
+				}
+			}
+			else if (hand.getRank() == TWO_PAIRS) {
+				if (numChoice == 2) {
+
+				}
+				else if (numChoice == 3) {
+	
+				}
+				else if (numChoice == 4) {
+	
+				}
+			}
+			else if (hand.getRank() == THREE_OF_A_KIND) {
+				if (numChoice == 2) {
+
+				}
+				else if (numChoice == 3) {
+	
+				}
+				else if (numChoice == 4) {
+	
+				}
+			}
+			else if (hand.getRank() == STRAIGHT) {
+				if (numChoice == 2) {
+					smartAIDec.add(75);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(70);
+					smartAIDec.add(85);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(65);
+					smartAIDec.add(75);
+					smartAIDec.add(85);
+				}
+			}
+			else if (hand.getRank() == FLUSH) {
+				if (numChoice == 2) {
+					smartAIDec.add(80);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(75);
+					smartAIDec.add(90);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(70);
+					smartAIDec.add(85);
+					smartAIDec.add(95);
+				}
+			}
+			else if (hand.getRank() == FULL_HOUSE) {
+				if (numChoice == 2) {
+					smartAIDec.add(95);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(85);
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(80);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+			else if (hand.getRank() == FOUR_OF_A_KIND) {
+				if (numChoice == 2) {
+					smartAIDec.add(100);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(90);
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(80);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+			else if (hand.getRank() == STRAIGHT_FLUSH) {
+				if (numChoice == 2) {
+					smartAIDec.add(100);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(90);
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(85);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+			else if (hand.getRank() == ROYAL_FLUSH) {
+				if (numChoice == 2) {
+					smartAIDec.add(100);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(90);
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(85);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+ 		}
 		return smartAIDec;
 	}
 
