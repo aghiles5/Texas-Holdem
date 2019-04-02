@@ -67,6 +67,7 @@ public class MainMenu {
 				
 					Button resume = new Button("Continue");
 					resume.getStyleClass().add("button-large");
+					resume.setId("continue");
 					Button newGame = new Button("New Game");
 					newGame.getStyleClass().add("button-large");
 					Button tutorial = new Button("How to Play");

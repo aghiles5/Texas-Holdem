@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import cards.Card;
 import game.Game;
+import game.SaveIO;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
@@ -44,6 +45,7 @@ import javafx.scene.media.MediaPlayer;
 public class GUI extends Application {
 	private final double WIN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
+	private SaveIO saveLoad = new SaveIO();
     //resources used for playing music
 	//private final URL resource = getClass().getResource("/Resources/LOUDER.mp3");
     //private final Media media = new Media(resource.toString());
@@ -74,14 +76,33 @@ public class GUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
+		((Button) scene.lookup("#continue")).setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				loadFromFile(scene);
+			}
+		});
+		
 		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
 			@Override
 			public void handle(ActionEvent event) {
 				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
 				int stackSize = Integer.parseInt((((ChoiceBox<String>) scene.lookup("#stackChoice")).getValue()).substring(1).replaceAll(" ", "").replace("$", ""));
-				generatePlayArea(scene, playerNum, stackSize);
+				makeNewGame(scene, playerNum, stackSize);
 			}
 		});
+	}
+	
+	private void makeNewGame(Scene scene, int playerNum, int stackSize) {
+		Game game = new Game(); //The new game is created and its parameters are generated
+		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
+		game.setupRound();
+		generatePlayArea(scene, game);
+	}
+	
+	private void loadFromFile(Scene scene) {
+		Game game = saveLoad.loadState();
+		generatePlayArea(scene, game);
 	}
 	
 	/**
@@ -93,15 +114,10 @@ public class GUI extends Application {
 	 * 
 	 * @param scene the GUI scene
 	 */
-	private void generatePlayArea(Scene scene, int playerNum, int stackSize) {
-		Game game = new Game(); //The new game is created and its parameters are generated
-		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
-		game.setupRound();
-		ArrayList<Card> comm = game.getComm();
-		
+	private void generatePlayArea(Scene scene, Game game) {
 		BorderPane playArea = new BorderPane(); //The GUI play area scene is created
-		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT, stackSize);
-		Table table = new Table(players, comm);
+		ActionBar actionBar = new ActionBar(WIN_WIDTH, WIN_HEIGHT, (int) (game.getSmallBlind() / 0.025));
+		Table table = new Table(game.getPlayerList(), game.getComm());
 		playArea.setBottom(actionBar.getBarPane());
 		playArea.setCenter(table.getTablePane());
 		scene.setRoot(playArea);
@@ -148,7 +164,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				((HBox) scene.lookup("#endGameNotif")).setVisible(false);
 				((Button) scene.lookup("#quit")).setDisable(true);
-				generatePlayArea(scene, playerNum, stackSize);
+				makeNewGame(scene, game.getPlayerList().size(), (int) (game.getSmallBlind() / 0.025));
 			}
 		});
 		
@@ -176,6 +192,13 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				game.call();
 				finishUserTurn(scene, game);
+			}
+		});
+		
+		((Button) scene.lookup("#save")).setOnAction(new EventHandler<ActionEvent>() { //Handler for saving the game
+			@Override
+			public void handle(ActionEvent event) {
+				saveLoad.saveState(game.getPlayerList(), game.getSmallBlind());
 			}
 		});
 		
