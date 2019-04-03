@@ -17,12 +17,19 @@ public class SaveIO {
 	
 	public void clear() {
 		File dat = new File("Save.txt");
+		File blind = new File("Blind.txt");
 		FileWriter out;
+		FileWriter b;
 		BufferedWriter stuff;
+		BufferedWriter cBlind;
 		try {
 			out = new FileWriter(dat);
 			stuff = new BufferedWriter(out);
 			stuff.write("");
+			b = new FileWriter(blind);
+			cBlind = new BufferedWriter(b);
+			cBlind.write("");
+			cBlind.close();
 			stuff.close();
 		} catch (IOException e) {
 			System.out.println("File not cleared.");
@@ -42,9 +49,11 @@ public class SaveIO {
 		ArrayList<Integer> stacks = new ArrayList<Integer>();
 		//writes to a new file each save
 		File dataFile = new File("Save.txt");
+		File blind = new File("Blind.txt");
 		FileWriter out;
+		FileWriter nblind;
 		BufferedWriter writeScore;
-		int smallBlind = smlBlind;
+		BufferedWriter writeBlind;
 		
 		//adds the name and stack of each player to a separate list
 		for (int k = 0; k < copy.size(); k++) {
@@ -55,15 +64,19 @@ public class SaveIO {
 		//writes to file
 		try {
 			out = new FileWriter(dataFile); //output stream
+			nblind = new FileWriter(blind);
 			writeScore = new BufferedWriter(out);
+			writeBlind = new BufferedWriter(nblind);
+			writeBlind.write(Integer.toString(smlBlind));
 			for (int i = 0; i < copy.size(); i++) {
 				writeScore.write(name.get(i));
 				writeScore.newLine();
 				writeScore.write(Integer.toString(stacks.get(i)));
 				writeScore.newLine();
 			}
-			writeScore.write(Integer.toString(smallBlind));
+			writeBlind.close();
 			writeScore.close();
+			nblind.close();
 			out.close();
 			System.out.println("Game Saved.");
 		} catch (IOException e) {
@@ -80,24 +93,20 @@ public class SaveIO {
 		try {
 			//Opens a BufferedReader stream
 			BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
-			String names = "";
-			int Money;
+			BufferedReader sBlind = new BufferedReader(new FileReader("Blind.txt"));
 			try {
+				smallBlind = Integer.parseInt(sBlind.readLine());
 				//two file approach if doesn't work
-				while (names != null) {
-					if(saveState.readLine() != null) {
-						names = saveState.readLine();
-						name.add(names);
-					}
-					if(saveState.readLine() != null) {
-						Money = Integer.parseInt(saveState.readLine());
-						stacks.add(Money);
-					}
+				String in = saveState.readLine();
+				while (in != null) {
+						name.add(in);
+						in = saveState.readLine();
+						stacks.add(Integer.parseInt(in));
+						in = saveState.readLine();
 				}
-				
-				
-				smallBlind = Integer.parseInt(saveState.lines());
+				sBlind.close();
 				saveState.close();
+				
 			} catch (IOException e) {
 				System.out.println("File could not be read.");
 				System.err.println("IOException: " + e.getMessage());
