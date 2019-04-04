@@ -149,6 +149,7 @@ public class AI extends Player {
 			
 		}
 
+		percent.clear();
 		smartAIDec.clear(); // Clears the list of percentage for next round
 	}
 	/**
@@ -190,7 +191,7 @@ public class AI extends Player {
 
 		// If AI has a stack less than minBet then they only have 2 actions to play
 		if (super.getStack() <= minBet) {
-			percent = smartAIDecision(2);
+			percent = smartAIDecision2(2);
 
 			// All in action
 			if (decision < percent.get(0)) {
@@ -204,7 +205,7 @@ public class AI extends Player {
 
 		// When AI has suffifient stack but can only bet to the bet interval
 		else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
-			percent = smartAIDecision(3);
+			percent = smartAIDecision2(3);
 
 			// All in action
 			if (decision < percent.get(0)) {
@@ -222,7 +223,7 @@ public class AI extends Player {
 
 		// AI has sufficient stack to bet more than the minimum bet amount
 		else {
-			percent = smartAIDecision(4);
+			percent = smartAIDecision2(4);
 
 			// AI all in action
 			if (decision < percent.get(0)) {
@@ -244,6 +245,7 @@ public class AI extends Player {
 			
 		}
 
+		percent.clear();
 		smartAIDec.clear(); // Clears the list of percentage for next round
 	}
 
@@ -355,15 +357,23 @@ public class AI extends Player {
 		return returnBet;
 	}
 
+	// AI DECIDES ON PROBABILITY OF EACH ACTION BASED UPON THE RANKING OF IT'S OWN CARDS ---------------------------------------------------------------------------
+
 	/**
 	 * This method will decide the probability of percentage of which action the AI will implement
 	 * based on the card ranking it has
 	 * 
+	 * This method only decides for AI when it cannot check
+	 * 
 	 * @param numChoice
 	 * @return 
 	 */
-	public ArrayList<Integer> smartAIDecision(int numChoice) {
+	protected ArrayList<Integer> smartAIDecision(int numChoice) {
+		smartAIDec.clear();
+
 		hand = super.getHand();
+
+		// Default probabilities when AI cards have no ranking yet
 		if (hand == null) {
 			if (numChoice == 2) {
 				smartAIDec.add(5);
@@ -395,103 +405,112 @@ public class AI extends Player {
 			}
 			else if (hand.getRank() == ONE_PAIR) {
 				if (numChoice == 2) {
-					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					smartAIDec.add(2);
 				}
 				else if (numChoice == 3) {
-	
+					smartAIDec.add(2);
+					smartAIDec.add(12);
 				}
 				else if (numChoice == 4) {
-	
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+					smartAIDec.add(17);
 				}
 			}
 			else if (hand.getRank() == TWO_PAIRS) {
 				if (numChoice == 2) {
-
+					smartAIDec.add(2);
 				}
 				else if (numChoice == 3) {
-	
+					smartAIDec.add(5);
+					smartAIDec.add(30);
 				}
 				else if (numChoice == 4) {
-	
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+					smartAIDec.add(30);
 				}
 			}
 			else if (hand.getRank() == THREE_OF_A_KIND) {
 				if (numChoice == 2) {
-
+					smartAIDec.add(2);
 				}
 				else if (numChoice == 3) {
-	
+					smartAIDec.add(3);
+					smartAIDec.add(13);
 				}
 				else if (numChoice == 4) {
-	
+					smartAIDec.add(4);
+					smartAIDec.add(19);
+					smartAIDec.add(70);
 				}
 			}
 			else if (hand.getRank() == STRAIGHT) {
 				if (numChoice == 2) {
-					smartAIDec.add(75);
+					smartAIDec.add(10);
 				}
 				else if (numChoice == 3) {
-					smartAIDec.add(70);
+					smartAIDec.add(10);
 					smartAIDec.add(85);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(65);
-					smartAIDec.add(75);
+					smartAIDec.add(12);
+					smartAIDec.add(50);
 					smartAIDec.add(85);
 				}
 			}
 			else if (hand.getRank() == FLUSH) {
 				if (numChoice == 2) {
-					smartAIDec.add(80);
+					smartAIDec.add(30);
 				}
 				else if (numChoice == 3) {
-					smartAIDec.add(75);
-					smartAIDec.add(90);
+					smartAIDec.add(25);
+					smartAIDec.add(60);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(70);
-					smartAIDec.add(85);
-					smartAIDec.add(95);
+					smartAIDec.add(22);
+					smartAIDec.add(56);
+					smartAIDec.add(90);
 				}
 			}
 			else if (hand.getRank() == FULL_HOUSE) {
 				if (numChoice == 2) {
-					smartAIDec.add(95);
+					smartAIDec.add(60);
 				}
 				else if (numChoice == 3) {
-					smartAIDec.add(85);
-					smartAIDec.add(99);
+					smartAIDec.add(40);
+					smartAIDec.add(80);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(80);
+					smartAIDec.add(20);
+					smartAIDec.add(75);
 					smartAIDec.add(95);
-					smartAIDec.add(99);
 				}
 			}
 			else if (hand.getRank() == FOUR_OF_A_KIND) {
 				if (numChoice == 2) {
-					smartAIDec.add(100);
+					smartAIDec.add(98);
 				}
 				else if (numChoice == 3) {
-					smartAIDec.add(90);
-					smartAIDec.add(99);
+					smartAIDec.add(80);
+					smartAIDec.add(95);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(80);
+					smartAIDec.add(75);
 					smartAIDec.add(95);
 					smartAIDec.add(99);
 				}
 			}
 			else if (hand.getRank() == STRAIGHT_FLUSH) {
 				if (numChoice == 2) {
-					smartAIDec.add(100);
+					smartAIDec.add(99);
 				}
 				else if (numChoice == 3) {
-					smartAIDec.add(90);
+					smartAIDec.add(60);
 					smartAIDec.add(99);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(85);
+					smartAIDec.add(60);
 					smartAIDec.add(95);
 					smartAIDec.add(99);
 				}
@@ -501,11 +520,185 @@ public class AI extends Player {
 					smartAIDec.add(100);
 				}
 				else if (numChoice == 3) {
-					smartAIDec.add(90);
+					smartAIDec.add(70);
 					smartAIDec.add(99);
 				}
 				else if (numChoice == 4) {
+					smartAIDec.add(60);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+ 		}
+		return smartAIDec;
+	}
+
+	/**
+	 * This method will decide the probability of percentage of which action the AI will implement
+	 * based on the card ranking it has
+	 * 
+	 * This method only decides for AI when it cannot call !!
+	 * 
+	 * @param numChoice
+	 * @return 
+	 */
+	protected ArrayList<Integer> smartAIDecision2(int numChoice) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		smartAIDec.clear();
+
+		hand = super.getHand();
+
+		// Default probabilities when AI cards have no ranking yet
+		if (hand == null) {
+			if (numChoice == 2) {
+				smartAIDec.add(5);
+			}
+			else if (numChoice == 3) {
+				smartAIDec.add(5);
+				smartAIDec.add(35);
+			}
+			else if (numChoice == 4) {
+				smartAIDec.add(5);
+				smartAIDec.add(15);
+				smartAIDec.add(40);
+			}
+		}
+		else {
+			if (hand.getRank() == HIGH_CARD) {
+				if (numChoice == 2) {
+					smartAIDec.add(1);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+					smartAIDec.add(17);
+				}
+			}
+			else if (hand.getRank() == ONE_PAIR) {
+				if (numChoice == 2) {
+					smartAIDec.add(2);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+					smartAIDec.add(17);
+				}
+			}
+			else if (hand.getRank() == TWO_PAIRS) {
+				if (numChoice == 2) {
+					smartAIDec.add(2);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(5);
+					smartAIDec.add(30);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(2);
+					smartAIDec.add(12);
+					smartAIDec.add(30);
+				}
+			}
+			else if (hand.getRank() == THREE_OF_A_KIND) {
+				if (numChoice == 2) {
+					smartAIDec.add(2);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(3);
+					smartAIDec.add(13);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(4);
+					smartAIDec.add(19);
+					smartAIDec.add(70);
+				}
+			}
+			else if (hand.getRank() == STRAIGHT) {
+				if (numChoice == 2) {
+					smartAIDec.add(10);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(10);
 					smartAIDec.add(85);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(12);
+					smartAIDec.add(50);
+					smartAIDec.add(85);
+				}
+			}
+			else if (hand.getRank() == FLUSH) {
+				if (numChoice == 2) {
+					smartAIDec.add(30);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(25);
+					smartAIDec.add(60);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(22);
+					smartAIDec.add(56);
+					smartAIDec.add(90);
+				}
+			}
+			else if (hand.getRank() == FULL_HOUSE) {
+				if (numChoice == 2) {
+					smartAIDec.add(60);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(40);
+					smartAIDec.add(80);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(20);
+					smartAIDec.add(75);
+					smartAIDec.add(95);
+				}
+			}
+			else if (hand.getRank() == FOUR_OF_A_KIND) {
+				if (numChoice == 2) {
+					smartAIDec.add(98);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(80);
+					smartAIDec.add(95);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(75);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+			else if (hand.getRank() == STRAIGHT_FLUSH) {
+				if (numChoice == 2) {
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(60);
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(60);
+					smartAIDec.add(95);
+					smartAIDec.add(99);
+				}
+			}
+			else if (hand.getRank() == ROYAL_FLUSH) {
+				if (numChoice == 2) {
+					smartAIDec.add(100);
+				}
+				else if (numChoice == 3) {
+					smartAIDec.add(70);
+					smartAIDec.add(99);
+				}
+				else if (numChoice == 4) {
+					smartAIDec.add(60);
 					smartAIDec.add(95);
 					smartAIDec.add(99);
 				}
