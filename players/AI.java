@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 04/02/2019
+ * @version 04/05/2019
  */
 
 
