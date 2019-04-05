@@ -191,11 +191,15 @@ public class AI extends Player {
 
 		// If AI has a stack less than minBet then they only have 2 actions to play
 		if (super.getStack() <= minBet) {
-			percent = smartAIDecision2(2);
+			percent = smartAIDecision2(3);
 
 			// All in action
 			if (decision < percent.get(0)) {
 				super.allIn("A");
+			}
+			// Check action
+			else if (decision >= percent.get(1) && decision < percent.get(2)) {
+				super.check("C");
 			}
 			// Fold action
 			else {
@@ -203,9 +207,11 @@ public class AI extends Player {
 			}
 		}
 
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 		// When AI has suffifient stack but can only bet to the bet interval
-		else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
-			percent = smartAIDecision2(3);
+		/*else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
+			percent = smartAIDecision2(4);
 
 			// All in action
 			if (decision < percent.get(0)) {
@@ -215,14 +221,18 @@ public class AI extends Player {
 			else if (decision >= percent.get(0) && decision < percent.get(1)) {
 				super.BetRaise("B", betInterval);
 			}
+			// AI check action
+			else if (decision >= percent.get(1) && decision < percent.get(2)) {
+				super.check("C");
+			}
 			// Fold action
 			else {
 				super.fold("F");
 			}
-		}
+		}*/
 
 		// AI has sufficient stack to bet more than the minimum bet amount
-		else {
+		else { 
 			percent = smartAIDecision2(4);
 
 			// AI all in action
@@ -231,8 +241,13 @@ public class AI extends Player {
 			}
 			// AI bet action
 			else if (decision >= percent.get(0) && decision < percent.get(1)) {
-				int bet = checkAIBets(); // Generates a random number within the bounds of minimum bet and stack for betting
-				super.BetRaise("B", bet);
+				if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
+					super.BetRaise("B", betInterval);
+				}
+				else {
+					int bet = checkAIBets(); // Generates a random number within the bounds of minimum bet and stack for betting
+					super.BetRaise("B", bet);
+				}
 			}
 			// AI check action
 			else if (decision >= percent.get(1) && decision < percent.get(2)) {
@@ -542,104 +557,83 @@ public class AI extends Player {
 	 * @param numChoice
 	 * @return 
 	 */
-	protected ArrayList<Integer> smartAIDecision2(int numChoice) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	protected ArrayList<Integer> smartAIDecision2(int numChoice) { // UPDATE THIS METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		smartAIDec.clear();
 
 		hand = super.getHand();
 
 		// Default probabilities when AI cards have no ranking yet
 		if (hand == null) {
-			if (numChoice == 2) {
-				smartAIDec.add(5);
-			}
-			else if (numChoice == 3) {
-				smartAIDec.add(5);
-				smartAIDec.add(35);
+			if (numChoice == 3) {
+				smartAIDec.add(3);
+				smartAIDec.add(80);
 			}
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
 				smartAIDec.add(15);
-				smartAIDec.add(40);
+				smartAIDec.add(30);
 			}
 		}
 		else {
 			if (hand.getRank() == HIGH_CARD) {
-				if (numChoice == 2) {
+				if (numChoice == 3) {
 					smartAIDec.add(1);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(2);
-					smartAIDec.add(12);
+					smartAIDec.add(65);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(2);
-					smartAIDec.add(12);
-					smartAIDec.add(17);
+					smartAIDec.add(1);
+					smartAIDec.add(13);
+					smartAIDec.add(70);
 				}
 			}
 			else if (hand.getRank() == ONE_PAIR) {
-				if (numChoice == 2) {
+				if (numChoice == 3) {
 					smartAIDec.add(2);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(2);
-					smartAIDec.add(12);
+					smartAIDec.add(65);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(2);
-					smartAIDec.add(12);
-					smartAIDec.add(17);
+					smartAIDec.add(13);
+					smartAIDec.add(70);
 				}
 			}
 			else if (hand.getRank() == TWO_PAIRS) {
-				if (numChoice == 2) {
+				if (numChoice == 3) {
 					smartAIDec.add(2);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(5);
-					smartAIDec.add(30);
+					smartAIDec.add(80);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(2);
 					smartAIDec.add(12);
-					smartAIDec.add(30);
+					smartAIDec.add(70);
 				}
 			}
 			else if (hand.getRank() == THREE_OF_A_KIND) {
-				if (numChoice == 2) {
-					smartAIDec.add(2);
-				}
-				else if (numChoice == 3) {
+				if (numChoice == 3) {
 					smartAIDec.add(3);
-					smartAIDec.add(13);
+					smartAIDec.add(80);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(4);
 					smartAIDec.add(19);
-					smartAIDec.add(70);
+					smartAIDec.add(75);
 				}
 			}
 			else if (hand.getRank() == STRAIGHT) {
-				if (numChoice == 2) {
-					smartAIDec.add(10);
-				}
-				else if (numChoice == 3) {
+				if (numChoice == 3) {
 					smartAIDec.add(10);
 					smartAIDec.add(85);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(12);
-					smartAIDec.add(50);
+					smartAIDec.add(45);
 					smartAIDec.add(85);
 				}
 			}
 			else if (hand.getRank() == FLUSH) {
-				if (numChoice == 2) {
-					smartAIDec.add(30);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(25);
-					smartAIDec.add(60);
+				if (numChoice == 3) {
+					smartAIDec.add(20);
+					smartAIDec.add(90);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(22);
@@ -648,58 +642,46 @@ public class AI extends Player {
 				}
 			}
 			else if (hand.getRank() == FULL_HOUSE) {
-				if (numChoice == 2) {
-					smartAIDec.add(60);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(40);
-					smartAIDec.add(80);
+				if (numChoice == 3) {
+					smartAIDec.add(20);
+					smartAIDec.add(90);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(20);
+					smartAIDec.add(25);
 					smartAIDec.add(75);
 					smartAIDec.add(95);
 				}
 			}
 			else if (hand.getRank() == FOUR_OF_A_KIND) {
-				if (numChoice == 2) {
-					smartAIDec.add(98);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(80);
+				if (numChoice == 3) {
+					smartAIDec.add(30);
 					smartAIDec.add(95);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(75);
-					smartAIDec.add(95);
+					smartAIDec.add(30);
+					smartAIDec.add(80);
 					smartAIDec.add(99);
 				}
 			}
 			else if (hand.getRank() == STRAIGHT_FLUSH) {
-				if (numChoice == 2) {
-					smartAIDec.add(99);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(60);
+				if (numChoice == 3) {
+					smartAIDec.add(40);
 					smartAIDec.add(99);
 				}
 				else if (numChoice == 4) {
-					smartAIDec.add(60);
-					smartAIDec.add(95);
+					smartAIDec.add(50);
+					smartAIDec.add(85);
 					smartAIDec.add(99);
 				}
 			}
 			else if (hand.getRank() == ROYAL_FLUSH) {
-				if (numChoice == 2) {
-					smartAIDec.add(100);
-				}
-				else if (numChoice == 3) {
-					smartAIDec.add(70);
+				if (numChoice == 3) {
+					smartAIDec.add(50);
 					smartAIDec.add(99);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(60);
-					smartAIDec.add(95);
+					smartAIDec.add(90);
 					smartAIDec.add(99);
 				}
 			}
