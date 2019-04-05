@@ -207,8 +207,6 @@ public class AI extends Player {
 			}
 		}
 
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 		// When AI has suffifient stack but can only bet to the bet interval
 		/*else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
 			percent = smartAIDecision2(4);
@@ -557,7 +555,7 @@ public class AI extends Player {
 	 * @param numChoice
 	 * @return 
 	 */
-	protected ArrayList<Integer> smartAIDecision2(int numChoice) { // UPDATE THIS METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	protected ArrayList<Integer> smartAIDecision2(int numChoice) { 
 		smartAIDec.clear();
 
 		hand = super.getHand();
