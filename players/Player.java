@@ -35,8 +35,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A new stack value has been entered. post: The stack has been set to the
-	 * new value.
+	 * pre: A new stack value has been entered. 
+	 * post: The stack has been set to the new value.
 	 * 
 	 * @param nStack
 	 */
@@ -52,8 +52,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A name for the player has been set. post: The player's name has been
-	 * set.
+	 * pre: A name for the player has been set. 
+	 * post: The player's name has been set.
 	 * 
 	 * @param newName
 	 */
@@ -110,8 +110,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A card has been chosen. post: A card has been added to the player's
-	 * hole.
+	 * pre: A card has been chosen.
+	 * post: A card has been added to the player's hole.
 	 * 
 	 * @param c
 	 */
@@ -121,7 +121,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A bet value is entered. post: The player's total bet has been set.
+	 * pre: A bet value is entered.
+	 * post: The player's total bet has been set.
 	 */
 	public void setBet(int nBet) {
 		totBet = nBet;
@@ -136,8 +137,9 @@ public class Player {
 	}
 	
 	/**
-	 * pre: action variable has no action post: returns the player's action after
-	 * player finishes his/her round
+	 * pre: action variable has no action 
+	 * post: returns the player's action after
+	 * player finishes his/her turn
 	 * 
 	 * @return action
 	 */
@@ -146,8 +148,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's stack of money amount is returned. Gets and
-	 * returns the stack of money of player.
+	 * pre: none 
+	 * post: The player's stack of money amount is returned.
+	 * Gets and returns the stack of money of player.
 	 * 
 	 * @return stack
 	 */
@@ -156,8 +159,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's name has been returned. Gets and returns the
-	 * name of the player.
+	 * pre: none 
+	 * post: The player's name has been returned.
+	 * Gets and returns the name of the player.
 	 * 
 	 * @return name
 	 */
@@ -166,7 +170,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hand has been returned.
+	 * pre: none 
+	 * post: The player's hand has been returned.
 	 * 
 	 * @return new Hand object
 	 */
@@ -175,8 +180,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: Returns the player's hole. The player's hole has been
-	 * returned.
+	 * pre: none 
+	 * post: Returns the player's hole. 
+	 * The player's hole has been returned.
 	 * 
 	 * @return hole
 	 */
@@ -185,37 +191,56 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's total bet has been returned.
+	 * pre: none 
+	 * post: The player's total bet has been returned.
 	 * 
 	 * @return totBet
 	 */
 	public int getBet() {
 		return totBet;
 	}
-
+	
+	/**
+	 * pre: none
+	 * post: none
+	 * Gets overridden by getDecision in AI class
+	 */
 	public void getDecision() {
 		// Goes to getDecision in AI;
 	}
-
+	
+	/**
+	 * pre: none
+	 * post: none
+	 * Gets overridden by getDecision2 in AI class
+	 */
 	public void getDecision2() {
 		// Goes to getDecision2 in AI;
 	}
-
+	
+	/**
+	 * pre: none
+	 * pre: highbet has been returned. 
+	 * 
+	 * @return highBet
+	 */
 	public int getHighBet() {
 		return highBet;
 	}
 	
 	/**
-	 * pre: none post: The player's hole has been reset The hole ArrayList has been
-	 * cleared to reset for the next round.
+	 * pre: none 
+	 * post: The player's hole has been reset.
+	 * The hole ArrayList has been cleared to reset for the next round.
 	 */
 	public void emptyHole() {
 		hole.clear();
 	}
 
 	/**
-	 * pre: none post: The player's hand has been reset The hole ArrayList has been
-	 * cleared to reset for the next round.
+	 * pre: none 
+	 * post: The player's hand has been reset. 
+	 * The hole ArrayList has been cleared to reset for the next round.
 	 */
 	public void emptyHand() {
 		hand = null;
@@ -223,8 +248,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player has "checked" and
-	 * chosen to do nothing.
+	 * pre: A player decision has been made.
+	 * post: The player has "checked" and chosen to do nothing.
 	 * 
 	 * @param choice
 	 */
@@ -238,8 +263,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player's hand has been
-	 * cleared as they have given up on this round.
+	 * pre: A player decision has been made.
+	 * post: The player's hand has been cleared 
+	 * as they have given up on this round.
 	 * 
 	 * @param choice
 	 */
@@ -256,9 +282,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision and their increased bet have been entered. post: The
-	 * player has added money to the pot with their total amount of money decreasing
-	 * appropriately.
+	 * pre: A player decision and their increased bet have been entered. 
+	 * post: The player has added money to the pot with 
+	 * their total amount of money decreasing appropriately.
 	 * 
 	 * @param choice
 	 * @param newBet
@@ -286,8 +312,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player has called. Calculates
-	 * the amount to call and adds that amount to the pot.
+	 * pre: A player decision has been made. 
+	 * post: The player has called. 
+	 * Calculates the amount to call and adds that amount to the pot.
 	 * 
 	 * @param choice
 	 * @param currentBet
@@ -305,8 +332,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player has $0 remaining and
-	 * has gone "All-In."
+	 * pre: A player decision has been made. 
+	 * post: The player has $0 remaining and has gone "All-In."
 	 * 
 	 * @param choice
 	 */
