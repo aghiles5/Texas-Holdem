@@ -161,7 +161,7 @@ public class ActionBar {
 			help.setId("help");
 			help.setDisable(true);
 			
-			Button escapeClause = new Button("Quit");
+			Button escapeClause = new Button("Exit");
 			escapeClause.setId("quit");
 			escapeClause.setMinSize(winWidth / 10, winHeight / 30 - 3);
 			escapeClause.setDisable(true);
