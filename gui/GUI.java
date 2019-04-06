@@ -46,9 +46,7 @@ public class GUI extends Application {
 	private SaveIO saveLoad = new SaveIO();
 	private Animator animator = new Animator();
     //resources used for playing music
-	private final URL resource = getClass().getResource("/gui/BIG.mp3");
-    private final Media media = new Media(resource.toString());
-    private final MediaPlayer mediaPlayer = new MediaPlayer(media);
+	private MusicPlayer mp = new MusicPlayer();
 	
 	/**
 	 * On the start of the GUI the main menu will be displayed and an
@@ -68,8 +66,7 @@ public class GUI extends Application {
 		scene.getStylesheets().add("/gui/tableStyle.css");
 		scene.setFill(Color.BLACK);
 		//plays a media file indefinitely
-		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-	    mediaPlayer.play();
+		mp.play();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
