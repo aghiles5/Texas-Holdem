@@ -116,7 +116,6 @@ public class SaveIO {
 			System.err.println("IOException: " + e.getMessage());
 		}
 		Game nGame = new Game(name, stacks, smallBlind);
-		clear();
 		return nGame;
 	}
 	

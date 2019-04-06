@@ -115,6 +115,7 @@ public class GUI extends Application {
 	
 	private void loadFromFile(Scene scene) {
 		Game game = saveLoad.loadState();
+		game.setupRound();
 		generatePlayArea(scene, game);
 	}
 	

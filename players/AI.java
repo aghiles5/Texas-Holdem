@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 04/05/2019
+ * @version 04/06/2019
  */
 
 
@@ -393,7 +393,7 @@ public class AI extends Player {
 			}
 			else if (numChoice == 3) {
 				smartAIDec.add(5);
-				smartAIDec.add(35);
+				smartAIDec.add(20);
 			}
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
@@ -569,14 +569,14 @@ public class AI extends Player {
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
 				smartAIDec.add(15);
-				smartAIDec.add(30);
+				smartAIDec.add(80);
 			}
 		}
 		else {
 			if (hand.getRank() == HIGH_CARD) {
 				if (numChoice == 3) {
 					smartAIDec.add(1);
-					smartAIDec.add(65);
+					smartAIDec.add(70);
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(1);
