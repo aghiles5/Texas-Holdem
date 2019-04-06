@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import cards.Card;
 import game.Game;
 import game.SaveIO;
-import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
-import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -16,7 +13,6 @@ import javafx.event.EventHandler;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import players.AI;
 import players.Human;
 import players.Player;
 import javafx.scene.Scene;
@@ -109,7 +105,7 @@ public class GUI extends Application {
 	
 	private void makeNewGame(Scene scene, int playerNum, int stackSize) {
 		Game game = new Game(); //The new game is created and its parameters are generated
-		ArrayList<Player> players = game.generatePlayers(playerNum, stackSize);
+		game.generatePlayers(playerNum, stackSize);
 		game.setupRound();
 		generatePlayArea(scene, game);
 	}

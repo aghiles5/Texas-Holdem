@@ -58,6 +58,10 @@
 	-fx-font-size: 18;
 }
 
+.button-main-menu{
+	-fx-font-size: 24;
+}
+
 .bar-label{
 	-fx-text-fill: goldenrod;
 }

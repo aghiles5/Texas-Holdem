@@ -17,6 +17,18 @@ import players.Human;
 import players.Player;
 
 public class Animator {
+	public SequentialTransition roundStartAnim(Scene scene, Game game) {
+		SequentialTransition fullMotion = new SequentialTransition();
+		fullMotion.getChildren().addAll(shuffleDeck(scene, game), dealHoles(scene, game));
+		return fullMotion;
+	}
+	
+	public SequentialTransition roundFinishAnim(Scene scene, Game game) {
+		SequentialTransition fullMotion = new SequentialTransition();
+		fullMotion.getChildren().addAll(returnComm(scene, game), returnAllHoles(scene, game));
+		return fullMotion;
+	}
+	
 	/**
 	 * To show the shuffling of the cards each image that makes up the deck's
 	 * GUI representation has to be moved in a specific way as defined in the
@@ -58,7 +70,7 @@ public class Animator {
 	 * @param scene the node tree
 	 * @param game the current game object
 	 */
-	public ParallelTransition shuffleDeck(Scene scene, Game game) {
+	private ParallelTransition shuffleDeck(Scene scene, Game game) {
 		//The deck components are listed
 		ImageView deckA = (ImageView) scene.lookup("#deckA");
 		ImageView deckB = (ImageView) scene.lookup("#deckB");
@@ -110,12 +122,6 @@ public class Animator {
 		
 		dealAllHoles.getChildren().add(showUserCards);
 		return dealAllHoles;
-	}
-	
-	public SequentialTransition roundStartAnim(Scene scene, Game game) {
-		SequentialTransition fullMotion = new SequentialTransition();
-		fullMotion.getChildren().addAll(shuffleDeck(scene, game), dealHoles(scene, game));
-		return fullMotion;
 	}
 	
 	/**
@@ -190,12 +196,6 @@ public class Animator {
 		cardAnim.play();
 	}
 	
-	public SequentialTransition roundFinishAnim(Scene scene, Game game) {
-		SequentialTransition fullMotion = new SequentialTransition();
-		fullMotion.getChildren().addAll(returnComm(scene, game), returnAllHoles(scene, game));
-		return fullMotion;
-	}
-	
 	/**
 	 * All of the community cards are simultaneously flipped then returned to
 	 * the deck one by one.
@@ -203,7 +203,7 @@ public class Animator {
 	 * @param scene the game node tree
 	 * @param game the current Game object
 	 */
-	public SequentialTransition returnComm(Scene scene, Game game) {
+	private SequentialTransition returnComm(Scene scene, Game game) {
 		SequentialTransition returnCards = new SequentialTransition();
 		ParallelTransition hideCards = new ParallelTransition();
 		returnCards.getChildren().add(hideCards); //The parallel hide animation is played before any returns to the deck
