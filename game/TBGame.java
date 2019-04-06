@@ -140,7 +140,7 @@ public class TBGame {
                                 } else if (choice.equalsIgnoreCase("B")) {
                                     game.bet(getBetAmt());
                                 } else if (choice.equalsIgnoreCase("A")) {
-                                    game.bet(player.stack);
+                                    game.bet(player.getStack());
                                     break;
                                 } else if (choice.equalsIgnoreCase("Q")) {
                                     System.exit(0);
@@ -156,7 +156,7 @@ public class TBGame {
                             } else if (choice.equalsIgnoreCase("B")) {
                                 game.bet(getBetAmt());
                             } else if (choice.equalsIgnoreCase("A")) {
-                                game.bet(player.stack);
+                                game.bet(player.getStack());
                                 break;
                             } else if (choice.equalsIgnoreCase("Q")) {
                                 System.exit(0);
@@ -166,7 +166,7 @@ public class TBGame {
 
                     else {
                         player = game.processTurn();
-                        if (player.stack == 0) {
+                        if (player.getStack() == 0) {
                             break;
                         }
                     }
@@ -182,12 +182,16 @@ public class TBGame {
                 }
 
                 if (player instanceof Human) {
-                    if (player.stack == 0) {
+                    if (player.getStack() == 0) {
                         players = game.getPlayers();
-                        game.incrementPlayer();
-                        printInfo();
-                        player = game.processTurn();
-                        continueCheck();
+                        for (Player playa : players) {
+                            if (playa instanceof AI) {
+                                game.incrementPlayer();
+                                printInfo();
+                                player = game.processTurn();
+                                continueCheck();
+                            }
+                        }
                         break;
                     }
                 }
@@ -294,7 +298,8 @@ public class TBGame {
     }
 
     /**
-     * Asks the user to enter the amount of money he wants to bet if he chooses to bet
+     * Asks the user to enter the amount of money he wants to bet if he chooses to
+     * bet
      * 
      * @Return an integer for the players bet amount
      */
