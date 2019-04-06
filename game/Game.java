@@ -35,6 +35,7 @@ public class Game {
     private boolean userFolded;
     private boolean sBlindDone;
     private boolean bBlindDone;
+    private boolean userWon;
 
     /*
      * Constructor to ensure that roundNum and playerCount are reset to 0 when a
@@ -50,6 +51,7 @@ public class Game {
         gameOver = false;
         sBlindDone = false;
         bBlindDone = false;
+        userWon = false;
     }
 
     /**
@@ -445,6 +447,7 @@ public class Game {
 
         if (gameOverList.size() == 1) {
             gameOver = true;
+            userWon = true;
         }
 
         userFolded = false;
@@ -587,6 +590,15 @@ public class Game {
      */
     public boolean isUserFolded() {
         return userFolded;
+    }
+
+    /**
+     * Gets the check to see if the user has won the game or not.
+     * 
+     * @return a boolean condition corresponding to the evaluated relation
+     */
+    public boolean hasUserWon() {
+        return userWon;
     }
 
     /**
