@@ -22,10 +22,6 @@ public class Player {
 	protected int highBet = 0;
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
-	private double wins;
-	private double lost;
-	private double folds;
-	private double winPercent;
 
 	// method in main that sets the blinds
 	// make the current player bet into a list?
@@ -47,82 +43,12 @@ public class Player {
 	public void setStack(int nStack) {
 		stack = nStack;
 	}
-
+	
 	/**
-	 * pre: none post: calculates the percentage of winning for the player and
-	 * returns a double
-	 * 
-	 * @return winPercent
+	 *
 	 */
-	public double getWinPercent() {
-		winPercent = (getWins() / (getWins() + getLost())) * 100; // multiply by 100 to get a percentage number
-		return winPercent;
-	}
-
-	/**
-	 * pre: none post: returns the number of times the player has folded during a
-	 * game
-	 * 
-	 * @return folds
-	 */
-	public double getFolds() {
-		return folds;
-	}
-
-	/**
-	 * pre: none post: returns the number of rounds the player has won
-	 * 
-	 * @return wins
-	 */
-	public double getWins() {
-		return wins;
-	}
-
-	/**
-	 * pre: none post: returns the nuumber of rounds lost for the player
-	 * 
-	 * @return lost
-	 */
-	public double getLost() {
-		return lost;
-	}
-
-	/**
-	 * pre: none post: adds another round of win when player wins the round
-	 */
-	public void setWins() {
-		wins += 1;
-	}
-
-	/**
-	 * pre: none post: adds another round of lost when player losses round
-	 */
-	public void setLost() {
-		lost += 1;
-	}
-
 	public void setAction(String newAction) {
 		action = newAction;
-	}
-
-	/**
-	 * pre: action variable has no action post: returns the player's action after
-	 * player finishes his/her round
-	 * 
-	 * @return action
-	 */
-	public String getAction() {
-		return action;
-	}
-
-	/**
-	 * pre: none post: The player's stack of money amount is returned. Gets and
-	 * returns the stack of money of player.
-	 * 
-	 * @return stack
-	 */
-	public int getStack() {
-		return stack;
 	}
 
 	/**
@@ -133,16 +59,6 @@ public class Player {
 	 */
 	public void setName(String newName) {
 		name = newName;
-	}
-
-	/**
-	 * pre: none post: The player's name has been returned. Gets and returns the
-	 * name of the player.
-	 * 
-	 * @return name
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**
@@ -194,15 +110,6 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hand has been returned.
-	 * 
-	 * @return new Hand object
-	 */
-	public Hand getHand() {
-		return new Hand(hand);
-	}
-
-	/**
 	 * pre: A card has been chosen. post: A card has been added to the player's
 	 * hole.
 	 * 
@@ -211,6 +118,60 @@ public class Player {
 	public void setHole(Card c) {
 		// adds the cards to the hand list
 		hole.add(c);
+	}
+
+	/**
+	 * pre: A bet value is entered. post: The player's total bet has been set.
+	 */
+	public void setBet(int nBet) {
+		totBet = nBet;
+	}
+
+	public void setHighBet(int betAmt) {
+		highBet = betAmt;
+	}
+
+	public void setMinBet(int betAmt) {
+		minBet = betAmt;
+	}
+	
+	/**
+	 * pre: action variable has no action post: returns the player's action after
+	 * player finishes his/her round
+	 * 
+	 * @return action
+	 */
+	public String getAction() {
+		return action;
+	}
+
+	/**
+	 * pre: none post: The player's stack of money amount is returned. Gets and
+	 * returns the stack of money of player.
+	 * 
+	 * @return stack
+	 */
+	public int getStack() {
+		return stack;
+	}
+
+	/**
+	 * pre: none post: The player's name has been returned. Gets and returns the
+	 * name of the player.
+	 * 
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * pre: none post: The player's hand has been returned.
+	 * 
+	 * @return new Hand object
+	 */
+	public Hand getHand() {
+		return new Hand(hand);
 	}
 
 	/**
@@ -223,6 +184,27 @@ public class Player {
 		return hole;
 	}
 
+	/**
+	 * pre: none post: The player's total bet has been returned.
+	 * 
+	 * @return totBet
+	 */
+	public int getBet() {
+		return totBet;
+	}
+
+	public void getDecision() {
+		// Goes to getDecision in AI;
+	}
+
+	public void getDecision2() {
+		// Goes to getDecision2 in AI;
+	}
+
+	public int getHighBet() {
+		return highBet;
+	}
+	
 	/**
 	 * pre: none post: The player's hole has been reset The hole ArrayList has been
 	 * cleared to reset for the next round.
@@ -238,22 +220,6 @@ public class Player {
 	public void emptyHand() {
 		hand = null;
 		hand = new Hand();
-	}
-
-	/**
-	 * pre: none post: The player's total bet has been returned.
-	 * 
-	 * @return totBet
-	 */
-	public int getBet() {
-		return totBet;
-	}
-
-	/**
-	 * pre: A bet value is entered. post: The player's total bet has been set.
-	 */
-	public void setBet(int nBet) {
-		totBet = nBet;
 	}
 
 	/**
@@ -284,7 +250,6 @@ public class Player {
 			emptyHole(); // Clears hole
 			action = "Folded";
 			System.out.println("Player Folded.");
-			folds += 1;
 			// Nothing
 
 		}
@@ -354,14 +319,6 @@ public class Player {
 		}
 	}
 
-	public void getDecision() {
-		// Goes to getDecision in AI;
-	}
-
-	public void getDecision2() {
-		// Goes to getDecision2 in AI;
-	}
-
 	/**
 	 * All six unique combinations of five card hands from a six card set are found
 	 * by the below algorithm. One blank space is cycled through all the indices of
@@ -418,17 +375,4 @@ public class Player {
 		}
 		return combs;
 	}
-
-	public void setHighBet(int betAmt) {
-		highBet = betAmt;
-	}
-
-	public int getHighBet() {
-		return highBet;
-	}
-
-	public void setMinBet(int betAmt) {
-		minBet = betAmt;
-	}
-
 }
