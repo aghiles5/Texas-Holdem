@@ -126,7 +126,7 @@ public class AI extends Player {
 
 		// AI has sufficient stack to raise more than one bet interval
 		else {
-			percent = smartAIDecision(3);
+			percent = smartAIDecision(4);
 
 			// AI all in action
 			if (decision < percent.get(0)) {
@@ -353,11 +353,11 @@ public class AI extends Player {
 					}
 				}
 				else { // Rounds raise amount up
-					if (returnBet + betInterval - (int) checkBet >= super.getStack()) { // Tests if round up raise exceeds stack
+					if (returnBet + betInterval - checkBet >= super.getStack()) { // Tests if round up raise exceeds stack
 						returnBet -= checkBet; // Rounds down raise amount
 					}
 					else { // Rounds up raise amount
-						returnBet += (betInterval - (int) checkBet);
+						returnBet += (betInterval - checkBet);
 					}
 				}
 
