@@ -14,7 +14,21 @@ import org.junit.Test;
 public class PlayerTest {
 
     @Test
-    public void testHumanConstructor() {
+    public void testHumanConstructor() { // Tests Human class constructors
+        Human a = new Human("Jeff");
+        assertEquals("Jeff", a.getName());
+        assertEquals(null, a.getStack());
+
+        Human b = new Human(a.getName(), 1000);
+        assertEquals("Jeff", b.getName());
+        assertEquals(1000, b.getStack());
+    }
+
+    @Test
+    public void testHumanDecisions() {
+        Human a = new Human("Johnny", 2500);
+
         
+    }
     }
 }
