@@ -83,6 +83,7 @@ public class Game {
         ArrayList<String> names = new ArrayList<String>(name);
         ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
         int position = 0;
+        AI.setBetIntervals((int) (smallBlind / 0.025));
         for (int i = 0; i < name.size(); i++) {
             if (names.get(i).equals("You")) {
                 position = i;
