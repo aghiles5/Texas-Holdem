@@ -46,7 +46,7 @@ public class GUI extends Application {
 	private SaveIO saveLoad = new SaveIO();
 	private Animator animator = new Animator();
     //resources used for playing music
-	private final URL resource = getClass().getResource("/Resources/LOUDER.mp3");
+	private final URL resource = getClass().getResource("/gui/BIG.mp3");
     private final Media media = new Media(resource.toString());
     private final MediaPlayer mediaPlayer = new MediaPlayer(media);
 	
@@ -580,9 +580,8 @@ public class GUI extends Application {
 	}
 	
 	/**
-	 * Once a game is finished the end game notification is set to display.
-	 * TODO: Make label update with specific end game messages (i.e. You
-	 * Busted Out, You Won)
+	 * Once a game is finished the end game notification is set to display with
+	 * an appropriate message.
 	 * 
 	 * @param scene the game node tree
 	 * @param game the current Game instance
@@ -590,6 +589,12 @@ public class GUI extends Application {
 	private void gameOver(Scene scene, Game game) {
 		HBox endGameNotif = (HBox) scene.lookup("#endGameNotif");
 		Label endGameMsg = (Label) scene.lookup("#endGameMsg");
+		
+		if (game.hasUserWon())
+			endGameMsg.setText("A Winner is You!");
+		else
+			endGameMsg.setText("You Busted Out. Game Over!");
+		
 		((Button) scene.lookup("#quit")).setDisable(false);
 		endGameNotif.setVisible(true);
 	}
