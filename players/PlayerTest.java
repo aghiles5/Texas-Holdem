@@ -14,21 +14,39 @@ import org.junit.Test;
 public class PlayerTest {
 
     @Test
-    public void testHumanConstructor() { // Tests Human class constructors
+    public void testHumanConstructor() {
         Human a = new Human("Jeff");
         assertEquals("Jeff", a.getName());
         assertEquals(null, a.getStack());
 
+        a.setStack(100);
+        assertEquals(100, a.getStack());
+        assertEquals("", a.getAction());
+
         Human b = new Human(a.getName(), 1000);
         assertEquals("Jeff", b.getName());
         assertEquals(1000, b.getStack());
+
+        b.setStack(200);
+        assertEquals(200, b.getStack());
     }
 
     @Test
-    public void testHumanDecisions() {
-        Human a = new Human("Johnny", 2500);
+    public void testAIConstructor() {
+        AI a = new AI("Foo", 200);
+        assertEquals("Foo", a.getName());
+        assertEquals(200, a.getStack());
 
-        
+        a.setName("Hello");
+        a.setStack(300);
+        assertEquals("Hello", a.getName());
+        assertEquals(300, a.getStack());
     }
+
+    @Test
+    public void testAISettersGetters() {
+        AI.addCPUName();
+        AI.setBetIntervals(100000);
+        AI a = new AI();
     }
 }
