@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -55,25 +57,24 @@ public class MainMenu {
 			//Box for initial menu and associated options
 			VBox mainBox = new VBox();
 			mainBox.setAlignment(Pos.CENTER);
-			mainBox.setSpacing(25);
+			mainBox.setSpacing(100);
 			
 				//Main Title
-				Label title = new Label("Texas Hold'em");
-				title.setStyle("-fx-font-size: 48;");
+				ImageView title = new ImageView(new Image("/Images/title.png"));
 			
 				VBox mainButtonBox = new VBox();
 				mainButtonBox.setSpacing(10);
 				mainButtonBox.setAlignment(Pos.CENTER);
 				
 					Button resume = new Button("Continue");
-					resume.getStyleClass().add("button-large");
+					resume.getStyleClass().add("button-main-menu");
 					resume.setId("continue");
 					Button newGame = new Button("New Game");
-					newGame.getStyleClass().add("button-large");
+					newGame.getStyleClass().add("button-main-menu");
 					Button tutorial = new Button("How to Play");
-					tutorial.getStyleClass().add("button-large");
+					tutorial.getStyleClass().add("button-main-menu");
 					Button quit = new Button("Quit to Desktop");
-					quit.getStyleClass().add("button-large");
+					quit.getStyleClass().add("button-main-menu");
 		
 				mainButtonBox.getChildren().addAll(resume, newGame, tutorial, quit);
 				

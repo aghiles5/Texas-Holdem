@@ -1,5 +1,8 @@
 package game;
 import java.util.*;
+
+import players.Player;
+
 import java.io.*;
 
 public class SaveIOTest extends SaveIO {
@@ -16,8 +19,9 @@ public class SaveIOTest extends SaveIO {
 	}
 	
 	@Test
+	//not necessary???
 	public void testClear() {
-		String[] linesInFile = {"Kyle","1500","Adam", "500","25"};
+		String[] linesInFile = {"Kyle","1500","Adam", "500"};
 		createFile("Save.txt", linesInFile);
 		String[] expectedLinesInFile = {""};
 		assertFileContent("File is not clear.", expectedLinesInFile, "Save.txt");
@@ -25,7 +29,39 @@ public class SaveIOTest extends SaveIO {
 	}
 	
 	@Test
-	public void testSaveState() {
+	public void testSaveState() throws IOException {
+		ArrayList<Player> testPlayer = new ArrayList<Player>();
+		ArrayList<String> name = new ArrayList<String>();
+		ArrayList<Integer> stacks = new ArrayList<Integer>();
+		int smallBlind;
+		BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
+		BufferedReader sBlind = new BufferedReader(new FileReader("Blind.txt"));
+		String[] linesInFile1 = {"Kyle","1500","Adam", "500"};
+		String[] linesInFile2 = {"25"};
+		testPlayer.add(new Player("Kyle",1500));
+		testPlayer.add(new Player("Adam",500));
+		super.saveState(testPlayer, 25);
+		String in = saveState.readLine();
+		while (in != null) {
+				name.add(in);
+				in = saveState.readLine();
+				stacks.add(Integer.parseInt(in));
+				in = saveState.readLine();
+		}
+		sBlind.close();
+		saveState.close();
+		if(name.get(0) != linesInFile1[0]) {
+			fail("Players name was saved incorrectly.", "Kyle", name.get(0));
+		} else if(name.get(1) != linesInFile1[2]) {
+			fail("Players name was saved incorrectly.", "Adam", name.get(1));
+		}
+		if(stacks.get(0) != Integer.parseInt(linesInFile1[1])) {
+			fail("Players name was saved incorrectly.", 1500, stacks.get(0));
+		} else if(stacks.get(1) != Integer.parseInt(linesInFile1[3])) {
+			fail("Players name was saved incorrectly.", 500, stacks.get(2));
+		}
+		
+		
 		
 	}
 	
@@ -35,26 +71,6 @@ public class SaveIOTest extends SaveIO {
         	output.println(line);
         }
 		output.close();		
-	}
-	
-	private void assertFileContent(String message, String[] expectedLinesInFile, String filename) {
-		try {
-            BufferedReader input = new BufferedReader(new FileReader(filename));
-            int index = 0;
-			String line = input.readLine();
-			while (line != null) {
-				if (index >= expectedLinesInFile.length) {
-					fail(message + " Found more lines in file than expected.  Only expected " + expectedLinesInFile.length + " lines");
-				}
-				assertEquals(message + " testing line " + index + "in output file", expectedLinesInFile[index], line);
-				line = input.readLine();
-				index++;
-			}
-			assertEquals(message + " Expected more lines in output file.", expectedLinesInFile.length, index);
-			input.close();
-		} catch (IOException ioe) {
-			fail("Unexpected exception when testing file content.");
-		}		
 	}	
 
 }

@@ -22,10 +22,6 @@ public class Player {
 	protected int highBet = 0;
 	private int totBet = 0; // the player's total bet for the round
 	private String action = "";
-	private double wins;
-	private double lost;
-	private double folds;
-	private double winPercent;
 
 	// method in main that sets the blinds
 	// make the current player bet into a list?
@@ -39,110 +35,30 @@ public class Player {
 	}
 
 	/**
-	 * pre: A new stack value has been entered. post: The stack has been set to the
-	 * new value.
+	 * pre: A new stack value has been entered. 
+	 * post: The stack has been set to the new value.
 	 * 
 	 * @param nStack
 	 */
 	public void setStack(int nStack) {
 		stack = nStack;
 	}
-
+	
 	/**
-	 * pre: none post: calculates the percentage of winning for the player and
-	 * returns a double
-	 * 
-	 * @return winPercent
+	 *
 	 */
-	public double getWinPercent() {
-		winPercent = (getWins() / (getWins() + getLost())) * 100; // multiply by 100 to get a percentage number
-		return winPercent;
-	}
-
-	/**
-	 * pre: none post: returns the number of times the player has folded during a
-	 * game
-	 * 
-	 * @return folds
-	 */
-	public double getFolds() {
-		return folds;
-	}
-
-	/**
-	 * pre: none post: returns the number of rounds the player has won
-	 * 
-	 * @return wins
-	 */
-	public double getWins() {
-		return wins;
-	}
-
-	/**
-	 * pre: none post: returns the nuumber of rounds lost for the player
-	 * 
-	 * @return lost
-	 */
-	public double getLost() {
-		return lost;
-	}
-
-	/**
-	 * pre: none post: adds another round of win when player wins the round
-	 */
-	public void setWins() {
-		wins += 1;
-	}
-
-	/**
-	 * pre: none post: adds another round of lost when player losses round
-	 */
-	public void setLost() {
-		lost += 1;
-	}
-
 	public void setAction(String newAction) {
 		action = newAction;
 	}
 
 	/**
-	 * pre: action variable has no action post: returns the player's action after
-	 * player finishes his/her round
-	 * 
-	 * @return action
-	 */
-	public String getAction() {
-		return action;
-	}
-
-	/**
-	 * pre: none post: The player's stack of money amount is returned. Gets and
-	 * returns the stack of money of player.
-	 * 
-	 * @return stack
-	 */
-	public int getStack() {
-		return stack;
-	}
-
-	/**
-	 * pre: A name for the player has been set. post: The player's name has been
-	 * set.
+	 * pre: A name for the player has been set. 
+	 * post: The player's name has been set.
 	 * 
 	 * @param newName
 	 */
 	public void setName(String newName) {
 		name = newName;
-	}
-
-	/**
-	 * pre: none post: The player's name has been returned. Gets and returns the
-	 * name of the player.
-	 * 
-	 * @return name
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**
@@ -194,17 +110,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hand has been returned.
-	 * 
-	 * @return new Hand object
-	 */
-	public Hand getHand() {
-		return new Hand(hand);
-	}
-
-	/**
-	 * pre: A card has been chosen. post: A card has been added to the player's
-	 * hole.
+	 * pre: A card has been chosen.
+	 * post: A card has been added to the player's hole.
 	 * 
 	 * @param c
 	 */
@@ -214,8 +121,68 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: Returns the player's hole. The player's hole has been
-	 * returned.
+	 * pre: A bet value is entered.
+	 * post: The player's total bet has been set.
+	 */
+	public void setBet(int nBet) {
+		totBet = nBet;
+	}
+
+	public void setHighBet(int betAmt) {
+		highBet = betAmt;
+	}
+
+	public void setMinBet(int betAmt) {
+		minBet = betAmt;
+	}
+	
+	/**
+	 * pre: action variable has no action 
+	 * post: returns the player's action after
+	 * player finishes his/her turn
+	 * 
+	 * @return action
+	 */
+	public String getAction() {
+		return action;
+	}
+
+	/**
+	 * pre: none 
+	 * post: The player's stack of money amount is returned.
+	 * Gets and returns the stack of money of player.
+	 * 
+	 * @return stack
+	 */
+	public int getStack() {
+		return stack;
+	}
+
+	/**
+	 * pre: none 
+	 * post: The player's name has been returned.
+	 * Gets and returns the name of the player.
+	 * 
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * pre: none 
+	 * post: The player's hand has been returned.
+	 * 
+	 * @return new Hand object
+	 */
+	public Hand getHand() {
+		return new Hand(hand);
+	}
+
+	/**
+	 * pre: none 
+	 * post: Returns the player's hole. 
+	 * The player's hole has been returned.
 	 * 
 	 * @return hole
 	 */
@@ -224,16 +191,56 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's hole has been reset The hole ArrayList has been
-	 * cleared to reset for the next round.
+	 * pre: none 
+	 * post: The player's total bet has been returned.
+	 * 
+	 * @return totBet
+	 */
+	public int getBet() {
+		return totBet;
+	}
+	
+	/**
+	 * pre: none
+	 * post: none
+	 * Gets overridden by getDecision in AI class
+	 */
+	public void getDecision() {
+		// Goes to getDecision in AI;
+	}
+	
+	/**
+	 * pre: none
+	 * post: none
+	 * Gets overridden by getDecision2 in AI class
+	 */
+	public void getDecision2() {
+		// Goes to getDecision2 in AI;
+	}
+	
+	/**
+	 * pre: none
+	 * pre: highbet has been returned. 
+	 * 
+	 * @return highBet
+	 */
+	public int getHighBet() {
+		return highBet;
+	}
+	
+	/**
+	 * pre: none 
+	 * post: The player's hole has been reset.
+	 * The hole ArrayList has been cleared to reset for the next round.
 	 */
 	public void emptyHole() {
 		hole.clear();
 	}
 
 	/**
-	 * pre: none post: The player's hand has been reset The hole ArrayList has been
-	 * cleared to reset for the next round.
+	 * pre: none 
+	 * post: The player's hand has been reset. 
+	 * The hole ArrayList has been cleared to reset for the next round.
 	 */
 	public void emptyHand() {
 		hand = null;
@@ -241,24 +248,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: none post: The player's total bet has been returned.
-	 * 
-	 * @return totBet
-	 */
-	public int getBet() {
-		return totBet;
-	}
-
-	/**
-	 * pre: A bet value is entered. post: The player's total bet has been set.
-	 */
-	public void setBet(int nBet) {
-		totBet = nBet;
-	}
-
-	/**
-	 * pre: A player decision has been made. post: The player has "checked" and
-	 * chosen to do nothing.
+	 * pre: A player decision has been made.
+	 * post: The player has "checked" and chosen to do nothing.
 	 * 
 	 * @param choice
 	 */
@@ -272,8 +263,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player's hand has been
-	 * cleared as they have given up on this round.
+	 * pre: A player decision has been made.
+	 * post: The player's hand has been cleared 
+	 * as they have given up on this round.
 	 * 
 	 * @param choice
 	 */
@@ -284,16 +276,15 @@ public class Player {
 			emptyHole(); // Clears hole
 			action = "Folded";
 			System.out.println("Player Folded.");
-			folds += 1;
 			// Nothing
 
 		}
 	}
 
 	/**
-	 * pre: A player decision and their increased bet have been entered. post: The
-	 * player has added money to the pot with their total amount of money decreasing
-	 * appropriately.
+	 * pre: A player decision and their increased bet have been entered. 
+	 * post: The player has added money to the pot with 
+	 * their total amount of money decreasing appropriately.
 	 * 
 	 * @param choice
 	 * @param newBet
@@ -321,8 +312,9 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player has called. Calculates
-	 * the amount to call and adds that amount to the pot.
+	 * pre: A player decision has been made. 
+	 * post: The player has called. 
+	 * Calculates the amount to call and adds that amount to the pot.
 	 * 
 	 * @param choice
 	 * @param currentBet
@@ -340,8 +332,8 @@ public class Player {
 	}
 
 	/**
-	 * pre: A player decision has been made. post: The player has $0 remaining and
-	 * has gone "All-In."
+	 * pre: A player decision has been made. 
+	 * post: The player has $0 remaining and has gone "All-In."
 	 * 
 	 * @param choice
 	 */
@@ -352,14 +344,6 @@ public class Player {
 			System.out.println("Player went all-in!");
 			action = "All In";
 		}
-	}
-
-	public void getDecision() {
-		// Goes to getDecision in AI;
-	}
-
-	public void getDecision2() {
-		// Goes to getDecision2 in AI;
 	}
 
 	/**
@@ -418,17 +402,4 @@ public class Player {
 		}
 		return combs;
 	}
-
-	public void setHighBet(int betAmt) {
-		highBet = betAmt;
-	}
-
-	public int getHighBet() {
-		return highBet;
-	}
-
-	public void setMinBet(int betAmt) {
-		minBet = betAmt;
-	}
-
 }
