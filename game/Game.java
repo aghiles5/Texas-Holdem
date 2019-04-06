@@ -53,15 +53,6 @@ public class Game {
     }
 
     /**
-     * Gets the master list of the created players
-     * 
-     * @Return ArrayList of type Player
-     */
-    public ArrayList<Player> getPlayerList() {
-        return players;
-    }
-
-    /**
      * Generates the old players loaded from a file in the SaveIO class
      * 
      * @param name, stack name and stack contain the arrayList passed from SaveIO to
@@ -80,7 +71,7 @@ public class Game {
         bBlindDone = false;
         loadPlayers(name, stack);
     }
-    
+
     /**
      * Generates the old players loaded from a file in the SaveIO class
      * 
@@ -92,6 +83,7 @@ public class Game {
         ArrayList<String> names = new ArrayList<String>(name);
         ArrayList<Integer> stacks = new ArrayList<Integer>(stack);
         int position = 0;
+        AI.setBetIntervals((int) (smallBlind / 0.025));
         for (int i = 0; i < name.size(); i++) {
             if (names.get(i).equals("You")) {
                 position = i;
@@ -109,9 +101,8 @@ public class Game {
                 player.setHole(cardDeck.dealSingle());
         }
 
-        
     }
-    
+
     /**
      * Generates the players needed to be recorded throughout the game, in gui and
      * TBGame
@@ -233,51 +224,6 @@ public class Game {
     }
 
     /**
-     * Gets the round number for GUI
-     * 
-     * @return a integer corresponding to the evaluated relation
-     */
-    public int getRound() {
-        return roundNum;
-    }
-
-    /**
-     * Gets the string for the current round number for GUI
-     * 
-     * @return a string corresponding to the evaluated relation
-     */
-    public String getRoundString() {
-        return ROUNDKEY[roundNum];
-    }
-
-    /**
-     * Gets the player that the round is currently on for GUI
-     * 
-     * @return a Player object corresponding to the evaluated relation
-     */
-    public Player getCurrentPlayer() {
-        return roundPlayers.get(playerCount);
-    }
-
-    /**
-     * Sets an object of type player to the last player that the game was just
-     * getting input from
-     */
-    public void setLastPlayer(Player theLastPlayer) {
-        lastPlayer = theLastPlayer;
-    }
-
-    /**
-     * Gets the player that made the most recent decision which is currently for GUI
-     * and TBGame
-     * 
-     * @return a Player object corresponding to the evaluated relation
-     */
-    public Player getLastPlayer() {
-        return lastPlayer;
-    }
-
-    /**
      * Processes the AI's turn/decision
      * 
      * @return a Player object corresponding to the evaluated relation
@@ -331,21 +277,58 @@ public class Game {
     }
 
     /**
-     * Gives GUI the players used in the round
-     * 
-     * @return an arraylist of type player corresponding to the evaluated relation
+     * Calls the player's action when the player chooses to fold and removes him
+     * from the round
      */
-    public ArrayList<Player> getPlayers() {
-        return roundPlayers;
+    public void fold() {
+        roundPlayers.get(playerCount).fold("F");
+        setLastPlayer(roundPlayers.get(playerCount));
+        pot += roundPlayers.get(playerCount).getBet();
+        roundPlayers.get(playerCount).setBet(0);
+        roundPlayers.remove(playerCount);
+        playerCount -= 1;
+        userFolded = true;
     }
 
     /**
-     * Gives GUI the middle community cards used for the round
-     * 
-     * @return an arraylist of type card corresponding to the evaluated relation
+     * Calls the player's action when the player chooses to Call or Check
      */
-    public ArrayList<Card> getComm() {
-        return middleCards;
+    public void call() {
+        if (roundPlayers.get(playerCount).getBet() == highestBet) {
+            roundPlayers.get(playerCount).check("C");
+        }
+
+        else if (roundPlayers.get(playerCount).stack <= (highestBet - roundPlayers.get(playerCount).getBet())) {
+            roundPlayers.get(playerCount).allIn("A");
+        }
+
+        else {
+            roundPlayers.get(playerCount).call("L");
+        }
+
+        setLastPlayer(roundPlayers.get(playerCount));
+    }
+
+    /**
+     * Calls the player's action when the player chooses to Bet some amount of their
+     * stack
+     */
+    public void bet(int betAmt) {
+        if (roundPlayers.get(playerCount).stack <= (betAmt + highestBet)) {
+            roundPlayers.get(playerCount).allIn("A");
+            betAmt = roundPlayers.get(playerCount).getBet();
+        }
+
+        else {
+            if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
+                roundPlayers.get(playerCount).BetRaise("B", betAmt);
+            } else {
+                roundPlayers.get(playerCount).BetRaise("R", betAmt);
+            }
+        }
+
+        highBetHolder += betAmt;
+        setLastPlayer(roundPlayers.get(playerCount));
     }
 
     /**
@@ -471,70 +454,6 @@ public class Game {
     }
 
     /**
-     * Calls the player's action when the player chooses to fold and removes him
-     * from the round
-     */
-    public void fold() {
-        roundPlayers.get(playerCount).fold("F");
-        setLastPlayer(roundPlayers.get(playerCount));
-        pot += roundPlayers.get(playerCount).getBet();
-        roundPlayers.get(playerCount).setBet(0);
-        roundPlayers.remove(playerCount);
-        playerCount -= 1;
-        userFolded = true;
-    }
-
-    /**
-     * Calls the player's action when the player chooses to Call or Check
-     */
-    public void call() {
-        if (roundPlayers.get(playerCount).getBet() == highestBet) {
-            roundPlayers.get(playerCount).check("C");
-        }
-
-        else if (roundPlayers.get(playerCount).stack <= (highestBet - roundPlayers.get(playerCount).getBet())) {
-            roundPlayers.get(playerCount).allIn("A");
-        }
-
-        else {
-            roundPlayers.get(playerCount).call("L");
-        }
-
-        setLastPlayer(roundPlayers.get(playerCount));
-    }
-
-    /**
-     * Calls the player's action when the player chooses to Bet some amount of their
-     * stack
-     */
-    public void bet(int betAmt) {
-        if (roundPlayers.get(playerCount).stack <= (betAmt + highestBet)) {
-            roundPlayers.get(playerCount).allIn("A");
-            betAmt = roundPlayers.get(playerCount).getBet();
-        }
-
-        else {
-            if (highestBet == 0 || (roundNum == 0 && betAmt > highestBet * 2)) {
-                roundPlayers.get(playerCount).BetRaise("B", betAmt);
-            } else {
-                roundPlayers.get(playerCount).BetRaise("R", betAmt);
-            }
-        }
-
-        highBetHolder += betAmt;
-        setLastPlayer(roundPlayers.get(playerCount));
-    }
-
-    /**
-     * Gets the smallblind for GUI and TBGame
-     * 
-     * @return a integer corresponding to the evaluated relation
-     */
-    public int getSmallBlind() {
-        return (int) (smallBlind);
-    }
-
-    /**
      * Rotates the blinds for the players so that the person doing the blinds is
      * different
      */
@@ -550,6 +469,79 @@ public class Game {
 
         players.clear();
         players.addAll(tempPList);
+    }
+
+    /**
+     * Gets the master list of the created players
+     * 
+     * @Return ArrayList of type Player
+     */
+    public ArrayList<Player> getPlayerList() {
+        return players;
+    }
+
+    /**
+     * Gets the round number for GUI
+     * 
+     * @return a integer corresponding to the evaluated relation
+     */
+    public int getRound() {
+        return roundNum;
+    }
+
+    /**
+     * Gets the string for the current round number for GUI
+     * 
+     * @return a string corresponding to the evaluated relation
+     */
+    public String getRoundString() {
+        return ROUNDKEY[roundNum];
+    }
+
+    /**
+     * Gets the player that the round is currently on for GUI
+     * 
+     * @return a Player object corresponding to the evaluated relation
+     */
+    public Player getCurrentPlayer() {
+        return roundPlayers.get(playerCount);
+    }
+
+    /**
+     * Gets the player that made the most recent decision which is currently for GUI
+     * and TBGame
+     * 
+     * @return a Player object corresponding to the evaluated relation
+     */
+    public Player getLastPlayer() {
+        return lastPlayer;
+    }
+
+    /**
+     * Gives GUI the players used in the round
+     * 
+     * @return an arraylist of type player corresponding to the evaluated relation
+     */
+    public ArrayList<Player> getPlayers() {
+        return roundPlayers;
+    }
+
+    /**
+     * Gives GUI the middle community cards used for the round
+     * 
+     * @return an arraylist of type card corresponding to the evaluated relation
+     */
+    public ArrayList<Card> getComm() {
+        return middleCards;
+    }
+
+    /**
+     * Gets the smallblind for GUI and TBGame
+     * 
+     * @return a integer corresponding to the evaluated relation
+     */
+    public int getSmallBlind() {
+        return (int) (smallBlind);
     }
 
     /**
@@ -595,5 +587,13 @@ public class Game {
      */
     public boolean isUserFolded() {
         return userFolded;
+    }
+
+    /**
+     * Sets an object of type player to the last player that the game was just
+     * getting input from
+     */
+    public void setLastPlayer(Player theLastPlayer) {
+        lastPlayer = theLastPlayer;
     }
 }

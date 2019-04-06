@@ -120,7 +120,7 @@ public class TBGame {
                         break;
                     }
 
-                    if (player.stack == 0) {
+                    if (player.getStack() == 0) {
                         break;
                     }
 
@@ -140,7 +140,7 @@ public class TBGame {
                                 } else if (choice.equalsIgnoreCase("B")) {
                                     game.bet(getBetAmt());
                                 } else if (choice.equalsIgnoreCase("A")) {
-                                    game.bet(player.stack);
+                                    game.bet(player.getStack());
                                     break;
                                 } else if (choice.equalsIgnoreCase("Q")) {
                                     System.exit(0);
@@ -156,7 +156,7 @@ public class TBGame {
                             } else if (choice.equalsIgnoreCase("B")) {
                                 game.bet(getBetAmt());
                             } else if (choice.equalsIgnoreCase("A")) {
-                                game.bet(player.stack);
+                                game.bet(player.getStack());
                                 break;
                             } else if (choice.equalsIgnoreCase("Q")) {
                                 System.exit(0);
@@ -166,7 +166,7 @@ public class TBGame {
 
                     else {
                         player = game.processTurn();
-                        if (player.stack == 0) {
+                        if (player.getStack() == 0) {
                             break;
                         }
                     }
@@ -182,18 +182,22 @@ public class TBGame {
                 }
 
                 if (player instanceof Human) {
-                    if (player.stack == 0) {
+                    if (player.getStack() == 0) {
                         players = game.getPlayers();
-                        game.incrementPlayer();
-                        printInfo();
-                        player = game.processTurn();
-                        continueCheck();
+                        for (Player playa : players) {
+                            if (playa instanceof AI) {
+                                game.incrementPlayer();
+                                printInfo();
+                                player = game.processTurn();
+                                continueCheck();
+                            }
+                        }
                         break;
                     }
                 }
 
-                else if (player instanceof Human) {
-                    if (player.stack == 0) {
+                else if (player instanceof AI) {
+                    if (player.getStack() == 0) {
                         players = game.getPlayers();
                         game.incrementPlayer();
                         printInfo();
@@ -206,7 +210,7 @@ public class TBGame {
                         } else if (choice.equalsIgnoreCase("B")) {
                             game.bet(getBetAmt());
                         } else if (choice.equalsIgnoreCase("A")) {
-                            game.bet(player.stack);
+                            game.bet(player.getStack());
                             break;
                         } else if (choice.equalsIgnoreCase("Q")) {
                             System.exit(0);
@@ -294,7 +298,8 @@ public class TBGame {
     }
 
     /**
-     * Asks the user to enter the amount of money he wants to bet if he chooses to bet
+     * Asks the user to enter the amount of money he wants to bet if he chooses to
+     * bet
      * 
      * @Return an integer for the players bet amount
      */
@@ -373,7 +378,7 @@ public class TBGame {
             System.out.printf("Human Player");
         }
 
-        System.out.println("\nStack: " + curPlayer.stack);
+        System.out.println("\nStack: " + curPlayer.getStack());
         System.out.println("\nHole:\n");
         if (curPlayer instanceof Human) {
             for (Card card : curPlayer.getHole()) {
