@@ -401,7 +401,7 @@ public class Table {
 						flop.setAlignment(Pos.CENTER);	
 						flop.setSpacing(5);
 						for (int index = 0; index < 3; index++) {
-							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+							Image cardImage = new Image("/Images/Back.png");
 							ImageView cardView = new ImageView(cardImage);
 							cardView.setScaleX(0);
 							cardView.setId("commFront" + index);
@@ -413,7 +413,7 @@ public class Table {
 						streets.setAlignment(Pos.CENTER);	
 						streets.setSpacing(20);
 						for (int index = 3; index < 5; index++) {
-							Image cardImage = new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png");
+							Image cardImage = new Image("/Images/Back.png");
 							ImageView cardView = new ImageView(cardImage);
 							cardView.setScaleX(0);
 							cardView.setId("commFront" + index);
