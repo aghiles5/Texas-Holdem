@@ -432,7 +432,7 @@ public class GUI extends Application {
 			raise.setDisable(true);
 			call.setText("All In");
 		}
-		else if (((user.getStack() + user.getBet()) > game.getHighestBet()) && ((user.getBet() + user.getStack()) < (game.getHighestBet() + game.getSmallBlind()))) {
+		else if (((user.getStack() + user.getBet()) > game.getHighestBet()) && ((user.getBet() + user.getStack()) <= (game.getHighestBet() + game.getSmallBlind()))) {
 			raiseSlider.setDisable(true); //If the user can match the highest bet but not the minimum raise they can fold, call, or go all-in
 			raiseConfirm.setText("All In");
 		}
