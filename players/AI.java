@@ -62,6 +62,11 @@ public class AI extends Player {
 		cpuName.clear();
 	}
 
+	// This is a getter for PlayerTest class
+	public ArrayList<String> getCPUName() {
+		return cpuName;
+	}
+
 	// This method sets the name of AI and removes the name from the list to avoid duplicates
 	public void setCPUName() {
 		Random name = new Random();
