@@ -67,8 +67,7 @@ public class AI extends Player {
 		return cpuName;
 	}
 
-	// This is a getter for PlayerTest class
-	public int getBetInterVal() {
+	public static int getBetInterval() {
 		return betInterval;
 	}
 
