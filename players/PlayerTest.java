@@ -45,8 +45,7 @@ public class PlayerTest {
 
     @Test
     public void testAISettersGetters() {
-        AI.addCPUName();
         AI.setBetIntervals(100000);
-        AI a = new AI();
+        assertEquals(1000, AI.getBetInterval());
     }
 }
