@@ -29,6 +29,15 @@ public class Animator {
 		return fullMotion;
 	}
 	
+	public SequentialTransition iniMovement(Scene scene, Game game) {
+		SequentialTransition motion = moveCard(scene, (ImageView) scene.lookup("#" + game.getPlayers().get(0).getName() + "Card1Back"), 
+				(ImageView) scene.lookup("#" + game.getPlayers().get(0).getName() + "Card1"), false, true);
+		SequentialTransition motion2 = moveCard(scene, (ImageView) scene.lookup("#" + game.getPlayers().get(0).getName() + "Card1Back"), 
+				(ImageView) scene.lookup("#" + game.getPlayers().get(0).getName() + "Card1"), true, true);
+		motion.getChildren().add(motion2);
+		return motion;
+	}
+	
 	/**
 	 * To show the shuffling of the cards each image that makes up the deck's
 	 * GUI representation has to be moved in a specific way as defined in the

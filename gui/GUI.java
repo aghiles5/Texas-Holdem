@@ -264,9 +264,16 @@ public class GUI extends Application {
 			((ImageView) scene.lookup("#commFront" + index)).setImage(new Image("/Images/" + comm.get(index).getSuit() + "/" + comm.get(index).getRank() + ".png"));
 		}
 		
-		SequentialTransition startAnim = animator.roundStartAnim(scene, game); //The deck shuffle animation is played
-		startAnim.setOnFinished(e -> interRound(scene, game)); //At the end of the animation the round start notification is displayed
-		startAnim.play();
+		SequentialTransition iniAnim = animator.iniMovement(scene, game); //To ensure lower nodes can be found the animation must first be initialized
+		iniAnim.setOnFinished(new EventHandler<ActionEvent>() { 
+			@Override
+			public void handle(ActionEvent event) { //On the finish of the initialization the starting animations are played
+				SequentialTransition startAnim = animator.roundStartAnim(scene, game); //The deck shuffle animation is played
+				startAnim.setOnFinished(e -> interRound(scene, game)); //At the end of the animation the round start notification is displayed
+				startAnim.play();
+			}
+		});
+		iniAnim.play();
 	}
 	
 	/**
