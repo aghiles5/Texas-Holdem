@@ -22,7 +22,7 @@ public class MusicPlayer {
 		}
 		
 		URL resource = getClass().getResource(filenames[index]);
-		//System.out.println(prevIndex + " " + index + " " + filenames[index]); Debug message listing the previous index, current index, and filname to play
+		//System.out.println(prevIndex + " " + index + " " + resource.toString()); //Debug message listing the previous index, current index, and filname to play
 		Media medium = new Media(resource.toString());
 		MediaPlayer player = new MediaPlayer(medium);
 		view.setMediaPlayer(player);

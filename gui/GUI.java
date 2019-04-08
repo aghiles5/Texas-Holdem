@@ -597,7 +597,7 @@ public class GUI extends Application {
 		if (game.hasUserWon())
 			endGameMsg.setText("A Winner is You!");
 		else
-			endGameMsg.setText("You Busted Out. Game Over!");
+			endGameMsg.setText("Game Over!");
 		
 		((Button) scene.lookup("#quit")).setDisable(false);
 		endGameNotif.setVisible(true);

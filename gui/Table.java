@@ -191,7 +191,7 @@ public class Table {
 		double outsetEllipseRadiusY = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + (PLAYER_OUTSET / 2) + (SEAT_HEIGHT / 2) + TABLE_RIM;
 		double outsetEllipseRadiusX = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) + (PLAYER_OUTSET / 2) + (SEAT_WIDTH / 3) + TABLE_RIM;
 		double insetEllipseRadiusY = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
-		double insetEllipseRadiusX = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - PLAYER_INSET;
+		double insetEllipseRadiusX = ((TABLE_WIDTH / TABLE_HEIGHT_RATIO)  / 2.0) - 1.5*PLAYER_INSET;
 		
 		//=====================================================================
 		//Parent Nodes
