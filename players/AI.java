@@ -67,6 +67,11 @@ public class AI extends Player {
 		return cpuName;
 	}
 
+	// This is a getter for PlayerTest class
+	public int getBetInterVal() {
+		return betInterval;
+	}
+
 	// This method sets the name of AI and removes the name from the list to avoid duplicates
 	public void setCPUName() {
 		Random name = new Random();
