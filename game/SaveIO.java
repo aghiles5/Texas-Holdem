@@ -90,6 +90,8 @@ public class SaveIO {
 	 * post: The names and stacks of each existing player have been passed to the loadPlayers method in the super class.
 	 */
 	public Game loadState() {
+		name.clear();
+		stacks.clear();
 		try {
 			//Opens a BufferedReader stream
 			BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));

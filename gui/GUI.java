@@ -239,10 +239,22 @@ public class GUI extends Application {
 	 * @param game the Game object
 	 */
 	private void startPlayRound(Scene scene, Game game) {
-		ArrayList<Player> players = game.getPlayers();
+		for (Player player : game.getPlayerList()) {
+			if (player.getStack() == 0) {
+				((Label) scene.lookup("#" + player.getName() + "Action")).setText("BUSTED OUT");
+				((Label) scene.lookup("#" + player.getName() + "Bet")).setText(" ");
+			}
+		}
 		
-		for (Player player : players)
+		ArrayList<Player> players = game.getPlayers();
+		for (Player player : players) {
 			((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
+			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
+			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
+			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
+			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
+		}
+		
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setFill(Color.BLUE); //The blind/dealer chips are displayed as appropriate
 		((Ellipse) scene.lookup("#" + players.get(0).getName() + "Chip")).setVisible(true);
 		((Ellipse) scene.lookup("#" + players.get(1).getName() + "Chip")).setFill(Color.YELLOW);
@@ -250,13 +262,6 @@ public class GUI extends Application {
 		if (players.size() != 2) {
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setFill(Color.WHITE);
 			((Ellipse) scene.lookup("#" + players.get(players.size() - 1).getName() + "Chip")).setVisible(true);
-		}
-		
-		for (Player player : players) { //Each player's cards are updated and bets are returned to 0, their action is also reset
-			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
-			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
-			((Label) scene.lookup("#" + player.getName() + "Bet")).setText("Current Bet: $0");
-			((Label) scene.lookup("#" + player.getName() + "Action")).setText(" ");
 		}
 		
 		for(int index = 0; index < 5; index++) { //The community cards are updated
