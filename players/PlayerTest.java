@@ -45,7 +45,7 @@ public class PlayerTest {
 
     @Test
     public void testAISettersGetters() {
-        ArrayList<String> n = new ArrayList<String>(); // This is an empty array of CPU player names
+        ArrayList<String> n = new ArrayList<String>();
         String[] j = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton", "DickheadDallas", "EasyEarle","FrenchmanFrank", "GallantGary", "HeartyHenry", "IdiotIgnacio", "ProspectorPatrick", "MagnificentMick", "SpeedyGonzales" };
 
         for (int i = 0; i < j.length; i++) {
@@ -57,6 +57,9 @@ public class PlayerTest {
 
         AI.addCPUName();
         assertEquals(n, AI.getCPUName());
+
+        AI a = new AI();
+        assertNotEquals("", a.getName());
 
         AI.clearCPUName();
         n.clear();
