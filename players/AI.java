@@ -63,7 +63,7 @@ public class AI extends Player {
 	}
 
 	// This is a getter for PlayerTest class
-	public ArrayList<String> getCPUName() {
+	public static ArrayList<String> getCPUName() {
 		return cpuName;
 	}
 
