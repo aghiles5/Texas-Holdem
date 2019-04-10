@@ -16,19 +16,54 @@ import players.AI;
 import players.Human;
 import players.Player;
 
+/**
+ * This class handles all necessary animations card nodes on the table will
+ * follow, including drawing, discarding, and shuffling.
+ * 
+ * @author Adam Hiles
+ * @version 04/10/19
+ */
 public class Animator {
+	/**
+	 * At the beginning of each round of play the deck is shuffled, all 
+	 * player holes are dealt, and the user's cards are revealed to them,
+	 * with such animations being constructed and returned to the caller in
+	 * order to set on finish conditions.
+	 * 
+	 * @param scene the master node tree
+	 * @param game the current Game object
+	 * @return the full round start animation
+	 */
 	public SequentialTransition roundStartAnim(Scene scene, Game game) {
 		SequentialTransition fullMotion = new SequentialTransition();
 		fullMotion.getChildren().addAll(shuffleDeck(scene, game), dealHoles(scene, game));
 		return fullMotion;
 	}
 	
+	/**
+	 * At the end of each round of play the community cards and remaining hole
+	 * cards are returned the deck visually by this animation.
+	 * 
+	 * @param scene the master node tree
+	 * @param game the current Game object
+	 * @return the full round end animation
+	 */
 	public SequentialTransition roundFinishAnim(Scene scene, Game game) {
 		SequentialTransition fullMotion = new SequentialTransition();
 		fullMotion.getChildren().addAll(returnComm(scene, game), returnAllHoles(scene, game));
 		return fullMotion;
 	}
 	
+	/**
+	 * In order for the code to properly recognize the absolute of coordinates
+	 * of nodes contained in layout nodes (HBox, VBox, etc.) an near
+	 * instantaneous initializing animation is carried out in which the first
+	 * player's first card is drawn then returned to the deck.
+	 * 
+	 * @param scene the master node tree
+	 * @param game the current Game object
+	 * @return the initialization animation
+	 */
 	public SequentialTransition iniMovement(Scene scene, Game game) {
 		SequentialTransition motion = moveCard(scene, (ImageView) scene.lookup("#" + game.getPlayers().get(0).getName() + "Card1Back"), 
 				(ImageView) scene.lookup("#" + game.getPlayers().get(0).getName() + "Card1"), false, true);
@@ -78,6 +113,7 @@ public class Animator {
 	 * 
 	 * @param scene the node tree
 	 * @param game the current game object
+	 * @return the full shuffle animation for all involved nodes
 	 */
 	private ParallelTransition shuffleDeck(Scene scene, Game game) {
 		//The deck components are listed
@@ -105,6 +141,7 @@ public class Animator {
 	 * 
 	 * @param scene the game node tree
 	 * @param game the current Game object
+	 * @return the full motion for all hole cards
 	 */
 	private SequentialTransition dealHoles(Scene scene, Game game) {
 		SequentialTransition dealAllHoles = new SequentialTransition();
@@ -211,6 +248,7 @@ public class Animator {
 	 * 
 	 * @param scene the game node tree
 	 * @param game the current Game object
+	 * @return the full return animation for the community cards
 	 */
 	private SequentialTransition returnComm(Scene scene, Game game) {
 		SequentialTransition returnCards = new SequentialTransition();
@@ -240,6 +278,7 @@ public class Animator {
 	 * 
 	 * @param scene the game node tree
 	 * @param game the current Game object
+	 * @return the full return animation for all remaining hole cards
 	 */
 	private SequentialTransition returnAllHoles(Scene scene, Game game) {
 		SequentialTransition returnCards = new SequentialTransition();
@@ -295,7 +334,7 @@ public class Animator {
 	 * @param cardFront the image of the front of the card
 	 * @param reversed whether or not the animation should be reversed
 	 * @param fast whether or not the animation should move fast
-	 * @return
+	 * @return the card's full motion
 	 */
 	private SequentialTransition moveCard(Scene scene, ImageView cardBack, ImageView cardFront, Boolean reversed, Boolean fast) {
 		ImageView subCard; //Depending on if the card needs to be drawn or returned the appropriate dummy image is found
