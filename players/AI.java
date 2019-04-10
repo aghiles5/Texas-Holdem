@@ -14,6 +14,7 @@ public class AI extends Player {
 
 	private static int betInterval; // Interval for bets
 	private int minBet; // Minimum bet amount
+	private ArrayList<Integer> smartAIDec = new ArrayList<Integer>(); // Empty list of percentages that will be passed
 	
 	// Next few lines are variable from Hand class
 	private static final int HIGH_CARD = 0;
@@ -26,8 +27,6 @@ public class AI extends Player {
 	private static final int FOUR_OF_A_KIND = 7;
 	private static final int STRAIGHT_FLUSH = 8;
 	private static final int ROYAL_FLUSH = 9;
-
-	private ArrayList<Integer> smartAIDec = new ArrayList<Integer>();
 
 	public static ArrayList<String> cpuName = new ArrayList<String>(); // This is an empty array of CPU player names
 	public static final String[] newNames = new String[] { "AdventurousAlonzo", "ButcherBoone", "CleverClayton",
@@ -215,28 +214,6 @@ public class AI extends Player {
 				super.fold("F");
 			}
 		}
-
-		// When AI has suffifient stack but can only bet to the bet interval
-		/*else if (super.getStack() > minBet && super.getStack() <= 2 * betInterval) {
-			percent = smartAIDecision2(4);
-
-			// All in action
-			if (decision < percent.get(0)) {
-				super.allIn("A");
-			}
-			// Bet action
-			else if (decision >= percent.get(0) && decision < percent.get(1)) {
-				super.BetRaise("B", betInterval);
-			}
-			// AI check action
-			else if (decision >= percent.get(1) && decision < percent.get(2)) {
-				super.check("C");
-			}
-			// Fold action
-			else {
-				super.fold("F");
-			}
-		}*/
 
 		// AI has sufficient stack to bet more than the minimum bet amount
 		else { 
