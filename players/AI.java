@@ -389,7 +389,7 @@ public class AI extends Player {
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
 				smartAIDec.add(10);
-				smartAIDec.add(40);
+				smartAIDec.add(80);
 			}
 		}
 		else {
@@ -403,7 +403,7 @@ public class AI extends Player {
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(2);
-					smartAIDec.add(12);
+					smartAIDec.add(7);
 					smartAIDec.add(17);
 				}
 			}
