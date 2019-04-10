@@ -396,8 +396,8 @@ public class AI extends Player {
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(2);
-					smartAIDec.add(4);
-					smartAIDec.add(70);
+					smartAIDec.add(7);
+					smartAIDec.add(17);
 				}
 			}
 			else if (hand.getRank() == ONE_PAIR) {
