@@ -49,11 +49,6 @@ public class AI extends Player {
 
 	// SETTERS AND GETTERS------------------------------------------------------------------------------------------------------------------------------------------
 
-	// This getter is only for running tests
-	public ArrayList<Integer> betSmartAIDec() {
-		return smartAIDec;
-	}
-
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
 		for (int i = 0; i < newNames.length; i++) { // For loop to add newNames to cpuName
@@ -69,10 +64,6 @@ public class AI extends Player {
 	// This is a getter for PlayerTest class
 	public static ArrayList<String> getCPUName() {
 		return cpuName;
-	}
-
-	public static int getBetInterval() {
-		return betInterval;
 	}
 
 	// This method sets the name of AI and removes the name from the list to avoid duplicates
@@ -160,35 +151,10 @@ public class AI extends Player {
 			else {
 				super.fold("F");
 			}
-		
-			
 		}
 
 		percent.clear();
 		smartAIDec.clear(); // Clears the list of percentage for next round
-	}
-	/**
-	 * This method generates a random raise amount that is greater than the highest bet for AI
-	 * 
-	 * @return newRaise
-	 */
-	public int checkAIRaise() {
-		Random bet = new Random();
-		
-		int newRaise = 0;
-
-		Boolean canBet = false;
-
-		while (canBet == false) { // Loop will run until raising amount is satisfied
-			int raising = bet.nextInt(super.getStack() + 1);
-
-			// Raise amount must be greater than highest bet but lower than stack to avoid all in action
-			if (raising > super.getHighBet() && raising < super.getStack()) { 
-				newRaise = checkBetInterval("R", raising);
-				canBet = true;
-			}
-		}
-		return newRaise;
 	}
 
 	/**
@@ -250,11 +216,34 @@ public class AI extends Player {
 			else {
 				super.fold("F");
 			}
-			
 		}
 
 		percent.clear();
 		smartAIDec.clear(); // Clears the list of percentage for next round
+	}
+
+	/**
+	 * This method generates a random raise amount that is greater than the highest bet for AI
+	 * 
+	 * @return newRaise
+	 */
+	public int checkAIRaise() {
+		Random bet = new Random();
+		
+		int newRaise = 0;
+
+		Boolean canBet = false;
+
+		while (canBet == false) { // Loop will run until raising amount is satisfied
+			int raising = bet.nextInt(super.getStack() + 1);
+
+			// Raise amount must be greater than highest bet but lower than stack to avoid all in action
+			if (raising > super.getHighBet() && raising < super.getStack()) { 
+				newRaise = checkBetInterval("R", raising);
+				canBet = true;
+			}
+		}
+		return newRaise;
 	}
 
 	/**
