@@ -49,11 +49,6 @@ public class AI extends Player {
 
 	// SETTERS AND GETTERS------------------------------------------------------------------------------------------------------------------------------------------
 
-	// This getter is only for running tests
-	public ArrayList<Integer> betSmartAIDec() {
-		return smartAIDec;
-	}
-
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
 		for (int i = 0; i < newNames.length; i++) { // For loop to add newNames to cpuName
@@ -69,10 +64,6 @@ public class AI extends Player {
 	// This is a getter for PlayerTest class
 	public static ArrayList<String> getCPUName() {
 		return cpuName;
-	}
-
-	public static int getBetInterval() {
-		return betInterval;
 	}
 
 	// This method sets the name of AI and removes the name from the list to avoid duplicates
@@ -102,6 +93,8 @@ public class AI extends Player {
 		// Next 2 lines of code sets up probability of AI decisions
 		Random choice = new Random();
 		int decision = choice.nextInt(100); // Generates a random choice out of 100
+
+		smartAIDec.clear();
 
 		ArrayList<Integer> percent; // Empty list of percentages that will be updated
 
@@ -146,7 +139,7 @@ public class AI extends Player {
 				super.allIn("A");
 			}
 			// AI raise action
-			else if (decision >= percent.get(0) && decision > percent.get(1)) {
+			else if (decision >= percent.get(0) && decision < percent.get(1)) {
 				int bet = checkAIRaise(); // Generates a random number within the bounds of stack for raising
 				super.BetRaise("R", bet - super.getHighBet());
 			}
@@ -155,38 +148,13 @@ public class AI extends Player {
 				super.call("L");
 			}
 			// AI fold action
-			else {
+			else if (decision >= percent.get(2) && decision < 100) {
 				super.fold("F");
 			}
-		
-			
 		}
 
 		percent.clear();
 		smartAIDec.clear(); // Clears the list of percentage for next round
-	}
-	/**
-	 * This method generates a random raise amount that is greater than the highest bet for AI
-	 * 
-	 * @return newRaise
-	 */
-	public int checkAIRaise() {
-		Random bet = new Random();
-		
-		int newRaise = 0;
-
-		Boolean canBet = false;
-
-		while (canBet == false) { // Loop will run until raising amount is satisfied
-			int raising = bet.nextInt(super.getStack() + 1);
-
-			// Raise amount must be greater than highest bet but lower than stack to avoid all in action
-			if (raising > super.getHighBet() && raising < super.getStack()) { 
-				newRaise = checkBetInterval("R", raising);
-				canBet = true;
-			}
-		}
-		return newRaise;
 	}
 
 	/**
@@ -199,6 +167,8 @@ public class AI extends Player {
 		// Next 2 lines of code sets up probability of AI decisions
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
+
+		smartAIDec.clear();
 
 		ArrayList<Integer> percent; // Empty list of percentages that will be updated
 
@@ -246,11 +216,34 @@ public class AI extends Player {
 			else {
 				super.fold("F");
 			}
-			
 		}
 
 		percent.clear();
 		smartAIDec.clear(); // Clears the list of percentage for next round
+	}
+
+	/**
+	 * This method generates a random raise amount that is greater than the highest bet for AI
+	 * 
+	 * @return newRaise
+	 */
+	public int checkAIRaise() {
+		Random bet = new Random();
+		
+		int newRaise = 0;
+
+		Boolean canBet = false;
+
+		while (canBet == false) { // Loop will run until raising amount is satisfied
+			int raising = bet.nextInt(super.getStack() + 1);
+
+			// Raise amount must be greater than highest bet but lower than stack to avoid all in action
+			if (raising > super.getHighBet() && raising < super.getStack()) { 
+				newRaise = checkBetInterval("R", raising);
+				canBet = true;
+			}
+		}
+		return newRaise;
 	}
 
 	/**
@@ -270,8 +263,8 @@ public class AI extends Player {
 		while (canBet == false) {
 			int betting = bet.nextInt(super.getStack() + 1); // Creating a random number for betting
 
-			// Probability of betting alot is 10%
-			if (betProb < 10) {
+			// Probability of betting alot is 5%
+			if (betProb < 5) {
 				// Must bet more than half of AI's stack as rule
 				if (betting < super.getStack() && betting >= (super.getStack() / 2)) {
 					if (betting <= 2 * betInterval) {
@@ -285,8 +278,8 @@ public class AI extends Player {
 				}
 			}
 
-			// Probability of betting low is 90%
-			else if (betProb >= 10) {
+			// Probability of betting low is 95%
+			else if (betProb >= 5) {
 				// Must bet less than half of AI's stack
 				if (betting < (super.getStack() / 2) && betting >= minBet) {
 					returnBet = checkBetInterval("B", betting); // Checks if the betting amount is an interval of betting
@@ -384,12 +377,12 @@ public class AI extends Player {
 			}
 			else if (numChoice == 3) {
 				smartAIDec.add(5);
-				smartAIDec.add(20);
+				smartAIDec.add(50);
 			}
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
-				smartAIDec.add(15);
-				smartAIDec.add(40);
+				smartAIDec.add(10);
+				smartAIDec.add(95);
 			}
 		}
 		else {
@@ -403,7 +396,7 @@ public class AI extends Player {
 				}
 				else if (numChoice == 4) {
 					smartAIDec.add(2);
-					smartAIDec.add(12);
+					smartAIDec.add(7);
 					smartAIDec.add(17);
 				}
 			}
