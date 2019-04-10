@@ -262,6 +262,8 @@ public class Game {
             }
         } else if (lastPlayer.getAction() == "Folded" && highestBet != 0) {
             roundPlayers.get(playerCount).getDecision();
+        } else {
+            roundPlayers.get(playerCount).getDecision();
         }
 
         if (roundPlayers.get(playerCount).getBet() > highBetHolder) {
