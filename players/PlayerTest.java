@@ -17,7 +17,7 @@ public class PlayerTest {
     public void testHumanConstructor() {
         Human a = new Human("Jeff");
         assertEquals("Jeff", a.getName());
-        assertEquals(null, a.getStack());
+        assertEquals(0, a.getStack());
 
         a.setStack(100);
         assertEquals(100, a.getStack());
@@ -64,5 +64,26 @@ public class PlayerTest {
         AI.clearCPUName();
         n.clear();
         assertEquals(n, AI.getCPUName());
+    }
+
+    @Test
+    public void otherTests() {
+        Human a = new Human("Not Harvey");
+        ArrayList<String> e = new ArrayList<String>();
+        a.setName("Harvey");
+        assertEquals("Harvey", a.getName());
+        assertEquals(0, a.getStack());
+
+        a.setAction("Fold");
+        assertEquals("Fold", a.getAction());
+
+        a.setBet(250);
+        assertEquals(250, a.getBet());
+
+        a.setHighBet(1000);
+        assertEquals(1000, a.getHighBet());
+
+        assertEquals(e, a.getHole());
+
     }
 }
