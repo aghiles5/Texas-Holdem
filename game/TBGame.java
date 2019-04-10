@@ -199,23 +199,30 @@ public class TBGame {
                 else if (player instanceof AI) {
                     if (player.getStack() == 0) {
                         players = game.getPlayers();
-                        game.incrementPlayer();
-                        printInfo();
-                        String choice = getPlayerInput();
-                        if (choice.equalsIgnoreCase("F")) {
-                            game.fold();
-                            break;
-                        } else if (choice.equalsIgnoreCase("C")) {
-                            game.call();
-                        } else if (choice.equalsIgnoreCase("B")) {
-                            game.bet(getBetAmt());
-                        } else if (choice.equalsIgnoreCase("A")) {
-                            game.bet(player.getStack());
-                            break;
-                        } else if (choice.equalsIgnoreCase("Q")) {
-                            System.exit(0);
+                        for (Player playa : players) {
+                            game.incrementPlayer();
+                            printInfo();
+                            if (playa instanceof AI) {
+                                player = game.processTurn();
+                                continueCheck();
+                            } else {
+                                String choice = getPlayerInput();
+                                if (choice.equalsIgnoreCase("F")) {
+                                    game.fold();
+                                    break;
+                                } else if (choice.equalsIgnoreCase("C")) {
+                                    game.call();
+                                } else if (choice.equalsIgnoreCase("B")) {
+                                    game.bet(getBetAmt());
+                                } else if (choice.equalsIgnoreCase("A")) {
+                                    game.bet(player.getStack());
+                                    break;
+                                } else if (choice.equalsIgnoreCase("Q")) {
+                                    System.exit(0);
+                                }
+                                continueCheck();
+                            }
                         }
-                        continueCheck();
                         break;
                     }
                 }
