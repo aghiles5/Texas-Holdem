@@ -148,7 +148,7 @@ public class AI extends Player {
 				super.call("L");
 			}
 			// AI fold action
-			else if (decision >= percent.get(3)) {
+			else if (decision >= percent.get(2)) {
 				super.fold("F");
 			}
 		}
