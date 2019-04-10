@@ -105,7 +105,7 @@ public class GUI extends Application {
 	 */
 	private void generateTutorial(Scene scene) {
 		Parent returnRoot = scene.getRoot();
-		scene.setRoot((new Tutorial()).getTutorial());
+		scene.setRoot((new Tutorial(WIN_WIDTH)).getTutorial());
 		((Button) scene.lookup("#return")).setOnAction(e -> scene.setRoot(returnRoot));
 	}
 	

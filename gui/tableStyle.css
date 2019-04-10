@@ -62,6 +62,10 @@
 	-fx-font-size: 24;
 }
 
+.button-tutorial{
+	-fx-font-size: 36;
+}
+
 .bar-label{
 	-fx-text-fill: goldenrod;
 }
