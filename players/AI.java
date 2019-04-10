@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 04/06/2019
+ * @version 04/10/2019
  */
 
 
@@ -48,6 +48,11 @@ public class AI extends Player {
 	}
 
 	// SETTERS AND GETTERS------------------------------------------------------------------------------------------------------------------------------------------
+
+	// This getter is only for running tests
+	public ArrayList<Integer> betSmartAIDec() {
+		return smartAIDec;
+	}
 
 	// This method adds the list of names to the empty array of CPU names
 	public static void addCPUName() {
