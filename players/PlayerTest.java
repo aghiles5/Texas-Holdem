@@ -8,7 +8,7 @@ import org.junit.Test;
  * Human class
  *
  * @author John Lowie
- * @version 04/06/19
+ * @version 04/10/19
  */
 
 public class PlayerTest {
