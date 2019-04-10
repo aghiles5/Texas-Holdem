@@ -7,6 +7,20 @@
 	-fx-text-fill: black;
 }
 
+.bar-label{
+	-fx-text-fill: goldenrod;
+}
+
+.tutorial-title{
+	-fx-font-size: 96;
+	-fx-text-fill: goldenrod;
+}
+
+.tutorial-body{
+	-fx-font-size: 36;
+	-fx-text-fill: goldenrod;
+}
+
 .button{
 	-fx-background-image: url("textures/velvet.png");
 	-fx-text-fill: goldenrod;
@@ -64,10 +78,6 @@
 
 .button-tutorial{
 	-fx-font-size: 36;
-}
-
-.bar-label{
-	-fx-text-fill: goldenrod;
 }
 
 .flooring{
