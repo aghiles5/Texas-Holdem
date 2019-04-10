@@ -135,6 +135,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				((HBox) scene.lookup("#notif")).setVisible(false); //Certain nodes are made invisible and disabled
 				((Button) scene.lookup("#save")).setDisable(true);
+				((Button) scene.lookup("#save")).setText("Save");
 				((Button) scene.lookup("#help")).setDisable(true);
 				((Button) scene.lookup("#quit")).setDisable(true);
 				
@@ -216,6 +217,8 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				saveLoad.saveState(game.getPlayerList(), game.getSmallBlind());
+				((Button) scene.lookup("#save")).setText("Saved!");
+				((Button) scene.lookup("#save")).setDisable(true);
 			}
 		});
 		
