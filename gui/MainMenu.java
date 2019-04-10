@@ -71,12 +71,13 @@ public class MainMenu {
 					resume.setId("continue");
 					Button newGame = new Button("New Game");
 					newGame.getStyleClass().add("button-main-menu");
-					Button tutorial = new Button("How to Play");
-					tutorial.getStyleClass().add("button-main-menu");
+					Button help = new Button("How to Play");
+					help.getStyleClass().add("button-main-menu");
+					help.setId("help");
 					Button quit = new Button("Quit to Desktop");
 					quit.getStyleClass().add("button-main-menu");
 		
-				mainButtonBox.getChildren().addAll(resume, newGame, tutorial, quit);
+				mainButtonBox.getChildren().addAll(resume, newGame, help, quit);
 				
 			mainBox.getChildren().addAll(title, mainButtonBox);
 				

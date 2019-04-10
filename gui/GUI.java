@@ -15,12 +15,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import players.Human;
 import players.Player;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -34,8 +36,7 @@ import javafx.scene.media.MediaPlayer;
 
 /**
  * This method is the entry point for a new, GUI-based game. The menu is 
- * displayed, new Games are created, and the main game loop is run from here.
- * Code for playing a media file is from http://www.java2s.com/Code/Java/JavaFX/Playmp3file.htm
+ * displayed, new Games are created, and the main game loop is run from here. 
  * 
  * @author Adam Hiles
  * @version 03/28/18
@@ -83,14 +84,10 @@ public class GUI extends Application {
 			((Button) scene.lookup("#continue")).setDisable(true);
 		} catch (IOException e) {}
 		
-		((Button) scene.lookup("#continue")).setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				loadFromFile(scene);
-			}
-		});
+		((Button) scene.lookup("#continue")).setOnAction(e -> loadFromFile(scene));
+		((Button) scene.lookup("#help")).setOnAction(e -> generateTutorial(scene));
 		
-		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //Temporarily, the EventHandler for the main menu's start button is set here.
+		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
@@ -98,6 +95,18 @@ public class GUI extends Application {
 				makeNewGame(scene, playerNum, stackSize);
 			}
 		});
+	}
+	
+	/**
+	 * On the press of the appropriate help button in either the main menu
+	 * or in game will cause the current root to be held 
+	 * 
+	 * @param scene the master node tree
+	 */
+	private void generateTutorial(Scene scene) {
+		Parent returnRoot = scene.getRoot();
+		scene.setRoot((new Tutorial()).getTutorial());
+		((Button) scene.lookup("#return")).setOnAction(e -> scene.setRoot(returnRoot));
 	}
 	
 	private void makeNewGame(Scene scene, int playerNum, int stackSize) {
@@ -221,6 +230,8 @@ public class GUI extends Application {
 				((Button) scene.lookup("#save")).setDisable(true);
 			}
 		});
+		
+		((Button) scene.lookup("#help")).setOnAction(e -> generateTutorial(scene));
 		
 		((Button) scene.lookup("#quit")).setOnAction(new EventHandler<ActionEvent>() { //Handler for saving the game
 			@Override
