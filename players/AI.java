@@ -377,7 +377,7 @@ public class AI extends Player {
 			}
 			else if (numChoice == 3) {
 				smartAIDec.add(5);
-				smartAIDec.add(20);
+				smartAIDec.add(50);
 			}
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
