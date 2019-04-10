@@ -139,7 +139,7 @@ public class AI extends Player {
 				super.allIn("A");
 			}
 			// AI raise action
-			else if (decision >= percent.get(0) && decision > percent.get(1)) {
+			else if (decision >= percent.get(0) && decision < percent.get(1)) {
 				int bet = checkAIRaise(); // Generates a random number within the bounds of stack for raising
 				super.BetRaise("R", bet - super.getHighBet());
 			}
@@ -381,7 +381,7 @@ public class AI extends Player {
 			}
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
-				smartAIDec.add(6);
+				smartAIDec.add(15);
 				smartAIDec.add(90);
 			}
 		}
