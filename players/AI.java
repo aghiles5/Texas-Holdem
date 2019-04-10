@@ -103,6 +103,8 @@ public class AI extends Player {
 		Random choice = new Random();
 		int decision = choice.nextInt(100); // Generates a random choice out of 100
 
+		smartAIDec.clear();
+
 		ArrayList<Integer> percent; // Empty list of percentages that will be updated
 
 		// If AI has a stack less than minBet or less than the highest bet, then they only have 2 actions to play 
@@ -199,6 +201,8 @@ public class AI extends Player {
 		// Next 2 lines of code sets up probability of AI decisions
 		Random choice = new Random();
 		int decision = choice.nextInt(100);
+
+		smartAIDec.clear();
 
 		ArrayList<Integer> percent; // Empty list of percentages that will be updated
 
