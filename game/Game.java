@@ -189,7 +189,9 @@ public class Game {
             playerCount += 1;
         }
 
-        highestBet = highBetHolder;
+        if (highestBet < highBetHolder) {
+            highestBet = highBetHolder;
+        }
 
         for (Player player : roundPlayers) {
             player.setHighBet(highestBet);
