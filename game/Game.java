@@ -189,7 +189,7 @@ public class Game {
             playerCount += 1;
         }
 
-        if (highestBet < highBetHolder) {
+        if (highestBet <= highBetHolder) {
             highestBet = highBetHolder;
         }
 
