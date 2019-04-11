@@ -8,7 +8,7 @@ import org.junit.Test;
  * Human class
  *
  * @author John Lowie
- * @version 04/10/19
+ * @version 04/11/19
  */
 
 public class PlayerTest {
@@ -85,5 +85,26 @@ public class PlayerTest {
 
         assertEquals(e, a.getHole());
 
+    }
+
+    @Test
+    public void someMoreTests() {
+        Deck deck = new Deck();
+        Human a = new Human("Tom");
+        ArrayList<Card> middleCards = new ArrayList<Card>();
+        a.setHole(deck.dealSingle());
+        a.setHole(deck.dealSingle());
+
+        deck.dealCard(middleCards);
+        a.setHand(middleCards);
+        assertEquals(null, null);
+
+        deck.dealCard(middleCards);
+        a.setHand(middleCards);
+        assertEquals(null, null);
+
+        deck.dealCard(middleCards);
+        a.setHand(middleCards);
+        assertEquals(null, null);
     }
 }
