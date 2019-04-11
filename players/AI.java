@@ -6,7 +6,7 @@ import java.util.Random;
  * The AI class handles the random decisions that the AI commits
  * 
  * @author John Lowie
- * @version 04/10/2019
+ * @version 04/11/2019
  */
 
 
@@ -77,6 +77,11 @@ public class AI extends Player {
 	// This method sets up the intervals for betting
 	public static void setBetIntervals(int stack) {
 		betInterval = (int) (0.01 * stack); // Sets the bet interval to 1% of the initial stack
+	}
+
+	// This method is only for testing
+	public static int getBetInterval() {
+		return betInterval;
 	}
 
 	// THE METHODS BELOW THIS LINE ARE ALL AI ACTIONS AND ACTION QUALIFICATION CHECKS-------------------------------------------------------------------------------
