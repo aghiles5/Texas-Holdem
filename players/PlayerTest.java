@@ -3,6 +3,10 @@ import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import cards.Card;
+import cards.Deck;
+import cards.Hand;
+
 /**
  * This is a test file for the Player class and its child classes, AI class and
  * Human class
