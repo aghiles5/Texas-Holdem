@@ -7,35 +7,13 @@ import players.Player;
 /**
  * Saves All names and their stacks in a file.
  * @author Kyle Wen
- * @version March 30, 2019
+ * @version April 11, 2019
  */
-//JUNIT TESTING!!!
+
 public class SaveIO {
 	private ArrayList<String> name = new ArrayList<String>();
 	private ArrayList<Integer> stacks = new ArrayList<Integer>();
-	private int smallBlind;
-	
-	public void clear() {
-		File dat = new File("Save.txt");
-		File blind = new File("Blind.txt");
-		FileWriter out;
-		FileWriter b;
-		BufferedWriter stuff;
-		BufferedWriter cBlind;
-		try {
-			out = new FileWriter(dat);
-			stuff = new BufferedWriter(out);
-			stuff.write("");
-			b = new FileWriter(blind);
-			cBlind = new BufferedWriter(b);
-			cBlind.write("");
-			cBlind.close();
-			stuff.close();
-		} catch (IOException e) {
-			System.out.println("File not cleared.");
-			System.out.println("IOException: " + e.getMessage());
-		}
-	}	
+	private int smallBlind;	
 	
 	/**
 	 * pre: none
@@ -87,7 +65,9 @@ public class SaveIO {
 	
 	/**
 	 * pre: A file exists containing the names and stacks of each player
-	 * post: The names and stacks of each existing player have been passed to the loadPlayers method in the super class.
+	 * post: A game object is created using the names and stacks of each player and returned.
+	 * 
+	 * @return nGame
 	 */
 	public Game loadState() {
 		name.clear();
@@ -96,6 +76,7 @@ public class SaveIO {
 			//Opens a BufferedReader stream
 			BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
 			BufferedReader sBlind = new BufferedReader(new FileReader("Blind.txt"));
+			//reads the two files and stores their information appropriately
 			try {
 				smallBlind = Integer.parseInt(sBlind.readLine());
 				//two file approach if doesn't work
@@ -121,14 +102,32 @@ public class SaveIO {
 		return nGame;
 	}
 	
+	/**
+	 * pre: none
+	 * post: The name list has been returned.
+	 * 
+	 * @return name
+	 */
 	public ArrayList<String> getName() {
 		return name;
 	}
 	
+	/**
+	 * pre: none
+	 * post: The stacks list has been returned.
+	 * 
+	 * @return stacks
+	 */
 	public ArrayList<Integer> getStacks() {
 		return stacks;
 	}
 	
+	/**
+	 * pre: none
+	 * post: The small blind has been returned.
+	 * 
+	 * @return smallBlind
+	 */
 	public int getSmallBlind() {
 		return smallBlind;
 	}
