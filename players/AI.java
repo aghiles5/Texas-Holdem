@@ -371,7 +371,7 @@ public class AI extends Player {
 		hand = super.getHand();
 
 		// Default probabilities when AI cards have no ranking yet
-		if (hand == null) {
+		if (hand.getCards().size() == 0) {
 			if (numChoice == 2) {
 				smartAIDec.add(5);
 			}
