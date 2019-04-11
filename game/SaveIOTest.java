@@ -1,7 +1,6 @@
 package game;
 
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,17 +12,16 @@ public class SaveIOTest extends SaveIO {
 	
 	@Test
 	public void testLoadState() {
-		String[] linesInFile = {"Kyle","1500","Adam", "500"};
+		String[] linesInFile = {"You","1500","Adam", "500"};
 		String[] lineInFile = {"25"};
 		try {
 			createFile("Save.txt", linesInFile);
 			createFile("Blind.txt", lineInFile);
 			Game MockGame = super.loadState();
-			System.out.println(MockGame.getPlayerList());
-			assertEquals("Player one's name should be Kyle", "Kyle", MockGame.getPlayers().get(0));
-			assertEquals("Player one's stack should be 1500", 1500, MockGame.getPlayers().get(0).getStack());
-			assertEquals("Player two's name should be Adam", "Adam", MockGame.getPlayers().get(1));
-			assertEquals("Player two's stack should be 1500", 500, MockGame.getPlayers().get(1).getStack());
+			assertEquals("Player one's name should be You", "You", MockGame.getPlayerList().get(0).getName());
+			assertEquals("Player one's stack should be 1500", 1500, MockGame.getPlayerList().get(0).getStack());
+			assertEquals("Player two's name should be Adam", "Adam", MockGame.getPlayerList().get(1).getName());
+			assertEquals("Player two's stack should be 1500", 500, MockGame.getPlayerList().get(1).getStack());
 			assertEquals("Small blind should be 25", 25, MockGame.getSmallBlind());
 		} catch (IOException e) {
 			
