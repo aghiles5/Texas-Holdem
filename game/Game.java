@@ -238,18 +238,21 @@ public class Game {
         if (roundNum == 0 && playerCount == 0 && sBlindDone == false) {
             if (roundPlayers.get(playerCount).stack < smallBlind) {
                 roundPlayers.get(playerCount).allIn("A");
+                highBetHolder = (int) smallBlind;
             } else {
                 bet((int) (smallBlind));
+                highBetHolder = roundPlayers.get(playerCount).getBet();
             }
-            highBetHolder = roundPlayers.get(playerCount).getBet();
+            
             sBlindDone = true;
         } else if (roundNum == 0 && playerCount == 1 && bBlindDone == false) {
             if (roundPlayers.get(playerCount).stack < (smallBlind * 2)) {
                 roundPlayers.get(playerCount).allIn("A");
+                highBetHolder = (int)smallBlind*2;
             } else {
                 bet((int) (smallBlind));
+                highBetHolder = roundPlayers.get(playerCount).getBet();
             }
-            highBetHolder = roundPlayers.get(playerCount).getBet();
             bBlindDone = true;
         } else if (playerCount == 0 && roundNum != 0 && highestBet == 0) {
             roundPlayers.get(playerCount).getDecision2();
