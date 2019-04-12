@@ -102,16 +102,31 @@ public class PlayerTest {
         a.setHole(deck.dealSingle());
         a.setHole(deck.dealSingle());
 
-        System.out.println(a.getHole()); // This line is temporary
+        assertNotEquals("Player hole is not suppose to be empty", null, a.getHole());
 
-        assertNotEquals("Player hand is not suppose to be empty", null, a.getHole());
+        a.emptyHole();
+        assertEquals("Player hole should be empty", middleCards, a.getHole());
+
+        a.setHole(deck.dealSingle());
+        a.setHole(deck.dealSingle());
 
         middleCards = deck.dealCard(middleCards);
-        System.out.println(middleCards);
 
+        a.setHand(middleCards);
+        assertNotEquals("Player hand should not be empty", null, a.getHand());
 
+        middleCards = deck.dealCard(middleCards);
+        a.setHand(middleCards);
+        assertNotEquals("Player hand should not be empty", null, a.getHand());
 
-        a.setHand(middleCards); // This is when the problem occurs
+        middleCards = deck.dealCard(middleCards);
+        a.setHand(middleCards);
+        assertNotEquals("Player hand should not be empty", null, a.getHand());
+
+        middleCards.clear();
+        a.emptyHole();
+        a.emptyHand();
+        assertEquals("Player hand should be empty", null, a.getHand());
         
     }
 }
