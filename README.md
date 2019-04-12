@@ -1,6 +1,6 @@
 # Texas-Holdem
 ## T03 G08, CPSC 233, WINTER 2019
-### Current Version: 0.demo3
+### Current Version: 1.demoInteractive
 ### Repository: https://github.com/aghiles5/Texas-Holdem
 
 This program requires a system running at least JDK 1.8.
@@ -35,3 +35,7 @@ java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore []
 where the name of the class replaces the brackets.
 
 The PlayerTest can be compiled and run normally without JUnit.
+
+TESTING NOTICE: Due to the nature of poker as a game of chance it is not possible to thoroughly test every scenario. Compounding the millions of hand properities with up to 10 players innumerable ways a game can go through give a small idea of the scale of possibles. As such, the test files handle a good number of logic cases in specific areas, but it should be expected that a good number of bugs will exist in scenarios that could not be accounted for.
+
+COPYRIGHT NOTICE: The music used in this game is valid under fair dealing exceptions according to the Copyright Act of Canada secion 29.4 due to its use for educational purposes. Marty Robbins *Gunfighter Ballads and Trail Songs* 1999 reissue is owned by Sony Music Entertainment Inc..
