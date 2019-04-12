@@ -142,7 +142,7 @@ public class MainMenu {
 			//=================================================================
 			// Event Handlers/Listeners
 			
-			back.setOnAction(new EventHandler<ActionEvent>() {
+			back.setOnAction(new EventHandler<ActionEvent>() { //The user is returned to the main menu from the new game menu
 				@Override
 				public void handle(ActionEvent event) {
 					newGameBox.setVisible(false);
@@ -150,7 +150,7 @@ public class MainMenu {
 				}
 			});
 			
-			newGame.setOnAction(new EventHandler<ActionEvent>() {
+			newGame.setOnAction(new EventHandler<ActionEvent>() { //The user is brought to the new game menu from the main menu
 				@Override
 				public void handle(ActionEvent event) {
 					newGameBox.setVisible(true);
@@ -158,7 +158,7 @@ public class MainMenu {
 				}
 			});
 			
-			quit.setOnAction(new EventHandler<ActionEvent>() {
+			quit.setOnAction(new EventHandler<ActionEvent>() { //The game quits to desktop
 				@Override
 				public void handle(ActionEvent event) {
 					System.exit(0);

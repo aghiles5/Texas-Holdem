@@ -22,17 +22,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.shape.Ellipse;
-//imports used to play background music
-import java.net.URL;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 /**
  * This method is the entry point for a new, GUI-based game. The menu is 
@@ -46,7 +41,6 @@ public class GUI extends Application {
 	private final double WIN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 	private SaveIO saveLoad = new SaveIO();
 	private Animator animator = new Animator();
-    //resources used for playing music
 	private MusicPlayer mp = new MusicPlayer();
 	
 	/**
@@ -66,7 +60,6 @@ public class GUI extends Application {
 		Scene scene = new Scene(new Pane(), WIN_WIDTH, WIN_HEIGHT);
 		scene.getStylesheets().add("/gui/tableStyle.css");
 		scene.setFill(Color.BLACK);
-		//plays a media file indefinitely
 		mp.play();
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -84,10 +77,10 @@ public class GUI extends Application {
 			((Button) scene.lookup("#continue")).setDisable(true);
 		} catch (IOException e) {}
 		
-		((Button) scene.lookup("#continue")).setOnAction(e -> loadFromFile(scene));
-		((Button) scene.lookup("#help")).setOnAction(e -> generateTutorial(scene));
+		((Button) scene.lookup("#continue")).setOnAction(e -> loadFromFile(scene)); //The continue button allows a game to be loaded from file
+		((Button) scene.lookup("#help")).setOnAction(e -> generateTutorial(scene)); //The how to play button opens the tutorial
 		
-		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() {
+		((Button) scene.lookup("#startButton")).setOnAction(new EventHandler<ActionEvent>() { //The start button in the new game menu will start a new game
 			@Override
 			public void handle(ActionEvent event) {
 				int playerNum = (int) ((Slider) scene.lookup("#comSlider")).getValue() + 1;
@@ -109,6 +102,14 @@ public class GUI extends Application {
 		((Button) scene.lookup("#return")).setOnAction(e -> scene.setRoot(returnRoot));
 	}
 	
+	/**
+	 * From the parameters given by the main menu a new game is generated and
+	 * begun.
+	 * 
+	 * @param scene the master node tree
+	 * @param playerNum the number of players
+	 * @param stackSize the initial money of players
+	 */
 	private void makeNewGame(Scene scene, int playerNum, int stackSize) {
 		Game game = new Game(); //The new game is created and its parameters are generated
 		game.generatePlayers(playerNum, stackSize);
@@ -116,6 +117,12 @@ public class GUI extends Application {
 		generatePlayArea(scene, game);
 	}
 	
+	/**
+	 * The SaveIO will load the saved game, which will be used to generate a play
+	 * area and resume the game.
+	 * 
+	 * @param scene the master node tree
+	 */
 	private void loadFromFile(Scene scene) {
 		Game game = saveLoad.loadState();
 		game.setupRound();
@@ -231,9 +238,9 @@ public class GUI extends Application {
 			}
 		});
 		
-		((Button) scene.lookup("#help")).setOnAction(e -> generateTutorial(scene));
+		((Button) scene.lookup("#help")).setOnAction(e -> generateTutorial(scene)); //Handler for accessing ingame tutorial
 		
-		((Button) scene.lookup("#quit")).setOnAction(new EventHandler<ActionEvent>() { //Handler for saving the game
+		((Button) scene.lookup("#quit")).setOnAction(new EventHandler<ActionEvent>() { //Handler for quitting to menu
 			@Override
 			public void handle(ActionEvent event) {
 				generateMenu(scene);
@@ -261,7 +268,7 @@ public class GUI extends Application {
 		}
 		
 		ArrayList<Player> players = game.getPlayers();
-		for (Player player : players) {
+		for (Player player : players) { //Each active players' cards and information labels are updated, chips are made invisible
 			((Ellipse) scene.lookup("#" + player.getName() + "Chip")).setVisible(false);
 			((ImageView) scene.lookup("#" + player.getName() + "Card1")).setImage(new Image("/Images/" + player.getHole().get(0).getSuit() + "/" + player.getHole().get(0).getRank() + ".png")); 
 			((ImageView) scene.lookup("#" + player.getName() + "Card2")).setImage(new Image("/Images/" + player.getHole().get(1).getSuit() + "/" + player.getHole().get(1).getRank() + ".png"));
