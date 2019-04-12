@@ -10,6 +10,7 @@ The following folders, along with all containted files, must be downloaded in th
 cards
 game
 gui
+gunfighterBallads
 images
 players
 ```
