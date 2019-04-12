@@ -35,6 +35,6 @@ java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore []
 ```
 where the name of the class replaces the brackets.
 
-TESTING NOTICE: Due to the nature of poker as a game of chance it is not possible to thoroughly test every scenario. Compounding the millions of hand properities with up to 10 players innumerable ways a game can go through give a small idea of the scale of possibles. As such, the test files handle a good number of logic cases in specific areas, but it should be expected that a good number of bugs will exist in scenarios that could not be accounted for.
+TESTING NOTICE: Due to the nature of poker as a game of chance it is not possible to thoroughly test every scenario. Compounding the millions of hand properities with up to 10 players innumerable ways a game can go through give a small idea of the scale of possibles. As such, the test files handle a good number of logic cases in specific areas, but it should be expected that a good number of bugs will exist in scenarios that could not be accounted for. The only major, game-breaking bug at the moment occurs in cases where many players on the table have gone "all-in", causing the betting to not end properly and falling into an infinite loop. This bug was not able to be fixed before the final submission.
 
 COPYRIGHT NOTICE: Marty Robbins *Gunfighter Ballads and Trail Songs* 1999 reissue is owned by Sony Music Entertainment Inc..
