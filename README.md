@@ -38,4 +38,4 @@ The PlayerTest can be compiled and run normally without JUnit.
 
 TESTING NOTICE: Due to the nature of poker as a game of chance it is not possible to thoroughly test every scenario. Compounding the millions of hand properities with up to 10 players innumerable ways a game can go through give a small idea of the scale of possibles. As such, the test files handle a good number of logic cases in specific areas, but it should be expected that a good number of bugs will exist in scenarios that could not be accounted for.
 
-COPYRIGHT NOTICE: The music used in this game is valid under fair dealing exceptions according to the Copyright Act of Canada secion 29.4 due to its use for educational purposes. Marty Robbins *Gunfighter Ballads and Trail Songs* 1999 reissue is owned by Sony Music Entertainment Inc..
+COPYRIGHT NOTICE: Marty Robbins *Gunfighter Ballads and Trail Songs* 1999 reissue is owned by Sony Music Entertainment Inc..
