@@ -126,7 +126,7 @@ public class PlayerTest {
         middleCards.clear();
         a.emptyHole();
         a.emptyHand();
-        assertEquals("Player hand should be empty", null, a.getHand());
+        assertEquals("Player hand should be empty", null, a.getHand()); // not return empty ranking of hand
         
     }
 }
