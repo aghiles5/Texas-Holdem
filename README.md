@@ -26,9 +26,9 @@ where the brackets are the package and class respectively. The GUI version of th
 
 To compile and run the JUnit test cases (GameTest, PlayerTest, SavIOTest, and HandTest) download the latest junit and hamcrest jar files form the JUnit 4 repository (https://github.com/junit-team/junit4) and place a copy of each in the respective folders of the test files. Each case must first be compiled in the command line with:
 ```
-javac -cp .:junit-[].jar:hamcrest-core-[].jar *.java
+javac -cp .:junit-[].jar:hamcrest-core-[].jar [].java
 ```
-where the version of each file replaces the brackets. Once compiled, the tests are run with:
+where the version of each file replaces the first two brackets and the name of the test .java file replaces the last. Once compiled, the tests are run with:
 ```
 java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore []
 ```
