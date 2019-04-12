@@ -38,7 +38,6 @@ public class MusicPlayer {
 		//System.out.println(prevIndex + " " + index + " " + resource.toString()); //Debug message listing the previous index, current index, and filname to play
 		Media medium = new Media(resource.toString());
 		MediaPlayer player = new MediaPlayer(medium);
-		player.setMute(true);
 		
 		view.setMediaPlayer(player); //The media player is set to the MediaView
 		prevIndex = index; //The current index is set to the previous index
