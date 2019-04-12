@@ -291,4 +291,240 @@ public class HandTest {
 		assertEquals("The given cards should form a royal flush hand", 9, testRank);
 	}
 	
+	//=========================================================================
+	// DISPUTE TESTS
+	
+	@Test
+	/*
+	 * General test for straight disputes, two close straight flushes.
+	 */
+	public void test_dispute_straightGeneral() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(1, 6));
+		testHand.addCard(new Card(1, 5));
+		testHand.addCard(new Card(1, 3));
+		testHand.addCard(new Card(1, 4));
+		testHand.addCard(new Card(1, 7));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(2, 6));
+		testHand2.addCard(new Card(2, 8));
+		testHand2.addCard(new Card(2, 5));
+		testHand2.addCard(new Card(2, 4));
+		testHand2.addCard(new Card(2, 7));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand2 is greater, should return OTHER_HAND_GREATER", 2, result);
+	}
+	
+	@Test
+	/*
+	 * Special case for straight disputes, the highest and lowest straights,
+	 * both containing aces.
+	 */
+	public void test_dispute_straightAces() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(2, 12));
+		testHand.addCard(new Card(3, 8));
+		testHand.addCard(new Card(1, 11));
+		testHand.addCard(new Card(0, 9));
+		testHand.addCard(new Card(2, 10));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(2, 2));
+		testHand2.addCard(new Card(3, 3));
+		testHand2.addCard(new Card(3, 0));
+		testHand2.addCard(new Card(1, 1));
+		testHand2.addCard(new Card(0, 12));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand is greater, should return THIS_HAND_GREATER", 1, result);
+	}
+	
+	@Test
+	/*
+	 * General non-consecutive dispute test, two essentially random hands.
+	 */
+	public void test_dispute_nonConsec() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(0, 6));
+		testHand.addCard(new Card(3, 2));
+		testHand.addCard(new Card(2, 0));
+		testHand.addCard(new Card(0, 7));
+		testHand.addCard(new Card(1, 10));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(2, 4));
+		testHand2.addCard(new Card(0, 8));
+		testHand2.addCard(new Card(3, 3));
+		testHand2.addCard(new Card(2, 10));
+		testHand2.addCard(new Card(3, 5));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand2 is greater, should return OTHER_HAND_GREATER", 2, result);
+	}
+	
+	@Test
+	/*
+	 * One rank set dispute for four of a kind hands.
+	 */
+	public void test_dispute_oneRankSetFourOfAKind() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(0, 9));
+		testHand.addCard(new Card(2, 12));
+		testHand.addCard(new Card(1, 9));
+		testHand.addCard(new Card(3, 9));
+		testHand.addCard(new Card(2, 9));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(3, 8));
+		testHand2.addCard(new Card(2, 7));
+		testHand2.addCard(new Card(0, 8));
+		testHand2.addCard(new Card(1, 8));
+		testHand2.addCard(new Card(2, 8));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand is greater, should return THIS_HAND_GREATER", 1, result);
+	}
+	
+	@Test
+	/*
+	 * One rank set dispute for three of a kind hands.
+	 */
+	public void test_dispute_oneRankSetThreeOfAKind() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(2, 11));
+		testHand.addCard(new Card(3, 2));
+		testHand.addCard(new Card(1, 2));
+		testHand.addCard(new Card(2, 10));
+		testHand.addCard(new Card(2, 2));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(1, 3));
+		testHand2.addCard(new Card(3, 8));
+		testHand2.addCard(new Card(0, 3));
+		testHand2.addCard(new Card(2, 7));
+		testHand2.addCard(new Card(2, 3));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand2 is greater, should return OTHER_HAND_GREATER", 2, result);
+	}
+	
+	@Test
+	/*
+	 * One rank set dispute for one rank hands where they are equal in value.
+	 */
+	public void test_dispute_oneRankSetOnePairEqual() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(3, 7));
+		testHand.addCard(new Card(1, 6));
+		testHand.addCard(new Card(3, 9));
+		testHand.addCard(new Card(0, 10));
+		testHand.addCard(new Card(2, 6));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(0, 6));
+		testHand2.addCard(new Card(2, 9));
+		testHand2.addCard(new Card(3, 6));
+		testHand2.addCard(new Card(1, 7));
+		testHand2.addCard(new Card(1, 10));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("hands are equal, should return HANDS_EQUAL", 0, result);
+	}
+	
+	@Test
+	/*
+	 * General two rank set dispute test for full house hands.
+	 */
+	public void test_dispute_twoRankSetFullHouse() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(2, 7));
+		testHand.addCard(new Card(0, 7));
+		testHand.addCard(new Card(0, 11));
+		testHand.addCard(new Card(1, 7));
+		testHand.addCard(new Card(3, 11));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(0, 8));
+		testHand2.addCard(new Card(2, 9));
+		testHand2.addCard(new Card(3, 9));
+		testHand2.addCard(new Card(1, 9));
+		testHand2.addCard(new Card(1, 8));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand2 is greater, should return OTHER_HAND_GREATER", 2, result);
+	}
+	
+	@Test
+	/*
+	 * General two rank set dispute test for two pairs hands.
+	 */
+	public void test_dispute_twoRankSetTwoPairs() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(1, 10));
+		testHand.addCard(new Card(3, 12));
+		testHand.addCard(new Card(3, 9));
+		testHand.addCard(new Card(2, 10));
+		testHand.addCard(new Card(2, 12));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(0, 11));
+		testHand2.addCard(new Card(1, 12));
+		testHand2.addCard(new Card(2, 11));
+		testHand2.addCard(new Card(0, 9));
+		testHand2.addCard(new Card(0, 12));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand2 is greater, should return OTHER_HAND_GREATER", 2, result);
+	}
+	
+	@Test
+	/*
+	 * Two rank set dispute test for two pairs hands where pairs are identical,
+	 * kicker decides greater value.
+	 */
+	public void test_dispute_twoRankSetTwoPairsKicker() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(0, 2));
+		testHand.addCard(new Card(3, 2));
+		testHand.addCard(new Card(3, 3));
+		testHand.addCard(new Card(2, 4));
+		testHand.addCard(new Card(1, 3));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(2, 5));
+		testHand2.addCard(new Card(2, 2));
+		testHand2.addCard(new Card(0, 3));
+		testHand2.addCard(new Card(2, 3));
+		testHand2.addCard(new Card(1, 2));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("testHand2 is greater, should return OTHER_HAND_GREATER", 2, result);
+	}
+	
+	@Test
+	/*
+	 * Two rank set dispute test for two pairs hands where hands are of equal 
+	 * value.
+	 */
+	public void test_dispute_twoRankSetTwoPairsEqual() {
+		Hand testHand = new Hand();
+		testHand.addCard(new Card(2, 6));
+		testHand.addCard(new Card(2, 5));
+		testHand.addCard(new Card(3, 6));
+		testHand.addCard(new Card(1, 5));
+		testHand.addCard(new Card(0, 4));
+		
+		Hand testHand2 = new Hand();
+		testHand2.addCard(new Card(0, 6));
+		testHand2.addCard(new Card(3, 4));
+		testHand2.addCard(new Card(0, 5));
+		testHand2.addCard(new Card(1, 6));
+		testHand2.addCard(new Card(3, 5));
+		
+		int result = testHand.dispute(testHand2);
+		assertEquals("hands are equal, should return HANDS_EQUAL", 0, result);
+	}
+	
 }

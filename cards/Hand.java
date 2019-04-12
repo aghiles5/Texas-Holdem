@@ -314,10 +314,10 @@ public class Hand {
 	 */
 	private int disputeStraight(ArrayList<Card> hand1, ArrayList<Card> hand2) {
 		if (((hand1.get(0).getRank() == 12) && (hand1.get(4).getRank() == 0)) || ((hand2.get(0).getRank() == 12) && (hand2.get(4).getRank() == 0))) { //Ace special case
-			if ((hand2.get(0).getRank() != 12) && (hand2.get(4).getRank() != 0))
-				return OTHER_HAND_GREATER;
-			else if ((hand1.get(0).getRank() != 12) && (hand1.get(4).getRank() != 0))
+			if ((hand2.get(0).getRank() == 12) && (hand2.get(4).getRank() == 0))
 				return THIS_HAND_GREATER;
+			else if ((hand1.get(0).getRank() == 12) && (hand1.get(4).getRank() == 0))
+				return OTHER_HAND_GREATER;
 			else
 				return HANDS_EQUAL;
 		}
