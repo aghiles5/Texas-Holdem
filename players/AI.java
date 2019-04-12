@@ -553,7 +553,7 @@ public class AI extends Player {
 		if (hand == null) {
 			if (numChoice == 3) {
 				smartAIDec.add(3);
-				smartAIDec.add(80);
+				smartAIDec.add(75);
 			}
 			else if (numChoice == 4) {
 				smartAIDec.add(5);
