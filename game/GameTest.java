@@ -72,4 +72,20 @@ public class GameTest {
 		assertEquals(0, game.getHighestBet());
 		assertEquals(1, game.getPlayerCount());
 	}
+
+	// testing incrementRound
+	@Test
+	public void test_incrementRound() {
+		Game game = new Game();
+		ArrayList<Player> players = new ArrayList<Player>();
+		players = game.generatePlayers(3, 1000);
+		game.setupRound();
+		game.incrementRound();
+
+		assertEquals(0, game.getPlayerCount());
+		assertEquals(0, game.getHighestBet());
+		assertEquals(1, game.getRound());
+		assertEquals(4, game.getComm().size());
+		assertEquals(0, game.getPot());
+	}
 }
