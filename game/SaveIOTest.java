@@ -10,13 +10,18 @@ import players.Player;
 
 public class SaveIOTest extends SaveIO {
 	
+	//tests the loadState method
 	@Test
 	public void testLoadState() {
+		//expected lines in the Save file
 		String[] linesInFile = {"You","1500","Adam", "500"};
+		//expected line in the Blind file
 		String[] lineInFile = {"25"};
 		try {
+			//creates the two files
 			createFile("Save.txt", linesInFile);
 			createFile("Blind.txt", lineInFile);
+			//tests the results of the load through a new Game object
 			Game MockGame = super.loadState();
 			assertEquals("Player one's name should be You", "You", MockGame.getPlayerList().get(0).getName());
 			assertEquals("Player one's stack should be 1500", 1500, MockGame.getPlayerList().get(0).getStack());
@@ -24,21 +29,31 @@ public class SaveIOTest extends SaveIO {
 			assertEquals("Player two's stack should be 1500", 500, MockGame.getPlayerList().get(1).getStack());
 			assertEquals("Small blind should be 25", 25, MockGame.getSmallBlind());
 		} catch (IOException e) {
-			
+			//Does nothing
 		}	
 	}
+	
+	//tests the saveState method
 	@Test
 	public void testSaveState() throws IOException {
+		//Create test objects and streams
 		ArrayList<Player> testPlayer = new ArrayList<Player>();
 		ArrayList<String> name = new ArrayList<String>();
 		ArrayList<Integer> stacks = new ArrayList<Integer>();
 		BufferedReader saveState = new BufferedReader(new FileReader("Save.txt"));
 		BufferedReader sBlind = new BufferedReader(new FileReader("Blind.txt"));
+		
+		//expected lines in Save.txt
 		String[] linesInFile1 = {"Kyle","1500","Adam", "500"};
+		//expected line in Blind.txt
 		String[] linesInFile2 = {"25"};
+		//adds two players to the testPlayer list
 		testPlayer.add(new Player("Kyle",1500));
 		testPlayer.add(new Player("Adam",500));
+		//writes the players and small blind to separate files
 		super.saveState(testPlayer, 25);
+		
+		//tests the output of the file to see if it matches the expected output
 		String in = saveState.readLine();
 		while (in != null) {
 				name.add(in);
@@ -48,22 +63,16 @@ public class SaveIOTest extends SaveIO {
 		}
 		
 		String blind = sBlind.readLine();
+		//closes the streams
 		sBlind.close();
 		saveState.close();
-		if(name.get(0) != linesInFile1[0]) {
-			assertEquals("Players name was saved incorrectly.", "Kyle", testPlayer.get(0).getName());
-		} else if(name.get(1) != linesInFile1[2]) {
-			assertEquals("Players name was saved incorrectly.", "Adam", testPlayer.get(1).getName());
-		}
-		if(stacks.get(0) != Integer.parseInt(linesInFile1[1])) {
-			assertEquals("Players stack was saved incorrectly.", 1500, testPlayer.get(0).getStack());
-		} else if(stacks.get(1) != Integer.parseInt(linesInFile1[3])) {
-			assertEquals("Players stack was saved incorrectly.", 500, testPlayer.get(1).getName());
-		}
-		if(Integer.parseInt(blind) != Integer.parseInt(linesInFile2[0])) {
-			assertEquals("The small blind was saved incorrectly.", 25, Integer.parseInt(blind));
-		}
 		
+		//checks to see if the lines match
+		assertEquals("Players name was saved incorrectly.", "Kyle", testPlayer.get(0).getName());
+		assertEquals("Players name was saved incorrectly.", "Adam", testPlayer.get(1).getName());
+		assertEquals("Players stack was saved incorrectly.", 1500, testPlayer.get(0).getStack());
+		assertEquals("Players stack was saved incorrectly.", 500, testPlayer.get(1).getStack());
+		assertEquals("The small blind was saved incorrectly.", 25, Integer.parseInt(blind));
 	}
 	
 	private void createFile(String filename, String[] lines) throws IOException {
