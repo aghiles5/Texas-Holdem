@@ -20,31 +20,31 @@ public class PlayerTest {
     @Test
     public void testHumanConstructor() {
         Human a = new Human("Jeff");
-        assertEquals("Jeff", a.getName());
+        assertEquals("Player name is suppose to be: Jeff", "Jeff", a.getName());
         assertEquals(0, a.getStack());
 
         a.setStack(100);
-        assertEquals(100, a.getStack());
+        assertEquals("Player stack is suppose to be: 100", 100, a.getStack());
         assertEquals("", a.getAction());
 
         Human b = new Human(a.getName(), 1000);
-        assertEquals("Jeff", b.getName());
+        assertEquals("Player name is suppose to be: Jeff", "Jeff", b.getName());
         assertEquals(1000, b.getStack());
 
         b.setStack(200);
-        assertEquals(200, b.getStack());
+        assertEquals("Player stack is suppose to be: 200", 200, b.getStack());
     }
 
     @Test
     public void testAIConstructor() {
         AI a = new AI("Foo", 200);
-        assertEquals("Foo", a.getName());
-        assertEquals(200, a.getStack());
+        assertEquals("Player name is suppose to be: Foo", "Foo", a.getName());
+        assertEquals("Player stack is suppose to be: 200", 200, a.getStack());
 
         a.setName("Hello");
         a.setStack(300);
-        assertEquals("Hello", a.getName());
-        assertEquals(300, a.getStack());
+        assertEquals("Player name is suppose to be: Hello", "Hello", a.getName());
+        assertEquals("Player stack is suppose to be: 300", 300, a.getStack());
     }
 
     @Test
@@ -57,17 +57,17 @@ public class PlayerTest {
         }
 
         AI.setBetIntervals(100000);
-        assertEquals(1000, AI.getBetInterval());
+        assertEquals("Bet interval is suppose to be: 1000", 1000, AI.getBetInterval());
 
         AI.addCPUName();
-        assertEquals(n, AI.getCPUName());
+        assertEquals("CPU names is suppose to be" + n, n, AI.getCPUName());
 
         AI a = new AI();
-        assertNotEquals("", a.getName());
+        assertNotEquals("Player name is suppose to be: ", "", a.getName());
 
         AI.clearCPUName();
         n.clear();
-        assertEquals(n, AI.getCPUName());
+        assertEquals("CPU name is suppose to be cleared", n, AI.getCPUName());
     }
 
     @Test
@@ -75,17 +75,17 @@ public class PlayerTest {
         Human a = new Human("Not Harvey");
         ArrayList<String> e = new ArrayList<String>();
         a.setName("Harvey");
-        assertEquals("Harvey", a.getName());
-        assertEquals(0, a.getStack());
+        assertEquals("Player name is suppose to be: Harvey", "Harvey", a.getName());
+        assertEquals("Player stack is suppose to be: 0", 0, a.getStack());
 
         a.setAction("Fold");
-        assertEquals("Fold", a.getAction());
+        assertEquals("Player action is suppose to be: Fold", "Fold", a.getAction());
 
         a.setBet(250);
-        assertEquals(250, a.getBet());
+        assertEquals("Bet amount is suppose to be" + 250, 250, a.getBet());
 
         a.setHighBet(1000);
-        assertEquals(1000, a.getHighBet());
+        assertEquals("Highest bet amount is suppose to be: " + 1000, 1000, a.getHighBet());
 
         assertEquals(e, a.getHole());
 
@@ -96,19 +96,22 @@ public class PlayerTest {
         Deck deck = new Deck();
         Human a = new Human("Tom");
         ArrayList<Card> middleCards = new ArrayList<Card>();
+
+        assertEquals("Player should not have any cards", middleCards, a.getHole());
+
         a.setHole(deck.dealSingle());
         a.setHole(deck.dealSingle());
 
-        deck.dealCard(middleCards);
-        a.setHand(middleCards);
-        assertEquals(null, null);
+        System.out.println(a.getHole()); // This line is temporary
 
-        deck.dealCard(middleCards);
-        a.setHand(middleCards);
-        assertEquals(null, null);
+        assertNotEquals("Player hand is not suppose to be empty", null, a.getHole());
 
-        deck.dealCard(middleCards);
-        a.setHand(middleCards);
-        assertEquals(null, null);
+        middleCards = deck.dealCard(middleCards);
+        System.out.println(middleCards);
+
+
+
+        a.setHand(middleCards); // This is when the problem occurs
+        
     }
 }
