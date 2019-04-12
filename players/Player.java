@@ -16,7 +16,7 @@ import cards.Hand;
 public class Player {
 	public int stack; // Tracks each player's stack of money
 	protected ArrayList<Card> hole = new ArrayList<Card>(); // the player's 2 card hand
-	protected Hand hand; // player's 5 card hand as an object
+	protected Hand hand = new Hand(); // player's 5 card hand as an object
 	protected String name = ""; // the name of the human player
 	protected int minBet = 0;
 	protected int highBet = 0;
